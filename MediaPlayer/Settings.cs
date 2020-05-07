@@ -34,7 +34,7 @@ namespace MediaPlayer
         [Setting(Name = "Local.Lang", Default = "en-US")]
         public static string Lang { get; set; } = null;
 
-        [Setting(Name = "Local.ConversionMode", Default = "1")]
+        [Setting(Name = "Local.ConversionMode", Default = 1)]
         public static Int32 ConversionMode { get; set; } = 1;
 
         [Setting(Name = "Local.ConversionBitRate", Default = "128")]
@@ -50,13 +50,13 @@ namespace MediaPlayer
     public partial class MainWindow : Window
     {
 
-        private void ParamsInit()
+        private void SettingsInit()
         {
             Settings.LoadSettings();
             if (Settings.Lang == null) { if (AppLang.StartsWith("fr-")) { Settings.Lang = "fr-FR"; } else { Settings.Lang = "en-US"; } }
         }
 
-        private void ParamsSetup()
+        private void SettingsSetUp()
         {
             if (Settings.Lang.StartsWith("fr-")) { ParamsLanguageVals.SelectedIndex = 1; }
             else { ParamsLanguageVals.SelectedIndex = 0; }
@@ -75,7 +75,6 @@ namespace MediaPlayer
             ParamsConvQualityVals.SelectionChanged += ParamsConvQualityVals_SelectionChanged;
             player.ConvQuality(Settings.ConversionBitRate);
 
-            Debug.WriteLine(Settings.LibFolder);
             if (Settings.LibFolder != null)
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }

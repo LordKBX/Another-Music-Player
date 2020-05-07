@@ -59,4 +59,6 @@
     <sys:String x:Key="ParamsLibFolderSelectorBlockerType">this.directory</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorBlockerName">select</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorBlockerTitle">Directory</sys:String>
+
+    <sys:String x:Key="ParamsLibItemContextMenuItem1">Add to PlayList</sys:String>
 </ResourceDictionary>

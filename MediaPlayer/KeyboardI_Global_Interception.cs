@@ -1,13 +1,49 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Collections.Generic;
 
 namespace MediaPlayer
 {
+    public partial class MainWindow : Window
+    {
+        /// <summary>
+        /// Initialize Global Keyboard listener for Media Buttons
+        /// </summary>
+        private void KeyboardInterceptorSetUp()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                LowLevelKeyboardListener _listener = new LowLevelKeyboardListener(this);
+                _listener.OnKeyPressed += (sender, e) => {
+                    string re = e.KeyPressed.ToString(); //Debug.WriteLine(re);
+                    if (re == "MediaPlayPause") { Pause(); }
+                    if (re == "MediaPreviousTrack") { PreviousTrack(); }
+                    if (re == "MediaNextTrack") { NextTrack(); }
+                };
+                _listener.HookKeyboard();
+                ListReferences.Add("KeyboardListener", _listener);
+            }
+        }
 
+        /// <summary>
+        /// Destroy Global Keyboard listener
+        /// </summary>
+        private void KeyboardInterceptorDestroy()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                ((LowLevelKeyboardListener)ListReferences["KeyboardListener"]).UnHookKeyboard();
+            }
+        }
+    }
+
+    /// <summary>
+    /// Global Keyboard Listener Class For Windows OS
+    /// </summary>
     public class LowLevelKeyboardListener
     {
         private const int WH_KEYBOARD_LL = 13;
@@ -63,35 +99,6 @@ namespace MediaPlayer
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
-            //List<int> list = new List<int> { 6, 8, 32, 132, 160, 256, 512 };
-            //int vkey = 0;
-            //if (!list.Contains(nCode) && nCode < 999) { 
-            //    Debug.WriteLine("nCode: " + nCode);
-            //    Debug.WriteLine("wParam: " + wParam);
-            //    Debug.WriteLine("lParam: " + lParam);
-            //    int vkCode = Marshal.ReadInt32(lParam);
-
-            //    if (OnKeyPressed != null) { OnKeyPressed(this, new KeyPressedArgs(KeyInterop.KeyFromVirtualKey(vkCode))); }
-            //}
-            //switch (nCode)
-            //{
-            //    case 256: //Symbols (a-z 0-9 $%* ...)
-            //        vkey = (((int)lParam >> 16) & 0xFFFF);
-            //        Debug.WriteLine("vkey: " + vkey);
-            //        break;
-            //    case 793: //Multimedia
-            //        vkey = (((int)lParam >> 16) & 0xFFFF);
-            //        Debug.WriteLine("vkey: " + vkey);
-
-            //        if (vkey == 14) { parent.Pause(); } // pause
-            //        if (vkey == 12) { parent.PreviousTrack(); } // previous
-            //        if (vkey == 11) { parent.NextTrack(); } // next
-            //        break;
-            //}
-
-
-
-
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN || wParam == (IntPtr)WM_SYSKEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
@@ -103,6 +110,9 @@ namespace MediaPlayer
         }
     }
 
+    /// <summary>
+    /// Return Class Object For Global Keyboard Listener Class For Windows OS
+    /// </summary>
     public class KeyPressedArgs : EventArgs
     {
         public Key KeyPressed { get; private set; }

@@ -8,7 +8,7 @@
         <TaskbarItemInfo x:Name="taskBarItemInfo1" Description="Taskbar Item Info Sample">
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfoCollection>
-                    <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlPrev" Description="PreviousTrack" />
+                    <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlPrev" Description="PreviousTrack" RenderOptions.BitmapScalingMode="HighQuality" />
                     <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlPause" Description="Play" RenderOptions.BitmapScalingMode="HighQuality" />
                     <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlNext" Description="NextTrack" RenderOptions.BitmapScalingMode="HighQuality" />
                 </ThumbButtonInfoCollection>
@@ -18,14 +18,12 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--
-                <ResourceDictionary Source="/styles.xaml" />
-                <ResourceDictionary Source="/Traductions/en.xaml" />
-                -->
+                 <!--<ResourceDictionary Source="/styles.xaml" />
+                <ResourceDictionary Source="/Traductions/en.xaml" />--> 
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
-    <Grid Background="#FF303030">
+    <Grid Background="#FF303030" Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="100*"/>
             <RowDefinition Height="40px"/>
@@ -34,9 +32,9 @@
             <ColumnDefinition Width="100*"/>
             <ColumnDefinition Width="50px"/>
         </Grid.ColumnDefinitions>
-        
-        <TabControl  Grid.Row="0" Grid.Column="0" x:Name="TabControler" BorderBrush="{x:Null}" Background="{x:Null}">
-            <TabItem Header="{DynamicResource TabPlaylist}" Margin="0,0,0,-3" FontFamily="Segoe UI Symbol" MinWidth="30" MinHeight="20" BorderBrush="#FFACACAC">
+
+        <TabControl  Grid.Row="0" Grid.Column="0" x:Name="TabControler" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0" Padding="0">
+            <TabItem x:Name="Tab1" Header="{DynamicResource TabPlaylist}" Style="{DynamicResource TabItemStyle}">
                 <Grid x:Name="Grid1">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150px"/>
@@ -47,18 +45,20 @@
                     </Grid.RowDefinitions>
 
                     <Border Grid.Row="0" Grid.Column="0" BorderBrush="Gray" BorderThickness="0,0,1,0">
-                    <Grid x:Name="Grid2" Background="#FF666666" Panel.ZIndex="99999">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="150px"/>
-                            <RowDefinition Height="100*"/>
-                        </Grid.RowDefinitions>
+                        <Grid x:Name="Grid2" Background="#FF666666" Panel.ZIndex="99999">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="150px"/>
+                                <RowDefinition Height="100*"/>
+                            </Grid.RowDefinitions>
 
-                        <TextBlock Background="Black">
-                            <Image x:Name="FileCover" Grid.Row="0" Width="150" Height="150" RenderOptions.BitmapScalingMode="HighQuality"/>
-                        </TextBlock>
-                        <Border BorderThickness="0,1,0,1" BorderBrush="Gray" Grid.Row="1">
-                            <ScrollViewer  ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Background="#FF303030">
-                                <TextBlock Foreground="White">
+                            <Border BorderThickness="0,1,0,1" BorderBrush="LightGray"  Margin="0,0,0,0">
+                                <TextBlock Background="Black">
+                                    <Image x:Name="FileCover" Grid.Row="0" Width="150" Height="150" RenderOptions.BitmapScalingMode="HighQuality"/>
+                                </TextBlock>
+                            </Border>
+                            <Border BorderThickness="0,1,0,1" BorderBrush="Gray" Grid.Row="1">
+                                <ScrollViewer  ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Background="#FF303030">
+                                    <TextBlock Foreground="White">
                                     <TextBlock Text="{DynamicResource Title2}" x:Name="PlayItemNameTitle" Margin="3,3,0,0"/> <LineBreak></LineBreak>
                                     <AccessText x:Name="PlayItemNameValue" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow" Text=""/>
                                     <LineBreak></LineBreak>
@@ -71,49 +71,86 @@
                                     <TextBlock Visibility="Collapsed" Text="{DynamicResource Duration2}" x:Name="PlayItemDurationTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
                                     <TextBlock Visibility="Collapsed"  x:Name="PlayItemDurationValue" Text="" Margin="10,0,0,0" Foreground="#FF959595"/>
                                 </TextBlock>
-                            </ScrollViewer>
-                        </Border>
-                    </Grid>
+                                </ScrollViewer>
+                            </Border>
+                        </Grid>
                     </Border>
-                    <ListView x:Name="PlayListView" Grid.Row="0" Grid.Column="1" SelectionMode="Single" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden"  ItemsSource="{Binding PlayList}" ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlayListViewItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="White" BorderThickness="0,0,1,0" Padding="-3,0,-10,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight">
-                        <ListView.View>
-                            <GridView AllowsColumnReorder="False">
-                                <GridViewColumn x:Name="PlayListViewC1" Width="25" Header="" DisplayMemberBinding="{Binding Selected}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
-                                <GridViewColumn x:Name="PlayListViewC2" Header="{DynamicResource Title}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <AccessText Text="{Binding Name}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn x:Name="PlayListViewC5" Width="80" Header="{DynamicResource Duration}" DisplayMemberBinding="{Binding Duration}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
-                                <GridViewColumn x:Name="PlayListViewC4" Header="{DynamicResource Artist}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <AccessText Text="{Binding Artist}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                                <GridViewColumn x:Name="PlayListViewC3" Header="{DynamicResource Album}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
-                                    <GridViewColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <AccessText Text="{Binding Album}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
-                                        </DataTemplate>
-                                    </GridViewColumn.CellTemplate>
-                                </GridViewColumn>
-                            </GridView>
-                        </ListView.View>
-                    </ListView>
+                    <Grid x:Name="Grid3" Grid.Row="0" Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20px"/>
+                            <RowDefinition Height="100*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1,1,1,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,1,0">
+                            <TextBlock Foreground="White" Padding="5,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left">
+                                <TextBlock>Pistes à venir:</TextBlock><Run Text=" "/>
+                                <TextBlock x:Name="Label_PlayListDisplayedNBTracks" /><TextBlock>, Total:</TextBlock><Run Text=" "/>
+                                <TextBlock x:Name="Label_PlayListNBTracks" /><TextBlock>, Position:</TextBlock>
+                                <TextBlock x:Name="Label_PlayListIndex" />
+                            </TextBlock>
+                        </Border>
+                        <ListView x:Name="PlayListView" Grid.Row="1" SelectionMode="Single" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlayListViewItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight" Margin="0,0,1,0">
+                            <ListView.View>
+                                <GridView AllowsColumnReorder="False">
+                                    <GridViewColumn x:Name="PlayListViewC1" Width="25" Header="" DisplayMemberBinding="{Binding Selected}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
+                                    <GridViewColumn x:Name="PlayListViewC2" Header="{DynamicResource Title}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <AccessText Text="{Binding Name}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Name="PlayListViewC5" Width="80" Header="{DynamicResource Duration}" DisplayMemberBinding="{Binding DurationS}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
+                                    <GridViewColumn x:Name="PlayListViewC4" Header="{DynamicResource Artist}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <AccessText Text="{Binding Artist}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                    <GridViewColumn x:Name="PlayListViewC3" Header="{DynamicResource Album}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                        <GridViewColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <AccessText Text="{Binding Album}" Style="{DynamicResource ListViewColumnItemAccessText}" Margin="0,0,20,0"/>
+                                            </DataTemplate>
+                                        </GridViewColumn.CellTemplate>
+                                    </GridViewColumn>
+                                </GridView>
+                            </ListView.View>
+                        </ListView>
+                    </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource TabLibrary}" Margin="0,0,0,-3" FontFamily="Segoe UI Symbol" MinWidth="30" MinHeight="20">
-                <TreeView x:Name="LibTreeView" MouseRightButtonUp="LibTreeView_MouseRightButtonUp" MouseDoubleClick="LibTreeView_MouseDoubleClick">
-                </TreeView>
+            <TabItem Header="{DynamicResource TabLibrary}" Style="{DynamicResource TabItemStyle}">
+                <Grid Background="#FFCFCFCF" Margin="0,0,4,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20"/>
+                        <RowDefinition Height="100*"/>
+                    </Grid.RowDefinitions>
+                    <Viewbox HorizontalAlignment="Left" VerticalAlignment="Stretch" FlowDirection="LeftToRight">
+                        <WrapPanel x:Name="LibNavigationPathContener" Style="{DynamicResource LibNavigationPathContener}">
+                            <TextBlock Style="{DynamicResource LibNavigationPathItem}" TextDecorations="Underline" Text="Home"/>
+                        </WrapPanel>
+                    </Viewbox>
+                    <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Black">
+                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                            <WrapPanel x:Name="LibNavigationContent">
+
+                                <TextBlock>
+
+                                </TextBlock>
+                            </WrapPanel>
+                        </ScrollViewer>
+                    </Border>
+                    <!--
+                    <TreeView x:Name="LibTreeView" Grid.Row="1" MouseRightButtonUp="LibTreeView_MouseRightButtonUp" MouseDoubleClick="LibTreeView_MouseDoubleClick">
+                    </TreeView>
+                    -->
+                </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource TabRecordedPlaylists}" Margin="0,0,0,-3" FontFamily="Segoe UI Symbol" MinWidth="30" MinHeight="20">
+            <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle}">
             </TabItem>
-            <TabItem Header="{DynamicResource TabParams}" FontFamily="Segoe UI Symbol" Margin="0,0,0,-3" MinWidth="30" MinHeight="20">
-                <WrapPanel Background="#FFCFCFCF">
+            <TabItem Header="{DynamicResource TabParams}" Style="{DynamicResource TabItemStyle}">
+                <WrapPanel Background="#FFCFCFCF" Margin="0,0,4,0">
                     <Grid HorizontalAlignment="Stretch" Margin="0,0,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="100px"/>
@@ -138,8 +175,8 @@
                         <AccessText Text="{DynamicResource ParamsConvDisclaimerLabel}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="10,0,0,0"/>
                         <Label Content="{DynamicResource ParamsConvKeepLabel}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center"/>
                         <ComboBox  x:Name="ParamsConvKeepVals" Grid.Column="1" Grid.Row="3" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                            <ComboBoxItem Tag="temp" Content="{DynamicResource ParamsConvKeepVals_TEMP}" IsSelected="True"/>
-                            <ComboBoxItem Tag="remplace" Content="{DynamicResource ParamsConvKeepVals_REPLACE}" IsSelected="False"/>
+                            <ComboBoxItem Tag="1" Content="{DynamicResource ParamsConvKeepVals_TEMP}" IsSelected="True"/>
+                            <ComboBoxItem Tag="2" Content="{DynamicResource ParamsConvKeepVals_REPLACE}" IsSelected="False"/>
                         </ComboBox>
                         <Label Content="{DynamicResource ParamsConvQualityLabel}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center"/>
                         <ComboBox  x:Name="ParamsConvQualityVals" Grid.Column="1" Grid.Row="4" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
@@ -149,7 +186,7 @@
                             <ComboBoxItem Tag="256" Content="{DynamicResource ParamsConvQualityVals_256}" IsSelected="False"/>
                             <ComboBoxItem Tag="320" Content="{DynamicResource ParamsConvQualityVals_320}" IsSelected="False"/>
                         </ComboBox>
-                        
+
                         <AccessText Text="{DynamicResource ParamsLibFolderLabel}" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
                         <TextBox x:Name="ParamsLibFolderTextBox" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
                         <Button x:Name="ParamsLibFolderBtn" Grid.Column="2" Grid.Row="7" Content=" ... " HorizontalAlignment="Left" Width="30" Click="ParamsLibFolderBtn_Click"/>
@@ -181,7 +218,7 @@
             <Button Grid.Row="5" x:Name="BtnShuffle" Margin="2,0,2,0" ToolTip="{DynamicResource BtnShuffleToolTip}" Click="BtnShuffle_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="6" x:Name="BtnClearList" Margin="2,0,2,0" ToolTip="{DynamicResource BtnClearListToolTip}" Click="Clear_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
 
-             <AccessText x:Name="DisplayPlayListInfo" Grid.Row="8" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="0,0,0,0"/>
+            <AccessText x:Name="DisplayPlayListInfo" Grid.Row="8" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="0,0,0,0"/>
             <!-- 
             <Button x:Name="BtnSub10s" FontFamily="Segoe UI Symbol" FontSize="{DynamicResource BtnSub10sZise}" ToolTip="{DynamicResource BtnSub10sToolTip}" Content="{DynamicResource BtnSub10sText}" Grid.Row="8" Background="#FF474747" Foreground="White" Click="PositionMoins10_Button_Click" Margin="2,0,2,0"/>
             <Button x:Name="BtnAdd10s" FontFamily="Segoe UI Symbol" FontSize="{DynamicResource BtnSub10sZise}" ToolTip="{DynamicResource BtnAdd10sToolTip}" Content="{DynamicResource BtnAdd10sText}" Grid.Row="9" Background="#FF474747" Foreground="White" Click="PositionPlus10_Button_Click" Margin="2,0,2,0"/>
@@ -194,7 +231,7 @@
                 <ColumnDefinition Width="60px"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" x:Name="DisplayPlaybackPosition" HorizontalAlignment="Left" VerticalAlignment="Center" Height="24" Content="00:00" HorizontalContentAlignment="Center" Foreground="#FFA4A4A4" Grid.ColumnSpan="2" Margin="6,0,0,0" />
-            <ProgressBar Grid.Column="1" x:Name="DisplayPlaybackPositionBar" Margin="0,0,0,0" HorizontalContentAlignment="Center" Height="10" Value="0" MouseDown="DisplayPlaybackPositionBar_MouseDown" SmallChange="0.0001" Maximum="1000" ToolTip="test" MouseMove="DisplayPlaybackPositionBar_MouseMove" BorderBrush="#FF707070" Background="#FF464646" Foreground="White" BorderThickness="1,5,1,5" ScrollViewer.VerticalScrollBarVisibility="Disabled" />
+            <ProgressBar Grid.Column="1" x:Name="DisplayPlaybackPositionBar" Margin="0,0,0,0" HorizontalContentAlignment="Center" Height="10" Value="0" MouseDown="DisplayPlaybackPositionBar_MouseDown" SmallChange="0.0001" Maximum="1000" ToolTip="test" MouseMove="DisplayPlaybackPositionBar_MouseMove" BorderBrush="#FF707070" Background="#FF464646" Foreground="White" BorderThickness="1,5,1,5" ScrollViewer.VerticalScrollBarVisibility="Disabled" Cursor="Hand" />
             <Label Grid.Column="2" x:Name="DisplayPlaybackSize" HorizontalAlignment="Center" VerticalAlignment="Center" Height="24" Content="00:00" HorizontalContentAlignment="Center" Foreground="#FFA4A4A4" />
         </Grid>
     </Grid>

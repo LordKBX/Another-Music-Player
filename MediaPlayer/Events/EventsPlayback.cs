@@ -68,12 +68,12 @@ namespace MediaPlayer
 
             if (PlayRepeatStatus <= 0)
             {
-                if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(PlayListIndex + 1, true); })); }
+                if (PlayListIndex + 1 < PlayList2.Count) { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(PlayListIndex + 1, true); })); }
                 else { Dispatcher.BeginInvoke(new Action(() => { StopPlaylist(); })); }
             }
             else if (PlayRepeatStatus == 1) { }
             else {
-                if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(PlayListIndex + 1, true); })); }
+                if (PlayListIndex + 1 < PlayList2.Count) { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(PlayListIndex + 1, true); })); }
                 else { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(0, true); })); }
             }
         }
@@ -100,7 +100,7 @@ namespace MediaPlayer
             UpdatePosition(displayTime(0));
             UpdateSize(displayTime(0));
             UpdatePositionBar(0);
-            if (PlayList.Count > 0) { updatePlaylist(0, false); }
+            if (PlayList2.Count > 0) { updatePlaylist(0, false); }
         }
         #endregion
     }

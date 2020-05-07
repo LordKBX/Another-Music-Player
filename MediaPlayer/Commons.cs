@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Windows;
-using System.Drawing;
-using TagLib;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 
@@ -11,29 +9,19 @@ namespace MediaPlayer
     {
         public string Path { get; set; }
         public string OriginPath { get; set; }
-        public BitmapImage Cover { get; set; }
         public string Name { get; set; }
         public string Album { get; set; }
         public string Artist { get; set; }
-        public string Duration { get; set; }
+        public long Duration { get; set; }
+        public string DurationS { get; set; }
         public string Selected { get; set; }
+        public object ToolTip { get; set; }
 
         public PlayListViewItem()
         {
-            Cover = null;
-            Path = OriginPath = Name = Album = Artist = Duration = Selected = "test";
-        }
-
-        public static void copy(PlayListViewItem source, ref PlayListViewItem output)
-        {
-            output.Cover = source.Cover;
-            output.Path = source.Path;
-            output.OriginPath = source.OriginPath;
-            output.Name = source.Name;
-            output.Album = source.Album;
-            output.Artist = source.Artist;
-            output.Duration = source.Duration;
-            output.Selected = source.Selected;
+            Path = OriginPath = Name = Album = Artist = Selected = DurationS = "test";
+            Duration = 0;
+            ToolTip = null;
         }
     }
 
@@ -44,7 +32,7 @@ namespace MediaPlayer
         public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
         public static string BaseDirImg = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + "icons" + System.IO.Path.DirectorySeparatorChar;
 
-        public static BitmapImage CoverImg = new BitmapImage(new Uri(BaseDirImg + "album_small.png"));
+        //public static BitmapImage CoverImg = new BitmapImage(new Uri(BaseDirImg + "album_small.png"));
 
         //public static BitmapImage OpenButtonImg = new BitmapImage(new Uri(BaseDirImg + "file.png"));
         //public static BitmapImage PreviousButtonImg = new BitmapImage(new Uri(BaseDirImg + "previous.png"));

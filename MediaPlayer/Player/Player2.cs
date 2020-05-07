@@ -46,13 +46,37 @@ namespace MediaPlayer
         public bool IsRepeat() { return PlayRepeat; }
         public List<string> AcceptedExtentions() { return new List<string> { ".MP3",".mp3",".WMA",".wma",".FLAC",".flac" }; }
 
+        public async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
+        {
+            bool replace = false;
+            if (FileOutput == null)
+            {
+                FileOutput = Path.ChangeExtension(FileInput, ".mp3");
+                replace = true;
+            }
+            Debug.WriteLine("Task_Start");
+            Debug.WriteLine(FileInput);
+            Debug.WriteLine(FileOutput);
+
+            if (System.IO.File.Exists(FileOutput)) { System.IO.File.Delete(FileOutput); }
+            Debug.WriteLine("Test File");
+
+            bool ret = await ConvExe(FileInput, FileOutput);
+            if (ret == true && deleteOrigin == true) { System.IO.File.Delete(FileInput); }
+            Debug.WriteLine("ret conv : " + ((ret) ? "True" : "False"));
+
+            if (replace) { System.IO.File.Delete(FileInput); }
+
+            return true;
+        }
+
         private async Task<bool> ConvExe(string FileInput, string FileOutput)
         {
             // Use ProcessStartInfo class
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
-            startInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + "ffmpeg" 
+            startInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + "Player" + System.IO.Path.DirectorySeparatorChar + "ffmpeg" 
                 + ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows))?".exe":"");
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = "-i \"" + FileInput + "\" -acodec mp3 -b:a " + ConvQualityBitrates + "k -map_metadata 0:s:0 \"" + FileOutput + "\"";
@@ -76,28 +100,6 @@ namespace MediaPlayer
             return false;
         }
 
-        public async Task<bool> Conv(string FileInput, string FileOutput = null)
-        {
-            bool replace = false;
-            if (FileOutput == null) {
-                FileOutput = Path.ChangeExtension(FileInput, ".mp3");
-                replace = true;
-            }
-            Debug.WriteLine("Task_Start");
-            Debug.WriteLine(FileInput);
-            Debug.WriteLine(FileOutput);
-
-            if (System.IO.File.Exists(FileOutput)) { System.IO.File.Delete(FileOutput); }
-            Debug.WriteLine("Test File");
-
-            bool ret = await ConvExe(FileInput, FileOutput);
-            Debug.WriteLine("ret conv : "+((ret)?"True":"False"));
-
-            if (replace) { System.IO.File.Delete(FileInput); }
-
-            return true;
-        }
-
         public PlayListViewItem MediaInfo(string FilePath, bool Selected, string OriginPath = null) {
             if (System.IO.File.Exists(FilePath) || System.IO.File.Exists(OriginPath))
             {
@@ -112,21 +114,8 @@ namespace MediaPlayer
                 item.Path = FilePath;
                 item.OriginPath = OriginPath;
                 item.Selected = (Selected) ? MainWindow.PlayListSelectionChar : "";
-                item.Duration = MainWindow.displayTime(0);
-
-                if(tags.Tag.Pictures.Length > 0)
-                {
-                    TagLib.IPicture pic = tags.Tag.Pictures[0];
-                    MemoryStream ms = new MemoryStream(pic.Data.Data);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    // ImageSource for System.Windows.Controls.Image
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = ms;
-                    bitmap.EndInit();
-                    item.Cover = bitmap;
-                }
-                else { item.Cover = null; }
+                item.Duration = 0;
+                item.DurationS = "00:00";
 
                 tags.Dispose();
 
@@ -139,19 +128,44 @@ namespace MediaPlayer
                             if (FilePath.EndsWith(".flac"))
                             {
                                 FlacReader fir = new FlacReader(FilePath);
-                                item.Duration = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
+                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
+                                item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
                                 fir.Dispose();
                             }
                             else
                             {
                                 AudioFileReader fir = new AudioFileReader(FilePath);
-                                item.Duration = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
+                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
+                                item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
                                 fir.Dispose();
                             }
                         }
                     }
                 }
                 return item;
+            }
+            return null;
+        }
+
+        public BitmapImage MediaPicture(string FilePath) {
+            if (System.IO.File.Exists(FilePath))
+            {
+                TagLib.File tags = TagLib.File.Create(FilePath);
+
+                if (tags.Tag.Pictures.Length > 0)
+                {
+                    TagLib.IPicture pic = tags.Tag.Pictures[0];
+                    MemoryStream ms = new MemoryStream(pic.Data.Data);
+                    ms.Seek(0, SeekOrigin.Begin);
+                    // ImageSource for System.Windows.Controls.Image
+                    BitmapImage bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.StreamSource = ms;
+                    bitmap.EndInit();
+                    return bitmap;
+                }
+
+                tags.Dispose();
             }
             return null;
         }

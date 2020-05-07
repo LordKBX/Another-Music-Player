@@ -59,4 +59,6 @@
     <sys:String x:Key="ParamsLibFolderSelectorBlockerType">ce.dossier</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorBlockerName">selectionner</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorBlockerTitle">Dossier</sys:String>
+
+    <sys:String x:Key="ParamsLibItemContextMenuItem1">Ajouter à la liste de lecture</sys:String>
 </ResourceDictionary>
