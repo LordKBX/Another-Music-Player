@@ -15,6 +15,8 @@ This is a personal project to create a Music player written with C#.Net Core 3.1
 **Supported Language:** *(If your system language is French auto select french à first starup)*
 * English
 * French
+
+#### [Bynary download on ![Download Another Music Player](https://sourceforge.net/sflogo.php?type=16&group_id=3217897)](https://sourceforge.net/p/another-music-player/)
 ---
 ## Documentation Française
 
@@ -30,3 +32,5 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C#.N
 **Langues Supportées:** *(Si votre système d'exploitation et configuré en français, au premier démarrage l'application vas se configurer en Français)*
 * Anglais
 * Français
+
+#### [Télécharger l'executable sur ![Download Another Music Player](https://sourceforge.net/sflogo.php?type=16&group_id=3217897)](https://sourceforge.net/p/another-music-player/)
