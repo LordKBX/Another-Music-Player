@@ -8,7 +8,7 @@ This is a personal project to create a Music player written with C#.Net Core 3.1
 
 **Functions:**
 * Playlist
-* Library sort by folder organization with auto scan for update(not in the playlist)
+* Library sorted by folder with auto scan for update(not in the playlist)
 * Conversion for audio files not in the supported formats(mp3;wma;flac) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s
 * Interception of Multimedia shortcuts (Play/Pause, Previous Track, Next Track) on windows
 
