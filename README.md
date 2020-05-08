@@ -16,8 +16,10 @@ This is a personal project to create a Music player written with C#.Net Core 3.1
 * English
 * French
 
-#### [Dependencies ![](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/NET-Core-Logo.png?raw=true)](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x64-installer)
-#### [Bynary download on ![Download Another Music Player](https://sourceforge.net/sflogo.php?type=13&group_id=3217897)](https://sourceforge.net/p/another-music-player/)
+#### Dependencies
+|Name|Version|
+|---|---|
+|![.Net Core](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/NET-Core-Logo.png?raw=true)|[3.1.x](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x64-installer)|
 ---
 ## Documentation Française
 
@@ -34,5 +36,7 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C#.N
 * Anglais
 * Français
 
-#### [Dépendances ![](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/NET-Core-Logo.png?raw=true)](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x64-installer)
-#### [Télécharger l'executable sur ![Download Another Music Player](https://sourceforge.net/sflogo.php?type=13&group_id=3217897)](https://sourceforge.net/p/another-music-player/)
+#### Dépendances
+|Nom|Version|
+|---|---|
+|![.Net Core](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/NET-Core-Logo.png?raw=true)|[3.1.x](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x64-installer)|
