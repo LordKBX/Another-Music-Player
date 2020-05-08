@@ -1,9 +1,9 @@
-#Audio Player
+# Audio Player
 
 ---
-##English Documentation
+## English Documentation
 
-###Abstract:
+### Abstract:
 This is a personal project to create a Music player written with C#.Net Core 3.1 for creating a possible multi-platforms application
 
 **Functions:**
@@ -15,9 +15,9 @@ This is a personal project to create a Music player written with C#.Net Core 3.1
 * English
 * French
 ---
-##Documentation Française
+## Documentation Française
 
-###Abstract:
+### Abstract:
 Ceci est un projet personnel de création d'un lecteur de musique écrit en C#.Net Core 3.1 pour possiblement écrice une application multi-platformes
 
 **Fonctions:**
