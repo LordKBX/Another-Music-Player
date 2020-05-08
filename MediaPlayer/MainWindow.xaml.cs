@@ -55,6 +55,7 @@ namespace MediaPlayer
 
 
             InitializeComponent();
+            SettingsSetUp();
 
             Resources.MergedDictionaries.Clear();
             Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });
@@ -80,7 +81,6 @@ namespace MediaPlayer
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
 
-            SettingsSetUp();
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)

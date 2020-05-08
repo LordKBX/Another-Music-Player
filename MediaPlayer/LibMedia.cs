@@ -33,22 +33,15 @@ namespace MediaPlayer
         private string LibCurrentFolderS = null;
         FileSystemWatcher LibFolderWatcher = null;
 
-        private void ScanLibrary()
+        private void ScanLibrary(bool DoClean = false)
         {
             if (Settings.LibFolder != null)
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder))
                 {
-                    if (LibFolderWatcher == null)
-                    {
-                        LibFolderWatcher = new FileSystemWatcher();
-                        LibFolderWatcher.Path = Settings.LibFolder;
-                        LibFolderWatcher.IncludeSubdirectories = true;
-                        LibFolderWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-                        LibFolderWatcher.Filter = "*.*";
-                        LibFolderWatcher.Changed += new FileSystemEventHandler(OnLibraryChanged);
-                        LibFolderWatcher.EnableRaisingEvents = true;
-                    }
+                    if (DoClean) { LibCurrentFolder = null; LibFolderWatcher = null; }
+                    if (LibFolderWatcher == null) { LibCreateFolderWatcher(); }
+                    else if (LibFolderWatcher.Path != Settings.LibFolder) { LibCreateFolderWatcher(); }
 
                     //LibTreeView.Items.Clear();
                     LastLibScan = UnixTimestamp();
@@ -60,6 +53,15 @@ namespace MediaPlayer
                     LibBuildNavigationContent(LibCurrentFolder ?? LibFolders);
                 }
             }
+        }
+        private void LibCreateFolderWatcher() {
+            LibFolderWatcher = new FileSystemWatcher();
+            LibFolderWatcher.Path = Settings.LibFolder;
+            LibFolderWatcher.IncludeSubdirectories = true;
+            LibFolderWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            LibFolderWatcher.Filter = "*.*";
+            LibFolderWatcher.Changed += new FileSystemEventHandler(OnLibraryChanged);
+            LibFolderWatcher.EnableRaisingEvents = true;
         }
 
         private void OnLibraryChanged(object source, FileSystemEventArgs e)
@@ -119,9 +121,9 @@ namespace MediaPlayer
             Folder last = fold;
             tabFold.Insert(0, last);
             while (true) {
-                last = last.Parent;
                 if (last != null) { tabFold.Insert(0, last); }
                 else { break; }
+                last = last.Parent;
             }
             //Debug.WriteLine(Settings.LibFolder);
             //Debug.WriteLine(path);
@@ -129,35 +131,32 @@ namespace MediaPlayer
 
             int l1 = 0;
             string newPath = "";
-            foreach (string pa in tabPath)
+            foreach (Folder pa in tabFold)
             {
-                if (pa != "")
+                if (l1>0)
                 {
-                    if (l1>0)
-                    {
-                        if (pa == "Home") { break; }
-                        TextBlock tb2 = new TextBlock();
-                        tb2.Text = "/";
-                        LibNavigationPathContener.Children.Add(tb2);
-                        newPath += "/";
-                    }
-
-                    newPath += pa;
-                    TextBlock tb3 = new TextBlock();
-                    tb3.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationPathItem"];
-                    tb3.Text = pa;
-                    tb3.Tag = new object[] { "folder", tabFold[l1].Path, tabFold[l1] };
-                    tb3.MouseDown += Tb3_MouseDown;
-
-                    ContextMenu ct = new ContextMenu();
-                    MenuItem mu = new MenuItem() { Header = (string)Resources.MergedDictionaries[1]["ParamsLibItemContextMenuItem1"] };
-                    mu.Click += LibContextMenuClick;
-                    ct.Items.Add(mu);
-                    tb3.ContextMenu = ct;
-
-                    LibNavigationPathContener.Children.Add(tb3);
-                    l1 += 1;
+                    if (tabFold[l1 - 1].Path == pa.Path) { break; }
+                    TextBlock tb2 = new TextBlock();
+                    tb2.Text = "/";
+                    LibNavigationPathContener.Children.Add(tb2);
+                    newPath += "/";
                 }
+
+                newPath += pa;
+                TextBlock tb3 = new TextBlock();
+                tb3.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationPathItem"];
+                tb3.Text = pa.Name;
+                tb3.Tag = new object[] { "folder", pa.Path, pa };
+                tb3.MouseDown += Tb3_MouseDown;
+
+                ContextMenu ct = new ContextMenu();
+                MenuItem mu = new MenuItem() { Header = (string)Resources.MergedDictionaries[1]["ParamsLibItemContextMenuItem1"] };
+                mu.Click += LibContextMenuClick;
+                ct.Items.Add(mu);
+                tb3.ContextMenu = ct;
+
+                LibNavigationPathContener.Children.Add(tb3);
+                l1 += 1;
             }
 
         }
