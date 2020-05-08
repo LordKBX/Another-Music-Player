@@ -151,18 +151,24 @@ namespace MediaPlayer
                     tb3.Text = pa;
                     tb3.Tag = new object[] { "folder", tabFold[l1].Path, tabFold[l1] };
                     tb3.MouseDown += Tb3_MouseDown;
-
-                    ContextMenu ct = new ContextMenu();
-                    MenuItem mu = new MenuItem() { Header = (string)Resources.MergedDictionaries[1]["ParamsLibItemContextMenuItem1"] };
-                    mu.Click += LibContextMenuClick;
-                    ct.Items.Add(mu);
-                    tb3.ContextMenu = ct;
+                    tb3.ContextMenu = LibMediaCreateContextMenu();
 
                     LibNavigationPathContener.Children.Add(tb3);
                     l1 += 1;
                 }
             }
 
+        }
+        private ContextMenu LibMediaCreateContextMenu()
+        {//AddImg
+            ContextMenu ct = new ContextMenu();
+            MenuItem mu = new MenuItem() { 
+                Header = (string)Resources.MergedDictionaries[1]["ParamsLibItemContextMenuItem1"],
+                Icon = AddImg
+            };
+            mu.Click += LibContextMenuClick;
+            ct.Items.Add(mu);
+            return ct;
         }
 
         private void Tb3_MouseDown(object sender, MouseButtonEventArgs e)
@@ -212,12 +218,7 @@ namespace MediaPlayer
 
             gr.Tag = new object[] { type, path, fold };
             gr.MouseLeftButtonDown += LibNavigationContentButtonClick;
-
-            ContextMenu ct = new ContextMenu();
-            MenuItem mu = new MenuItem() { Header = (string)Resources.MergedDictionaries[1]["ParamsLibItemContextMenuItem1"] };
-            mu.Click += LibContextMenuClick;
-            ct.Items.Add(mu);
-            gr.ContextMenu = ct;
+            gr.ContextMenu = LibMediaCreateContextMenu();
 
             br.Child = gr;
             LibNavigationContent.Children.Add(br);

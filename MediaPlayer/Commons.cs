@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
+using System.Windows.Controls;
 
 namespace MediaPlayer
 {
@@ -50,6 +51,8 @@ namespace MediaPlayer
         //public static BitmapImage MiniPlayButtonImg_Play = new BitmapImage(new Uri(BaseDirImg + "play_24.png"));
         //public static BitmapImage MiniPlayButtonImg_Pause = new BitmapImage(new Uri(BaseDirImg + "pause_24.png"));
         //public static BitmapImage MiniNextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next_24.png"));
+
+        public static Image AddImg = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
 
         private static Dictionary<string, Uri> ImagesUriList = new Dictionary<string, Uri> {
             { "CoverImg", new Uri(BaseDirImg + "album_small.png") },

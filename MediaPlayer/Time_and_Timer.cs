@@ -115,7 +115,7 @@ namespace MediaPlayer
                     if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; }
                     else { previous_items = new ObservableCollection<PlayListViewItem>(); }
 
-                    Debug.WriteLine("PlayListDisplayed loading");
+                    //Debug.WriteLine("PlayListDisplayed loading");
                     Timer_LastIndex = PlayListIndex;
                     ObservableCollection<PlayListViewItem> tmp = new ObservableCollection<PlayListViewItem>();
                     int min = (PlayListIndex != -1) ? PlayListIndex : 0;
@@ -139,7 +139,7 @@ namespace MediaPlayer
                             tmp.Add(item); 
                         }
                     }
-                    Debug.WriteLine(JsonConvert.SerializeObject(tmp));
+                    //Debug.WriteLine(JsonConvert.SerializeObject(tmp));
                     
                     PlayListView.ItemsSource = tmp;
                     PlayListView.Items.Refresh();
