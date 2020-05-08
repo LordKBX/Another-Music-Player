@@ -33,22 +33,15 @@ namespace MediaPlayer
         private string LibCurrentFolderS = null;
         FileSystemWatcher LibFolderWatcher = null;
 
-        private void ScanLibrary()
+        private void ScanLibrary(bool DoClean = false)
         {
             if (Settings.LibFolder != null)
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder))
                 {
-                    if (LibFolderWatcher == null)
-                    {
-                        LibFolderWatcher = new FileSystemWatcher();
-                        LibFolderWatcher.Path = Settings.LibFolder;
-                        LibFolderWatcher.IncludeSubdirectories = true;
-                        LibFolderWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-                        LibFolderWatcher.Filter = "*.*";
-                        LibFolderWatcher.Changed += new FileSystemEventHandler(OnLibraryChanged);
-                        LibFolderWatcher.EnableRaisingEvents = true;
-                    }
+                    if (DoClean) { LibCurrentFolder = null; LibFolderWatcher = null; }
+                    if (LibFolderWatcher == null) { LibCreateFolderWatcher(); }
+                    else if (LibFolderWatcher.Path != Settings.LibFolder) { LibCreateFolderWatcher(); }
 
                     //LibTreeView.Items.Clear();
                     LastLibScan = UnixTimestamp();
@@ -60,6 +53,16 @@ namespace MediaPlayer
                     LibBuildNavigationContent(LibCurrentFolder ?? LibFolders);
                 }
             }
+        }
+        private void LibCreateFolderWatcher()
+        {
+            LibFolderWatcher = new FileSystemWatcher();
+            LibFolderWatcher.Path = Settings.LibFolder;
+            LibFolderWatcher.IncludeSubdirectories = true;
+            LibFolderWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            LibFolderWatcher.Filter = "*.*";
+            LibFolderWatcher.Changed += new FileSystemEventHandler(OnLibraryChanged);
+            LibFolderWatcher.EnableRaisingEvents = true;
         }
 
         private void OnLibraryChanged(object source, FileSystemEventArgs e)
