@@ -31,7 +31,7 @@ namespace MediaPlayer
 {
     class Settings : Advexp.Settings<Settings>
     {
-        [Setting(Name = "Local.Lang", Default = null)]
+        [Setting(Name = "Local.Lang", Default = "en-US")]
         public static string Lang { get; set; } = null;
 
         [Setting(Name = "Local.ConversionMode", Default = 1)]
@@ -58,9 +58,6 @@ namespace MediaPlayer
 
         private void SettingsSetUp()
         {
-            //Settings.DeleteSettings(); Settings.SaveSettings();
-
-            if (Settings.Lang == null) { Settings.Lang = (AppLang.StartsWith("fr-")) ? "fr-FR" : "en-US"; }
             if (Settings.Lang.StartsWith("fr-")) { ParamsLanguageVals.SelectedIndex = 1; }
             else { ParamsLanguageVals.SelectedIndex = 0; }
             ParamsLanguageVals.SelectionChanged += ParamsLanguageVals_SelectionChanged;
@@ -82,10 +79,6 @@ namespace MediaPlayer
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }
                 else { Settings.LibFolder = null; }
-            }
-            else {
-                ParamsLibFolderTextBox.Text = Settings.LibFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-                Settings.SaveSettings();
             }
         }
 

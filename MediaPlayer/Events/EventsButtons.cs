@@ -187,12 +187,11 @@ namespace MediaPlayer
         private void ParamsLibFolderBtn_Click(object sender, RoutedEventArgs e)
         {
             string path = OpenFolder();
-            if (path != null && path != Settings.LibFolder)
+            if (path != null)
             {
                 ParamsLibFolderTextBox.Text = path;
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
-                ScanLibrary(true);
             }
         }
 

@@ -147,10 +147,7 @@
                     -->
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                <UniformGrid Background="#FFCFCFCF" Margin="0,0,4,0">
-                    <AccessText Text="  Comming Soon !  " Foreground="Black" Background="#FFCFCFCF" Margin="0,0,4,0" TextAlignment="Center" FontSize="48" VerticalAlignment="Center" />
-                </UniformGrid>
+            <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle}">
             </TabItem>
             <TabItem Header="{DynamicResource TabParams}" Style="{DynamicResource TabItemStyle}">
                 <WrapPanel Background="#FFCFCFCF" Margin="0,0,4,0">
