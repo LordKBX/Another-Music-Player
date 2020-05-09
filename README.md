@@ -1,4 +1,4 @@
-# Audio Player
+# Another Music Player
 
 ---
 ## English Documentation

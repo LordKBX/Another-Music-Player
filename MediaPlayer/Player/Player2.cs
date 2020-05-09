@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Runtime.InteropServices;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
 
     public partial class Player2

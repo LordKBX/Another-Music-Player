@@ -15,7 +15,7 @@ using System.ComponentModel;
 using System.Windows.Controls.Primitives;
 using System.Security.Cryptography;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {

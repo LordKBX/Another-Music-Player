@@ -2,9 +2,10 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Windows.Controls;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public class PlayListViewItem
     {
@@ -26,8 +27,10 @@ namespace MediaPlayer
         }
     }
 
+
     public partial class MainWindow : Window
     {
+
         public static string PlayListSelectionChar = "▶";
 
         public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;

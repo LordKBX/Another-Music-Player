@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Diagnostics;
 using System.ComponentModel;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -87,7 +87,7 @@ namespace MediaPlayer
             KeyboardInterceptorSetUp();
 
             //Settings.LibFolder = "D:\\Music\\";
-            ScanLibrary();
+            MediatequeScan();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

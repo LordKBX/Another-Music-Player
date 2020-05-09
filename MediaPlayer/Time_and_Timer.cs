@@ -11,7 +11,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using TagLib.Ape;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -56,7 +56,11 @@ namespace MediaPlayer
             return ret;
         }
 
-        public static double UnixTimestamp() { return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; }
+        public static double UnixTimestamp() { return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds; }
+        public static double UnixTimestamp(int year, int month, int day, int housr=0, int minutes=0, int seconds=0) {
+            DateTime date = new DateTime(year, month, day, housr, minutes, seconds, DateTimeKind.Utc);
+            return (date.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds;
+        }
 
         private void TimerUpdateButtonsSetUp()
         {

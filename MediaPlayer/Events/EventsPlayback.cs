@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Input;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -192,7 +192,7 @@ namespace MediaPlayer
                 ParamsLibFolderTextBox.Text = path;
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
-                ScanLibrary(true);
+                MediatequeScan(true);
             }
         }
 

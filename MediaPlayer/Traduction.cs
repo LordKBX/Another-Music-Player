@@ -7,7 +7,7 @@ using System.Diagnostics;
 using System.Collections;
 using System.Windows.Controls;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {

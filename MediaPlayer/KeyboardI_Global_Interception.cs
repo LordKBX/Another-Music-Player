@@ -6,7 +6,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Collections.Generic;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {

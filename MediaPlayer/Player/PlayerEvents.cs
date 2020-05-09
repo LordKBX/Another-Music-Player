@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public class MediaPositionChangedEventParams { public long Position = 0; public long Duration = 0; }
     public class MediaLengthChangedEventParams { public long Duration = 0; }

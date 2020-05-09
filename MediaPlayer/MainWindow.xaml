@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Collections="clr-namespace:System.Collections;assembly=System.Collections.NonGeneric" 
-        xmlns:local="clr-namespace:MediaPlayer"
-        x:Class="MediaPlayer.MainWindow" Name="win1" mc:Ignorable="d" Title="Media Player" Height="400" MinHeight="350" Width="550" MinWidth="500">
+        xmlns:local="clr-namespace:AnotherMusicPlayer"
+        x:Class="AnotherMusicPlayer.MainWindow" Name="win1" mc:Ignorable="d" Title="Another Music Player" Height="400" MinHeight="350" Width="550" MinWidth="500">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="taskBarItemInfo1" Description="Taskbar Item Info Sample">
             <TaskbarItemInfo.ThumbButtonInfos>

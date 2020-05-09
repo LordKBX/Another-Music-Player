@@ -27,7 +27,7 @@ using Advexp;
 using Advexp.DynamicSettings;
 using Advexp.LocalDynamicSettings;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     class Settings : Advexp.Settings<Settings>
     {
@@ -78,11 +78,9 @@ namespace MediaPlayer
             ParamsConvQualityVals.SelectionChanged += ParamsConvQualityVals_SelectionChanged;
             player.ConvQuality(Settings.ConversionBitRate);
 
-            if (Settings.LibFolder != null)
-            {
-                if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }
-                else { Settings.LibFolder = null; }
-            }
+            if (Settings.LibFolder == null) { Settings.LibFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic); }
+            if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }
+            else { Settings.LibFolder = null; }
         }
 
         private void ParamsLanguageVals_SelectionChanged(object sender, SelectionChangedEventArgs e)

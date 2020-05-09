@@ -4,7 +4,7 @@ using System.Windows.Input;
 using System.Drawing;
 using System.Diagnostics;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace MediaPlayer
+namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {
