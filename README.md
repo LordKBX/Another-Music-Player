@@ -1,5 +1,5 @@
 # Another Music Player
-[ ![Capture 1](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/1.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/1.png?raw=true)
+[ ![Capture 1|100x50](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/1.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/1.png?raw=true)
 ---
 ## English Documentation
 
