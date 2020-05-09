@@ -1,5 +1,5 @@
 # Another Music Player
-[ ![Capture 1](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/1.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/1.png?raw=true){:target="_blank" rel="noopener"}
+[ ![Capture 1](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/1.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/1.png?raw=true)
 [ ![Capture 2](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/2.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/2.png?raw=true)
 [ ![Capture 3](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/3.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/3.png?raw=true)
 [ ![Capture 4](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/4.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/4.png?raw=true)
