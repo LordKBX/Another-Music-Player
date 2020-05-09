@@ -1,5 +1,7 @@
 ﻿using System;
 using System.IO;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Collections.Generic;
@@ -37,18 +39,74 @@ namespace AnotherMusicPlayer
         private Folder MediatequeCurrentFolder = null;
         private string MediatequeCurrentFolderS = null;
         private FileSystemWatcher MediatequeWatcher = null;
+        private double MediatequeTotalScanedSize = 0;
+        private double MediatequeTotalScanedDuration = 0;
 
         Dictionary<string, Dictionary<string, object>> MediatequeBddFiles = new Dictionary<string, Dictionary<string, object>>();
         List<string> MediatequeScanedFiles = new List<string>();
-        private void MediatequeScan(bool DoClean = false)
+        private async void MediatequeInvokeScan(bool DoClean = false) {
+            try
+            {
+                Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScan));
+                objThread.IsBackground = true;
+                objThread.Priority = ThreadPriority.AboveNormal;
+                objThread.Start(DoClean);
+            }
+            catch (ThreadStartException objException) { }
+            catch (ThreadAbortException objException) { }
+            catch (Exception objException) { }
+        }
+        private async void MediatequeScan(object param) {
+            try { MediatequeScan((bool)param); }
+            catch { }
+        }
+        private async void MediatequeScan(bool DoClean = false)
         {
             MediatequeBddInit();
             if (Settings.LibFolder != null)
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder))
                 {
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        LibNavigationPathContener.Children.Clear();
+                        LibNavigationContent.Children.Clear();
+
+                        TextBlock tb2 = new TextBlock();
+                        tb2.Text = "<< Scan en cours >>, Fichiers trouvés: ";
+                        tb2.FontSize = 8;
+                        LibNavigationPathContener.Children.Add(tb2);
+
+                        TextBlock tb3 = new TextBlock();
+                        tb3.Text = "" + MediatequeScanedFiles.Count;
+                        tb3.FontSize = 8;
+                        LibNavigationPathContener.Children.Add(tb3);
+
+                        TextBlock tb4 = new TextBlock();
+                        tb4.Text = ", Taille Totale: ";
+                        tb4.FontSize = 8;
+                        LibNavigationPathContener.Children.Add(tb4);
+
+                        TextBlock tb5 = new TextBlock();
+                        tb5.Text = "" + MediatequeTotalScanedSize;
+                        tb5.FontSize = 8;
+                        LibNavigationPathContener.Children.Add(tb5);
+
+                        TextBlock tb6 = new TextBlock();
+                        tb6.Text = ", Durée Totale: ";
+                        tb6.FontSize = 8;
+                        LibNavigationPathContener.Children.Add(tb6);
+
+                        TextBlock tb7 = new TextBlock();
+                        tb7.Text = "" + MediatequeTotalScanedDuration;
+                        tb7.FontSize = 8;
+                        LibNavigationPathContener.Children.Add(tb7);
+
+                        LibNavigationContent.Orientation = Orientation.Vertical;
+                    }));
                     if (DoClean) {
                         MediatequeCurrentFolder = null; MediatequeWatcher = null;
+                        MediatequeTotalScanedSize = 0;
+                        MediatequeTotalScanedDuration = 0;
                         //MediatequeBddQuery("DELETE FROM files");
                         MediatequeScanedFiles = new List<string>();
                     }
@@ -61,12 +119,25 @@ namespace AnotherMusicPlayer
                     LastLibScan = UnixTimestamp();
                     DirectoryInfo di = new DirectoryInfo(Settings.LibFolder);
                     MediatequeRefFolder = new Folder() { Name = di.Name, Path = di.FullName };
+
                     MediatequeBddTansactionStart();
                     MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
                     MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
                     MediatequeBddTansactionEnd();
-                    MediatequeBuildNavigationPath(MediatequeCurrentFolder ?? MediatequeRefFolder);
-                    MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
+
+                    MediatequeBddTansactionStart();
+                    foreach (string fi in MediatequeScanedFiles) {
+                        if (!MediatequeScanedFiles.Contains(fi)) {
+                            MediatequeBddQuery("DELETE FROM files WHERE Path='"+ MediatequeBddEscapeString(fi) + "'");
+                        }
+                    }
+                    MediatequeBddTansactionEnd();
+
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        LibNavigationContent.Orientation = Orientation.Horizontal;
+                        MediatequeBuildNavigationPath(MediatequeCurrentFolder ?? MediatequeRefFolder);
+                        MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
+                    }));
                 }
             }
         }
@@ -139,26 +210,72 @@ namespace AnotherMusicPlayer
                         if (Convert.ToInt64((string)MediatequeBddFiles[fi.FullName]["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
                         {
                             PlayListViewItem item = player.MediaInfo(fi.FullName, false);
+                            MediatequeTotalScanedDuration += item.Duration;
+                            MediatequeTotalScanedSize += item.Size;
                             MediatequeBddQuery("UPDATE files SET Name='" + MediatequeBddEscapeString(item.Name)
                                 + "', Album='" + MediatequeBddEscapeString(item.Album)
                                 + "', Artists='" + MediatequeBddEscapeString(item.Artist)
                                 + "', Duration='" + item.Duration
+                                + "', Size='" + item.Size
                                 + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
                                 + "' WHERE Path='" + MediatequeBddEscapeString(fi.FullName) + "'");
+                        }
+                        else {
+                            MediatequeTotalScanedDuration += Convert.ToInt64(MediatequeBddFiles[fi.FullName]["Duration"]);
+                            MediatequeTotalScanedSize += Convert.ToInt64(MediatequeBddFiles[fi.FullName]["Size"]);
                         }
                     }
                     else
                     {
                         PlayListViewItem item = player.MediaInfo(fi.FullName, false);
-                        string query = "INSERT INTO files(Path,Name,Album,Artists,Duration,LastUpdate) VALUES('";
+                        MediatequeTotalScanedDuration += item.Duration;
+                        MediatequeTotalScanedSize += item.Size;
+                        string query = "INSERT INTO files(Path,Name,Album,Artists,Duration,Size,LastUpdate) VALUES('";
                         query += MediatequeBddEscapeString(fi.FullName) + "','";
                         query += MediatequeBddEscapeString(item.Name) + "','";
                         query += MediatequeBddEscapeString(item.Album) + "','";
                         query += MediatequeBddEscapeString(item.Artist) + "','";
                         query += item.Duration + "','";
+                        query += item.Size + "','";
                         query += fi.LastWriteTimeUtc.ToFileTime() + "')";
                         MediatequeBddQuery(query);
                     }
+
+                    if (MediatequeBddConnection.Changes % 100 == 0)
+                    {
+                        MediatequeBddTansactionEnd();
+                        MediatequeBddTansactionStart();
+                    }
+
+                    Dispatcher.BeginInvoke(new Action(() => {
+                        TextBlock tb2 = new TextBlock();
+                        tb2.Text = fi.FullName.Replace(Settings.LibFolder, "");
+                        LibNavigationContent.Children.Insert(0, tb2);
+                        if (LibNavigationContent.Children.Count > 30) { LibNavigationContent.Children.RemoveAt(30); }
+
+                        LibNavigationPathContener.Children.RemoveAt(1);
+                        TextBlock tb3 = new TextBlock();
+                        tb3.Text = "" + MediatequeScanedFiles.Count;
+                        tb3.FontSize = 8;
+                        LibNavigationPathContener.Children.Insert(1, tb3);
+
+                        LibNavigationPathContener.Children.RemoveAt(3);
+                        TextBlock tb5 = new TextBlock();
+                        tb5.Text = "" + BytesLengthToString((long)MediatequeTotalScanedSize);
+                        tb5.FontSize = 8;
+                        LibNavigationPathContener.Children.Insert(3, tb5);
+
+                        LibNavigationPathContener.Children.RemoveAt(5);
+                        TextBlock tb7 = new TextBlock();
+                        tb7.Text = "" + displayTime((long)MediatequeTotalScanedDuration);
+                        tb7.FontSize = 8;
+                        LibNavigationPathContener.Children.Insert(5, tb7);
+                        /*
+                         
+        private double MediatequeTotalScanedSize = 0;
+        private double MediatequeTotalScanedDuration = 0;
+                         */
+                    }));
                 }
             }
             //Debug.WriteLine(JsonConvert.SerializeObject(fold.Files));
@@ -361,42 +478,6 @@ namespace AnotherMusicPlayer
             return tab;
         }
 
-
-
-
-
-        /*
-        private void LibTreeView_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void LibTreeView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            string file = (string)((TreeViewItem)LibTreeView.SelectedItem).Tag;
-            if (System.IO.File.Exists(file))
-            {
-                if (PlayListView.Items.Count > 0)
-                {
-                    if (player.IsPlaying()) { UpdateListView(player.MediaInfo(file, false), true); }
-                    else { updatePlaylist(UpdateListView(player.MediaInfo(file, false)), true); }
-                }
-                else { fileOpen(file); }
-            }
-            else if (System.IO.Directory.Exists(file))
-            {
-                foreach (TreeViewItem item in ((TreeViewItem)LibTreeView.SelectedItem).Items)
-                {
-                    file = (string)item.Tag;
-                    if (System.IO.File.Exists(file))
-                    {
-                        if (PlayListView.Items.Count > 0) { if (player.IsPlaying()) { UpdateListView(player.MediaInfo(file, false), true); } else { fileOpen(file); } }
-                        else { fileOpen(file); }
-                    }
-                }
-            }
-        }
-        */
 
     }
 }

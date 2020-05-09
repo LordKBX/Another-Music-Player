@@ -28,6 +28,7 @@ namespace AnotherMusicPlayer
         bool lastPlayStatus = false;
 
         string AppLang = System.Globalization.CultureInfo.CurrentCulture.Name;
+        public static string AppName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
 
         int WindowWidthMode = 150;
 
@@ -92,7 +93,7 @@ namespace AnotherMusicPlayer
             KeyboardInterceptorSetUp();
 
             //Settings.LibFolder = "D:\\Music\\";
-            MediatequeScan();
+            MediatequeInvokeScan();
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -156,6 +157,7 @@ namespace AnotherMusicPlayer
         public delegate void updatePlaylistCb(int index, bool DoPlay = false);
         private void updatePlaylist(int NewPosition, bool DoPlay = false)
         {
+            if (PlayList2.Count == 0) { return; }
             Debug.WriteLine("NewPosition = " + NewPosition);
             if (NewPosition >= 0 && NewPosition != PlayListIndex)
             {

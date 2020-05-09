@@ -15,6 +15,7 @@ namespace AnotherMusicPlayer
         public string Album { get; set; }
         public string Artist { get; set; }
         public long Duration { get; set; }
+        public long Size { get; set; }
         public string DurationS { get; set; }
         public string Selected { get; set; }
         public object ToolTip { get; set; }
@@ -22,7 +23,7 @@ namespace AnotherMusicPlayer
         public PlayListViewItem()
         {
             Path = OriginPath = Name = Album = Artist = Selected = DurationS = "test";
-            Duration = 0;
+            Duration = Size = 0;
             ToolTip = null;
         }
     }
@@ -78,6 +79,17 @@ namespace AnotherMusicPlayer
         };
         public static BitmapImage Bimage(string index) {
             if (ImagesUriList.ContainsKey(index)) { return new BitmapImage(ImagesUriList[index]); } else { return null; }
+        }
+
+        public static String BytesLengthToString(long byteCount)
+        {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+            if (byteCount == 0)
+                return "0" + suf[0];
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return (Math.Sign(byteCount) * num).ToString() + suf[place];
         }
     }
 }

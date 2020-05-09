@@ -114,7 +114,8 @@ namespace AnotherMusicPlayer
                 item.Path = FilePath;
                 item.OriginPath = OriginPath;
                 item.Selected = (Selected) ? MainWindow.PlayListSelectionChar : "";
-                item.Duration = 0;
+                item.Duration = (long)tags.Properties.Duration.TotalMilliseconds;
+                item.Size = new System.IO.FileInfo(OriginPath ?? FilePath).Length;
                 item.DurationS = "00:00";
 
                 tags.Dispose();

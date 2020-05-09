@@ -46,12 +46,11 @@ namespace AnotherMusicPlayer
         private static void MediatequeBddInit()
         {
             if (MediatequeBdd_IsInitilized()) { return; }
-            string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + appName;
+            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + AppName;
             //MediatequeBddFolder = BaseDir + System.IO.Path.DirectorySeparatorChar + appName;
             if (!System.IO.Directory.Exists(MediatequeBddFolder)) { System.IO.Directory.CreateDirectory(MediatequeBddFolder); }
 
-            Debug.WriteLine(appName);
+            Debug.WriteLine(AppName);
             Debug.WriteLine(MediatequeBddFolder);
             MediatequeBddConnection = new SQLiteConnection(
                 "Data Source="+ MediatequeBddFolder + System.IO.Path.DirectorySeparatorChar + "base.db; Version = 3; New = True; Compress = True; "
@@ -63,7 +62,7 @@ namespace AnotherMusicPlayer
                 else {
                     if (ret.Count == 0) { 
                         Debug.WriteLine("Not Found");
-                        MediatequeBddQuery("CREATE TABLE files(Path TEXT, Name TEXT, Artists TEXT, Album TEXT, Duration INTEGER, LastUpdate BIGINT)");
+                        MediatequeBddQuery("CREATE TABLE files(Path TEXT, Name TEXT, Artists TEXT, Album TEXT, Duration INTEGER, Size INTEGER, LastUpdate BIGINT)");
                     }
                     else
                     {
