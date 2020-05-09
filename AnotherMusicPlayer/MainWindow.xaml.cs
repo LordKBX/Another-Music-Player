@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Input;
 
 using System.Diagnostics;
@@ -36,6 +37,8 @@ namespace AnotherMusicPlayer
         public PlayListViewItem PlayItem { get; set; }
         public static RoutedCommand GlobalCommand = new RoutedCommand();
 
+        Duration duration;
+
         /// <summary>
         /// Used for storing object dependant of the Operating system
         /// </summary>
@@ -44,6 +47,8 @@ namespace AnotherMusicPlayer
 
         public MainWindow()
         {
+            duration = new Duration(TimeSpan.FromMilliseconds(100));
+
             SettingsInit();
 
             this.DataContext = this;
@@ -131,92 +136,21 @@ namespace AnotherMusicPlayer
             ((TabItem)(TabControler.Items[TabControler.Items.Count - 1])).Width -= 1;
         }
 
-        //private void fileOpen(string FilePath, string OriginPath = null, bool doPlay = true)
-        //{
-        //    PlayListViewItem it = player.MediaInfo(FilePath, doPlay, OriginPath);
-        //    lastEnd = UnixTimestamp();
-        //    if (doPlay)
-        //    {
-        //        player.StopAll();
-        //        int last = PlayListIndex;
-        //        Dispatcher.BeginInvoke(new Action(() => {
-        //            try
-        //            {
-        //                PlayList[last].Selected = PlayListSelectionChar;
-        //                //PlayListView.Items.Refresh();
-        //            }
-        //            catch /*  (System.Exception er) {Debug.WriteLine(JsonConvert.SerializeObject(er));} */ { }
-        //        }));
-        //    }
-        //    player.Open(FilePath, doPlay);
-        //    MediaLastOpen = FilePath;
-        //    PlayListIndex = UpdateListView(it);
-
-        //    PlayItemNameValue.ToolTip = PlayItemNameValue.Text = it.Name;
-        //    PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = it.Album;
-        //    PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = it.Artist;
-        //    PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = it.DurationS;
-
-        //    FileCover.Source = null;
-        //    FileCover.Source = player.MediaPicture(FilePath);
-        //    if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
-        //    //PlayListView.SelectedIndex = PlayListIndex;
-        //}
-
         private void fileOpen(string FilePath, bool doPlay = true)
         {
             PlayListViewItem it = player.MediaInfo(FilePath, false);
+            if (it == null) { return; }
             lastEnd = UnixTimestamp();
             player.Open(FilePath, doPlay);
 
-            PlayItemNameValue.ToolTip = PlayItemNameValue.Text = it.Name;
-            PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = it.Album;
-            PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = it.Artist;
+            PlayItemNameValue.ToolTip = PlayItemNameValue.Text = (it.Name!=null)?it.Name:"";
+            PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = (it.Album != null) ? it.Album : "";
+            PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = (it.Artist != null) ? it.Artist : "";
             PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = it.DurationS;
 
             FileCover.Source = null;
             FileCover.Source = player.MediaPicture(FilePath);
             if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
-        }
-
-        private int UpdateListView(PlayListViewItem item, bool replace = false)
-        {
-            if (item == null) { return -1; }
-            int Max = PlayList.Count;
-            for (int i = 0; i < Max; i++)
-            {
-                try
-                {
-                    bool doReplace = false;
-                    if (item.OriginPath != null)
-                    {
-                        if (PlayList[i].OriginPath == item.OriginPath) { doReplace = true; Debug.WriteLine("Replace by OriginPath"); }
-                    }
-                    else { if (PlayList[i].Path == item.Path) { doReplace = true; Debug.WriteLine("Replace by Path"); } }
-
-                    if (doReplace)
-                    {
-                        if (replace)
-                        {
-                            PlayList[i].Path = item.Path;
-                            PlayList[i].Name = item.Name;
-                            PlayList[i].Album = item.Album;
-                            PlayList[i].Artist = item.Artist;
-                            PlayList[i].Duration = item.Duration;
-                            //PlayListView.Items.Refresh();
-                            //Debug.WriteLine(JsonConvert.SerializeObject(PlayList[i]));
-                        }
-                        return i;
-                    }
-                }
-                //catch (System.Reflection.TargetParameterCountException er) { Debug.WriteLine(JsonConvert.SerializeObject(er)); }
-                //catch (System.Exception er) { Debug.WriteLine(JsonConvert.SerializeObject(er)); }
-                catch { }
-            }
-
-            PlayList.Add(item);
-            //PlayListView.SelectedIndex = PlayList.Count - 1;
-            return PlayList.Count - 1;
         }
 
         public delegate void updatePlaylistCb(int index, bool DoPlay = false);

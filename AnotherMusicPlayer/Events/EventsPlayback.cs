@@ -52,7 +52,9 @@ namespace AnotherMusicPlayer
             Dispatcher.BeginInvoke(new Action(() => { UpdatePosition(displayTime((long)(e.Position))); }));
             if (PreventUpdateSlider) { return; }
             float BarCalc = (e.Position > e.Duration) ? 1000 : ((1000 * e.Position) / e.Duration);
-            Dispatcher.BeginInvoke(new Action(() => { UpdatePositionBar((double)BarCalc); }));
+            Dispatcher.BeginInvoke(new Action(() => { 
+                UpdatePositionBar((double)BarCalc);
+            }));
         }
 
         /// <summary>

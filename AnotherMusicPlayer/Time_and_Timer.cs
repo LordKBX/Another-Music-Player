@@ -123,7 +123,8 @@ namespace AnotherMusicPlayer
                     Timer_LastIndex = PlayListIndex;
                     ObservableCollection<PlayListViewItem> tmp = new ObservableCollection<PlayListViewItem>();
                     int min = (PlayListIndex != -1) ? PlayListIndex : 0;
-                    int max = PlayListIndex + 25;
+                    int max = PlayListIndex + 100;
+                    //int max = PlayList2.Count;
                     string file;
                     PlayListViewItem item;
                     for (int i = min; i < max; i++)
@@ -131,16 +132,29 @@ namespace AnotherMusicPlayer
                         if (PlayList2.Count <= i) { break; }
                         else
                         {
-                            file = PlayList2[i][(PlayList2[i][1] != null)?1:0];
+                            file = PlayList2[i][0];
                             item = null;
                             foreach (PlayListViewItem itm in previous_items) {
                                 if (itm.Path == file) { item = itm; break; }
                             }
+                            if (item == null) {                                 
+                                Dictionary<string, object> rep = MediatequeBddFileInfo(file);
+                                item = new PlayListViewItem() { 
+                                    Path = file, 
+                                    Name = (string)rep["Name"], 
+                                    Album = (string)rep["Album"], 
+                                    Artist = (string)rep["Artists"], 
+                                    Duration = Convert.ToInt64((string)rep["Duration"]),
+                                    DurationS = displayTime(Convert.ToInt64((string)rep["Duration"])),
+                                };
+                            }
                             if (item == null) { item = player.MediaInfo(file, false); }
-                            if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
-                            if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
-
-                            tmp.Add(item); 
+                            if (item != null)
+                            {
+                                if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
+                                if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
+                                tmp.Add(item);
+                            }
                         }
                     }
                     //Debug.WriteLine(JsonConvert.SerializeObject(tmp));

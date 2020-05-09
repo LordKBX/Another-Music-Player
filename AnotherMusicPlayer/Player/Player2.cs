@@ -119,29 +119,33 @@ namespace AnotherMusicPlayer
 
                 tags.Dispose();
 
-                if (System.IO.File.Exists(FilePath))
+                try
                 {
-                    foreach (string ext in AcceptedExtentions())
+                    if (System.IO.File.Exists(FilePath))
                     {
-                        if (FilePath.EndsWith(ext))
+                        foreach (string ext in AcceptedExtentions())
                         {
-                            if (FilePath.EndsWith(".flac"))
+                            if (FilePath.EndsWith(ext))
                             {
-                                FlacReader fir = new FlacReader(FilePath);
-                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                                item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
-                                fir.Dispose();
-                            }
-                            else
-                            {
-                                AudioFileReader fir = new AudioFileReader(FilePath);
-                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                                item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
-                                fir.Dispose();
+                                if (FilePath.EndsWith(".flac"))
+                                {
+                                    FlacReader fir = new FlacReader(FilePath);
+                                    item.Duration = (long)fir.TotalTime.TotalMilliseconds;
+                                    item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
+                                    fir.Dispose();
+                                }
+                                else
+                                {
+                                    AudioFileReader fir = new AudioFileReader(FilePath);
+                                    item.Duration = (long)fir.TotalTime.TotalMilliseconds;
+                                    item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
+                                    fir.Dispose();
+                                }
                             }
                         }
                     }
                 }
+                catch { }
                 return item;
             }
             return null;

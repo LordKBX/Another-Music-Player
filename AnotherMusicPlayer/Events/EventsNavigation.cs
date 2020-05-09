@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Windows.Media.Animation;
 using System.Windows.Input;
 using System.Drawing;
 using System.Diagnostics;
@@ -14,7 +15,9 @@ namespace AnotherMusicPlayer
 
         private void UpdateSize(string size) { DisplayPlaybackSize.Content = size; }
         private void UpdatePosition(string position) { DisplayPlaybackPosition.Content = position; }
-        private void UpdatePositionBar(double position) { DisplayPlaybackPositionBar.Value = position; }
+        private void UpdatePositionBar(double position) { 
+            DisplayPlaybackPositionBar.BeginAnimation(System.Windows.Controls.ProgressBar.ValueProperty, new DoubleAnimation((double)position, duration));
+        }
 
         private void DisplayPlaybackPositionBar_MouseDown(object sender, MouseButtonEventArgs e)
         {

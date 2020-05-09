@@ -47,8 +47,8 @@ namespace AnotherMusicPlayer
         {
             if (MediatequeBdd_IsInitilized()) { return; }
             string appName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData)
-                 + System.IO.Path.DirectorySeparatorChar + appName;
+            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + appName;
+            //MediatequeBddFolder = BaseDir + System.IO.Path.DirectorySeparatorChar + appName;
             if (!System.IO.Directory.Exists(MediatequeBddFolder)) { System.IO.Directory.CreateDirectory(MediatequeBddFolder); }
 
             Debug.WriteLine(appName);
@@ -58,12 +58,12 @@ namespace AnotherMusicPlayer
                 );
             try { 
                 MediatequeBddConnection.Open();
-                List<Dictionary<string, object>> ret = MediatequeBddQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'files'");
+                Dictionary<string, Dictionary<string, object>> ret = MediatequeBddQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'files'");
                 if (ret == null) { Debug.WriteLine("ERROR"); }
                 else {
                     if (ret.Count == 0) { 
                         Debug.WriteLine("Not Found");
-                        MediatequeBddQuery("CREATE TABLE files(Path TEXT, Name TEXT, Artists TEXT, Album TEXT, Duration INTEGER, LastUpdate TEXT)");
+                        MediatequeBddQuery("CREATE TABLE files(Path TEXT, Name TEXT, Artists TEXT, Album TEXT, Duration INTEGER, LastUpdate BIGINT)");
                     }
                     else
                     {
@@ -75,28 +75,67 @@ namespace AnotherMusicPlayer
             catch (Exception ex) { Debug.WriteLine("Catch ERROR"); }
         }
 
-        private static List<Dictionary<string, object>> MediatequeBddQuery(string query)
+        private static Dictionary<string, Dictionary<string, object>> MediatequeBddQuery(string query, string index = null, bool AutoCommit = false)
         {
-            List<Dictionary<string, object>> ret = null;
+            Dictionary<string, Dictionary<string, object>> ret = null;
             SQLiteDataReader sqlite_datareader;
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = MediatequeBddConnection.CreateCommand();
             sqlite_cmd.CommandText = query;
+            string tq = query.ToUpper().Trim();
 
-            if (query.ToUpper().Trim().StartsWith("SELECT "))
+            if (tq.StartsWith("SELECT "))
             {
-                ret = new List<Dictionary<string, object>>();
+                ret = new Dictionary<string, Dictionary<string, object>>();
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
+                int line = 0;
+                string id = "";
                 while (sqlite_datareader.Read())
                 {
-                    NameValueCollection line = sqlite_datareader.GetValues();
-                    ret.Add( MediatequeBdd_NameValueCollectionToDictionary(line, false) );
+                    NameValueCollection row = sqlite_datareader.GetValues();
+
+                    row.AllKeys.Contains(index);
+                    if (index != null) {
+                        if (row.AllKeys.Contains(index))
+                        {
+                            id = row[index];
+                        }
+                        else { id = "" + line; }
+                    }
+                    else { id = "" + line; }
+                    ret.Add( id, MediatequeBdd_NameValueCollectionToDictionary(row, false) );
                     //Debug.WriteLine(line.ToString());
+                    line += 1;
                 }
             }
-            else { sqlite_cmd.ExecuteNonQuery(); }
-            //MediatequeBddConnection.Close();
+            else {
+                if (AutoCommit) { MediatequeBddTansactionStart(); }
+
+                sqlite_cmd.ExecuteNonQuery();
+
+                if (AutoCommit) { MediatequeBddTansactionEnd(); }
+            }
             return ret;
+        }
+
+        private static string MediatequeBddEscapeString(string str)
+        {
+            if (str == null) { return ""; }
+            else { return str.Replace("'", "''"); }
+        }
+
+        private static void MediatequeBddTansactionStart()
+        {
+            SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
+            sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
+            sqlite_cmdTR.ExecuteNonQuery();
+        }
+
+        private static void MediatequeBddTansactionEnd()
+        {
+            SQLiteCommand sqlite_cmdCM = MediatequeBddConnection.CreateCommand();
+            sqlite_cmdCM.CommandText = "COMMIT";
+            sqlite_cmdCM.ExecuteNonQuery();
         }
 
 
