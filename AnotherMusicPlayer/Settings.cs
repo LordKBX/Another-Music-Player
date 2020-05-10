@@ -86,6 +86,7 @@ namespace AnotherMusicPlayer
             Settings.Lang = (string)item.Tag;
             Settings.SaveSettings();
             Traduction();
+            if (Scanning) { MediatequeBuildNavigationScan(); }
         }
 
         private void ParamsConvKeepVals_SelectionChanged(object sender, SelectionChangedEventArgs e)

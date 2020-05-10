@@ -20,5 +20,10 @@ namespace AnotherMusicPlayer
             Resources.MergedDictionaries[1].Clear();
             Resources.MergedDictionaries[1] = new ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + Path.DirectorySeparatorChar + end + ".xaml", UriKind.Absolute) };
         }
+
+        private string GetTaductionString(string reference) {
+            try { return (string)Resources.MergedDictionaries[1][reference]; }
+            catch { return ""; }
+        }
     }
 }

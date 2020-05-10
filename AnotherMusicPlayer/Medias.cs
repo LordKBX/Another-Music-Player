@@ -40,6 +40,7 @@ namespace AnotherMusicPlayer
         private FileSystemWatcher MediatequeWatcher = null;
         private double MediatequeTotalScanedSize = 0;
         private double MediatequeTotalScanedDuration = 0;
+        private bool Scanning = false;
 
         Dictionary<string, Dictionary<string, object>> MediatequeBddFiles = new Dictionary<string, Dictionary<string, object>>();
         List<string> MediatequeScanedFiles = new List<string>();
@@ -64,41 +65,10 @@ namespace AnotherMusicPlayer
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder))
                 {
+                    Scanning = true;
                     Dispatcher.BeginInvoke(new Action(() => {
-                        LibNavigationPathContener.Children.Clear();
                         LibNavigationContent.Children.Clear();
-
-                        TextBlock tb2 = new TextBlock();
-                        tb2.Text = "<< Scan en cours >>, Fichiers trouvés: ";
-                        tb2.FontSize = 8;
-                        LibNavigationPathContener.Children.Add(tb2);
-
-                        TextBlock tb3 = new TextBlock();
-                        tb3.Text = "" + MediatequeScanedFiles.Count;
-                        tb3.FontSize = 8;
-                        LibNavigationPathContener.Children.Add(tb3);
-
-                        TextBlock tb4 = new TextBlock();
-                        tb4.Text = ", Taille Totale: ";
-                        tb4.FontSize = 8;
-                        LibNavigationPathContener.Children.Add(tb4);
-
-                        TextBlock tb5 = new TextBlock();
-                        tb5.Text = "" + MediatequeTotalScanedSize;
-                        tb5.FontSize = 8;
-                        LibNavigationPathContener.Children.Add(tb5);
-
-                        TextBlock tb6 = new TextBlock();
-                        tb6.Text = ", Durée Totale: ";
-                        tb6.FontSize = 8;
-                        LibNavigationPathContener.Children.Add(tb6);
-
-                        TextBlock tb7 = new TextBlock();
-                        tb7.Text = "" + MediatequeTotalScanedDuration;
-                        tb7.FontSize = 8;
-                        LibNavigationPathContener.Children.Add(tb7);
-
-                        LibNavigationContent.Orientation = Orientation.Vertical;
+                        MediatequeBuildNavigationScan();
                     }));
                     if (DoClean) {
                         MediatequeCurrentFolder = null; MediatequeWatcher = null;
@@ -134,6 +104,7 @@ namespace AnotherMusicPlayer
                         MediatequeBuildNavigationPath(MediatequeCurrentFolder ?? MediatequeRefFolder);
                         MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
                     }));
+                    Scanning = false;
                 }
             }
         }
@@ -292,6 +263,42 @@ namespace AnotherMusicPlayer
             mu.Click += MediatequeContextMenuClick;
             ct.Items.Add(mu);
             return ct;
+        }
+
+        private void MediatequeBuildNavigationScan()
+        {
+            LibNavigationPathContener.Children.Clear();
+            TextBlock tb2 = new TextBlock();
+            tb2.Text = "<< " + GetTaductionString("LibMediaScanning") + " >>, " + GetTaductionString("LibMediaFiles") + ": ";
+            tb2.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb2);
+
+            TextBlock tb3 = new TextBlock();
+            tb3.Text = "" + MediatequeScanedFiles.Count;
+            tb3.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb3);
+
+            TextBlock tb4 = new TextBlock();
+            tb4.Text = ", " + GetTaductionString("LibMediaTotalSize") + ": ";
+            tb4.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb4);
+
+            TextBlock tb5 = new TextBlock();
+            tb5.Text = "" + MediatequeTotalScanedSize;
+            tb5.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb5);
+
+            TextBlock tb6 = new TextBlock();
+            tb6.Text = ", " + GetTaductionString("LibMediaTotalDuration") + ": ";
+            tb6.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb6);
+
+            TextBlock tb7 = new TextBlock();
+            tb7.Text = "" + MediatequeTotalScanedDuration;
+            tb7.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb7);
+
+            LibNavigationContent.Orientation = Orientation.Vertical;
         }
 
         private void MediatequeBuildNavigationPath(Folder fold) {

@@ -61,4 +61,9 @@
     <sys:String x:Key="ParamsLibFolderSelectorBlockerTitle">Dossier</sys:String>
 
     <sys:String x:Key="ParamsLibItemContextMenuItem1">Ajouter à la liste de lecture</sys:String>
+
+    <sys:String x:Key="LibMediaScanning">Scan en cours</sys:String>
+    <sys:String x:Key="LibMediaFiles">Fichiers trouvés</sys:String>
+    <sys:String x:Key="LibMediaTotalSize">Taille Totale</sys:String>
+    <sys:String x:Key="LibMediaTotalDuration">Durée Totale</sys:String>
 </ResourceDictionary>
