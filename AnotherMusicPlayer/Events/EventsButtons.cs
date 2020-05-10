@@ -143,7 +143,7 @@ namespace AnotherMusicPlayer
                 ParamsLibFolderTextBox.Text = path;
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
-                MediatequeScan(true);
+                MediatequeInvokeScan(true);
             }
         }
 
