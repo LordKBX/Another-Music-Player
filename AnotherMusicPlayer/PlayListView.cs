@@ -19,7 +19,8 @@ namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {
-        private void PlayListViewInit()
+        /// <summary> Initialisation variables and events configuration of PlayListView </summary>
+        private void PlayListView_Init()
         {
             PlayListView.ItemsSource = new ObservableCollection<PlayListViewItem>();
             PlayListViewC1.Width = 25;
@@ -29,24 +30,17 @@ namespace AnotherMusicPlayer
 
             ((INotifyPropertyChanged)PlayListViewC1).PropertyChanged += (sender, e) => { PlayListViewC1.Width = 25; };
             ((INotifyPropertyChanged)PlayListViewC5).PropertyChanged += (sender, e) => { 
-                if (PlayListView.ActualWidth > 500)
-                {
-                    PlayListViewC5.Width = 60;
-                }
-                else { PlayListViewC5.Width = 70; }
+                if (PlayListView.ActualWidth > 500) { PlayListViewC5.Width = 60; } else { PlayListViewC5.Width = 70; } 
             };
 
             ((INotifyPropertyChanged)PlayListViewC2).PropertyChanged += (sender, e) => {
-                if (PlayListView.ActualWidth > 500)
-                {
-                    if (IsCollumnWidth(e)) { PlayListViewC2.Width = CalcCollumnWidth(); }
-                }
-                else { if (IsCollumnWidth(e)) { PlayListViewC2.Width = PlayListView.ActualWidth - 25 - 70; } }
+                if (PlayListView.ActualWidth > 500) { if (PlayListView_IsCollumnWidth(e)) { PlayListViewC2.Width = PlayListView_CalcCollumnWidth(); } }
+                else { if (PlayListView_IsCollumnWidth(e)) { PlayListViewC2.Width = PlayListView.ActualWidth - 25 - 70; } }
             };
             ((INotifyPropertyChanged)PlayListViewC3).PropertyChanged += (sender, e) => {
                 if (PlayListView.ActualWidth > 500)
                 {
-                    if (IsCollumnWidth(e)) { PlayListViewC3.Width = CalcCollumnWidth(); }
+                    if (PlayListView_IsCollumnWidth(e)) { PlayListViewC3.Width = PlayListView_CalcCollumnWidth(); }
                     PlayListViewC3.HeaderContainerStyle = (Style)Resources.MergedDictionaries[0]["ListViewHeaderStyle"];
                 }
                 else { PlayListViewC3.Width = 0; PlayListViewC3.HeaderContainerStyle = (Style)Resources.MergedDictionaries[0]["ListViewHeaderStyle2"]; }
@@ -54,38 +48,26 @@ namespace AnotherMusicPlayer
             ((INotifyPropertyChanged)PlayListViewC4).PropertyChanged += (sender, e) => {
                 if (PlayListView.ActualWidth > 500)
                 {
-                    if (IsCollumnWidth(e)) { PlayListViewC4.Width = CalcCollumnWidth() + 10; }
+                    if (PlayListView_IsCollumnWidth(e)) { PlayListViewC4.Width = PlayListView_CalcCollumnWidth() + 10; }
                     PlayListViewC4.HeaderContainerStyle = (Style)Resources.MergedDictionaries[0]["ListViewHeaderStyle"];
                 }
                 else { PlayListViewC4.Width = 0; PlayListViewC4.HeaderContainerStyle = (Style)Resources.MergedDictionaries[0]["ListViewHeaderStyle2"]; }
             };
 
-            PlayListView.MouseDoubleClick += Items_CurrentChanged;
-            PlayListView.SizeChanged += (sender, e) => { PlayListViewC2.Width = PlayListViewC3.Width = PlayListViewC4.Width = CalcCollumnWidth(); };
-
-            PlayListView.SelectionChanged += PlayListView_SelectionChanged;
+            PlayListView.MouseDoubleClick += PlayListView_DblClick;
+            PlayListView.SizeChanged += (sender, e) => { PlayListViewC2.Width = PlayListViewC3.Width = PlayListViewC4.Width = PlayListView_CalcCollumnWidth(); };
 
             Label_PlayListDisplayedNBTracks.Text = "0";
             Label_PlayListNBTracks.Text = "0";
             Label_PlayListIndex.Text = "0";
         }
 
-        private void PlayListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //ListViewItem item = new ListViewItem();
-            try
-            {
-                //System.Diagnostics.Debug.WriteLine("e.AddedItems = " + e.AddedItems[0]);
-                //PlayListView.ScrollIntoView(e.AddedItems[0]);
-            }
-            catch { }
-        }
-
-        private double CalcCollumnWidth() {
-            double calc = (PlayListView.ActualWidth - 95) / 3;
-            return (calc > 0)?calc:0; 
-        }
-        private bool IsCollumnWidth(PropertyChangedEventArgs e) { return (e.PropertyName == "ActualWidth"); }
+        /// <summary> Callback PlayListView for DoubleClick Event </summary>
+        private void PlayListView_DblClick(object sender, EventArgs e) { updatePlaylist(PlayListIndex + PlayListView.SelectedIndex, true); }
+        /// <summary> Calculate Big Collumns width if PlayListView Width > 500(px) </summary>
+        private double PlayListView_CalcCollumnWidth() { double calc = (PlayListView.ActualWidth - 95) / 3; return (calc > 0)?calc:0; }
+        /// <summary> Test if PropertyChangedEventArgs contains ActualWidth Property </summary>
+        private bool PlayListView_IsCollumnWidth(PropertyChangedEventArgs e) { return (e.PropertyName == "ActualWidth"); }
     }
 
 }

@@ -28,7 +28,7 @@ LicenseFile=C:\Users\KevBo\source\repos\MediaPlayer\LICENSE
 ;PrivilegesRequired=lowest
 PrivilegesRequiredOverridesAllowed=dialog
 OutputDir=C:\Users\KevBo\source\repos\MediaPlayer\Installers
-OutputBaseFilename=AnotherMusicPlayer-Setup
+OutputBaseFilename=AnotherMusicPlayer-{#MyAppVersion}
 Compression=lzma
 SolidCompression=yes
 WizardStyle=modern
@@ -62,7 +62,7 @@ begin
   WizardForm.WelcomeLabel1.Visible := True;
   WizardForm.WelcomeLabel2.Font.Color := clRed;   
   WizardForm.WelcomeLabel2.Font.Size := 10;
-  WizardForm.WelcomeLabel2.Caption := 'This application require the instalation of the framework ".NET CORE 3.1", Go to'
+  WizardForm.WelcomeLabel2.Caption := 'This application require the framework ".NET CORE 3.1", Go to'
     + #13#10 + ' https://dotnet.microsoft.com/download/dotnet-core/3.1'
     + #13#10 + ' Section "Desktop Runtime"';
 end;

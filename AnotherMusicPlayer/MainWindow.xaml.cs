@@ -68,7 +68,7 @@ namespace AnotherMusicPlayer
             BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_None"));
 
             EventsPlaybackInit();
-            PlayListViewInit();
+            PlayListView_Init();
 
             TimerInterfaceSetUp();
 
@@ -77,6 +77,7 @@ namespace AnotherMusicPlayer
             this.Closing += MainWindow_Closing;
         }
 
+        /// <summary> Callback Main window loaded </summary>
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             KeyboardInterceptorSetUp();
@@ -85,12 +86,14 @@ namespace AnotherMusicPlayer
             MediatequeInvokeScan();
         }
 
+        /// <summary> Callback Main window closing / exit </summary>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             KeyboardInterceptorDestroy();
             Settings.SaveSettings();
         }
 
+        /// <summary> Callback Main window size change </summary>
         private void Win1_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (win1.ActualWidth > 800 && win1.ActualHeight > 460)
@@ -135,7 +138,6 @@ namespace AnotherMusicPlayer
             if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
         }
 
-        public delegate void updatePlaylistCb(int index, bool DoPlay = false);
         private void updatePlaylist(int NewPosition, bool DoPlay = false)
         {
             if (PlayList.Count == 0) { return; }
@@ -149,13 +151,6 @@ namespace AnotherMusicPlayer
                 PlayListIndex = NewPosition;
                 fileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
             }
-        }
-
-        private void Items_CurrentChanged(object sender, EventArgs e) { Items_CurrentChanged(); }
-        private void Items_CurrentChanged()
-        {
-            Debug.WriteLine("Items_CurrentChanged");
-            updatePlaylist(PlayListIndex + PlayListView.SelectedIndex, true);
         }
     }
 }
