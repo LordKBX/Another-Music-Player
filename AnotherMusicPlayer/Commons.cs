@@ -31,11 +31,11 @@ namespace AnotherMusicPlayer
 
     public partial class MainWindow : Window
     {
-
         public static string PlayListSelectionChar = "▶";
+        public static char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
 
-        public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
-        public static string BaseDirImg = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + "icons" + System.IO.Path.DirectorySeparatorChar;
+        public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar;
+        public static string BaseDirImg = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar + "icons" + SeparatorChar;
 
         //public static BitmapImage CoverImg = new BitmapImage(new Uri(BaseDirImg + "album_small.png"));
 
@@ -77,6 +77,7 @@ namespace AnotherMusicPlayer
             { "MiniPlayButtonImg_Pause", new Uri(BaseDirImg + "pause_24.png") },
             { "MiniNextButtonImg", new Uri(BaseDirImg + "next_24.png") }
         };
+
         public static BitmapImage Bimage(string index) {
             if (ImagesUriList.ContainsKey(index)) { return new BitmapImage(ImagesUriList[index]); } else { return null; }
         }

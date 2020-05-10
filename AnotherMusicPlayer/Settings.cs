@@ -44,9 +44,6 @@ namespace AnotherMusicPlayer
         public static string LibFolder { get; set; } = null;
     }
 
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 

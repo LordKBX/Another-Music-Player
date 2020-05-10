@@ -7,16 +7,15 @@ using System.Diagnostics;
 
 namespace AnotherMusicPlayer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary> Duration for smoth animation ProgressBar played media </summary>
+        public Duration AnimationProgressBarDuration = new Duration(TimeSpan.FromMilliseconds(100));
 
         private void UpdateSize(string size) { DisplayPlaybackSize.Content = size; }
         private void UpdatePosition(string position) { DisplayPlaybackPosition.Content = position; }
         private void UpdatePositionBar(double position) { 
-            DisplayPlaybackPositionBar.BeginAnimation(System.Windows.Controls.ProgressBar.ValueProperty, new DoubleAnimation((double)position, duration));
+            DisplayPlaybackPositionBar.BeginAnimation(System.Windows.Controls.ProgressBar.ValueProperty, new DoubleAnimation((double)position, AnimationProgressBarDuration));
         }
 
         private void DisplayPlaybackPositionBar_MouseDown(object sender, MouseButtonEventArgs e)

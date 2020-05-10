@@ -8,7 +8,6 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using Newtonsoft.Json.Converters;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -46,14 +45,14 @@ namespace AnotherMusicPlayer
         private static void MediatequeBddInit()
         {
             if (MediatequeBdd_IsInitilized()) { return; }
-            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + System.IO.Path.DirectorySeparatorChar + AppName;
-            //MediatequeBddFolder = BaseDir + System.IO.Path.DirectorySeparatorChar + appName;
+            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName;
+            //MediatequeBddFolder = BaseDir + SeparatorChar + appName;
             if (!System.IO.Directory.Exists(MediatequeBddFolder)) { System.IO.Directory.CreateDirectory(MediatequeBddFolder); }
 
             Debug.WriteLine(AppName);
             Debug.WriteLine(MediatequeBddFolder);
             MediatequeBddConnection = new SQLiteConnection(
-                "Data Source="+ MediatequeBddFolder + System.IO.Path.DirectorySeparatorChar + "base.db; Version = 3; New = True; Compress = True; "
+                "Data Source="+ MediatequeBddFolder + SeparatorChar + "base.db; Version = 3; New = True; Compress = True; "
                 );
             try { 
                 MediatequeBddConnection.Open();
@@ -71,7 +70,7 @@ namespace AnotherMusicPlayer
                 }
                 //SELECT name FROM sqlite_master WHERE type = 'table' AND name = '{table_name}';
             }
-            catch (Exception ex) { Debug.WriteLine("Catch ERROR"); }
+            catch  { Debug.WriteLine("Catch ERROR"); }
         }
 
         private static Dictionary<string, Dictionary<string, object>> MediatequeBddQuery(string query, string index = null, bool AutoCommit = false)

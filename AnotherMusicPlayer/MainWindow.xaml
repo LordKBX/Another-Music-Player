@@ -68,7 +68,7 @@
                                     <TextBlock Text="{DynamicResource Artist2}" x:Name="PlayItemArtistsTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
                                     <AccessText   x:Name="PlayItemArtistsValue" Text="" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow"/>
                                     <LineBreak></LineBreak>
-                                    <TextBlock Visibility="Collapsed" Text="{DynamicResource Duration2}" x:Name="PlayItemDurationTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
+                                    <TextBlock Visibility="Collapsed" Text="{DynamicResource duration2}" x:Name="PlayItemdurationTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
                                     <TextBlock Visibility="Collapsed"  x:Name="PlayItemDurationValue" Text="" Margin="10,0,0,0" Foreground="#FF959595"/>
                                 </TextBlock>
                                 </ScrollViewer>
@@ -99,7 +99,7 @@
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
-                                    <GridViewColumn x:Name="PlayListViewC5" Width="80" Header="{DynamicResource Duration}" DisplayMemberBinding="{Binding DurationS}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
+                                    <GridViewColumn x:Name="PlayListViewC5" Width="80" Header="{DynamicResource duration}" DisplayMemberBinding="{Binding DurationS}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
                                     <GridViewColumn x:Name="PlayListViewC4" Header="{DynamicResource Artist}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>

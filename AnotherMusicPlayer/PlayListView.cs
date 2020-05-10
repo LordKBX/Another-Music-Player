@@ -21,7 +21,7 @@ namespace AnotherMusicPlayer
     {
         private void PlayListViewInit()
         {
-            PlayListView.ItemsSource = PlayListDisplayed;
+            PlayListView.ItemsSource = new ObservableCollection<PlayListViewItem>();
             PlayListViewC1.Width = 25;
             PlayListViewC2.Width = PlayListViewC3.Width = PlayListViewC4.Width = 200;
             if (PlayListView.ActualWidth > 500) { PlayListViewC5.Width = 60; } else { PlayListViewC5.Width = 70; }

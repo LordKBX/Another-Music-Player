@@ -8,12 +8,12 @@
     <sys:String x:Key="Title">Title</sys:String>
     <sys:String x:Key="Album">Album</sys:String>
     <sys:String x:Key="Artist">Artists</sys:String>
-    <sys:String x:Key="Duration">Duration</sys:String>
+    <sys:String x:Key="duration">duration</sys:String>
 
     <sys:String x:Key="Title2">Title:</sys:String>
     <sys:String x:Key="Album2">Album:</sys:String>
     <sys:String x:Key="Artist2">Artists:</sys:String>
-    <sys:String x:Key="Duration2">Duration:</sys:String>
+    <sys:String x:Key="duration2">duration:</sys:String>
 
     <sys:String x:Key="BtnOpenToolTip">Open Files</sys:String>
     <sys:String x:Key="BtnPreviousToolTip">Previous Track</sys:String>

@@ -10,7 +10,6 @@ using System.Windows.Input;
 using System.Windows.Shapes;
 using System.Windows.Controls;
 using System.Windows.Documents;
-using Newtonsoft.Json.Converters;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -52,9 +51,7 @@ namespace AnotherMusicPlayer
                 objThread.Priority = ThreadPriority.AboveNormal;
                 objThread.Start(DoClean);
             }
-            catch (ThreadStartException objException) { }
-            catch (ThreadAbortException objException) { }
-            catch (Exception objException) { }
+            catch { }
         }
         private async void MediatequeScan(object param) {
             try { MediatequeScan((bool)param); }
@@ -116,7 +113,6 @@ namespace AnotherMusicPlayer
                     else if (MediatequeWatcher.Path != Settings.LibFolder) { MediatequeCreateWatcher(); }
 
                     //LibTreeView.Items.Clear();
-                    LastLibScan = UnixTimestamp();
                     DirectoryInfo di = new DirectoryInfo(Settings.LibFolder);
                     MediatequeRefFolder = new Folder() { Name = di.Name, Path = di.FullName };
 
@@ -201,7 +197,7 @@ namespace AnotherMusicPlayer
                 {
                     FileInfo fi = new FileInfo(file);
                     fold.Files.Add(fi.FullName);
-                    MediatequeScanedFiles.Add(fi.FullName);
+                    //MediatequeScanedFiles.Add(fi.FullName);
                     if (MediatequeBddFiles.ContainsKey(fi.FullName))
                     {
                         //Debug.WriteLine(fi.FullName);
@@ -209,6 +205,7 @@ namespace AnotherMusicPlayer
                         //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
                         if (Convert.ToInt64((string)MediatequeBddFiles[fi.FullName]["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
                         {
+                            MediatequeScanedFiles.Add(fi.FullName);
                             PlayListViewItem item = player.MediaInfo(fi.FullName, false);
                             MediatequeTotalScanedDuration += item.Duration;
                             MediatequeTotalScanedSize += item.Size;
@@ -227,6 +224,7 @@ namespace AnotherMusicPlayer
                     }
                     else
                     {
+                        MediatequeScanedFiles.Add(fi.FullName);
                         PlayListViewItem item = player.MediaInfo(fi.FullName, false);
                         MediatequeTotalScanedDuration += item.Duration;
                         MediatequeTotalScanedSize += item.Size;
@@ -241,7 +239,7 @@ namespace AnotherMusicPlayer
                         MediatequeBddQuery(query);
                     }
 
-                    if (MediatequeBddConnection.Changes % 100 == 0)
+                    if (MediatequeScanedFiles.Count % 100 == 0)
                     {
                         MediatequeBddTansactionEnd();
                         MediatequeBddTansactionStart();
@@ -270,15 +268,9 @@ namespace AnotherMusicPlayer
                         tb7.Text = "" + displayTime((long)MediatequeTotalScanedDuration);
                         tb7.FontSize = 8;
                         LibNavigationPathContener.Children.Insert(5, tb7);
-                        /*
-                         
-        private double MediatequeTotalScanedSize = 0;
-        private double MediatequeTotalScanedDuration = 0;
-                         */
                     }));
                 }
             }
-            //Debug.WriteLine(JsonConvert.SerializeObject(fold.Files));
         }
 
 
@@ -306,7 +298,7 @@ namespace AnotherMusicPlayer
             LibNavigationPathContener.Children.Clear();
             MediatequeCurrentFolder = fold;
             MediatequeCurrentFolderS = fold.Path;
-            string basePath = "Home/"+((fold.Path == Settings.LibFolder)?"": fold.Path.Replace(Settings.LibFolder, "").Replace(System.IO.Path.DirectorySeparatorChar, '/').Replace("//", "/"));
+            string basePath = "Home/"+((fold.Path == Settings.LibFolder)?"": fold.Path.Replace(Settings.LibFolder, "").Replace(SeparatorChar, '/').Replace("//", "/"));
             string[] tabPath = basePath.Split('/');
             List<Folder> tabFold = new List<Folder>();
             Folder last = fold;
@@ -365,7 +357,7 @@ namespace AnotherMusicPlayer
             LibNavigationContent.Children.Clear();
 
             foreach (Folder fl in fold.Folders) { MediatequeBuildNavigationContentButton("folder", fl.Name, fl.Path, fl); }
-            foreach (string fi in fold.Files) { MediatequeBuildNavigationContentButton("file", fi, fold.Path + System.IO.Path.DirectorySeparatorChar + fi); }
+            foreach (string fi in fold.Files) { MediatequeBuildNavigationContentButton("file", fi, fold.Path + SeparatorChar + fi); }
         }
 
         private void MediatequeBuildNavigationContentButton(string type, string name, string path, Folder fold = null)

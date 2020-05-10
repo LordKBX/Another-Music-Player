@@ -13,59 +13,48 @@ using System.ComponentModel;
 
 namespace AnotherMusicPlayer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
+    /// <summary> Interaction logic for MainWindow.xaml </summary>
     public partial class MainWindow : Window
     {
-        Player2 player;
-        string MediaLastOpen = "";
-        double lastEnd = 0;
+        /// <summary> Object music player </summary>
+        Player player;
+        /// <summary> Store the last time(unix) playback was stoped, used for preventing media skip since default playback status is stoped before starting </summary>
+        double PlaybackStopLastTime = 0;
+        /// <summary> Store the playlist current play index </summary>
         int PlayListIndex = -1;
+        /// <summary> Store repeat mode status: x <= 0(none), 1(repeat one), x >= 2(repeat playlist)</summary>
         int PlayRepeatStatus = 0;
-        System.Timers.Timer ButtonPlayTimer = null;
+        /// <summary> Store if we do not authorise update for PlayBack Position bar </summary>
         bool PreventUpdateSlider = false;
-        bool lastPlayStatus = false;
 
+        /// <summary> Store system language reference code </summary>
         string AppLang = System.Globalization.CultureInfo.CurrentCulture.Name;
+        /// <summary> Store the application assembly name </summary>
         public static string AppName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
+        /// <summary> Store PlayList Pannel left collumn width(150 or 250) </summary>
+        double WindowWidthMode = 150;
 
-        int WindowWidthMode = 150;
-
-        public ObservableCollection<PlayListViewItem> PlayList { get; set; }
-        public List<string[]> PlayList2 { get; set; }
-        public ObservableCollection<PlayListViewItem> PlayListDisplayed { get; set; }
-        public PlayListViewItem PlayItem { get; set; }
-        public static RoutedCommand GlobalCommand = new RoutedCommand();
-
-        Duration duration;
-
-        /// <summary>
-        /// Used for storing object dependant of the Operating system
-        /// </summary>
+        /// <summary> Store PlayList by string[]{ File, ConvertedFile(null if no conversion) }  </summary>
+        public List<string[]> PlayList { get; set; }
+        /// <summary> Used for storing object dependant of the Operating system </summary>
         private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
 
-
+        /// <summary> Constructor </summary>
         public MainWindow()
         {
-            duration = new Duration(TimeSpan.FromMilliseconds(100));
-
-            SettingsInit();
-
+            SettingsInit();//Initialize and load settings
+            // Set DataContext
             this.DataContext = this;
 
-            PlayList = new ObservableCollection<PlayListViewItem>();
-            PlayList2 = new List<string[]>();
-            PlayItem = new PlayListViewItem();
-            player = new Player2();
+            PlayList = new List<string[]>();//Initialize PlayList
+            player = new Player();//Create Player object
 
+            InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
+            SettingsSetUp();//Initialize interface elements with stored parametters in settings
 
-            InitializeComponent();
-            SettingsSetUp();
-
-            Resources.MergedDictionaries.Clear();
-            Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });
-            //Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + System.IO.Path.DirectorySeparatorChar + "fr.xaml", UriKind.Absolute) });
+            Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
+            Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load settings file
+            //Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + SeparatorChar + "fr.xaml", UriKind.Absolute) });
             Traduction();
             PreviewSetUp();
 
@@ -81,7 +70,7 @@ namespace AnotherMusicPlayer
             EventsPlaybackInit();
             PlayListViewInit();
 
-            TimerUpdateButtonsSetUp();
+            TimerInterfaceSetUp();
 
             this.SizeChanged += Win1_SizeChanged;
             this.Loaded += MainWindow_Loaded;
@@ -96,13 +85,9 @@ namespace AnotherMusicPlayer
             MediatequeInvokeScan();
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            KeyboardInterceptorDestroy();
-        }
-
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
+            KeyboardInterceptorDestroy();
             Settings.SaveSettings();
         }
 
@@ -112,20 +97,16 @@ namespace AnotherMusicPlayer
             {
                 if (WindowWidthMode != 250)
                 {
-                    WindowWidthMode = 250;
-                    Grid1.ColumnDefinitions[0].Width =
-                        Grid2.RowDefinitions[0].Height = new GridLength((double)250);
-                    FileCover.Width = FileCover.Height = 250;
+                    Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)250);
+                    WindowWidthMode = FileCover.Width = FileCover.Height = 250;
                 }
             }
             else
             {
                 if (WindowWidthMode != 150)
                 {
-                    WindowWidthMode = 150;
-                    Grid1.ColumnDefinitions[0].Width =
-                        Grid2.RowDefinitions[0].Height = new GridLength((double)150);
-                    FileCover.Width = FileCover.Height = 150;
+                    Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)150);
+                    WindowWidthMode = FileCover.Width = FileCover.Height = 150;
                 }
             }
             Grid1.ColumnDefinitions[1].Width = new GridLength(TabControler.ActualWidth - WindowWidthMode - 5);
@@ -141,7 +122,7 @@ namespace AnotherMusicPlayer
         {
             PlayListViewItem it = player.MediaInfo(FilePath, false);
             if (it == null) { return; }
-            lastEnd = UnixTimestamp();
+            PlaybackStopLastTime = UnixTimestamp();
             player.Open(FilePath, doPlay);
 
             PlayItemNameValue.ToolTip = PlayItemNameValue.Text = (it.Name!=null)?it.Name:"";
@@ -157,15 +138,16 @@ namespace AnotherMusicPlayer
         public delegate void updatePlaylistCb(int index, bool DoPlay = false);
         private void updatePlaylist(int NewPosition, bool DoPlay = false)
         {
-            if (PlayList2.Count == 0) { return; }
-            Debug.WriteLine("NewPosition = " + NewPosition);
+            if (PlayList.Count == 0) { return; }
+            if (NewPosition < 0) { NewPosition = 0; }
+            //Debug.WriteLine("NewPosition = " + NewPosition);
             if (NewPosition >= 0 && NewPosition != PlayListIndex)
             {
                 //StopPlaylist();
                 player.StopAll();
-                if (NewPosition >= PlayList2.Count) { NewPosition = 0; }
+                if (NewPosition >= PlayList.Count) { NewPosition = 0; }
                 PlayListIndex = NewPosition;
-                fileOpen(PlayList2[NewPosition][(PlayList2[NewPosition][1] == null) ? 0 : 1], DoPlay);
+                fileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
             }
         }
 

@@ -13,140 +13,120 @@ using TagLib.Ape;
 
 namespace AnotherMusicPlayer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
+        /// <summary> Convert milliseconds times in human readable string </summary>
         public static string displayTime(long time)
         {
-            string ret = "";
-            int Days = 0, Hours = 0, Minutes = 0, Seconds = 0;
-
-            int ms = (int)(time % 1000);
-            long TotalSeconds = (time - ms) / 1000;
-
-            if (TotalSeconds >= 86400)
-            {
-                long reste = (TotalSeconds % 86400);
-                Days = (int)((TotalSeconds - reste) / 86400);
-                TotalSeconds = reste;
-            }
-
-            if (TotalSeconds >= 3600)
-            {
-                long reste = (TotalSeconds % 3600);
-                Hours = (int)((TotalSeconds - reste) / 3600);
-                TotalSeconds = reste;
-            }
-
-            if (TotalSeconds >= 60)
-            {
-                long reste = (TotalSeconds % 60);
-                Minutes = (int)((TotalSeconds - reste) / 60);
-                TotalSeconds = reste;
-            }
-
-            Seconds = (int)(TotalSeconds);
+            string ret = ""; int Days = 0, Hours = 0, Minutes = 0;
+            int ms = (int)(time % 1000); long TotalSeconds = (time - ms) / 1000, reste;
+            if (TotalSeconds >= 86400) { reste = (TotalSeconds % 86400); Days = (int)((TotalSeconds - reste) / 86400); TotalSeconds = reste; }
+            if (TotalSeconds >= 3600) { reste = (TotalSeconds % 3600); Hours = (int)((TotalSeconds - reste) / 3600); TotalSeconds = reste; }
+            if (TotalSeconds >= 60) { reste = (TotalSeconds % 60); Minutes = (int)((TotalSeconds - reste) / 60); TotalSeconds = reste; }
 
             if (Days > 0) { ret += ((Days < 10) ? "0" : "") + Days + "d "; }
-            if (Hours > 0) { ret += ((Hours < 10) ? "0" : "") + Hours + ":"; }
-            ret += ((Minutes < 10) ? "0" : "") + Minutes + ":" + ((Seconds < 10) ? "0" : "") + Seconds;
-
-            return ret;
+            if (Hours > 0) { ret += ((Hours < 10) ? "0" : "") + Hours + ":"; } //ret += ((Minutes < 10) ? "0" : "") + Minutes + ":" + ((TotalSeconds < 10) ? "0" : "") + TotalSeconds;
+            return ret + ((Minutes < 10) ? "0" : "") + Minutes + ":" + ((TotalSeconds < 10) ? "0" : "") + TotalSeconds;
         }
 
+        /// <summary> Generate current time Unix Timestamp </summary>
         public static double UnixTimestamp() { return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds; }
+        /// <summary> Generate a Unix Timestamp </summary>
         public static double UnixTimestamp(int year, int month, int day, int housr=0, int minutes=0, int seconds=0) {
             DateTime date = new DateTime(year, month, day, housr, minutes, seconds, DateTimeKind.Utc);
             return (date.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds;
         }
 
-        private void TimerUpdateButtonsSetUp()
+        /// <summary> Timer for periodic interface updates </summary>
+        Timer TimerInterface = null;
+        /// <summary> Create and start Timer for periodic interface updates </summary>
+        private void TimerInterfaceSetUp()
         {
-            ButtonPlayTimer = new System.Timers.Timer(100);
-            ButtonPlayTimer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
-            ButtonPlayTimer.Start();
+            if (TimerInterface != null) { return; }
+            TimerInterface = new System.Timers.Timer(100);
+            TimerInterface.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
+            TimerInterface.Start();
         }
 
-        private double LastLibScan = UnixTimestamp();
-        private int LastPlayRepeatStatus = 0;
+        /// <summary> Store timer number of cycle, used for périodic Garbage Collector summon </summary>
         private int Timer_Count = 0;
-        private int Timer_LastIndex = 0;
+        /// <summary> Store the last know status of playback repeat property by the timer </summary>
+        private int Timer_PlayRepeatStatus = 0;
+        /// <summary> Store the last know playlist index by the timer </summary>
+        private int Timer_PlayListIndex = 0;
+        /// <summary> Store the last Playing status by the timer </summary>
+        private bool Timer_IsPlaying = false;
+
+        /// <summary> Callback of the timer </summary>
         protected void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 //Win1_SizeChanged(null, null);
+
+                // Section update display button Play/Pause
                 if (player.IsPlaying()) {
-                    if (lastPlayStatus == false)
+                    if (Timer_IsPlaying == false)
                     {
-                        lastPlayStatus = true;
-                        BtnPlayPause.Background = null;
-                        PreviewCtrlPause.ImageSource = null;
+                        Timer_IsPlaying = true; BtnPlayPause.Background = null; PreviewCtrlPause.ImageSource = null;
                         BtnPlayPause.Background = new ImageBrush(Bimage("PlayButtonImg_Pause"));
                         PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Pause");
                     }
                 }
                 else
                 {
-                    if (lastPlayStatus == true)
+                    if (Timer_IsPlaying == true)
                     {
-                        lastPlayStatus = false;
-                        BtnPlayPause.Background = null;
-                        PreviewCtrlPause.ImageSource = null;
+                        Timer_IsPlaying = false; BtnPlayPause.Background = null; PreviewCtrlPause.ImageSource = null;
                         BtnPlayPause.Background = new ImageBrush(Bimage("PlayButtonImg_Play"));
                         PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Play");
                     }
                 }
+
+                // Section PlayBack Repeat Status
                 if (PlayRepeatStatus == 0)
                 {
-                    if (LastPlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_None")); }
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_None")); }
                 }
                 else if (PlayRepeatStatus == 1)
                 {
-                    if (LastPlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_One")); }
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_One")); }
                 }
                 else
                 {
-                    if (LastPlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_All")); }
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_All")); }
                 }
-                LastPlayRepeatStatus = PlayRepeatStatus;
+                Timer_PlayRepeatStatus = PlayRepeatStatus;
 
-                if (Timer_LastIndex != PlayListIndex)
+                // Section PlayList
+                if (Timer_PlayListIndex != PlayListIndex)
                 {
                     ObservableCollection<PlayListViewItem> previous_items;
-                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; }
-                    else { previous_items = new ObservableCollection<PlayListViewItem>(); }
-
-                    //Debug.WriteLine("PlayListDisplayed loading");
-                    Timer_LastIndex = PlayListIndex;
+                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; } else { previous_items = new ObservableCollection<PlayListViewItem>(); }
+                    Timer_PlayListIndex = PlayListIndex;
                     ObservableCollection<PlayListViewItem> tmp = new ObservableCollection<PlayListViewItem>();
                     int min = (PlayListIndex != -1) ? PlayListIndex : 0;
-                    int max = PlayListIndex + 100;
-                    //int max = PlayList2.Count;
-                    string file;
-                    PlayListViewItem item;
+                    int max = PlayListIndex + 100; //int max = PlayList.Count;  // test full list
+                    string file; PlayListViewItem item;
                     for (int i = min; i < max; i++)
                     {
-                        if (PlayList2.Count <= i) { break; }
+                        if (PlayList.Count <= i) { break; }
                         else
                         {
-                            file = PlayList2[i][0];
-                            item = null;
-                            foreach (PlayListViewItem itm in previous_items) {
-                                if (itm.Path == file) { item = itm; break; }
-                            }
+                            file = PlayList[i][0]; item = null;
+                            foreach (PlayListViewItem itm in previous_items) { if (itm.Path == file) { item = itm; break; } }
                             if (item == null) {                                 
                                 Dictionary<string, object> rep = MediatequeBddFileInfo(file);
-                                item = new PlayListViewItem() { 
-                                    Path = file, 
-                                    Name = (string)rep["Name"], 
-                                    Album = (string)rep["Album"], 
-                                    Artist = (string)rep["Artists"], 
-                                    Duration = Convert.ToInt64((string)rep["Duration"]),
-                                    DurationS = displayTime(Convert.ToInt64((string)rep["Duration"])),
-                                };
+                                if(rep != null)
+                                {
+                                    item = new PlayListViewItem();
+                                    item.Path = file;
+                                    item.Name = (string)rep["Name"];
+                                    item.Album = (string)rep["Album"];
+                                    item.Artist = (string)rep["Artists"];
+                                    item.Duration = Convert.ToInt64((string)rep["Duration"]);
+                                    item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+                                }
                             }
                             if (item == null) { item = player.MediaInfo(file, false); }
                             if (item != null)
@@ -158,27 +138,17 @@ namespace AnotherMusicPlayer
                         }
                     }
                     //Debug.WriteLine(JsonConvert.SerializeObject(tmp));
-                    
                     PlayListView.ItemsSource = tmp;
                     PlayListView.Items.Refresh();
 
                     Label_PlayListDisplayedNBTracks.Text = "" + tmp.Count;
-                    Label_PlayListNBTracks.Text = "" + PlayList2.Count;
+                    Label_PlayListNBTracks.Text = "" + PlayList.Count;
                     Label_PlayListIndex.Text = "" + ( PlayListIndex + 1);
                 }
 
+                // Garbage Collector périodic summon
                 if (Timer_Count >= 50)
-                {
-                    Timer_Count = 0;
-                    try
-                    {
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                        GC.Collect();
-                        GC.WaitForPendingFinalizers();
-                    }
-                    catch (Exception) { }
-                }
+                { Timer_Count = 0; try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); } catch { } }
 
                 Timer_Count += 1;
             }));

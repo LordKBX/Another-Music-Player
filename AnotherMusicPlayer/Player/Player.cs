@@ -18,7 +18,7 @@ using System.Runtime.InteropServices;
 namespace AnotherMusicPlayer
 {
 
-    public partial class Player2
+    public partial class Player
     {
         private Dictionary<string, Thread> ThreadList = null;
         private Dictionary<string, object> AudioList = null;
@@ -28,7 +28,7 @@ namespace AnotherMusicPlayer
         private bool PlayRepeat = false;
         private Int32 ConvQualityBitrates = 128;
 
-        public Player2() {
+        public Player() {
             ThreadList = new Dictionary<string, Thread>();
             AudioList = new Dictionary<string, object>();
             PlayStatus = new Dictionary<string, int>();
@@ -114,7 +114,7 @@ namespace AnotherMusicPlayer
                 item.Path = FilePath;
                 item.OriginPath = OriginPath;
                 item.Selected = (Selected) ? MainWindow.PlayListSelectionChar : "";
-                item.Duration = (long)tags.Properties.Duration.TotalMilliseconds;
+                item.Duration = (long)0;
                 item.Size = new System.IO.FileInfo(OriginPath ?? FilePath).Length;
                 item.DurationS = "00:00";
 
@@ -132,16 +132,15 @@ namespace AnotherMusicPlayer
                                 {
                                     FlacReader fir = new FlacReader(FilePath);
                                     item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                                    item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
                                     fir.Dispose();
                                 }
                                 else
                                 {
                                     AudioFileReader fir = new AudioFileReader(FilePath);
                                     item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                                    item.DurationS = MainWindow.displayTime((long)fir.TotalTime.TotalMilliseconds);
                                     fir.Dispose();
                                 }
+                                item.DurationS = MainWindow.displayTime(item.Duration);
                             }
                         }
                     }
@@ -226,9 +225,7 @@ namespace AnotherMusicPlayer
                     CurrentFile = FilePath;
                     return true;
                 }
-                catch (ThreadStartException objException) { }
-                catch (ThreadAbortException objException) { }
-                catch (Exception objException) { }
+                catch { }
             }
             return false;
         }
@@ -332,8 +329,8 @@ namespace AnotherMusicPlayer
                         {
                             outputDevice.Play(); CurrentFile = FilePath;
                             MediaLengthChangedEventParams evtp = new MediaLengthChangedEventParams();
-                            if (IsFlac) { evtp.Duration = (long)( ((FlacReader)audioFile).TotalTime.TotalMilliseconds ); }
-                            else { evtp.Duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds); }
+                            if (IsFlac) { evtp.duration = (long)( ((FlacReader)audioFile).TotalTime.TotalMilliseconds ); }
+                            else { evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds); }
                             LengthChanged(this, evtp);
                             started = true;
                         }
@@ -359,13 +356,13 @@ namespace AnotherMusicPlayer
                             if (IsFlac) {
                                 FlacReader a = (FlacReader)audioFile;
                                 evt.Position = (long)( a.CurrentTime.TotalMilliseconds ); 
-                                evt.Duration = (long)( a.TotalTime.TotalMilliseconds ); 
+                                evt.duration = (long)( a.TotalTime.TotalMilliseconds ); 
                             }
                             else
                             {
                                 AudioFileReader a = (AudioFileReader)audioFile;
                                 evt.Position = (long)( a.CurrentTime.TotalMilliseconds );
-                                evt.Duration = (long)( a.TotalTime.TotalMilliseconds );
+                                evt.duration = (long)( a.TotalTime.TotalMilliseconds );
                             }
                             PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
@@ -384,12 +381,11 @@ namespace AnotherMusicPlayer
                                 }
                             }
                         }
-                        catch (System.NullReferenceException a) { break; }
-                        catch (Exception b) { break; }
+                        catch { break; }
 
                         Thread.Sleep(50);
                     }
-                    try { outputDevice.Stop(); } catch (Exception err) { }
+                    try { outputDevice.Stop(); } catch { }
                     outputDevice.Dispose();
                 }
 
@@ -403,7 +399,7 @@ namespace AnotherMusicPlayer
                 AudioList.Remove(FilePath);
                 ThreadList.Remove(FilePath);
             }
-            catch (Exception err) { }
+            catch { }
             return;
         }
     }

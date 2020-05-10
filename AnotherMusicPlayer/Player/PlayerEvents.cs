@@ -7,9 +7,9 @@ using Newtonsoft.Json.Converters;
 
 namespace AnotherMusicPlayer
 {
-    public class MediaPositionChangedEventParams { public long Position = 0; public long Duration = 0; }
-    public class MediaLengthChangedEventParams { public long Duration = 0; }
-    public partial class Player2
+    public class MediaPositionChangedEventParams { public long Position = 0; public long duration = 0; }
+    public class MediaLengthChangedEventParams { public long duration = 0; }
+    public partial class Player
     {
         public delegate void OnPositionChanged(object sender, MediaPositionChangedEventParams e);
         public event OnPositionChanged PositionChanged;

@@ -17,7 +17,7 @@ namespace AnotherMusicPlayer
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                LowLevelKeyboardListener _listener = new LowLevelKeyboardListener(this);
+                GlobalKeyboardListener _listener = new GlobalKeyboardListener(this);
                 _listener.OnKeyPressed += (sender, e) => {
                     string re = e.KeyPressed.ToString(); //Debug.WriteLine(re);
                     if (re == "MediaPlayPause") { Pause(); }
@@ -36,7 +36,7 @@ namespace AnotherMusicPlayer
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                ((LowLevelKeyboardListener)ListReferences["KeyboardListener"]).UnHookKeyboard();
+                ((GlobalKeyboardListener)ListReferences["KeyboardListener"]).UnHookKeyboard();
             }
         }
     }
@@ -44,7 +44,7 @@ namespace AnotherMusicPlayer
     /// <summary>
     /// Global Keyboard Listener Class For Windows OS
     /// </summary>
-    public class LowLevelKeyboardListener
+    public class GlobalKeyboardListener
     {
         private const int WH_KEYBOARD_LL = 13;
         private const int WM_KEYDOWN = 0x0100;
@@ -72,7 +72,7 @@ namespace AnotherMusicPlayer
 
         private MainWindow parent;
 
-        public LowLevelKeyboardListener(MainWindow origin)
+        public GlobalKeyboardListener(MainWindow origin)
         {
             parent = origin;
             _proc = HookCallback;

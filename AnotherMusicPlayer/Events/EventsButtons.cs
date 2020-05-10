@@ -9,9 +9,6 @@ using System.Windows.Input;
 
 namespace AnotherMusicPlayer
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
 
@@ -64,29 +61,17 @@ namespace AnotherMusicPlayer
                         else { player.Conv(files[i], NewFile, (Settings.ConversionMode == 1) ? false : true); }
                         //LoadFileAsync(files[i]);
                     }
-                    //else {
-                    //    if (i == 0) {
-                    //        if (PlayList.Count > 0)
-                    //        {
-                    //            if (player.IsPlaying()) { updatePlaylistAsync(files[i], (i + 1 >= files.Length) ? true : false); }
-                    //            else { updatePlaylistAsync2(files[i], (i + 1 >= files.Length) ? true : false); }
-                    //        }
-                    //        else { fileOpen(files[i]); if (i + 1 >= files.Length) { PlayListView.ItemsSource = PlayList; } }
-                    //    }
-                    //    else {
-                    //        updatePlaylistAsync(files[i], (i+1 >= files.Length)?true:false);
-                    //    }
-                    //}
                     string[] tmp = new string[] { files[i], NewFile };
 
-                    if (!PlayList2.Contains(tmp)) { PlayList2.Add(tmp); }
+                    if (!PlayList.Contains(tmp)) { PlayList.Add(tmp); }
                 }
             }
+            Timer_PlayListIndex = -1;
 
-            if (PlayListIndex <= 0)  { 
-                PlayListIndex = startIndex + 1;
+            if (PlayListIndex < 0)  { 
+                PlayListIndex = 0;
             }
-            if (!player.IsPlaying()) { fileOpen(PlayList2[PlayListIndex][(PlayList2[PlayListIndex][1] == null) ? 0 : 1]); }
+            if (!player.IsPlaying()) { fileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]); }
             return doConv;
         }
 
@@ -99,40 +84,6 @@ namespace AnotherMusicPlayer
             }));
         }
 
-        //private async void updatePlaylistAsync(string FileName, bool last=false)
-        //{
-        //    UpdateListView(player.MediaInfo(FileName, false), true);
-        //    if (last) { PlayListView.Items.Refresh(); }
-        //}
-
-        //private async void updatePlaylistAsync2(string FileName, bool last = false)
-        //{
-        //    updatePlaylist(UpdateListView(player.MediaInfo(FileName, false)), true);
-        //    if (last) { PlayListView.Items.Refresh(); }
-        //}
-
-        //private async void LoadFileAsync(string FileName) {
-        //    string[] ra = FileName.Split(Path.DirectorySeparatorChar);
-        //    string end = Path.GetTempPath() + Path.ChangeExtension(ra[ra.Length - 1], ".mp3");
-        //    await player.Conv(FileName, end);
-
-        //    UpdateListView(player.MediaInfo(null, false, FileName), true);
-        //    if (PlayList.Count > 0)
-        //    {
-        //        int position = UpdateListView(player.MediaInfo(end, false, FileName), true);
-        //        if (!player.IsPlaying()) {
-        //            for (int i = 0; i < PlayList.Count; i++)
-        //            {
-        //                if (i == position) { PlayList[i].Selected = PlayListSelectionChar; } else { PlayList[i].Selected = ""; }
-        //            }
-        //            fileOpen(end, FileName);
-        //        }
-        //    }
-        //    else { fileOpen(end, FileName); }
-        //    Mouse.OverrideCursor = null;
-        //    win1.IsEnabled = true;
-        //}
-
 
         private void Play_Button_Click(object sender, RoutedEventArgs e) { Pause(); }
         private void Previous_Button_Click(object sender, RoutedEventArgs e) { PreviousTrack(); }
@@ -144,7 +95,7 @@ namespace AnotherMusicPlayer
         private void Clear_Button_Click(object sender, RoutedEventArgs e)
         {
             player.StopAll();
-            PlayList2.Clear();
+            PlayList.Clear();
             PlayListIndex = -1;
 
             PlayItemNameValue.ToolTip = PlayItemNameValue.Text = "";
@@ -159,22 +110,22 @@ namespace AnotherMusicPlayer
             List<string[]> tmpList = new List<string[]>();
             List<int> pasts = new List<int>();
             Random rnd = new Random();
-            string currentFile = (PlayListIndex > -1) ? PlayList2[PlayListIndex][0] : null;
+            string currentFile = (PlayListIndex > -1) ? PlayList[PlayListIndex][0] : null;
             int newIndex = PlayListIndex;
 
             int index = 0;
-            while (tmpList.Count < PlayList2.Count)
+            while (tmpList.Count < PlayList.Count)
             {
-                index = rnd.Next(0, PlayList2.Count);
+                index = rnd.Next(0, PlayList.Count);
                 if (pasts.Contains(index)) { continue; }
-                tmpList.Add(PlayList2[index]);
+                tmpList.Add(PlayList[index]);
                 pasts.Add(index);
-                if (PlayList2[index][0] == currentFile) { newIndex = tmpList.Count -1; }
+                if (PlayList[index][0] == currentFile) { newIndex = tmpList.Count -1; }
             }
 
-            PlayList2 = tmpList;
+            PlayList = tmpList;
             PlayListIndex = newIndex;
-            Timer_LastIndex = -1;
+            Timer_PlayListIndex = -1;
         }
 
         private void BtnRepeat_Click(object sender, RoutedEventArgs e)

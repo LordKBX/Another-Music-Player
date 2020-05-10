@@ -147,11 +147,11 @@
                     </TextBlock>
                     <TextBlock>
                         <InlineUIContainer>
-                            <TextBlock Text="{DynamicResource Duration2}"/>
+                            <TextBlock Text="{DynamicResource duration2}"/>
                         </InlineUIContainer>
                         <Run Text=" "/>
                         <InlineUIContainer>
-                            <TextBlock Text="{Binding DurationS}"/>
+                            <TextBlock Text="{Binding durationS}"/>
                         </InlineUIContainer>
                     </TextBlock>
                 </UniformGrid>
