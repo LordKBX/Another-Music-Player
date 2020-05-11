@@ -47,7 +47,7 @@ namespace AnotherMusicPlayer
             this.DataContext = this;
 
             PlayList = new List<string[]>();//Initialize PlayList
-            player = new Player();//Create Player object
+            player = new Player(this);//Create Player object
 
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
@@ -114,6 +114,8 @@ namespace AnotherMusicPlayer
                 }
             }
         }
+
+        public void UnsetLockScreen() { Mouse.OverrideCursor = null; win1.IsEnabled = true; }
 
         private void MainWindow_LocationChanged(object sender, EventArgs e)
         {
@@ -204,7 +206,9 @@ namespace AnotherMusicPlayer
             Timer_PlayListIndex = -1;
 
             if (PlayListIndex < 0) { PlayListIndex = 0; }
-            if (!player.IsPlaying() && DoPlay == true) { FileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]); }
+            if (!player.IsPlaying() && DoPlay == true) { 
+                if(PlayListIndex >=0 && PlayListIndex < PlayList.Count) FileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]);
+            }
             
             UpdateRecordedQueue();
 

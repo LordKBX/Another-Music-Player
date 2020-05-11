@@ -29,9 +29,6 @@ namespace AnotherMusicPlayer
                 DoConv = Open(openFileDlg.FileNames);
             }
             if (DoConv == false) { Mouse.OverrideCursor = null; win1.IsEnabled = true; }
-            else {
-                
-            }
         }
 
         /// <summary> Callback Event Click on Play/Pause button </summary>

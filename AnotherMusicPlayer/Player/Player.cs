@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
 using NAudio;
@@ -35,8 +36,11 @@ namespace AnotherMusicPlayer
         /// <summary> Conversion quality for output MP3 file </summary>
         private Int32 ConvQualityBitrates = 128;
 
+        private MainWindow parent;
+
         /// <summary> Constructor </summary>
-        public Player() {
+        public Player(MainWindow parent = null) {
+            this.parent = parent;
             ThreadList = new Dictionary<string, Thread>();
             AudioList = new Dictionary<string, object>();
             PlayStatus = new Dictionary<string, int>();
@@ -58,9 +62,11 @@ namespace AnotherMusicPlayer
         /// <summary> Give the List of native accepted file extentions </summary>
         public List<string> AcceptedExtentions() { return new List<string> { ".MP3",".mp3",".WMA",".wma",".FLAC",".flac" }; }
 
+        private int ConvCount = 0;
         /// <summary> Public interface for file convertion </summary>
         public async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
         {
+            ConvCount += 1;
             bool replace = false;
             if (FileOutput == null) {FileOutput = Path.ChangeExtension(FileInput, ".mp3"); deleteOrigin = true; }
             //Debug.WriteLine("Task_Start");
@@ -72,6 +78,8 @@ namespace AnotherMusicPlayer
             
             bool ret = await ConvExe(FileInput, FileOutput);
             if (ret == true && deleteOrigin == true) { System.IO.File.Delete(FileInput); }
+            ConvCount -= 1;
+            if (ConvCount == 0) { parent.UnsetLockScreen(); }
             //Debug.WriteLine("ret conv : " + ((ret) ? "True" : "False"));
             return true;
         }
@@ -79,12 +87,23 @@ namespace AnotherMusicPlayer
         /// <summary> Private interface for file convertion usign ffmpeg birary </summary>
         private async Task<bool> ConvExe(string FileInput, string FileOutput)
         {
+            string AppName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
+            char sep = System.IO.Path.DirectorySeparatorChar;
+            string convPath1 = "", convPath2 = "", convPath3 = "";
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                convPath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg-win64-static.exe";
+                convPath2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg-win32-static.exe";
+                convPath3 = AppDomain.CurrentDomain.BaseDirectory + sep + "Player" + sep + "ffmpeg.exe";
+            }
+
             // Use ProcessStartInfo class
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.UseShellExecute = false;
-            startInfo.FileName = AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar + "Player" + System.IO.Path.DirectorySeparatorChar + "ffmpeg" 
-                + ((RuntimeInformation.IsOSPlatform(OSPlatform.Windows))?".exe":"");
+            if (System.IO.File.Exists(convPath1)) { startInfo.FileName = convPath1; }
+            else if (System.IO.File.Exists(convPath2)) { startInfo.FileName = convPath2; }
+            else if (System.IO.File.Exists(convPath3)) { startInfo.FileName = convPath3; }
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = "-i \"" + FileInput + "\" -acodec mp3 -b:a " + ConvQualityBitrates + "k -map_metadata 0:s:0 \"" + FileOutput + "\"";
 
