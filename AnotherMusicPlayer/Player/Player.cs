@@ -17,17 +17,25 @@ using System.Runtime.InteropServices;
 
 namespace AnotherMusicPlayer
 {
-
+    /// <summary> Player class, user for retrieving media file info or playing music </summary>
     public partial class Player
     {
+        /// <summary> List of audio threads by file path </summary>
         private Dictionary<string, Thread> ThreadList = null;
+        /// <summary> List of audio objects by file path </summary>
         private Dictionary<string, object> AudioList = null;
+        /// <summary> List of playing status by file path </summary>
         private Dictionary<string, int> PlayStatus = null;
+        /// <summary> List of playing new position by file path </summary>
         private Dictionary<string, long> PlayNewPositions = null;
+        /// <summary> Last played file </summary>
         private string CurrentFile = null;
+        /// <summary> Status if repeat file playback active </summary>
         private bool PlayRepeat = false;
+        /// <summary> Conversion quality for output MP3 file </summary>
         private Int32 ConvQualityBitrates = 128;
 
+        /// <summary> Constructor </summary>
         public Player() {
             ThreadList = new Dictionary<string, Thread>();
             AudioList = new Dictionary<string, object>();
@@ -41,35 +49,34 @@ namespace AnotherMusicPlayer
             Environment.SetEnvironmentVariable(name, newValue, scope);
         }
 
+        /// <summary> Define conversion quality for output MP3 file </summary>
         public Int32 ConvQuality(Int32 newQuality = -1) { if (newQuality != -1)  { return ConvQualityBitrates = newQuality; } else { return ConvQualityBitrates; } }
+        /// <summary> Define status if repeat file playback active </summary>
         public void Repeat(bool rep) { PlayRepeat = rep; }
+        /// <summary> Get status if repeat file playback active </summary>
         public bool IsRepeat() { return PlayRepeat; }
+        /// <summary> Give the List of native accepted file extentions </summary>
         public List<string> AcceptedExtentions() { return new List<string> { ".MP3",".mp3",".WMA",".wma",".FLAC",".flac" }; }
 
+        /// <summary> Public interface for file convertion </summary>
         public async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
         {
             bool replace = false;
-            if (FileOutput == null)
-            {
-                FileOutput = Path.ChangeExtension(FileInput, ".mp3");
-                replace = true;
-            }
-            Debug.WriteLine("Task_Start");
-            Debug.WriteLine(FileInput);
-            Debug.WriteLine(FileOutput);
+            if (FileOutput == null) {FileOutput = Path.ChangeExtension(FileInput, ".mp3"); deleteOrigin = true; }
+            //Debug.WriteLine("Task_Start");
+            //Debug.WriteLine(FileInput);
+            //Debug.WriteLine(FileOutput);
 
+            //Test if output file already exist
             if (System.IO.File.Exists(FileOutput)) { System.IO.File.Delete(FileOutput); }
-            Debug.WriteLine("Test File");
-
+            
             bool ret = await ConvExe(FileInput, FileOutput);
             if (ret == true && deleteOrigin == true) { System.IO.File.Delete(FileInput); }
-            Debug.WriteLine("ret conv : " + ((ret) ? "True" : "False"));
-
-            if (replace) { System.IO.File.Delete(FileInput); }
-
+            //Debug.WriteLine("ret conv : " + ((ret) ? "True" : "False"));
             return true;
         }
 
+        /// <summary> Private interface for file convertion usign ffmpeg birary </summary>
         private async Task<bool> ConvExe(string FileInput, string FileOutput)
         {
             // Use ProcessStartInfo class
@@ -100,6 +107,7 @@ namespace AnotherMusicPlayer
             return false;
         }
 
+        /// <summary> Recuperate Media MetaData(cover excluded) </summary>
         public PlayListViewItem MediaInfo(string FilePath, bool Selected, string OriginPath = null) {
             if (System.IO.File.Exists(FilePath) || System.IO.File.Exists(OriginPath))
             {
@@ -151,6 +159,7 @@ namespace AnotherMusicPlayer
             return null;
         }
 
+        /// <summary> Recuperate Media Cover </summary>
         public BitmapImage MediaPicture(string FilePath) {
             if (System.IO.File.Exists(FilePath))
             {
@@ -174,6 +183,7 @@ namespace AnotherMusicPlayer
             return null;
         }
 
+        /// <summary> Stop all currently playing threads </summary>
         public void StopAll() {
             if (ThreadList.Count > 0)
             {
@@ -205,12 +215,14 @@ namespace AnotherMusicPlayer
             }
         }
 
+        /// <summary> Test if file exist, if input = null remplace it with value in CurrentFile </summary>
         private bool TestFile(string FilePath = null) {
             if (FilePath == null) { if (CurrentFile == null) { return false; }; FilePath = CurrentFile; }
             if (System.IO.File.Exists(FilePath)) { return true; }
             else { return false; }
         }
 
+        /// <summary> Open a new media playing thread </summary>
         public bool Open(string FilePath, bool AutoPlay = false) {
             if (TestFile(FilePath)) {
                 try
@@ -230,6 +242,7 @@ namespace AnotherMusicPlayer
             return false;
         }
 
+        /// <summary> Start media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Play(string FilePath = null)
         {
             if (TestFile(FilePath))
@@ -240,8 +253,10 @@ namespace AnotherMusicPlayer
             }
             return false;
         }
+        /// <summary> Resume media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Resume(string FilePath = null) { return Play(FilePath); }
 
+        /// <summary> Pause media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Pause(string FilePath = null)
         {
             if (TestFile(FilePath))
@@ -252,6 +267,7 @@ namespace AnotherMusicPlayer
             return false;
         }
 
+        /// <summary> Stop media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Stop(string FilePath = null)
         {
             if (TestFile(FilePath))
@@ -262,6 +278,7 @@ namespace AnotherMusicPlayer
             return false;
         }
 
+        /// <summary> Test if FilePath played for FilePath or CurrentFile if FilePath is null </summary>
         public bool IsPlaying(string FilePath = null)
         {
             if (TestFile(FilePath))
@@ -273,6 +290,7 @@ namespace AnotherMusicPlayer
             return false;
         }
 
+        /// <summary> Get/Set position for FilePath or CurrentFile if FilePath is null </summary>
         public long Position(string FilePath = null, long position = -1)
         {
             if (TestFile(FilePath))
@@ -287,6 +305,8 @@ namespace AnotherMusicPlayer
             }
             return -1;
         }
+
+        /// <summary> Get media length of FilePath or CurrentFile if FilePath is null </summary>
         public long Length(string FilePath = null)
         {
             if (TestFile(FilePath))
@@ -299,6 +319,7 @@ namespace AnotherMusicPlayer
             return -1;
         }
 
+        /// <summary> Playing thread </summary>
         private void PlaySoundAsync(object file)
         {
             try

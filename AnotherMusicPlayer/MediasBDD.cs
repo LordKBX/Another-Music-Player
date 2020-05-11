@@ -1,31 +1,27 @@
 ﻿using System;
-using System.IO;
-using System.Collections;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Input;
-using System.Windows.Shapes;
-using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Windows.Data;
 using System.Linq;
-using System.Windows.Controls.Primitives;
 using System.Data.SQLite;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
 
 namespace AnotherMusicPlayer
 {
 
     public partial class MainWindow : Window
     {
+        /// <summary> Object connection to sqlite file </summary>
         private static SQLiteConnection MediatequeBddConnection = null;
+        /// <summary>
+        /// Path to file sqlite
+        /// On windows => %SystemDrive%\Users\%USERNAME%\AppData\Local\ + AppName
+        /// </summary>
         private static string MediatequeBddFolder = null;
 
+        /// <summary> Convert NameValueCollection to Dictionary<string, object> </summary>
         static Dictionary<string, object> MediatequeBdd_NameValueCollectionToDictionary(NameValueCollection nvc, bool handleMultipleValuesPerKey)
         {
             var result = new Dictionary<string, object>();
@@ -41,7 +37,10 @@ namespace AnotherMusicPlayer
             return result;
         }
 
+        /// <summary> Test if connection to SQLite database initialized </summary>
         private static bool MediatequeBdd_IsInitilized() { return (MediatequeBddConnection == null) ? false : true; }
+
+        /// <summary> Initialize SQLite database connection </summary>
         private static void MediatequeBddInit()
         {
             if (MediatequeBdd_IsInitilized()) { return; }
@@ -73,6 +72,7 @@ namespace AnotherMusicPlayer
             catch  { Debug.WriteLine("Catch ERROR"); }
         }
 
+        /// <summary> execute SQL query </summary>
         private static Dictionary<string, Dictionary<string, object>> MediatequeBddQuery(string query, string index = null, bool AutoCommit = false)
         {
             Dictionary<string, Dictionary<string, object>> ret = null;
@@ -116,12 +116,14 @@ namespace AnotherMusicPlayer
             return ret;
         }
 
+        /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
         private static string MediatequeBddEscapeString(string str)
         {
             if (str == null) { return ""; }
             else { return str.Replace("'", "''"); }
         }
 
+        /// <summary> Initialize transaction </summary>
         private static void MediatequeBddTansactionStart()
         {
             SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
@@ -129,6 +131,7 @@ namespace AnotherMusicPlayer
             sqlite_cmdTR.ExecuteNonQuery();
         }
 
+        /// <summary> Commit transaction </summary>
         private static void MediatequeBddTansactionEnd()
         {
             SQLiteCommand sqlite_cmdCM = MediatequeBddConnection.CreateCommand();

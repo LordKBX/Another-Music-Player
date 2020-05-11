@@ -66,4 +66,12 @@
     <sys:String x:Key="LibMediaFiles">Fichiers trouvés</sys:String>
     <sys:String x:Key="LibMediaTotalSize">Taille Totale</sys:String>
     <sys:String x:Key="LibMediaTotalDuration">Durée Totale</sys:String>
+
+    <sys:String x:Key="SizeBytesUnit">O</sys:String>
+    <sys:String x:Key="SizeBytesKilo">Kio</sys:String>
+    <sys:String x:Key="SizeBytesMega">Mio</sys:String>
+    <sys:String x:Key="SizeBytesGiga">Gio</sys:String>
+    <sys:String x:Key="SizeBytesTera">Tio</sys:String>
+    <sys:String x:Key="SizeBytesPeta">Pio</sys:String>
+    <sys:String x:Key="SizeBytesExa">Eio</sys:String>
 </ResourceDictionary>

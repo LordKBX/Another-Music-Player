@@ -7,6 +7,7 @@ using System.Windows.Controls;
 
 namespace AnotherMusicPlayer
 {
+    /// <summary> Class PlayListViewItem, a storae structure for Music Media Basic MetaData </summary>
     public class PlayListViewItem
     {
         public string Path { get; set; }
@@ -18,23 +19,25 @@ namespace AnotherMusicPlayer
         public long Size { get; set; }
         public string DurationS { get; set; }
         public string Selected { get; set; }
-        public object ToolTip { get; set; }
 
         public PlayListViewItem()
         {
             Path = OriginPath = Name = Album = Artist = Selected = DurationS = "test";
             Duration = Size = 0;
-            ToolTip = null;
         }
     }
 
 
     public partial class MainWindow : Window
     {
+        /// <summary> Char used in first collumn of PlayListView for displaying current played/selected media </summary>
         public static string PlayListSelectionChar = "▶";
+        /// <summary> Short notation for ystem.IO.Path.DirectorySeparatorChar </summary>
         public static char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
 
+        /// <summary> Base Diractory of the application </summary>
         public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar;
+        /// <summary> Base Diractory of the icon folder </summary>
         public static string BaseDirImg = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar + "icons" + SeparatorChar;
 
         //public static BitmapImage CoverImg = new BitmapImage(new Uri(BaseDirImg + "album_small.png"));
@@ -56,8 +59,10 @@ namespace AnotherMusicPlayer
         //public static BitmapImage MiniPlayButtonImg_Pause = new BitmapImage(new Uri(BaseDirImg + "pause_24.png"));
         //public static BitmapImage MiniNextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next_24.png"));
 
-        public static Image AddImg = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
+        /// <summary> Add(+) image for ContextMenuItem </summary>
+        public static Image ContextMenuItemImage_add = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
 
+        /// <summary> Dictionary contening Image URI indexed by a string code name </summary>
         private static Dictionary<string, Uri> ImagesUriList = new Dictionary<string, Uri> {
             { "CoverImg", new Uri(BaseDirImg + "album_small.png") },
             { "OpenButtonImg", new Uri(BaseDirImg + "file.png") },
@@ -78,19 +83,34 @@ namespace AnotherMusicPlayer
             { "MiniNextButtonImg", new Uri(BaseDirImg + "next_24.png") }
         };
 
+        /// <summary> Create BitmapImage from ImagesUriList </summary>
         public static BitmapImage Bimage(string index) {
             if (ImagesUriList.ContainsKey(index)) { return new BitmapImage(ImagesUriList[index]); } else { return null; }
         }
 
+        /// <summary> Convert a binary/bytes length in human readable string </summary>
         public static String BytesLengthToString(long byteCount)
         {
-            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
-            if (byteCount == 0)
-                return "0" + suf[0];
-            long bytes = Math.Abs(byteCount);
-            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
-            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
-            return (Math.Sign(byteCount) * num).ToString() + suf[place];
+            try
+            {
+                MainWindow mw = ((MainWindow)Application.Current.MainWindow);
+                string[] suf = {
+                mw.GetTaduction("SizeBytesUnit"),
+                    mw.GetTaduction("SizeBytesKilo"),
+                    mw.GetTaduction("SizeBytesMega"),
+                    mw.GetTaduction("SizeBytesGiga"),
+                    mw.GetTaduction("SizeBytesTera"),
+                    mw.GetTaduction("SizeBytesPeta"),
+                    mw.GetTaduction("SizeBytesExa")
+                }; //Longs run out around EB
+                if (byteCount == 0)
+                    return "0" + suf[0];
+                long bytes = Math.Abs(byteCount);
+                int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+                double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+                return (Math.Sign(byteCount) * num).ToString() + suf[place];
+            }
+            catch { return ""; }
         }
     }
 }

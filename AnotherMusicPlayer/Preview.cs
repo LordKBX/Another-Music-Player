@@ -4,6 +4,7 @@ namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {
+        /// <summary> Setup preview for Windows Aero Peek </summary>
         private void PreviewSetUp() {
             PreviewCtrlPause.Click += (sender, e) => { Pause(); };
             PreviewCtrlPrev.Click += (sender, e) => { PreviousTrack(); };

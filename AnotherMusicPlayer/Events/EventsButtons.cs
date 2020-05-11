@@ -12,6 +12,7 @@ namespace AnotherMusicPlayer
     public partial class MainWindow : Window
     {
 
+        /// <summary> Callback Event Click on button Open File(s) </summary>
         private void Open_Button_Click(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
@@ -33,65 +34,17 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private bool Open(string[] files)
-        {
-            bool doConv = false;
-            int startIndex = PlayListIndex;
-
-            if (files.Length > 0)
-            {
-                if (!player.IsPlaying()) {
-                    if (MediaTestFileExtention(files[0]) == false) { doConv = true; }
-                }
-                if (!player.IsPlaying() && MediaTestFileExtention(files[0]) == false) { doConv = true; }
-                
-                string NewFile;
-                for (int i = 0; i < files.Length; i++)
-                {
-                    NewFile = null;
-                    if (MediaTestFileExtention(files[i]) == false)
-                    {
-                        if (Settings.ConversionMode == 1) { NewFile = Path.GetTempPath() + Path.ChangeExtension(Path.GetFileName(files[i]), ".mp3"); }
-                        else { NewFile = Path.ChangeExtension(files[i], ".mp3"); }
-
-                        if (i == 0) {
-                            doConv = true;
-                            player.Conv(files[i], NewFile, (Settings.ConversionMode == 1)?false:true);
-                        }
-                        else { player.Conv(files[i], NewFile, (Settings.ConversionMode == 1) ? false : true); }
-                        //LoadFileAsync(files[i]);
-                    }
-                    string[] tmp = new string[] { files[i], NewFile };
-
-                    if (!PlayList.Contains(tmp)) { PlayList.Add(tmp); }
-                }
-            }
-            Timer_PlayListIndex = -1;
-
-            if (PlayListIndex < 0)  { 
-                PlayListIndex = 0;
-            }
-            if (!player.IsPlaying()) { fileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]); }
-            return doConv;
-        }
-
-        private async void ConvAndPlay(string FileInput, string FileOutput)
-        {
-            await player.Conv(FileInput, FileOutput, (Settings.ConversionMode == 1) ? false : true);
-            Dispatcher.BeginInvoke(new Action(() => {
-                try { fileOpen(FileInput); }
-                catch{ }
-            }));
-        }
-
-
+        /// <summary> Callback Event Click on Play/Pause button </summary>
         private void Play_Button_Click(object sender, RoutedEventArgs e) { Pause(); }
+        /// <summary> Callback Event Click on Previous Track button </summary>
         private void Previous_Button_Click(object sender, RoutedEventArgs e) { PreviousTrack(); }
+        /// <summary> Callback Event Click on Next Track button </summary>
         private void Next_Button_Click(object sender, RoutedEventArgs e) { NextTrack(); }
 
-        private void PositionMoins10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() - 10000); }
-        private void PositionPlus10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() + 10000); }
+        //private void PositionMoins10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() - 10000); }
+        //private void PositionPlus10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() + 10000); }
 
+        /// <summary> Callback Event Click on Clear List button </summary>
         private void Clear_Button_Click(object sender, RoutedEventArgs e)
         {
             player.StopAll();
@@ -105,6 +58,7 @@ namespace AnotherMusicPlayer
             FileCover.Source = Bimage("CoverImg");
         }
 
+        /// <summary> Callback Event Click on Shuffle button </summary>
         private void BtnShuffle_Click(object sender, RoutedEventArgs e)
         {
             List<string[]> tmpList = new List<string[]>();
@@ -128,46 +82,12 @@ namespace AnotherMusicPlayer
             Timer_PlayListIndex = -1;
         }
 
+        /// <summary> Callback Event Click on Repeat button </summary>
         private void BtnRepeat_Click(object sender, RoutedEventArgs e)
         {
             if (PlayRepeatStatus <= 0) { PlayRepeatStatus = 1; player.Repeat(true); }
             else if (PlayRepeatStatus == 1) { PlayRepeatStatus = 2; player.Repeat(false); }
             else { PlayRepeatStatus = 0; player.Repeat(false); }
-        }
-
-        private void ParamsLibFolderBtn_Click(object sender, RoutedEventArgs e)
-        {
-            string path = OpenFolder();
-            if (path != null && path != Settings.LibFolder)
-            {
-                ParamsLibFolderTextBox.Text = path;
-                Settings.LibFolder = path;
-                Settings.SaveSettings();
-                MediatequeInvokeScan(true);
-            }
-        }
-
-        private string OpenFolder()
-        {
-            string path = null;
-            ResourceDictionary res1 = Resources.MergedDictionaries[1];
-            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.InitialDirectory = Settings.LibFolder; // Use current value for initial dir
-            dialog.Title = (string)res1["ParamsLibFolderSelectorTitle"]; // instead of default "Save As"
-            dialog.Filter = ((string)res1["ParamsLibFolderSelectorBlockerTitle"]) + "|*." + ((string)res1["ParamsLibFolderSelectorBlockerType"]); // Prevents displaying files
-            dialog.FileName = (string)res1["ParamsLibFolderSelectorBlockerName"]; // Filename will then be "select.this.directory"
-            if (dialog.ShowDialog() == true)
-            {
-                path = dialog.FileName;
-                // Remove fake filename from resulting path
-                path = path.Replace("\\"+((string)res1["ParamsLibFolderSelectorBlockerName"]) +"."+((string)res1["ParamsLibFolderSelectorBlockerType"]), "");
-                path = path.Replace("."+ ((string)res1["ParamsLibFolderSelectorBlockerType"]), "");
-                // If user has changed the filename, create the new directory
-                if (!System.IO.Directory.Exists(path)) { return null; }
-                // Our final value is in path
-                //Debug.WriteLine(path);
-            }
-            return path;
         }
 
     }

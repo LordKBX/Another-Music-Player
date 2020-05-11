@@ -66,4 +66,12 @@
     <sys:String x:Key="LibMediaFiles">Files</sys:String>
     <sys:String x:Key="LibMediaTotalSize">Total Size</sys:String>
     <sys:String x:Key="LibMediaTotalDuration">Total Duration</sys:String>
+
+    <sys:String x:Key="SizeBytesUnit">B</sys:String>
+    <sys:String x:Key="SizeBytesKilo">Kib</sys:String>
+    <sys:String x:Key="SizeBytesMega">Mib</sys:String>
+    <sys:String x:Key="SizeBytesGiga">Gib</sys:String>
+    <sys:String x:Key="SizeBytesTera">Tib</sys:String>
+    <sys:String x:Key="SizeBytesPeta">Pib</sys:String>
+    <sys:String x:Key="SizeBytesExa">Eib</sys:String>
 </ResourceDictionary>

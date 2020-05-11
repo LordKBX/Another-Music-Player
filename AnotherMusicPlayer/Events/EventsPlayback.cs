@@ -13,10 +13,10 @@ namespace AnotherMusicPlayer
         public void Pause() { if (player.IsPlaying()) { player.Pause(); } else { player.Resume(); } }
 
         /// <summary> Go to the previous media in PlayList </summary>
-        public void PreviousTrack() { updatePlaylist(PlayListIndex - 1, true); }
+        public void PreviousTrack() { UpdatePlaylist(PlayListIndex - 1, true); }
 
         /// <summary> Go to the next media in PlayList </summary>
-        public void NextTrack() { updatePlaylist(PlayListIndex + 1, true); }
+        public void NextTrack() { UpdatePlaylist(PlayListIndex + 1, true); }
         #endregion
 
         #region PlayBack Events
@@ -56,13 +56,13 @@ namespace AnotherMusicPlayer
 
             if (PlayRepeatStatus <= 0)
             {
-                if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(PlayListIndex + 1, true); })); }
+                if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { UpdatePlaylist(PlayListIndex + 1, true); })); }
                 else { Dispatcher.BeginInvoke(new Action(() => { StopPlaylist(); })); }
             }
-            else if (PlayRepeatStatus == 1) { updatePlaylist(PlayListIndex, true); }
+            else if (PlayRepeatStatus == 1) { UpdatePlaylist(PlayListIndex, true); }
             else {
-                if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(PlayListIndex + 1, true); })); }
-                else { Dispatcher.BeginInvoke(new Action(() => { updatePlaylist(0, true); })); }
+                if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { UpdatePlaylist(PlayListIndex + 1, true); })); }
+                else { Dispatcher.BeginInvoke(new Action(() => { UpdatePlaylist(0, true); })); }
             }
         }
         #endregion
@@ -84,7 +84,7 @@ namespace AnotherMusicPlayer
             UpdatePosition(displayTime(0));
             UpdateSize(displayTime(0));
             UpdatePositionBar(0);
-            if (PlayList.Count > 0) { updatePlaylist(0, false); }
+            if (PlayList.Count > 0) { UpdatePlaylist(0, false); }
         }
         #endregion
     }

@@ -1,49 +1,56 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Collections;
-using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Shapes;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Windows.Data;
-using System.Linq;
-using System.Windows.Controls.Primitives;
-using System.Data.SQLite;
-using System.Reflection;
-using Newtonsoft.Json.Linq;
 
 namespace AnotherMusicPlayer
 {
-
+    /// <summary> Class Folder for storing a hierarchical structure of Folder + Files </summary>
     public class Folder
     {
+        /// <summary> list of Files in full path </summary>
         public List<string> Files = new List<string>();
+        /// <summary> List of Object Folder </summary>
         public List<Folder> Folders = new List<Folder>();
+        /// <summary> Folder name </summary>
         public string Name = null;
+        /// <summary> Folder full path </summary>
         public string Path = null;
+        /// <summary> Reference of Folder Parent object </summary>
         public Folder Parent = null;
     }
 
     public partial class MainWindow : Window
     {
+        /// <summary> Object Folder of scaned Library </summary>
         private Folder MediatequeRefFolder = new Folder();
+        /// <summary> Object Folder of current position in Library </summary>
         private Folder MediatequeCurrentFolder = null;
+        /// <summary> String Path of current position in Library </summary>
         private string MediatequeCurrentFolderS = null;
+        /// <summary> Object Watcher for detecting Library Modifications </summary>
         private FileSystemWatcher MediatequeWatcher = null;
+        /// <summary> Counter of Total number of scaned files </summary>
+        private double MediatequeTotalScanedFiles = 0;
+        /// <summary> Counter of Total scaned Size </summary>
         private double MediatequeTotalScanedSize = 0;
+        /// <summary> Counter of Total scaned Duration </summary>
         private double MediatequeTotalScanedDuration = 0;
+        /// <summary> status if currently scanning Library </summary>
         private bool Scanning = false;
 
+        /// <summary> list of know files in database and their basic metadata </summary>
         Dictionary<string, Dictionary<string, object>> MediatequeBddFiles = new Dictionary<string, Dictionary<string, object>>();
+        /// <summary> list of newly scanned files(absolute path) </summary>
         List<string> MediatequeScanedFiles = new List<string>();
+
+        /// <summary> Asynchronus call for scanning Library in a new thread </summary>
         private async void MediatequeInvokeScan(bool DoClean = false) {
             try
             {
@@ -54,12 +61,13 @@ namespace AnotherMusicPlayer
             }
             catch { }
         }
-        private async void MediatequeScan(object param) {
-            try { MediatequeScan((bool)param); }
-            catch { }
-        }
-        private async void MediatequeScan(bool DoClean = false)
+
+        /// <summary> Launch a scan of th Library </summary>
+        private async void MediatequeScan(object param = null)
         {
+            bool DoClean = false;
+            try { DoClean = (bool)param; } catch { }
+
             MediatequeBddInit();
             if (Settings.LibFolder != null)
             {
@@ -74,6 +82,7 @@ namespace AnotherMusicPlayer
                         MediatequeCurrentFolder = null; MediatequeWatcher = null;
                         MediatequeTotalScanedSize = 0;
                         MediatequeTotalScanedDuration = 0;
+                        MediatequeTotalScanedFiles = 0;
                         //MediatequeBddQuery("DELETE FROM files");
                         MediatequeScanedFiles = new List<string>();
                     }
@@ -99,6 +108,8 @@ namespace AnotherMusicPlayer
                     }
                     MediatequeBddTansactionEnd();
 
+                    MediatequeBddFiles = MediatequeBddQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
+
                     Dispatcher.BeginInvoke(new Action(() => {
                         LibNavigationContent.Orientation = Orientation.Horizontal;
                         MediatequeBuildNavigationPath(MediatequeCurrentFolder ?? MediatequeRefFolder);
@@ -108,8 +119,11 @@ namespace AnotherMusicPlayer
                 }
             }
         }
+
+        /// <summary> Create a Library folder watcher </summary>
         private void MediatequeCreateWatcher()
         {
+            if (MediatequeWatcher != null) { MediatequeWatcher.Dispose(); }
             MediatequeWatcher = new FileSystemWatcher();
             MediatequeWatcher.Path = Settings.LibFolder;
             MediatequeWatcher.IncludeSubdirectories = true;
@@ -119,21 +133,69 @@ namespace AnotherMusicPlayer
             MediatequeWatcher.EnableRaisingEvents = true;
         }
 
+        /// <summary> Fill the Navigation bar in Library pannel when scanning files </summary>
+        private void MediatequeBuildNavigationScan()
+        {
+            LibNavigationPathContener.Children.Clear();
+            TextBlock tb2 = new TextBlock();
+            tb2.Text = "<< " + GetTaduction("LibMediaScanning") + " >>, " + GetTaduction("LibMediaFiles") + ": ";
+            tb2.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb2);
+
+            TextBlock tb3 = new TextBlock();
+            tb3.Text = "" + MediatequeScanedFiles.Count;
+            tb3.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb3);
+
+            TextBlock tb4 = new TextBlock();
+            tb4.Text = ", " + GetTaduction("LibMediaTotalSize") + ": ";
+            tb4.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb4);
+
+            TextBlock tb5 = new TextBlock();
+            tb5.Text = "" + MediatequeTotalScanedSize;
+            tb5.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb5);
+
+            TextBlock tb6 = new TextBlock();
+            tb6.Text = ", " + GetTaduction("LibMediaTotalDuration") + ": ";
+            tb6.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb6);
+
+            TextBlock tb7 = new TextBlock();
+            tb7.Text = "" + MediatequeTotalScanedDuration;
+            tb7.FontSize = 8;
+            LibNavigationPathContener.Children.Add(tb7);
+
+            LibNavigationContent.Orientation = Orientation.Vertical;
+        }
+
+        /// <summary> Get Basic Metadata of a media file if stored in database </summary>
         private Dictionary<string, object> MediatequeBddFileInfo(string path) {
             if (MediatequeBddFiles.ContainsKey(path)) { return MediatequeBddFiles[path]; }
             else { return null; }
         }
 
+        /// <summary> GetCallback when Mediateque Watcher detect a change </summary>
         private void MediatequeChanged(object source, FileSystemEventArgs e)
         {
-            Debug.WriteLine(e.Name);
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                MediatequeScan();
-            }));
+            //Debug.WriteLine(e.Name);
+            Dispatcher.BeginInvoke(new Action(() => { MediatequeScan(); }));
         }
 
-        private void MediatequeLoadSubDirectories(string dir, Folder fold)
+        /// <summary> Recursive function for filling a List<string> with all the files Stored in the hierarchy of an Folder object </summary>
+        private List<string> MediatequeCreateList(Folder fold, List<string> liste)
+        {
+            if (fold.Folders != null)
+            {
+                foreach (Folder fl in fold.Folders) { liste = MediatequeCreateList(fl, liste); }
+            }
+            foreach (string fi in fold.Files) { liste.Add(fi); }
+            return liste;
+        }
+
+        /// <summary> Sub Recursive Function for scanning folder </summary>
+        private void MediatequeLoadSubDirectories(string dir, Folder fold, bool BddUpdate = true)
         {
             // Get all subdirectories  
             string[] subdirectoryEntries = Directory.GetDirectories(dir);
@@ -143,14 +205,15 @@ namespace AnotherMusicPlayer
                 DirectoryInfo di = new DirectoryInfo(subdirectory);
                 if (di.Name.StartsWith('.')) { continue; }
                 Folder fold2 = new Folder() { Name = di.Name, Path = di.FullName, Parent = fold };
-                MediatequeLoadFiles(subdirectory, fold2);
-                MediatequeLoadSubDirectories(subdirectory, fold2);
+                MediatequeLoadFiles(subdirectory, fold2, BddUpdate);
+                MediatequeLoadSubDirectories(subdirectory, fold2, BddUpdate);
                 if (MediatequeCurrentFolderS == di.FullName) { MediatequeCurrentFolder = fold2; }
                 fold.Folders.Add(fold2);
             }
         }
 
-        private void MediatequeLoadFiles(string dir, Folder fold)
+        /// <summary> Sub Function for scanning folder, fill the file list </summary>
+        private void MediatequeLoadFiles(string dir, Folder fold, bool BddUpdate = true)
         {
             string[] Files = Directory.GetFiles(dir, "*.*");
             bool ok = false;
@@ -168,139 +231,82 @@ namespace AnotherMusicPlayer
                 {
                     FileInfo fi = new FileInfo(file);
                     fold.Files.Add(fi.FullName);
-                    //MediatequeScanedFiles.Add(fi.FullName);
-                    if (MediatequeBddFiles.ContainsKey(fi.FullName))
+                    MediatequeTotalScanedFiles += 1;
+                    if (BddUpdate)
                     {
-                        //Debug.WriteLine(fi.FullName);
-                        //Debug.WriteLine("LastUpdate BDD = " + (long)MediatequeBddFiles[fi.FullName]["LastUpdate"]);
-                        //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
-                        if (Convert.ToInt64((string)MediatequeBddFiles[fi.FullName]["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
+                        if (MediatequeBddFiles.ContainsKey(fi.FullName))
+                        {
+                            //Debug.WriteLine(fi.FullName);
+                            //Debug.WriteLine("LastUpdate BDD = " + (long)MediatequeBddFiles[fi.FullName]["LastUpdate"]);
+                            //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
+                            if (Convert.ToInt64((string)MediatequeBddFiles[fi.FullName]["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
+                            {
+                                MediatequeScanedFiles.Add(fi.FullName);
+                                PlayListViewItem item = player.MediaInfo(fi.FullName, false);
+                                MediatequeTotalScanedDuration += item.Duration;
+                                MediatequeTotalScanedSize += item.Size;
+                                MediatequeBddQuery("UPDATE files SET Name='" + MediatequeBddEscapeString(item.Name)
+                                    + "', Album='" + MediatequeBddEscapeString(item.Album)
+                                    + "', Artists='" + MediatequeBddEscapeString(item.Artist)
+                                    + "', Duration='" + item.Duration
+                                    + "', Size='" + item.Size
+                                    + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
+                                    + "' WHERE Path='" + MediatequeBddEscapeString(fi.FullName) + "'");
+                            }
+                            else
+                            {
+                                MediatequeTotalScanedDuration += Convert.ToInt64(MediatequeBddFiles[fi.FullName]["Duration"]);
+                                MediatequeTotalScanedSize += Convert.ToInt64(MediatequeBddFiles[fi.FullName]["Size"]);
+                            }
+                        }
+                        else
                         {
                             MediatequeScanedFiles.Add(fi.FullName);
                             PlayListViewItem item = player.MediaInfo(fi.FullName, false);
                             MediatequeTotalScanedDuration += item.Duration;
                             MediatequeTotalScanedSize += item.Size;
-                            MediatequeBddQuery("UPDATE files SET Name='" + MediatequeBddEscapeString(item.Name)
-                                + "', Album='" + MediatequeBddEscapeString(item.Album)
-                                + "', Artists='" + MediatequeBddEscapeString(item.Artist)
-                                + "', Duration='" + item.Duration
-                                + "', Size='" + item.Size
-                                + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
-                                + "' WHERE Path='" + MediatequeBddEscapeString(fi.FullName) + "'");
+                            string query = "INSERT INTO files(Path,Name,Album,Artists,Duration,Size,LastUpdate) VALUES('";
+                            query += MediatequeBddEscapeString(fi.FullName) + "','";
+                            query += MediatequeBddEscapeString(item.Name) + "','";
+                            query += MediatequeBddEscapeString(item.Album) + "','";
+                            query += MediatequeBddEscapeString(item.Artist) + "','";
+                            query += item.Duration + "','";
+                            query += item.Size + "','";
+                            query += fi.LastWriteTimeUtc.ToFileTime() + "')";
+                            MediatequeBddQuery(query);
                         }
-                        else {
-                            MediatequeTotalScanedDuration += Convert.ToInt64(MediatequeBddFiles[fi.FullName]["Duration"]);
-                            MediatequeTotalScanedSize += Convert.ToInt64(MediatequeBddFiles[fi.FullName]["Size"]);
+
+                        if (MediatequeScanedFiles.Count % 100 == 0)
+                        {
+                            MediatequeBddTansactionEnd();
+                            MediatequeBddTansactionStart();
                         }
+
+                        Dispatcher.BeginInvoke(new Action(() => {
+                            MediatequeBuildNavigationScan();
+                        }));
                     }
-                    else
-                    {
-                        MediatequeScanedFiles.Add(fi.FullName);
-                        PlayListViewItem item = player.MediaInfo(fi.FullName, false);
-                        MediatequeTotalScanedDuration += item.Duration;
-                        MediatequeTotalScanedSize += item.Size;
-                        string query = "INSERT INTO files(Path,Name,Album,Artists,Duration,Size,LastUpdate) VALUES('";
-                        query += MediatequeBddEscapeString(fi.FullName) + "','";
-                        query += MediatequeBddEscapeString(item.Name) + "','";
-                        query += MediatequeBddEscapeString(item.Album) + "','";
-                        query += MediatequeBddEscapeString(item.Artist) + "','";
-                        query += item.Duration + "','";
-                        query += item.Size + "','";
-                        query += fi.LastWriteTimeUtc.ToFileTime() + "')";
-                        MediatequeBddQuery(query);
-                    }
-
-                    if (MediatequeScanedFiles.Count % 100 == 0)
-                    {
-                        MediatequeBddTansactionEnd();
-                        MediatequeBddTansactionStart();
-                    }
-
-                    Dispatcher.BeginInvoke(new Action(() => {
-                        TextBlock tb2 = new TextBlock();
-                        tb2.Text = fi.FullName.Replace(Settings.LibFolder, "");
-                        LibNavigationContent.Children.Insert(0, tb2);
-                        if (LibNavigationContent.Children.Count > 30) { LibNavigationContent.Children.RemoveAt(30); }
-
-                        LibNavigationPathContener.Children.RemoveAt(1);
-                        TextBlock tb3 = new TextBlock();
-                        tb3.Text = "" + MediatequeScanedFiles.Count;
-                        tb3.FontSize = 8;
-                        LibNavigationPathContener.Children.Insert(1, tb3);
-
-                        LibNavigationPathContener.Children.RemoveAt(3);
-                        TextBlock tb5 = new TextBlock();
-                        tb5.Text = "" + BytesLengthToString((long)MediatequeTotalScanedSize);
-                        tb5.FontSize = 8;
-                        LibNavigationPathContener.Children.Insert(3, tb5);
-
-                        LibNavigationPathContener.Children.RemoveAt(5);
-                        TextBlock tb7 = new TextBlock();
-                        tb7.Text = "" + displayTime((long)MediatequeTotalScanedDuration);
-                        tb7.FontSize = 8;
-                        LibNavigationPathContener.Children.Insert(5, tb7);
-                    }));
                 }
             }
         }
 
 
 
-
-
-
-
-
-
+        /// <summary> Create context menu for objects in Library </summary>
         private ContextMenu LibMediaCreateContextMenu()
-        {//AddImg
+        {//ContextMenuItemImage_add
             ContextMenu ct = new ContextMenu();
             MenuItem mu = new MenuItem()
             {
-                Header = (string)Resources.MergedDictionaries[1]["ParamsLibItemContextMenuItem1"],
-                Icon = AddImg
+                Header = GetTaduction("ParamsLibItemContextMenuItem1"),
+                Icon = ContextMenuItemImage_add
             };
-            mu.Click += MediatequeContextMenuClick;
+            mu.Click += MediatequeCT_Open;
             ct.Items.Add(mu);
             return ct;
         }
 
-        private void MediatequeBuildNavigationScan()
-        {
-            LibNavigationPathContener.Children.Clear();
-            TextBlock tb2 = new TextBlock();
-            tb2.Text = "<< " + GetTaductionString("LibMediaScanning") + " >>, " + GetTaductionString("LibMediaFiles") + ": ";
-            tb2.FontSize = 8;
-            LibNavigationPathContener.Children.Add(tb2);
-
-            TextBlock tb3 = new TextBlock();
-            tb3.Text = "" + MediatequeScanedFiles.Count;
-            tb3.FontSize = 8;
-            LibNavigationPathContener.Children.Add(tb3);
-
-            TextBlock tb4 = new TextBlock();
-            tb4.Text = ", " + GetTaductionString("LibMediaTotalSize") + ": ";
-            tb4.FontSize = 8;
-            LibNavigationPathContener.Children.Add(tb4);
-
-            TextBlock tb5 = new TextBlock();
-            tb5.Text = "" + MediatequeTotalScanedSize;
-            tb5.FontSize = 8;
-            LibNavigationPathContener.Children.Add(tb5);
-
-            TextBlock tb6 = new TextBlock();
-            tb6.Text = ", " + GetTaductionString("LibMediaTotalDuration") + ": ";
-            tb6.FontSize = 8;
-            LibNavigationPathContener.Children.Add(tb6);
-
-            TextBlock tb7 = new TextBlock();
-            tb7.Text = "" + MediatequeTotalScanedDuration;
-            tb7.FontSize = 8;
-            LibNavigationPathContener.Children.Add(tb7);
-
-            LibNavigationContent.Orientation = Orientation.Vertical;
-        }
-
+        /// <summary> Fill the Navigation bar in Library pannel with current location </summary>
         private void MediatequeBuildNavigationPath(Folder fold) {
             LibNavigationPathContener.Children.Clear();
             MediatequeCurrentFolder = fold;
@@ -349,6 +355,7 @@ namespace AnotherMusicPlayer
 
         }
 
+        /// <summary> Callback click Navigation item in Navigation bar, used for changing location in library </summary>
         private void MediatequeBuildNavigationPathClick(object sender, MouseButtonEventArgs e)
         {
             object[] ob = (object[])((TextBlock)sender).Tag;
@@ -360,6 +367,7 @@ namespace AnotherMusicPlayer
         }
 
 
+        /// <summary> Fill the Content zone in Library pannel with folders and files </summary>
         private void MediatequeBuildNavigationContent(Folder fold) {
             LibNavigationContent.Children.Clear();
 
@@ -367,6 +375,7 @@ namespace AnotherMusicPlayer
             foreach (string fi in fold.Files) { MediatequeBuildNavigationContentButton("file", fi, fold.Path + SeparatorChar + fi); }
         }
 
+        /// <summary> Create button for the Content zone in Library pannel </summary>
         private void MediatequeBuildNavigationContentButton(string type, string name, string path, Folder fold = null)
         {
             Border br = new Border();
@@ -402,7 +411,11 @@ namespace AnotherMusicPlayer
             LibNavigationContent.Children.Add(br);
         }
 
-        double MediatequeNavigationContentButtonClick_Last = 0;
+        /// <summary> Library pannel Content button last time click </summary>
+        double MediatequeNavigationContentButtonClick_LastTime = 0;
+        /// <summary> Library pannel Content button last reference click </summary>
+        string MediatequeNavigationContentButtonClick_LastRef = "";
+        /// <summary> Click Callback content button in Library pannel </summary>
         private void MediatequeNavigationContentButtonClick(object sender, MouseButtonEventArgs e)
         {
             double tmpt = UnixTimestamp();
@@ -414,7 +427,7 @@ namespace AnotherMusicPlayer
             }
             else
             {
-                if (MediatequeNavigationContentButtonClick_Last + 1 > tmpt)
+                if (MediatequeNavigationContentButtonClick_LastTime + 1 > tmpt && MediatequeNavigationContentButtonClick_LastRef == (string)re[1])
                 {
                     Debug.WriteLine(((Grid)sender).Tag);
                     if (System.IO.File.Exists((string)re[1]))
@@ -426,22 +439,25 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            MediatequeNavigationContentButtonClick_Last = tmpt;
+            MediatequeNavigationContentButtonClick_LastTime = tmpt;
+            MediatequeNavigationContentButtonClick_LastRef = (string)re[1];
         }
 
-        public void MediatequeContextMenuClick(object sender, RoutedEventArgs e)
+        /// <summary> Click Callback on ContextMenuItem </summary>
+        public void MediatequeCT_Open(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("MediatequeContextMenuClick");
+            //Debug.WriteLine("MediatequeCT_Open");
             MenuItem mi = (MenuItem)sender;
             ContextMenu ct = (ContextMenu)mi.Parent;
             object[] tab;
             try
-            {
+            {   // With ContextMenu from Library pannel Content zone
                 Grid gr = (Grid)ct.PlacementTarget;
-                tab = (object[])gr.Tag;
+                tab = (object[])gr.Tag; gr = null;
             }
             catch
             {
+                // With ContextMenu from Library pannel Navigation bar
                 TextBlock tx = (TextBlock)ct.PlacementTarget;
                 tab = (object[])tx.Tag;
             }
@@ -449,32 +465,14 @@ namespace AnotherMusicPlayer
             if ((string)tab[0] == "folder") {
                 List<string> paths = new List<string>();
                 Folder fold = (Folder)tab[2];
-                paths = MediatequeContextMenuClickParseFolder(fold, paths);
-                Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
-                Open(paths.ToArray());
+                paths = MediatequeCreateList(fold, paths);
+                //Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
+                Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray()); }));
             }
             else if ((string)tab[0] == "file")
             {
-                Dispatcher.BeginInvoke(new Action(() =>
-                {
-                    Open(new string[] { (string)tab[1] });
-                }));
+                Dispatcher.BeginInvoke(new Action(() => { Open(new string[] { (string)tab[1] }); }));
             }
-        }
-
-        private List<string> MediatequeContextMenuClickParseFolder(Folder fold, List<string> tab)
-        {
-            if (fold.Folders != null)
-            {
-                foreach (Folder fl in fold.Folders)
-                {
-                    tab = MediatequeContextMenuClickParseFolder(fl, tab);
-                }
-            }
-            foreach (string fi in fold.Files) {
-                tab.Add(fi);
-            }
-            return tab;
         }
 
 

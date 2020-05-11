@@ -55,7 +55,7 @@ namespace AnotherMusicPlayer
             Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
             Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load settings file
             //Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + SeparatorChar + "fr.xaml", UriKind.Absolute) });
-            Traduction();
+            UpdateTraduction();
             PreviewSetUp();
 
             FileCover.Source = Bimage("CoverImg");
@@ -121,7 +121,60 @@ namespace AnotherMusicPlayer
             ((TabItem)(TabControler.Items[TabControler.Items.Count - 1])).Width -= 1;
         }
 
-        private void fileOpen(string FilePath, bool doPlay = true)
+        /// <summary> Load list of file in the playlist and play first element in list if music currently not played </summary>
+        private bool Open(string[] files)
+        {
+            bool doConv = false;
+            int startIndex = PlayListIndex;
+
+            if (files.Length > 0)
+            {
+                if (!player.IsPlaying() && MediaTestFileExtention(files[0]) == false) { doConv = true; }
+
+                string NewFile;
+                for (int i = 0; i < files.Length; i++)
+                {
+                    NewFile = null;
+                    if (MediaTestFileExtention(files[i]) == false)
+                    {
+                        if (Settings.ConversionMode == 1) { NewFile = Path.GetTempPath() + Path.ChangeExtension(Path.GetFileName(files[i]), ".mp3"); }
+                        else { NewFile = Path.ChangeExtension(files[i], ".mp3"); }
+
+                        if (i == 0)
+                        {
+                            doConv = true;
+                            player.Conv(files[i], NewFile, (Settings.ConversionMode == 1) ? false : true);
+                        }
+                        else { player.Conv(files[i], NewFile, (Settings.ConversionMode == 1) ? false : true); }
+                        //LoadFileAsync(files[i]);
+                    }
+                    string[] tmp = new string[] { files[i], NewFile };
+
+                    if (!PlayList.Contains(tmp)) { PlayList.Add(tmp); }
+                }
+            }
+            Timer_PlayListIndex = -1;
+
+            if (PlayListIndex < 0)
+            {
+                PlayListIndex = 0;
+            }
+            if (!player.IsPlaying()) { FileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]); }
+            return doConv;
+        }
+
+        /// <summary> Launch File conversion </summary>
+        private async void ConvAndPlay(string FileInput, string FileOutput)
+        {
+            await player.Conv(FileInput, FileOutput, (Settings.ConversionMode == 1) ? false : true);
+            Dispatcher.BeginInvoke(new Action(() => {
+                try { FileOpen(FileInput); }
+                catch { }
+            }));
+        }
+
+        /// <summary> Load music file and play if doPlay = true </summary>
+        private void FileOpen(string FilePath, bool doPlay = true)
         {
             PlayListViewItem it = player.MediaInfo(FilePath, false);
             if (it == null) { return; }
@@ -138,7 +191,8 @@ namespace AnotherMusicPlayer
             if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
         }
 
-        private void updatePlaylist(int NewPosition, bool DoPlay = false)
+        /// <summary> Change Playlist index and load music file if the new position is accepted </summary>
+        private void UpdatePlaylist(int NewPosition, bool DoPlay = false)
         {
             if (PlayList.Count == 0) { return; }
             if (NewPosition < 0) { NewPosition = 0; }
@@ -149,7 +203,7 @@ namespace AnotherMusicPlayer
                 player.StopAll();
                 if (NewPosition >= PlayList.Count) { NewPosition = 0; }
                 PlayListIndex = NewPosition;
-                fileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
+                FileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
             }
         }
     }
