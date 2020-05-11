@@ -59,8 +59,6 @@ namespace AnotherMusicPlayer
         public static double LastWindowTop { get; set; } = 100;
 
         // Last play Section
-        [Setting(Name = "Local.LastPlaylist", Default = null)]
-        public static string[] LastPlaylist { get; set; } = null;
         [Setting(Name = "Local.LastPlaylistIndex", Default = 0)]
         public static int LastPlaylistIndex { get; set; } = 0;
     }

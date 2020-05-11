@@ -50,6 +50,8 @@ namespace AnotherMusicPlayer
             player.StopAll();
             PlayList.Clear();
             PlayListIndex = -1;
+            UpdateRecordedQueue();
+            Settings.LastPlaylistIndex = -1;
 
             PlayItemNameValue.ToolTip = PlayItemNameValue.Text = "";
             PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = "";

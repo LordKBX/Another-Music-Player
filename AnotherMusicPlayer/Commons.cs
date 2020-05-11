@@ -112,5 +112,15 @@ namespace AnotherMusicPlayer
             }
             catch { return ""; }
         }
+
+        /// <summary> Normalize a int into a fixed string length by adding 0 before the number until wanted string length reached </summary>
+        public string NormalizeNumber(int number, int length)
+        {
+            string tstr = "" + number;
+            int dif = length - tstr.Length;
+            if (dif <= 0) { return tstr; }
+            for (int i = 0; i < dif; i++) { tstr = '0' + tstr; }
+            return tstr;
+        }
     }
 }

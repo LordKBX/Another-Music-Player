@@ -87,7 +87,7 @@ namespace AnotherMusicPlayer
                         MediatequeScanedFiles = new List<string>();
                     }
                     MediatequeBddFiles = MediatequeBddQuery("SELECT * FROM files ORDER BY Path ASC","Path");
-                    Debug.WriteLine(JsonConvert.SerializeObject(MediatequeBddFiles));
+                    //Debug.WriteLine(JsonConvert.SerializeObject(MediatequeBddFiles));
                     if (MediatequeWatcher == null) { MediatequeCreateWatcher(); }
                     else if (MediatequeWatcher.Path != Settings.LibFolder) { MediatequeCreateWatcher(); }
 
@@ -95,18 +95,18 @@ namespace AnotherMusicPlayer
                     DirectoryInfo di = new DirectoryInfo(Settings.LibFolder);
                     MediatequeRefFolder = new Folder() { Name = di.Name, Path = di.FullName };
 
-                    MediatequeBddTansactionStart();
+                    if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
                     MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
                     MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
-                    MediatequeBddTansactionEnd();
+                    if (IsInTransaction()) { MediatequeBddTansactionEnd(); }
 
-                    MediatequeBddTansactionStart();
+                    if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
                     foreach (string fi in MediatequeScanedFiles) {
                         if (!MediatequeScanedFiles.Contains(fi)) {
                             MediatequeBddQuery("DELETE FROM files WHERE Path='"+ MediatequeBddEscapeString(fi) + "'");
                         }
                     }
-                    MediatequeBddTansactionEnd();
+                    if (IsInTransaction()) { MediatequeBddTansactionEnd(); }
 
                     MediatequeBddFiles = MediatequeBddQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
 
@@ -143,7 +143,7 @@ namespace AnotherMusicPlayer
             LibNavigationPathContener.Children.Add(tb2);
 
             TextBlock tb3 = new TextBlock();
-            tb3.Text = "" + MediatequeScanedFiles.Count;
+            tb3.Text = "" + MediatequeTotalScanedFiles;
             tb3.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb3);
 
@@ -153,7 +153,7 @@ namespace AnotherMusicPlayer
             LibNavigationPathContener.Children.Add(tb4);
 
             TextBlock tb5 = new TextBlock();
-            tb5.Text = "" + MediatequeTotalScanedSize;
+            tb5.Text = "" + BytesLengthToString((long)MediatequeTotalScanedSize);
             tb5.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb5);
 
@@ -163,7 +163,7 @@ namespace AnotherMusicPlayer
             LibNavigationPathContener.Children.Add(tb6);
 
             TextBlock tb7 = new TextBlock();
-            tb7.Text = "" + MediatequeTotalScanedDuration;
+            tb7.Text = "" + displayTime((long)MediatequeTotalScanedDuration);
             tb7.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb7);
 
@@ -278,12 +278,17 @@ namespace AnotherMusicPlayer
 
                         if (MediatequeScanedFiles.Count % 100 == 0)
                         {
-                            MediatequeBddTansactionEnd();
-                            MediatequeBddTansactionStart();
+                            if (IsInTransaction()) { MediatequeBddTansactionEnd(); }
+                            if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
                         }
 
                         Dispatcher.BeginInvoke(new Action(() => {
                             MediatequeBuildNavigationScan();
+
+                            TextBlock t = new TextBlock();
+                            t.Text = fi.FullName;
+                            LibNavigationContent.Children.Insert(0, t);
+                            if (LibNavigationContent.Children.Count > 100) { LibNavigationContent.Children.RemoveAt(100); }
                         }));
                     }
                 }
@@ -361,7 +366,7 @@ namespace AnotherMusicPlayer
             object[] ob = (object[])((TextBlock)sender).Tag;
             Folder v = (Folder)(ob[2]);
             MediatequeCurrentFolder = v;
-            Debug.WriteLine(v.Name);
+            //Debug.WriteLine(v.Name);
             MediatequeBuildNavigationPath(v);
             MediatequeBuildNavigationContent(v);
         }
@@ -429,7 +434,7 @@ namespace AnotherMusicPlayer
             {
                 if (MediatequeNavigationContentButtonClick_LastTime + 1 > tmpt && MediatequeNavigationContentButtonClick_LastRef == (string)re[1])
                 {
-                    Debug.WriteLine(((Grid)sender).Tag);
+                    //Debug.WriteLine(((Grid)sender).Tag);
                     if (System.IO.File.Exists((string)re[1]))
                     {
                         Dispatcher.BeginInvoke(new Action(() =>
@@ -475,6 +480,24 @@ namespace AnotherMusicPlayer
             }
         }
 
+        public void UpdateRecordedQueue()
+        {
+            if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
+            MediatequeBddQuery("DELETE FROM queue;");
+            int index = 1;
+            foreach (string[] line in PlayList)
+            {
+                if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
+                string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
+                query += NormalizeNumber(index, 10) + "','";
+                query += line[0] + "',";
+                query += ((line[1] == null) ? "NULL" : "'" + line[1] + "'");
+                query += ")";
+                MediatequeBddQuery(query);
+                index += 1;
+            }
+            if (IsInTransaction()) { MediatequeBddTansactionEnd(); }
+        }
 
     }
 }

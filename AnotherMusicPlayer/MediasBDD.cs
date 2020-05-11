@@ -21,6 +21,12 @@ namespace AnotherMusicPlayer
         /// </summary>
         private static string MediatequeBddFolder = null;
 
+        /// <summary> store status if in transaction mode </summary>
+        private static bool inTransaction = false;
+
+        /// <summary> Get status if in transaction mode </summary>
+        public static bool IsInTransaction() { return inTransaction; }
+
         /// <summary> Convert NameValueCollection to Dictionary<string, object> </summary>
         static Dictionary<string, object> MediatequeBdd_NameValueCollectionToDictionary(NameValueCollection nvc, bool handleMultipleValuesPerKey)
         {
@@ -59,12 +65,22 @@ namespace AnotherMusicPlayer
                 if (ret == null) { Debug.WriteLine("ERROR"); }
                 else {
                     if (ret.Count == 0) { 
-                        Debug.WriteLine("Not Found");
                         MediatequeBddQuery("CREATE TABLE files(Path TEXT, Name TEXT, Artists TEXT, Album TEXT, Duration INTEGER, Size INTEGER, LastUpdate BIGINT)");
                     }
                     else
                     {
                         Debug.WriteLine( JsonConvert.SerializeObject(ret) );
+                    }
+                }
+                Dictionary<string, Dictionary<string, object>> ret2 = MediatequeBddQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'queue'");
+                if (ret2 == null) { Debug.WriteLine("ERROR"); }
+                else {
+                    if (ret2.Count == 0) { 
+                        MediatequeBddQuery("CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
+                    }
+                    else
+                    {
+                        Debug.WriteLine( JsonConvert.SerializeObject(ret2) );
                     }
                 }
                 //SELECT name FROM sqlite_master WHERE type = 'table' AND name = '{table_name}';
@@ -129,6 +145,7 @@ namespace AnotherMusicPlayer
             SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
             sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
             sqlite_cmdTR.ExecuteNonQuery();
+            inTransaction = true;
         }
 
         /// <summary> Commit transaction </summary>
@@ -137,6 +154,7 @@ namespace AnotherMusicPlayer
             SQLiteCommand sqlite_cmdCM = MediatequeBddConnection.CreateCommand();
             sqlite_cmdCM.CommandText = "COMMIT";
             sqlite_cmdCM.ExecuteNonQuery();
+            inTransaction = false;
         }
 
 
