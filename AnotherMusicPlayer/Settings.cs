@@ -32,17 +32,37 @@ namespace AnotherMusicPlayer
     /// <summary> Class storing application settings </summary>
     class Settings : Advexp.Settings<Settings>
     {
+        // Lang section
         [Setting(Name = "Local.Lang", Default = null)]
         public static string Lang { get; set; } = null;
 
+        // Conversion section
         [Setting(Name = "Local.ConversionMode", Default = 1)]
         public static Int32 ConversionMode { get; set; } = 1;
-
         [Setting(Name = "Local.ConversionBitRate", Default = 128)]
         public static Int32 ConversionBitRate { get; set; } = 128;
 
+        // Library Section
         [Setting(Name = "Local.LibFolder", Default = null)]
         public static string LibFolder { get; set; } = null;
+
+        // WindowSize section
+        [Setting(Name = "Local.LastWindowWidth", Default = 550)]
+        public static double LastWindowWidth { get; set; } = 550;
+        [Setting(Name = "Local.LastWindowHeight", Default = 400)]
+        public static double LastWindowHeight { get; set; } = 400;
+
+        // WindowPosition section
+        [Setting(Name = "Local.LastWindowLeft", Default = 100)]
+        public static double LastWindowLeft { get; set; } = 100;
+        [Setting(Name = "Local.LastWindowTop", Default = 100)]
+        public static double LastWindowTop { get; set; } = 100;
+
+        // Last play Section
+        [Setting(Name = "Local.LastPlaylist", Default = null)]
+        public static string[] LastPlaylist { get; set; } = null;
+        [Setting(Name = "Local.LastPlaylistIndex", Default = 0)]
+        public static int LastPlaylistIndex { get; set; } = 0;
     }
 
     public partial class MainWindow : Window

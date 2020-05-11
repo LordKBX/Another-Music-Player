@@ -72,9 +72,21 @@ namespace AnotherMusicPlayer
 
             TimerInterfaceSetUp();
 
+            win1.Width = Settings.LastWindowWidth;
+            win1.Height = Settings.LastWindowHeight;
+            win1.Left = Settings.LastWindowLeft;
+            win1.Top = Settings.LastWindowTop;
+
             this.SizeChanged += Win1_SizeChanged;
+            this.LocationChanged += MainWindow_LocationChanged;
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
+        }
+
+        private void MainWindow_LocationChanged(object sender, EventArgs e)
+        {
+            Settings.LastWindowLeft = win1.Left;
+            Settings.LastWindowTop = win1.Top;
         }
 
         /// <summary> Callback Main window loaded </summary>
@@ -119,6 +131,8 @@ namespace AnotherMusicPlayer
                 tab.Width = ((TabControler.ActualWidth - 4) / 4);
             }
             ((TabItem)(TabControler.Items[TabControler.Items.Count - 1])).Width -= 1;
+            Settings.LastWindowWidth = win1.ActualWidth;
+            Settings.LastWindowHeight = win1.ActualHeight;
         }
 
         /// <summary> Load list of file in the playlist and play first element in list if music currently not played </summary>
@@ -161,16 +175,6 @@ namespace AnotherMusicPlayer
             }
             if (!player.IsPlaying()) { FileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]); }
             return doConv;
-        }
-
-        /// <summary> Launch File conversion </summary>
-        private async void ConvAndPlay(string FileInput, string FileOutput)
-        {
-            await player.Conv(FileInput, FileOutput, (Settings.ConversionMode == 1) ? false : true);
-            Dispatcher.BeginInvoke(new Action(() => {
-                try { FileOpen(FileInput); }
-                catch { }
-            }));
         }
 
         /// <summary> Load music file and play if doPlay = true </summary>
