@@ -23,9 +23,11 @@ This is a personal project to create a Music player written with C#.Net Core 3.1
 * French
 
 #### Dependencies
+
 |Name|Version|
 |--|--|
 |![.Net Core](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/NET-Core-Logo.png?raw=true)|3.1.3 : [[X64]](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer)|
+|||
 
 ---
 ## Documentation Française
@@ -44,6 +46,8 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C#.N
 * Français
 
 #### Dépendances
+
 |Nom|Version|
 |--|--|
 |![.Net Core](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/NET-Core-Logo.png?raw=true)|3.1.3 : [[X64]](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/download/dotnet-core/thank-you/runtime-desktop-3.1.3-windows-x86-installer)|
+|||
