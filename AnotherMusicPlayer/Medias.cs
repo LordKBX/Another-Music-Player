@@ -296,7 +296,6 @@ namespace AnotherMusicPlayer
         }
 
 
-
         /// <summary> Create context menu for objects in Library </summary>
         private ContextMenu LibMediaCreateContextMenu()
         {//ContextMenuItemImage_add
@@ -451,7 +450,7 @@ namespace AnotherMusicPlayer
         /// <summary> Click Callback on ContextMenuItem </summary>
         public void MediatequeCT_Open(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("MediatequeCT_Open");
+            Debug.WriteLine("MediatequeCT_Open");
             MenuItem mi = (MenuItem)sender;
             ContextMenu ct = (ContextMenu)mi.Parent;
             object[] tab;
@@ -480,6 +479,7 @@ namespace AnotherMusicPlayer
             }
         }
 
+        /// <summary> Record Playing queue in database </summary>
         public void UpdateRecordedQueue()
         {
             if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
@@ -490,8 +490,8 @@ namespace AnotherMusicPlayer
                 if (!IsInTransaction()) { MediatequeBddTansactionStart(); }
                 string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
                 query += NormalizeNumber(index, 10) + "','";
-                query += line[0] + "',";
-                query += ((line[1] == null) ? "NULL" : "'" + line[1] + "'");
+                query += MediatequeBddEscapeString(line[0]) + "',";
+                query += ((line[1] == null) ? "NULL" : "'" + MediatequeBddEscapeString(line[1]) + "'");
                 query += ")";
                 MediatequeBddQuery(query);
                 index += 1;

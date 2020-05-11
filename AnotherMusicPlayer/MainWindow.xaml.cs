@@ -115,8 +115,10 @@ namespace AnotherMusicPlayer
             }
         }
 
+        /// <summary> Function unlocking window interface </summary>
         public void UnsetLockScreen() { Mouse.OverrideCursor = null; win1.IsEnabled = true; }
 
+        /// <summary> Callback for event window position changed </summary>
         private void MainWindow_LocationChanged(object sender, EventArgs e)
         {
             Settings.LastWindowLeft = win1.Left;
