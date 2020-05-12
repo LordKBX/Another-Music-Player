@@ -46,6 +46,30 @@ namespace AnotherMusicPlayer
         [Setting(Name = "Local.LibFolder", Default = null)]
         public static string LibFolder { get; set; } = null;
 
+        // Equalizer Section
+        [Setting(Name = "Local.EqualizerPreset", Default = null)]
+        public static string EqualizerPreset { get; set; } = null;
+        [Setting(Name = "Local.EqualizerBand1", Default = 0)]
+        public static float EqualizerBand1 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand2", Default = 0)]
+        public static float EqualizerBand2 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand3", Default = 0)]
+        public static float EqualizerBand3 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand4", Default = 0)]
+        public static float EqualizerBand4 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand5", Default = 0)]
+        public static float EqualizerBand5 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand6", Default = 0)]
+        public static float EqualizerBand6 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand7", Default = 0)]
+        public static float EqualizerBand7 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand8", Default = 0)]
+        public static float EqualizerBand8 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand9", Default = 0)]
+        public static float EqualizerBand9 { get; set; } = 0;
+        [Setting(Name = "Local.EqualizerBand10", Default = 0)]
+        public static float EqualizerBand10 { get; set; } = 0;
+
         // WindowSize section
         [Setting(Name = "Local.LastWindowWidth", Default = 550)]
         public static double LastWindowWidth { get; set; } = 550;

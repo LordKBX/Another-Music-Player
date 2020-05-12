@@ -61,6 +61,7 @@ namespace AnotherMusicPlayer
                 );
             try { 
                 MediatequeBddConnection.Open();
+                MediatequeBddTansactionStart();
                 Dictionary<string, Dictionary<string, object>> ret = MediatequeBddQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'files'");
                 if (ret == null) { Debug.WriteLine("ERROR"); }
                 else {
@@ -123,11 +124,11 @@ namespace AnotherMusicPlayer
                 }
             }
             else {
-                if (AutoCommit) { MediatequeBddTansactionStart(); }
+                //if (AutoCommit) { MediatequeBddTansactionStart(); }
 
                 sqlite_cmd.ExecuteNonQuery();
 
-                if (AutoCommit) { MediatequeBddTansactionEnd(); }
+                //if (AutoCommit) { MediatequeBddTansactionEnd(); }
             }
             return ret;
         }
@@ -142,19 +143,29 @@ namespace AnotherMusicPlayer
         /// <summary> Initialize transaction </summary>
         private static void MediatequeBddTansactionStart()
         {
-            SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
-            sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
-            sqlite_cmdTR.ExecuteNonQuery();
-            inTransaction = true;
+            if (inTransaction) { return; }
+            try
+            {
+                SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
+                sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
+                sqlite_cmdTR.ExecuteNonQuery();
+                inTransaction = true;
+            }
+            catch { }
         }
 
         /// <summary> Commit transaction </summary>
         private static void MediatequeBddTansactionEnd()
         {
-            SQLiteCommand sqlite_cmdCM = MediatequeBddConnection.CreateCommand();
-            sqlite_cmdCM.CommandText = "COMMIT";
-            sqlite_cmdCM.ExecuteNonQuery();
-            inTransaction = false;
+            if (!inTransaction) { return; }
+            try
+            {
+                SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
+                sqlite_cmdTR.CommandText = "COMMIT";
+                sqlite_cmdTR.ExecuteNonQuery();
+                inTransaction = false;
+            }
+            catch { }
         }
 
 

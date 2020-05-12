@@ -134,6 +134,16 @@ namespace AnotherMusicPlayer
                                 if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
                                 if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
                                 tmp.Add(item);
+                                if (i == min) {
+                                    PlayItemNameValue.ToolTip = PlayItemNameValue.Text = (item.Name != null) ? item.Name : "";
+                                    PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = (item.Album != null) ? item.Album : "";
+                                    PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = (item.Artist != null) ? item.Artist : "";
+                                    PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = item.DurationS;
+
+                                    FileCover.Source = null;
+                                    FileCover.Source = player.MediaPicture(item.Path);
+                                    if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
+                                }
                             }
                         }
                     }

@@ -38,8 +38,13 @@ namespace AnotherMusicPlayer
 
         private MainWindow parent;
 
-        /// <summary> Constructor </summary>
-        public Player(MainWindow parent = null) {
+
+        private readonly EqualizerBand[] bands;
+        public int MinimumGain = -25;
+        public int MaximumGain = 25;
+
+    /// <summary> Constructor </summary>
+    public Player(MainWindow parent = null) {
             this.parent = parent;
             ThreadList = new Dictionary<string, Thread>();
             AudioList = new Dictionary<string, object>();
@@ -51,6 +56,27 @@ namespace AnotherMusicPlayer
             var oldValue = Environment.GetEnvironmentVariable(name, scope);
             var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
             Environment.SetEnvironmentVariable(name, newValue, scope);
+
+            //--- NEW ---
+            bands = new EqualizerBand[]
+                    {
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
+                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
+                    };
+        }
+
+        public void UpdateEqualize(int Band, float Gain) {
+            try { bands[Band].Gain = Gain; }
+            catch { }
+            Debug.WriteLine("Equalizer Band("+Band+") = Gain " + Gain);
         }
 
         /// <summary> Define conversion quality for output MP3 file </summary>
@@ -351,15 +377,19 @@ namespace AnotherMusicPlayer
                 if (FilePath.EndsWith(".flac")) { audioFile = new FlacReader(FilePath); IsFlac = true; }
                 else { audioFile = new AudioFileReader(FilePath); }
 
+                /***/ Equalizer equalizer = new Equalizer((ISampleProvider)audioFile, bands);
+
                 using (var outputDevice = new WaveOutEvent())
                 {
-                    outputDevice.Init((IWaveProvider)audioFile);
+                    //outputDevice.Init((IWaveProvider)audioFile);
+                    outputDevice.Init(equalizer);
                     AudioList.Add(FilePath, audioFile);
                     int ret = -1; long ret2 = -1;
 
                     //while (outputDevice.PlaybackState == PlaybackState.Playing)
                     while (true)
                     {
+                        equalizer.Update();
                         ret2 = ret = -1;
                         PlayStatus.TryGetValue(FilePath, out ret);
                         PlayNewPositions.TryGetValue(FilePath, out ret2);
