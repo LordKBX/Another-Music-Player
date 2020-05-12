@@ -40,8 +40,8 @@ namespace AnotherMusicPlayer
 
 
         private readonly EqualizerBand[] bands;
-        public int MinimumGain = -25;
-        public int MaximumGain = 25;
+        public readonly int MinimumGain = -20;
+        public readonly int MaximumGain = 20;
 
     /// <summary> Constructor </summary>
     public Player(MainWindow parent = null) {

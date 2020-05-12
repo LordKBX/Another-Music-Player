@@ -81,4 +81,20 @@
     <sys:String x:Key="ParamsEqualizerPresets_Perso">Custom</sys:String>
     <sys:String x:Key="ParamsEqualizerPresets_Flat">Flat</sys:String>
     <sys:String x:Key="ParamsEqualizerPresets_Classic">Classic</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Club">Club</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Dance">Dance</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_FullBass">Full Bass</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_FullBassTreble">Full Bass &amp; Treble</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_FullTreble">Full Treble</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Headphones">Headphones</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_LargeHall">Large Hall</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Live">Live</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Party">Party</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Pop">Pop</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Reggae">Reggae</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Rock">Rock</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Ska">Ska</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Soft">Soft</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_SoftRock">Soft Rock</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Techno">Techno</sys:String>
 </ResourceDictionary>

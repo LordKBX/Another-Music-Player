@@ -12,8 +12,24 @@ namespace AnotherMusicPlayer
     public partial class MainWindow : Window
     {
         private Dictionary<string, float[]> EqualizerPresetsTab = new Dictionary<string, float[]>() {
-            { "Flat", new float[10]{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 } },
-            { "Classic", new float[10]{ 0, 0, 0, 0, 0, 0, (float)-7.1, (float)-7.1, (float)-7.1, (float)-9.6 } }
+            { "Flat", new float[10]{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } },
+            { "Classic", new float[10]{ -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -7.2f, -7.2f, -7.2f, -9.6f } },
+            { "Club", new float[10]{ -1.11022e-15f, -1.11022e-15f, 8.0f, 5.6f, 5.6f, 5.6f, 3.2f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f } },
+            { "Dance", new float[10]{ 9.6f, 7.2f, 2.4f, -1.11022e-15f, -1.11022e-15f, -5.6f, -7.2f, -7.2f, -1.11022e-15f, -1.11022e-15f } },
+            { "FullBass", new float[10]{ -8.0f, 9.6f, 9.6f, 5.6f, 1.6f, -4.0f, -8.0f, -10.4f, -11.2f, -11.2f } },
+            { "FullBassTreble", new float[10]{ 7.2f, 5.6f, -1.11022e-15f, -7.2f, -4.8f, 1.6f, 8.0f, 11.2f, 12.0f, 12.0f } },
+            { "FullTreble", new float[10]{ -9.6f, -9.6f, -9.6f, -4.0f, 2.4f, 11.2f, 16.0f, 16.0f, 16.0f, 16.8f } },
+            { "Headphones", new float[10]{ 4.8f, 11.2f, 5.6f, -3.2f, -2.4f, 1.6f, 4.8f, 9.6f, 12.8f, 14.4f } },
+            { "LargeHall", new float[10]{ 10.4f, 10.4f, 5.6f, 5.6f, -1.11022e-15f, -4.8f, -4.8f, -4.8f, -1.11022e-15f, -1.11022e-15f } },
+            { "Live", new float[10]{ -4.8f, -1.11022e-15f, 4.0f, 5.6f, 5.6f, 5.6f, 4.0f, 2.4f, 2.4f, 2.4f } },
+            { "Party", new float[10]{ 7.2f, 7.2f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, 7.2f, 7.2f } },
+            { "Pop", new float[10]{ -1.6f, 4.8f, 7.2f, 8.0f, 5.6f, -1.11022e-15f, -2.4f, -2.4f, -1.6f, -1.6f } },
+            { "Reggae", new float[10]{ -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -5.6f, -1.11022e-15f, 6.4f, 6.4f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f } },
+            { "Rock", new float[10]{ 8.0f, 4.8f, -5.6f, -8.0f, -3.2f, 4.0f, 8.8f, 11.2f, 11.2f, 11.2f } },
+            { "Ska", new float[10]{ -2.4f, -4.8f, -4.0f, -1.11022e-15f, 4.0f, 5.6f, 8.8f, 9.6f, 11.2f, 9.6f } },
+            { "Soft", new float[10]{ 4.8f, 1.6f, -1.11022e-15f, -2.4f, -1.11022e-15f, 4.0f, 8.0f, 9.6f, 11.2f, 12.0f } },
+            { "SoftRock", new float[10]{ 4.0f, 4.0f, 2.4f, -1.11022e-15f, -4.0f, -5.6f, -3.2f, -1.11022e-15f, 2.4f, 8.8f } },
+            { "Techno", new float[10]{ 8.0f, 5.6f, -1.11022e-15f, -5.6f, -4.8f, -1.11022e-15f, 8.0f, 9.6f, 9.6f, 8.8f } },
         };
         private int EqualizerBandFocusNb = 0;
 
@@ -99,6 +115,9 @@ namespace AnotherMusicPlayer
                 EqualizerBand4.Value = preset[3]; EqualizerBand5.Value = preset[4]; EqualizerBand6.Value = preset[5];
                 EqualizerBand7.Value = preset[6]; EqualizerBand8.Value = preset[7];
                 EqualizerBand9.Value = preset[8]; EqualizerBand10.Value = preset[9];
+
+                Settings.EqualizerPreset = tag;
+                Settings.SaveSettings();
             }
         }
 
@@ -109,7 +128,7 @@ namespace AnotherMusicPlayer
             NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalDigits = 2, NumberGroupSizes = new int[] { 2, 2, 3} };
             float NewValue = (float)Math.Round(e.NewValue, 2);
             player.UpdateEqualize(col, NewValue);
-            Settings.EqualizerPreset = "Perso";
+            if (EqualizerBandFocusNb > 0) { Settings.EqualizerPreset = "Perso"; }
 
             if (col == 0) { EqualizerLabel1.Text = Convert.ToString(NewValue); Settings.EqualizerBand1 = NewValue; }
             if (col == 1) { EqualizerLabel2.Text = Convert.ToString(NewValue); Settings.EqualizerBand2 = NewValue; }
