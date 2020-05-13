@@ -10,7 +10,7 @@
     <PackageId>AnotherMusicPlayer</PackageId>
     <AssemblyName>AnotherMusicPlayer</AssemblyName>
     <RootNamespace>AnotherMusicPlayer</RootNamespace>
-    <Version>0.1.4.0</Version>
+    <Version>0.1.4.1</Version>
     <Copyright>LordKBX Workshop 2020</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/LordKBX/Another-Music-Player</RepositoryUrl>
