@@ -132,7 +132,9 @@ namespace AnotherMusicPlayer
             Settings.Lang = (string)item.Tag;
             Settings.SaveSettings();
             UpdateTraduction();
-            if (Scanning) { MediatequeBuildNavigationScan(); }
+            if (PlayList.Count > 0 && PlayListIndex >= 0) { UpdateLeftPannelMediaInfo(); }
+            if (MediatequeScanning) {MediatequeBuildNavigationScan(); }
+            MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
         }
 
         /// <summary> Callback parametter conversion mode combobox </summary>

@@ -10,6 +10,7 @@ using System.Windows.Input;
 
 using System.Diagnostics;
 using System.ComponentModel;
+using System.Windows.Documents;
 
 namespace AnotherMusicPlayer
 {
@@ -69,7 +70,7 @@ namespace AnotherMusicPlayer
 
             EventsPlaybackInit();
             PlayListView_Init(); EqualizerInitEvents();
-            MediatequeBddInit();
+            DatabaseInit();
 
             TimerInterfaceSetUp();
 
@@ -109,7 +110,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window closing / exit </summary>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (IsInTransaction()) { MediatequeBddTansactionEnd(); }
+            if (IsInTransaction()) { DatabaseTansactionEnd(); }
             KeyboardInterceptorDestroy();
             Settings.SaveSettings();
         }
@@ -179,11 +180,12 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            Timer_PlayListIndex = -1;
 
             if (PlayListIndex < 0) { PlayListIndex = 0; }
-            if (!player.IsPlaying() && DoPlay == true) { 
-                if(PlayListIndex >=0 && PlayListIndex < PlayList.Count) FileOpen(PlayList[PlayListIndex][(PlayList[PlayListIndex][1] == null) ? 0 : 1]);
+            if (DoPlay == true) {
+                if (player.IsPlaying()) { player.StopAll(); }
+                FileOpen(PlayList[CountStart][(PlayList[CountStart][1] == null) ? 0 : 1]);
+                PlayListIndex = CountStart;
             }
             if (Load >=0) {
                 try { 
@@ -192,7 +194,10 @@ namespace AnotherMusicPlayer
                     Timer_PlayListIndex = -1;
                 } catch { }
             }
-            
+            if (!player.IsPlaying()) { player.Play(); }
+
+            Timer_PlayListIndex = -1;
+
             UpdateRecordedQueue();
 
             return doConv;
@@ -233,6 +238,115 @@ namespace AnotherMusicPlayer
                 Debug.WriteLine("LastPlaylistIndex saved");
                 FileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
             }
+        }
+
+        private PlayListViewItem GetMediaInfo(string path, ObservableCollection<PlayListViewItem> previous_items = null) {
+            PlayListViewItem item = null;
+            try {
+                if (previous_items == null)
+                {
+                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; }
+                    else { previous_items = new ObservableCollection<PlayListViewItem>(); }
+                }
+
+                foreach (PlayListViewItem itm in previous_items) { if (itm.Path == path) { item = itm; break; } }
+                if (item == null)
+                {
+                    Dictionary<string, object> rep = DatabaseFileInfo(path);
+                    if (rep != null)
+                    {
+                        item = new PlayListViewItem();
+                        item.Path = path;
+                        item.Name = (string)rep["Name"];
+                        item.Album = (string)rep["Album"];
+                        item.AlbumArtists = (string)rep["AlbumArtists"];
+                        item.Performers = (string)rep["Performers"];
+                        item.Composers = (string)rep["Composers"];
+                        item.Lyrics = (string)rep["Lyrics"];
+                        item.Duration = Convert.ToInt64((string)rep["Duration"]);
+                        item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+                        item.Genres = (string)rep["Genres"];
+                        item.Copyright = (string)rep["Copyright"];
+                        item.Disc = Convert.ToUInt32(rep["Disc"]);
+                        item.DiscCount = Convert.ToUInt32(rep["DiscCount"]);
+                        item.Track = Convert.ToUInt32(rep["Track"]);
+                        item.TrackCount = Convert.ToUInt32(rep["TrackCount"]);
+                        item.Year = Convert.ToUInt32(rep["Year"]);
+                    }
+                }
+                if (item == null) { item = player.MediaInfo(path, false); }
+            }
+            catch { }
+            
+            return item;
+        }
+
+        private void UpdateLeftPannelMediaInfo(PlayListViewItem item = null)
+        {
+            try
+            {
+                if (item == null) { item = GetMediaInfo(PlayList[PlayListIndex][0]); }
+                if (item == null) { return; }
+
+                LeftPannelMediaInfo.Inlines.Clear();
+                LeftPannelMediaInfo.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
+                System.Windows.Thickness tc1 = new Thickness(3,3,0,0);
+                System.Windows.Thickness tc2 = new Thickness(10,0,0,0);
+                SolidColorBrush cl2 = new SolidColorBrush(Color.FromRgb(149, 149, 149));
+
+                TextBlock t1 = new TextBlock() { Text = GetTaduction("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                AccessText a1 = new AccessText() { Text = item.Name, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                LeftPannelMediaInfo.Inlines.Add(a1);
+
+                if (item.Album != null && item.Album.Trim() != "")
+                {
+                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                    TextBlock t2 = new TextBlock() { Text = GetTaduction("Album2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t2);
+                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                    AccessText a2 = new AccessText() { Text = item.Album, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    LeftPannelMediaInfo.Inlines.Add(a2);
+                }
+
+                string Artists = "";
+                if (item.Performers != null && item.Performers.Trim() != "") {
+                    Artists += item.Performers;
+                }
+                if (item.Performers != null && item.Performers.Trim() != "") {
+                    if (Artists != null && Artists != "") { Artists += ", "; }
+                    Artists += item.Composers;
+                }
+
+                if (Artists != "")
+                {
+                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                    TextBlock t3 = new TextBlock() { Text = GetTaduction("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
+                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                    AccessText a3 = new AccessText() { Text = item.Performers, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    LeftPannelMediaInfo.Inlines.Add(a3);
+                }
+
+                if (item.Genres != null && item.Genres.Trim() != "")
+                {
+                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                    TextBlock t4 = new TextBlock() { Text = GetTaduction("Genres2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t4);
+                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                    AccessText a4 = new AccessText() { Text = item.Genres, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    LeftPannelMediaInfo.Inlines.Add(a4);
+                }
+
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                TextBlock t5 = new TextBlock() { Text = GetTaduction("Duration2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t5);
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                AccessText a5 = new AccessText() { Text = item.DurationS, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                LeftPannelMediaInfo.Inlines.Add(a5);
+
+                FileCover.Source = null;
+                FileCover.Source = player.MediaPicture(item.Path);
+                if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
+            }
+            catch { }
         }
     }
 }

@@ -113,36 +113,15 @@ namespace AnotherMusicPlayer
                         if (PlayList.Count <= i) { break; }
                         else
                         {
-                            file = PlayList[i][0]; item = null;
-                            foreach (PlayListViewItem itm in previous_items) { if (itm.Path == file) { item = itm; break; } }
-                            if (item == null) {                                 
-                                Dictionary<string, object> rep = MediatequeBddFileInfo(file);
-                                if(rep != null)
-                                {
-                                    item = new PlayListViewItem();
-                                    item.Path = file;
-                                    item.Name = (string)rep["Name"];
-                                    item.Album = (string)rep["Album"];
-                                    item.Artist = (string)rep["Artists"];
-                                    item.Duration = Convert.ToInt64((string)rep["Duration"]);
-                                    item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
-                                }
-                            }
-                            if (item == null) { item = player.MediaInfo(file, false); }
+                            file = PlayList[i][0]; 
+                            item = GetMediaInfo(file, previous_items);
                             if (item != null)
                             {
                                 if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
                                 if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
                                 tmp.Add(item);
                                 if (i == min) {
-                                    PlayItemNameValue.ToolTip = PlayItemNameValue.Text = (item.Name != null) ? item.Name : "";
-                                    PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = (item.Album != null) ? item.Album : "";
-                                    PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = (item.Artist != null) ? item.Artist : "";
-                                    PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = item.DurationS;
-
-                                    FileCover.Source = null;
-                                    FileCover.Source = player.MediaPicture(item.Path);
-                                    if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
+                                    UpdateLeftPannelMediaInfo(item);
                                 }
                             }
                         }
@@ -158,7 +137,11 @@ namespace AnotherMusicPlayer
 
                 // Garbage Collector périodic summon
                 if (Timer_Count >= 50)
-                { Timer_Count = 0; try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); } catch { } }
+                { 
+                    Timer_Count = 0; 
+                    try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); } catch { }
+                    if (MediatequeScanning == true) { MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);  }
+                }
 
                 Timer_Count += 1;
             }));

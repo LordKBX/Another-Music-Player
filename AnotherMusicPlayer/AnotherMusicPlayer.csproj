@@ -10,7 +10,7 @@
     <PackageId>AnotherMusicPlayer</PackageId>
     <AssemblyName>AnotherMusicPlayer</AssemblyName>
     <RootNamespace>AnotherMusicPlayer</RootNamespace>
-    <Version>0.1.3.2</Version>
+    <Version>0.1.4.0</Version>
     <Copyright>LordKBX Workshop 2020</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/LordKBX/Another-Music-Player</RepositoryUrl>
@@ -113,6 +113,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="icons\forward_10.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icons\goback.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="icons\list.png">

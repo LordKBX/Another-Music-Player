@@ -14,12 +14,12 @@ namespace AnotherMusicPlayer
     public partial class MainWindow : Window
     {
         /// <summary> Object connection to sqlite file </summary>
-        private static SQLiteConnection MediatequeBddConnection = null;
+        private static SQLiteConnection DatabaseConnection = null;
         /// <summary>
         /// Path to file sqlite
         /// On windows => %SystemDrive%\Users\%USERNAME%\AppData\Local\ + AppName
         /// </summary>
-        private static string MediatequeBddFolder = null;
+        private static string DatabaseFolder = null;
 
         /// <summary> store status if in transaction mode </summary>
         private static bool inTransaction = false;
@@ -28,7 +28,7 @@ namespace AnotherMusicPlayer
         public static bool IsInTransaction() { return inTransaction; }
 
         /// <summary> Convert NameValueCollection to Dictionary<string, object> </summary>
-        static Dictionary<string, object> MediatequeBdd_NameValueCollectionToDictionary(NameValueCollection nvc, bool handleMultipleValuesPerKey)
+        static Dictionary<string, object> Database_NameValueCollectionToDictionary(NameValueCollection nvc, bool handleMultipleValuesPerKey)
         {
             var result = new Dictionary<string, object>();
             foreach (string key in nvc.Keys)
@@ -44,58 +44,74 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Test if connection to SQLite database initialized </summary>
-        private static bool MediatequeBdd_IsInitilized() { return (MediatequeBddConnection == null) ? false : true; }
+        private static bool Database_IsInitilized() { return (DatabaseConnection == null) ? false : true; }
 
         /// <summary> Initialize SQLite database connection </summary>
-        private static void MediatequeBddInit()
+        private static void DatabaseInit()
         {
-            if (MediatequeBdd_IsInitilized()) { return; }
-            MediatequeBddFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName;
-            //MediatequeBddFolder = BaseDir + SeparatorChar + appName;
-            if (!System.IO.Directory.Exists(MediatequeBddFolder)) { System.IO.Directory.CreateDirectory(MediatequeBddFolder); }
+            if (Database_IsInitilized()) { return; }
+            DatabaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName;
+            //DatabaseFolder = BaseDir + SeparatorChar + appName;
+            if (!System.IO.Directory.Exists(DatabaseFolder)) { System.IO.Directory.CreateDirectory(DatabaseFolder); }
 
             Debug.WriteLine(AppName);
-            Debug.WriteLine(MediatequeBddFolder);
-            MediatequeBddConnection = new SQLiteConnection(
-                "Data Source="+ MediatequeBddFolder + SeparatorChar + "base.db; Version = 3; New = True; Compress = True; "
+            Debug.WriteLine(DatabaseFolder);
+            DatabaseConnection = new SQLiteConnection(
+                "Data Source="+ DatabaseFolder + SeparatorChar + "base.db; Version = 3; New = True; Compress = True; "
                 );
             try { 
-                MediatequeBddConnection.Open();
-                MediatequeBddTansactionStart();
-                Dictionary<string, Dictionary<string, object>> ret = MediatequeBddQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'files'");
-                if (ret == null) { Debug.WriteLine("ERROR"); }
-                else {
-                    if (ret.Count == 0) { 
-                        MediatequeBddQuery("CREATE TABLE files(Path TEXT, Name TEXT, Artists TEXT, Album TEXT, Duration INTEGER, Size INTEGER, LastUpdate BIGINT)");
-                    }
-                    else
-                    {
-                        Debug.WriteLine( JsonConvert.SerializeObject(ret) );
-                    }
-                }
-                Dictionary<string, Dictionary<string, object>> ret2 = MediatequeBddQuery("SELECT name FROM sqlite_master WHERE type = 'table' AND name = 'queue'");
-                if (ret2 == null) { Debug.WriteLine("ERROR"); }
-                else {
-                    if (ret2.Count == 0) { 
-                        MediatequeBddQuery("CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
-                    }
-                    else
-                    {
-                        Debug.WriteLine( JsonConvert.SerializeObject(ret2) );
-                    }
-                }
-                //SELECT name FROM sqlite_master WHERE type = 'table' AND name = '{table_name}';
+                DatabaseConnection.Open();
+                DatabaseTansactionStart();
+
+                DatabaseDetectOrCreateTable("files", "CREATE TABLE files("
+                    + "Path TEXT, "
+                    + "Name TEXT, "
+                    + "Performers TEXT, "
+                    + "Composers TEXT, "
+                    + "Album TEXT, "
+                    + "Genres TEXT, "
+                    + "Copyright TEXT, "
+                    + "Disc INTERGER, "
+                    + "DiscCount INTERGER, "
+                    + "AlbumArtists TEXT, "
+                    + "Lyrics TEXT, "
+                    + "Track INTEGER, "
+                    + "TrackCount INTEGER, "
+                    + "Year INTEGER, "
+                    + "Duration INTEGER, "
+                    + "Size INTEGER, "
+                    + "LastUpdate BIGINT"
+                    + ")");
+                DatabaseDetectOrCreateTable("queue", "CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
+                DatabaseDetectOrCreateTable("playlists", "CREATE TABLE playlists(FIndex TEXT, Name TEXT, Description TEXT)");
+                DatabaseDetectOrCreateTable("playlistsItems", "CREATE TABLE playlistsItems(PIndex TEXT, LIndex Text, Name TEXT, Path TEXT)");
             }
             catch  { Debug.WriteLine("Catch ERROR"); }
         }
 
+        private static bool DatabaseDetectOrCreateTable(string TableName, string QueryCreation) {
+            Dictionary<string, Dictionary<string, object>> ret2 = DatabaseQuery("SELECT name,sql FROM sqlite_master WHERE type = 'table' AND name = '" + TableName + "'");
+            if (ret2 == null) { Debug.WriteLine("ERROR"); }
+            else {
+                if (ret2.Count == 0) { DatabaseQuery(QueryCreation); }
+                else {
+                    if ((string)ret2["0"]["sql"] != QueryCreation) {
+                        DatabaseQuery("DROP TABLE "+TableName);
+                        DatabaseQuery(QueryCreation);
+                    }
+                    Debug.WriteLine(JsonConvert.SerializeObject(ret2));
+                }
+            }
+            return true;
+        }
+
         /// <summary> execute SQL query </summary>
-        private static Dictionary<string, Dictionary<string, object>> MediatequeBddQuery(string query, string index = null, bool AutoCommit = false)
+        private static Dictionary<string, Dictionary<string, object>> DatabaseQuery(string query, string index = null, bool AutoCommit = false)
         {
             Dictionary<string, Dictionary<string, object>> ret = null;
             SQLiteDataReader sqlite_datareader;
             SQLiteCommand sqlite_cmd;
-            sqlite_cmd = MediatequeBddConnection.CreateCommand();
+            sqlite_cmd = DatabaseConnection.CreateCommand();
             sqlite_cmd.CommandText = query;
             string tq = query.ToUpper().Trim();
 
@@ -118,35 +134,35 @@ namespace AnotherMusicPlayer
                         else { id = "" + line; }
                     }
                     else { id = "" + line; }
-                    ret.Add( id, MediatequeBdd_NameValueCollectionToDictionary(row, false) );
+                    ret.Add( id, Database_NameValueCollectionToDictionary(row, false) );
                     //Debug.WriteLine(line.ToString());
                     line += 1;
                 }
             }
             else {
-                //if (AutoCommit) { MediatequeBddTansactionStart(); }
+                //if (AutoCommit) { DatabaseTansactionStart(); }
 
                 sqlite_cmd.ExecuteNonQuery();
 
-                //if (AutoCommit) { MediatequeBddTansactionEnd(); }
+                //if (AutoCommit) { DatabaseTansactionEnd(); }
             }
             return ret;
         }
 
         /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
-        private static string MediatequeBddEscapeString(string str)
+        private static string DatabaseEscapeString(string str)
         {
             if (str == null) { return ""; }
             else { return str.Replace("'", "''"); }
         }
 
         /// <summary> Initialize transaction </summary>
-        private static void MediatequeBddTansactionStart()
+        private static void DatabaseTansactionStart()
         {
             if (inTransaction) { return; }
             try
             {
-                SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
+                SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
                 sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
                 sqlite_cmdTR.ExecuteNonQuery();
                 inTransaction = true;
@@ -155,12 +171,12 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Commit transaction </summary>
-        private static void MediatequeBddTansactionEnd()
+        private static void DatabaseTansactionEnd()
         {
             if (!inTransaction) { return; }
             try
             {
-                SQLiteCommand sqlite_cmdTR = MediatequeBddConnection.CreateCommand();
+                SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
                 sqlite_cmdTR.CommandText = "COMMIT";
                 sqlite_cmdTR.ExecuteNonQuery();
                 inTransaction = false;

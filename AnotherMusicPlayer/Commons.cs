@@ -10,20 +10,41 @@ namespace AnotherMusicPlayer
     /// <summary> Class PlayListViewItem, a storae structure for Music Media Basic MetaData </summary>
     public class PlayListViewItem
     {
+        public string Selected { get; set; }
         public string Path { get; set; }
         public string OriginPath { get; set; }
         public string Name { get; set; }
         public string Album { get; set; }
-        public string Artist { get; set; }
-        public long Duration { get; set; }
         public long Size { get; set; }
+        public long Duration { get; set; }
         public string DurationS { get; set; }
-        public string Selected { get; set; }
+        public string Genres { get; set; }
+        public string Performers { get; set; }
+        public string Composers { get; set; }
+        public string Copyright { get; set; }
+        public uint Disc { get; set; }
+        public uint DiscCount { get; set; }
+        public string AlbumArtists { get; set; }
+        public string Lyrics { get; set; }
+        public uint Track { get; set; }
+        public uint TrackCount { get; set; }
+        public uint Year { get; set; }
 
         public PlayListViewItem()
         {
-            Path = OriginPath = Name = Album = Artist = Selected = DurationS = "test";
+            Path = OriginPath
+                = Selected
+                = Name 
+                = Album 
+                = DurationS 
+                = Performers
+                = Composers
+                = Copyright
+                = AlbumArtists
+                = Lyrics
+                = "";
             Duration = Size = 0;
+            Disc = DiscCount = Track = TrackCount = Year = 0;
         }
     }
 
@@ -61,6 +82,7 @@ namespace AnotherMusicPlayer
 
         /// <summary> Add(+) image for ContextMenuItem </summary>
         public static Image ContextMenuItemImage_add = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
+        public static Image ContextMenuItemImage_back = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "goback.png")) };
 
         /// <summary> Dictionary contening Image URI indexed by a string code name </summary>
         private static Dictionary<string, Uri> ImagesUriList = new Dictionary<string, Uri> {

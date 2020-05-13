@@ -3,6 +3,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
     xmlns:local="clr-namespace:MediaPlayer" >
 
+    <Style x:Key="HQImg" TargetType="{x:Type Image}">
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+    </Style>
+
     <Style x:Key="TabItemStyle" TargetType="{x:Type TabItem}">
         <Setter Property="FontFamily" Value="Segoe UI Symbol"/>
         <Setter Property="MinWidth" Value="30"/>
@@ -197,20 +201,15 @@
         <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItem" TargetType="{x:Type Grid}">
+    <Style x:Key="LibNavigationContentItem" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
-        <Setter Property="MinWidth" Value="90"/> <Setter Property="Width" Value="90"/> <Setter Property="MaxWidth" Value="90"/>
-        <Setter Property="MinHeight" Value="90"/> <Setter Property="Height" Value="90"/> <Setter Property="MaxHeight" Value="90"/>
+        <Setter Property="MinWidth" Value="90"/>
+        <Setter Property="Width" Value="90"/>
+        <Setter Property="MinHeight" Value="90"/>
+        <Setter Property="Height" Value="90"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
-        <Setter Property="ContextMenu">
-            <Setter.Value>
-                <ContextMenu>
-                    <MenuItem Header="{DynamicResource ParamsLibItemContextMenuItem1}" />
-                </ContextMenu>
-            </Setter.Value>
-        </Setter>
     </Style>
 
     <Style x:Key="LibNavigationContentItemBorder" TargetType="{x:Type Border}">
@@ -228,13 +227,21 @@
         <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
     </Style>
 
+    <Style x:Key="LibNavigationContentItemViewBox" TargetType="{x:Type Viewbox}">
+        <Setter Property="MinWidth" Value="90"/>
+        <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        <Setter Property="VerticalAlignment" Value="Stretch"/>
+    </Style>
+
     <Style x:Key="LibNavigationContentItemText" TargetType="{x:Type AccessText}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="TextAlignment" Value="Center"/>
-        <Setter Property="TextWrapping" Value="Wrap"/>
+        <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
         <Setter Property="FontSize" Value="10"/>
         <Setter Property="Width" Value="70"/>
+        <Setter Property="MaxWidth" Value="70"/>
+        <Setter Property="Margin" Value="0,0,5,0"/>
     </Style>
 
 </ResourceDictionary>

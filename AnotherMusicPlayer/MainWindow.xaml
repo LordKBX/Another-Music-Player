@@ -61,20 +61,20 @@
                                 </TextBlock>
                             </Border>
                             <Border BorderThickness="0,1,0,1" BorderBrush="Gray" Grid.Row="1" Grid.ColumnSpan="2">
-                                <ScrollViewer  ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Background="#FF303030">
-                                    <TextBlock Foreground="White">
-                                    <TextBlock Text="{DynamicResource Title2}" x:Name="PlayItemNameTitle" Margin="3,3,0,0"/> <LineBreak></LineBreak>
-                                    <AccessText x:Name="PlayItemNameValue" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow" Text=""/>
-                                    <LineBreak></LineBreak>
-                                    <TextBlock Text="{DynamicResource Album2}" x:Name="PlayItemAlbumTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
-                                    <AccessText   x:Name="PlayItemAlbumValue" Text="" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow"/>
-                                    <LineBreak></LineBreak>
-                                    <TextBlock Text="{DynamicResource Artist2}" x:Name="PlayItemArtistsTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
-                                    <AccessText   x:Name="PlayItemArtistsValue" Text="" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow"/>
-                                    <LineBreak></LineBreak>
-                                    <TextBlock Visibility="Collapsed" Text="{DynamicResource duration2}" x:Name="PlayItemdurationTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
-                                    <TextBlock Visibility="Collapsed"  x:Name="PlayItemDurationValue" Text="" Margin="10,0,0,0" Foreground="#FF959595"/>
-                                </TextBlock>
+                                <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="True" Background="#FF303030">
+                                    <TextBlock x:Name="LeftPannelMediaInfo" Foreground="White">
+                                        <TextBlock Text="{DynamicResource Title2}" x:Name="PlayItemNameTitle" Margin="3,3,0,0"/> <LineBreak></LineBreak>
+                                        <AccessText x:Name="PlayItemNameValue" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow" Text=""/>
+                                        <LineBreak></LineBreak>
+                                        <TextBlock Text="{DynamicResource Album2}" x:Name="PlayItemAlbumTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
+                                        <AccessText   x:Name="PlayItemAlbumValue" Text="" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow"/>
+                                        <LineBreak></LineBreak>
+                                        <TextBlock Text="{DynamicResource Artist2}" x:Name="PlayItemArtistsTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
+                                        <AccessText   x:Name="PlayItemArtistsValue" Text="" Margin="10,0,0,0" Foreground="#FF959595" TextWrapping="WrapWithOverflow"/>
+                                        <LineBreak></LineBreak>
+                                        <TextBlock Visibility="Collapsed" Text="{DynamicResource duration2}" x:Name="PlayItemdurationTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
+                                        <TextBlock Visibility="Collapsed"  x:Name="PlayItemDurationValue" Text="" Margin="10,0,0,0" Foreground="#FF959595"/>
+                                    </TextBlock>
                                 </ScrollViewer>
                             </Border>
                         </Grid>
@@ -107,7 +107,7 @@
                                     <GridViewColumn x:Name="PlayListViewC4" Header="{DynamicResource Artist}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
                                         <GridViewColumn.CellTemplate>
                                             <DataTemplate>
-                                                <AccessText Text="{Binding Artist}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                                <AccessText Text="{Binding Performers}" Style="{DynamicResource ListViewColumnItemAccessText}"/>
                                             </DataTemplate>
                                         </GridViewColumn.CellTemplate>
                                     </GridViewColumn>
@@ -136,7 +136,7 @@
                         </WrapPanel>
                     </Viewbox>
                     <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Black">
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer x:Name="LibNavigationContentScroll" VerticalScrollBarVisibility="Auto">
                             <WrapPanel x:Name="LibNavigationContent">
 
                                 <TextBlock>

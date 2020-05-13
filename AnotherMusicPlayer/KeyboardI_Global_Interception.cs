@@ -18,9 +18,12 @@ namespace AnotherMusicPlayer
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
                 GlobalKeyboardListener _listener = new GlobalKeyboardListener(this);
-                _listener.OnKeyPressed += (sender, e) => {
-                    string re = e.KeyPressed.ToString(); //Debug.WriteLine(re);
-                    if (re == "MediaPlayPause") { Pause(); }
+                _listener.OnKeyPressed += (sender, e) => { 
+                    string re = e.KeyPressed.ToString(); 
+                    //Debug.WriteLine(re);
+                    //Debug.WriteLine("Focus = " + ((this.IsActive) ? "True" : "False") );
+
+                    if (re == "MediaPlayPause" || (re == "Space" && this.IsActive)) { Pause(); }
                     if (re == "MediaPreviousTrack") { PreviousTrack(); }
                     if (re == "MediaNextTrack") { NextTrack(); }
                 };

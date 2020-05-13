@@ -13,7 +13,8 @@
     <sys:String x:Key="Title2">Titre:</sys:String>
     <sys:String x:Key="Album2">Album:</sys:String>
     <sys:String x:Key="Artist2">Artistes:</sys:String>
-    <sys:String x:Key="duration2">Durée:</sys:String>
+    <sys:String x:Key="Duration2">Durée:</sys:String>
+    <sys:String x:Key="Genres2">Genre:</sys:String>
 
     <sys:String x:Key="BtnOpenToolTip">Ouvrir un/des fichier(s)</sys:String>
     <sys:String x:Key="BtnPreviousToolTip">Piste Précédente</sys:String>
@@ -65,7 +66,7 @@
 
     <sys:String x:Key="ParamsLibItemContextMenuItem1">Ajouter à la liste de lecture</sys:String>
 
-    <sys:String x:Key="LibMediaScanning">Scan en cours</sys:String>
+    <sys:String x:Key="LibMediaMediatequeScanning">Scan en cours</sys:String>
     <sys:String x:Key="LibMediaFiles">Fichiers trouvés</sys:String>
     <sys:String x:Key="LibMediaTotalSize">Taille Totale</sys:String>
     <sys:String x:Key="LibMediaTotalDuration">Durée Totale</sys:String>

@@ -36,11 +36,14 @@ namespace AnotherMusicPlayer
         /// <summary> Conversion quality for output MP3 file </summary>
         private Int32 ConvQualityBitrates = 128;
 
+        /// <summary> reference object of the application window </summary>
         private MainWindow parent;
 
-
+        /// <summary> list of equalizer bands </summary>
         private readonly EqualizerBand[] bands;
+        /// <summary> Maximum negative gain on an equalizer band </summary>
         public readonly int MinimumGain = -20;
+        /// <summary> Maximum gain on an equalizer band </summary>
         public readonly int MaximumGain = 20;
 
     /// <summary> Constructor </summary>
@@ -73,10 +76,10 @@ namespace AnotherMusicPlayer
                     };
         }
 
+        /// <summary> update an equalizer band Gain value </summary>
         public void UpdateEqualize(int Band, float Gain) {
-            try { bands[Band].Gain = Gain; }
-            catch { }
-            Debug.WriteLine("Equalizer Band("+Band+") = Gain " + Gain);
+            try { bands[Band].Gain = Gain; } catch { }
+            //Debug.WriteLine("Equalizer Band("+Band+") = Gain " + Gain);
         }
 
         /// <summary> Define conversion quality for output MP3 file </summary>
@@ -163,13 +166,24 @@ namespace AnotherMusicPlayer
                 PlayListViewItem item = new PlayListViewItem();
                 item.Name = tags.Tag.Title;
                 item.Album = tags.Tag.Album;
-                item.Artist = string.Join(", ", tags.Tag.Performers);
                 item.Path = FilePath;
                 item.OriginPath = OriginPath;
                 item.Selected = (Selected) ? MainWindow.PlayListSelectionChar : "";
                 item.Duration = (long)0;
                 item.Size = new System.IO.FileInfo(OriginPath ?? FilePath).Length;
                 item.DurationS = "00:00";
+
+                item.Performers = tags.Tag.JoinedPerformers;
+                item.Composers = tags.Tag.JoinedComposers;
+                item.Copyright = tags.Tag.Copyright;
+                item.Disc = tags.Tag.Disc;
+                item.DiscCount = tags.Tag.DiscCount;
+                item.AlbumArtists = tags.Tag.JoinedAlbumArtists;
+                item.Genres = tags.Tag.FirstGenre;
+                item.Lyrics = tags.Tag.Lyrics;
+                item.Track = tags.Tag.Track;
+                item.TrackCount = tags.Tag.TrackCount;
+                item.Year = tags.Tag.Year;
 
                 tags.Dispose();
 
@@ -206,25 +220,28 @@ namespace AnotherMusicPlayer
 
         /// <summary> Recuperate Media Cover </summary>
         public BitmapImage MediaPicture(string FilePath) {
-            if (System.IO.File.Exists(FilePath))
+            try
             {
-                TagLib.File tags = TagLib.File.Create(FilePath);
-
-                if (tags.Tag.Pictures.Length > 0)
+                if (System.IO.File.Exists(FilePath))
                 {
-                    TagLib.IPicture pic = tags.Tag.Pictures[0];
-                    MemoryStream ms = new MemoryStream(pic.Data.Data);
-                    ms.Seek(0, SeekOrigin.Begin);
-                    // ImageSource for System.Windows.Controls.Image
-                    BitmapImage bitmap = new BitmapImage();
-                    bitmap.BeginInit();
-                    bitmap.StreamSource = ms;
-                    bitmap.EndInit();
-                    return bitmap;
-                }
+                    TagLib.File tags = TagLib.File.Create(FilePath);
 
-                tags.Dispose();
+                    if (tags.Tag.Pictures.Length > 0)
+                    {
+                        TagLib.IPicture pic = tags.Tag.Pictures[0];
+                        MemoryStream ms = new MemoryStream(pic.Data.Data);
+                        ms.Seek(0, SeekOrigin.Begin);
+                        // ImageSource for System.Windows.Controls.Image
+                        BitmapImage bitmap = new BitmapImage();
+                        bitmap.BeginInit();
+                        bitmap.StreamSource = ms;
+                        bitmap.EndInit();
+                        return bitmap;
+                    }
+                    tags.Dispose();
+                }
             }
+            catch { }
             return null;
         }
 
