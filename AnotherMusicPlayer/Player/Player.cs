@@ -15,6 +15,9 @@ using System.Windows.Media.Imaging;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Runtime.InteropServices;
+using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 namespace AnotherMusicPlayer
 {
@@ -219,7 +222,9 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Recuperate Media Cover </summary>
-        public BitmapImage MediaPicture(string FilePath) {
+        public BitmapImage MediaPicture(string FilePath, bool export = true)
+        {
+            BitmapImage bitmap = null;
             try
             {
                 if (System.IO.File.Exists(FilePath))
@@ -229,20 +234,91 @@ namespace AnotherMusicPlayer
                     if (tags.Tag.Pictures.Length > 0)
                     {
                         TagLib.IPicture pic = tags.Tag.Pictures[0];
+                        //Debug.WriteLine("Picture size = " + pic.Data.Data.Length);
                         MemoryStream ms = new MemoryStream(pic.Data.Data);
                         ms.Seek(0, SeekOrigin.Begin);
                         // ImageSource for System.Windows.Controls.Image
-                        BitmapImage bitmap = new BitmapImage();
+                        bitmap = new BitmapImage();
                         bitmap.BeginInit();
                         bitmap.StreamSource = ms;
                         bitmap.EndInit();
-                        return bitmap;
+                        int max = 400;
+
+                        if (bitmap.PixelWidth > max || bitmap.PixelHeight > max)
+                        {
+                            double width = bitmap.PixelWidth, height = bitmap.PixelHeight;
+                            if (width > max) {height = (height / width) * max; width = max; }
+                            if (height > max) { width = (width / height) * max; height = max; }
+
+                            ms.Seek(0, SeekOrigin.Begin); System.Drawing.Image im = System.Drawing.Image.FromStream(ms); ms.Close();
+                            System.Drawing.Bitmap im2 = ResizeImage(im, Convert.ToInt32(width), Convert.ToInt32(height));
+                            bitmap = null; bitmap = ConvertBitmapToBitmapImage(im2);
+
+                            MemoryStream ms2 = new MemoryStream(); im2.Save(ms2, ImageFormat.Jpeg); ms2.Seek(0, SeekOrigin.Begin);
+
+                            TagLib.Picture pic2 = new TagLib.Picture();
+                            pic2.Type = TagLib.PictureType.FrontCover; pic2.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg; pic2.Description = "Cover";
+                            pic2.Data = TagLib.ByteVector.FromStream(ms2); tags.Tag.Pictures = new TagLib.IPicture[1] { pic2 };
+                            try { tags.Save(); } catch { } //error if file already opened
+                            ms2.Close();
+                        }
                     }
                     tags.Dispose();
                 }
             }
             catch { }
-            return null;
+            return (export)?bitmap:null;
+        }
+
+
+        private void MediaPictureInvoked(object FilePath = null) { MediaPicture((string)FilePath, false); }
+        public void MediaPictureAsync(string FilePath) {
+            Thread objThread = new Thread(new ParameterizedThreadStart(MediaPictureInvoked));
+            objThread.IsBackground = true;
+            objThread.Priority = ThreadPriority.AboveNormal;
+            objThread.Start(FilePath);
+        }
+
+        /// <summary>
+        /// Takes a bitmap and converts it to an image that can be handled by WPF ImageBrush
+        /// </summary>
+        /// <param name="src">A bitmap image</param>
+        /// <returns>The image as a BitmapImage for WPF</returns>
+        private BitmapImage ConvertBitmapToBitmapImage(Bitmap src)
+        {
+            MemoryStream ms = new MemoryStream();
+            ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            ms.Seek(0, SeekOrigin.Begin);
+            image.StreamSource = ms;
+            image.EndInit();
+            return image;
+        }
+
+        private Bitmap ResizeImage(System.Drawing.Image image, int width, int height)
+        {
+            var destRect = new System.Drawing.Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (Graphics graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
         }
 
         /// <summary> Stop all currently playing threads </summary>

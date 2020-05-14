@@ -288,7 +288,7 @@
             </Grid.RowDefinitions>
 
             <Button Grid.Row="0" x:Name="BtnOpen" Margin="2,0,2,0" ToolTip="{DynamicResource BtnOpenToolTip}" Click="Open_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
-            <Button Grid.Row="1" x:Name="BtnPrevious" Margin="2,0,2,0" ToolTip="{DynamicResource BtnOpenToolTip}" Click="Previous_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Button Grid.Row="1" x:Name="BtnPrevious" Margin="2,0,2,0" ToolTip="{DynamicResource BtnPreviousToolTip}" Click="Previous_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="2" x:Name="BtnPlayPause" Margin="2,0,2,0" ToolTip="{DynamicResource BtnPlayPauseToolTip}" Click="Play_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="3" x:Name="BtnNext" Margin="2,0,2,0" ToolTip="{DynamicResource BtnNexToolTipt}" Click="Next_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="4" x:Name="BtnRepeat" Margin="2,0,2,0" ToolTip="{DynamicResource BtnRepeatToolTip}" Click="BtnRepeat_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>

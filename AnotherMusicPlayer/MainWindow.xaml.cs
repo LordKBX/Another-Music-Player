@@ -40,18 +40,34 @@ namespace AnotherMusicPlayer
         /// <summary> Used for storing object dependant of the Operating system </summary>
         private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
 
+        string PreviousKeyboardKey = "";
+
         /// <summary> Constructor </summary>
         public MainWindow()
         {
             SettingsInit();//Initialize and load settings
             // Set DataContext
-            this.DataContext = this;
+            this.DataContext = this;    
 
             PlayList = new List<string[]>();//Initialize PlayList
             player = new Player(this);//Create Player object
 
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
+            this.PreviewKeyDown += (s, e) => {  // intercept keyboard event on UI to prevent selected button activation via keyboard
+                Debug.WriteLine("------------");
+                string key = e.Key.ToString();  Debug.WriteLine(key);
+                Debug.WriteLine(e.KeyStates.ToString());
+                //List<string> autorised = new List<string>() { "Left", "Right", "Up", "Down" };
+                List<string> autorised = new List<string>() { "Tab", "Left", "Right", "Up", "Down"};
+                if (!autorised.Contains(key)) { e.Handled = true; }
+                if (PreviousKeyboardKey == "LeftCtrl" || PreviousKeyboardKey == "RightCtrl")
+                {
+                    if (key == "Left") { PreviousTrack(); }
+                    if (key == "Right") { NextTrack(); }
+                }
+                PreviousKeyboardKey = key;
+            };
 
             Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
             Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load settings file
@@ -343,8 +359,18 @@ namespace AnotherMusicPlayer
                 LeftPannelMediaInfo.Inlines.Add(a5);
 
                 FileCover.Source = null;
-                FileCover.Source = player.MediaPicture(item.Path);
-                if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
+                FileCover.ToolTip = null;
+                System.Windows.Media.Imaging.BitmapImage bi = player.MediaPicture(item.Path);
+                FileCover.Source = (bi ?? Bimage("CoverImg"));
+
+                if (bi != null && (bi.Width > 250 || bi.Height > 250))
+                {
+                    WrapPanel p = new WrapPanel() { };
+                    Image im = new Image() { MaxHeight = 400, MaxWidth = 400, Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
+                    im.Source = bi;
+                    p.Children.Add(im);
+                    FileCover.ToolTip = p;
+                }
             }
             catch { }
         }

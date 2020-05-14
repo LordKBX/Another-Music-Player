@@ -85,6 +85,10 @@ namespace AnotherMusicPlayer
         // Last play Section
         [Setting(Name = "Local.LastPlaylistIndex", Default = 0)]
         public static int LastPlaylistIndex { get; set; } = 0;
+
+        // RepeatButton Section
+        [Setting(Name = "Local.LastRepeatStatus", Default = 0)]
+        public static int LastRepeatStatus { get; set; } = 0;
     }
 
     public partial class MainWindow : Window
@@ -97,6 +101,7 @@ namespace AnotherMusicPlayer
             if (Settings.Lang == null) { Settings.Lang = (AppLang.StartsWith("fr-")) ? "fr-FR" : "en-US"; }
             if (!System.IO.Directory.Exists(Settings.LibFolder)) { Settings.LibFolder = null; }
             if (Settings.LibFolder == null) { Settings.LibFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic); }
+            PlayRepeatStatus = Settings.LastRepeatStatus;
         }
 
         /// <summary> load settings in parametters panel </summary>

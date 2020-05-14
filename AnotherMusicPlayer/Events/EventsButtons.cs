@@ -79,6 +79,7 @@ namespace AnotherMusicPlayer
             PlayList = tmpList;
             PlayListIndex = newIndex;
             Timer_PlayListIndex = -1;
+            UpdateRecordedQueue();
         }
 
         /// <summary> Callback Event Click on Repeat button </summary>
@@ -87,6 +88,8 @@ namespace AnotherMusicPlayer
             if (PlayRepeatStatus <= 0) { PlayRepeatStatus = 1; player.Repeat(true); }
             else if (PlayRepeatStatus == 1) { PlayRepeatStatus = 2; player.Repeat(false); }
             else { PlayRepeatStatus = 0; player.Repeat(false); }
+            Settings.LastRepeatStatus = PlayRepeatStatus;
+            Settings.SaveSettingsAsync();
         }
 
     }

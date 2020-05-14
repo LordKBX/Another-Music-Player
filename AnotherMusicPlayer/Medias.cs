@@ -54,6 +54,8 @@ namespace AnotherMusicPlayer
         /// <summary> list of newly scanned files(absolute path) </summary>
         List<string> MediatequeScanedFiles = new List<string>();
 
+        List<string> MediatequeCacheQuerys = new List<string>();
+
         /// <summary> Asynchronus call for MediatequeScanning Library in a new thread </summary>
         private async void MediatequeInvokeScan(bool DoClean = false) {
             try
@@ -77,6 +79,7 @@ namespace AnotherMusicPlayer
             {
                 if (System.IO.Directory.Exists(Settings.LibFolder))
                 {
+                    MediatequeCacheQuerys.Clear();
                     MediatequeScanning = true;
                     Dispatcher.BeginInvoke(new Action(() => {
                         LibNavigationContent.Children.Clear();
@@ -102,14 +105,108 @@ namespace AnotherMusicPlayer
                     MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
                     MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
 
+                    foreach(string file in MediatequeScanedFiles)
+                    {
+                        MediatequeTotalScanedFiles += 1;
+                        FileInfo fi = new FileInfo(file);
+                        if (DatabaseFiles.ContainsKey(fi.FullName))
+                        {
+                            //Debug.WriteLine(fi.FullName);
+                            //Debug.WriteLine("LastUpdate Database = " + (long)DatabaseFiles[fi.FullName]["LastUpdate"]);
+                            //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
+                            if (Convert.ToInt64((string)DatabaseFiles[fi.FullName]["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
+                            {
+                                MediatequeScanedFiles.Add(fi.FullName);
+                                PlayListViewItem item = player.MediaInfo(fi.FullName, false);
+                                MediatequeTotalScanedDuration += item.Duration;
+                                MediatequeTotalScanedSize += item.Size;
+                                MediatequeCacheQuerys.Add("UPDATE files SET Name='" + DatabaseEscapeString(item.Name)
+                                    + "', Album='" + DatabaseEscapeString(item.Album)
+                                    + "', Performers='" + DatabaseEscapeString(item.Performers)
+                                    + "', Composers='" + DatabaseEscapeString(item.Composers)
+                                    + "', Genres='" + DatabaseEscapeString(item.Genres)
+                                    + "', Copyright='" + DatabaseEscapeString(item.Copyright)
+                                    + "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists)
+                                    + "', Lyrics='" + DatabaseEscapeString(item.Lyrics)
+                                    + "', Duration='" + item.Duration
+                                    + "', Size='" + item.Size
+                                    + "', Disc='" + item.Disc
+                                    + "', DiscCount='" + item.DiscCount
+                                    + "', Track='" + item.Track
+                                    + "', TrackCount='" + item.TrackCount
+                                    + "', Year='" + item.Year
+                                    + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
+                                    + "' WHERE Path='" + DatabaseEscapeString(fi.FullName) + "'");
+                            }
+                            else
+                            {
+                                MediatequeTotalScanedDuration += Convert.ToInt64(DatabaseFiles[fi.FullName]["Duration"]);
+                                MediatequeTotalScanedSize += Convert.ToInt64(DatabaseFiles[fi.FullName]["Size"]);
+                            }
+                        }
+                        else
+                        {
+                            PlayListViewItem item = player.MediaInfo(fi.FullName, false);
+                            MediatequeTotalScanedDuration += item.Duration;
+                            MediatequeTotalScanedSize += item.Size;
+                            string query = "INSERT INTO files("
+                                + "Path,"
+                                + "Name,"
+                                + "Album,"
+                                + "Performers,"
+                                + "Composers,"
+                                + "Genres,"
+                                + "Copyright,"
+                                + "AlbumArtists,"
+                                + "Lyrics,"
+                                + "Duration,"
+                                + "Size,"
+                                + "Disc,"
+                                + "DiscCount,"
+                                + "Track,"
+                                + "TrackCount,"
+                                + "Year,"
+                                + "LastUpdate"
+                                + ") VALUES('";
+                            query += DatabaseEscapeString(fi.FullName) + "','";
+                            query += DatabaseEscapeString(item.Name) + "','";
+                            query += DatabaseEscapeString(item.Album) + "','";
+                            query += DatabaseEscapeString(item.Performers) + "','";
+                            query += DatabaseEscapeString(item.Composers) + "','";
+                            query += DatabaseEscapeString(item.Genres) + "','";
+                            query += DatabaseEscapeString(item.Copyright) + "','";
+                            query += DatabaseEscapeString(item.AlbumArtists) + "','";
+                            query += DatabaseEscapeString(item.Lyrics) + "','";
+                            query += item.Duration + "','";
+                            query += item.Size + "','";
+                            query += item.Disc + "','";
+                            query += item.DiscCount + "','";
+                            query += item.Track + "','";
+                            query += item.TrackCount + "','";
+                            query += item.Year + "','";
+                            query += fi.LastWriteTimeUtc.ToFileTime() + "')";
+                            MediatequeCacheQuerys.Add(query);
+                        }
+
+                        if (MediatequeCacheQuerys.Count >= 100)
+                        {
+                            DatabaseQuerys(MediatequeCacheQuerys.ToArray());
+                            MediatequeCacheQuerys.Clear();
+                        }
+
+                        Dispatcher.BeginInvoke(new Action(() => {
+                            MediatequeBuildNavigationScan();
+                        }));
+                    }
+
+                    DatabaseQuerys(MediatequeCacheQuerys.ToArray());
+                    MediatequeCacheQuerys.Clear();
+
                     foreach (string fi in MediatequeScanedFiles) {
                         if (!MediatequeScanedFiles.Contains(fi)) {
                             DatabaseQuery("DELETE FROM files WHERE Path='"+ DatabaseEscapeString(fi) + "'");
                         }
                     }
-
-                     if (IsInTransaction()) { DatabaseTansactionEnd(); }
-                     if (!IsInTransaction()) { DatabaseTansactionStart(); }
 
                     DatabaseFiles = DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
 
@@ -284,105 +381,11 @@ namespace AnotherMusicPlayer
                 }
                 if (ok)
                 {
-                    FileInfo fi = new FileInfo(file);
-                    fold.Files.Add(fi.FullName);
-                    MediatequeTotalScanedFiles += 1;
+                    fold.Files.Add(file);
+                    MediatequeScanedFiles.Add(file);
                     if (DatabaseUpdate)
                     {
-                        if (DatabaseFiles.ContainsKey(fi.FullName))
-                        {
-                            //Debug.WriteLine(fi.FullName);
-                            //Debug.WriteLine("LastUpdate Database = " + (long)DatabaseFiles[fi.FullName]["LastUpdate"]);
-                            //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
-                            if (Convert.ToInt64((string)DatabaseFiles[fi.FullName]["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
-                            {
-                                MediatequeScanedFiles.Add(fi.FullName);
-                                PlayListViewItem item = player.MediaInfo(fi.FullName, false);
-                                MediatequeTotalScanedDuration += item.Duration;
-                                MediatequeTotalScanedSize += item.Size;
-                                DatabaseQuery("UPDATE files SET Name='" + DatabaseEscapeString(item.Name)
-                                    + "', Album='" + DatabaseEscapeString(item.Album)
-                                    + "', Performers='" + DatabaseEscapeString(item.Performers)
-                                    + "', Composers='" + DatabaseEscapeString(item.Composers)
-                                    + "', Genres='" + DatabaseEscapeString(item.Genres)
-                                    + "', Copyright='" + DatabaseEscapeString(item.Copyright)
-                                    + "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists)
-                                    + "', Lyrics='" + DatabaseEscapeString(item.Lyrics)
-                                    + "', Duration='" + item.Duration
-                                    + "', Size='" + item.Size
-                                    + "', Disc='" + item.Disc
-                                    + "', DiscCount='" + item.DiscCount
-                                    + "', Track='" + item.Track
-                                    + "', TrackCount='" + item.TrackCount
-                                    + "', Year='" + item.Year
-                                    + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
-                                    + "' WHERE Path='" + DatabaseEscapeString(fi.FullName) + "'");
-                            }
-                            else
-                            {
-                                MediatequeTotalScanedDuration += Convert.ToInt64(DatabaseFiles[fi.FullName]["Duration"]);
-                                MediatequeTotalScanedSize += Convert.ToInt64(DatabaseFiles[fi.FullName]["Size"]);
-                            }
-                        }
-                        else
-                        {
-                            MediatequeScanedFiles.Add(fi.FullName);
-                            PlayListViewItem item = player.MediaInfo(fi.FullName, false);
-                            MediatequeTotalScanedDuration += item.Duration;
-                            MediatequeTotalScanedSize += item.Size;
-                            string query = "INSERT INTO files("
-                                +"Path,"
-                                +"Name,"
-                                +"Album,"
-                                + "Performers,"
-                                + "Composers,"
-                                + "Genres,"
-                                + "Copyright,"
-                                + "AlbumArtists,"
-                                + "Lyrics,"
-                                + "Duration,"
-                                +"Size,"
-                                + "Disc,"
-                                + "DiscCount,"
-                                + "Track,"
-                                + "TrackCount,"
-                                + "Year,"
-                                + "LastUpdate"
-                                +") VALUES('";
-                            query += DatabaseEscapeString(fi.FullName) + "','";
-                            query += DatabaseEscapeString(item.Name) + "','";
-                            query += DatabaseEscapeString(item.Album) + "','";
-                            query += DatabaseEscapeString(item.Performers) + "','";
-                            query += DatabaseEscapeString(item.Composers) + "','";
-                            query += DatabaseEscapeString(item.Genres) + "','";
-                            query += DatabaseEscapeString(item.Copyright) + "','";
-                            query += DatabaseEscapeString(item.AlbumArtists) + "','";
-                            query += DatabaseEscapeString(item.Lyrics) + "','";
-                            query += item.Duration + "','";
-                            query += item.Size + "','";
-                            query += item.Disc + "','";
-                            query += item.DiscCount + "','";
-                            query += item.Track + "','";
-                            query += item.TrackCount + "','";
-                            query += item.Year + "','";
-                            query += fi.LastWriteTimeUtc.ToFileTime() + "')";
-                            DatabaseQuery(query);
-                        }
-
-                        if (MediatequeScanedFiles.Count % 100 == 0)
-                        {
-                            if (IsInTransaction()) { DatabaseTansactionEnd(); }
-                            if (!IsInTransaction()) { DatabaseTansactionStart(); }
-                        }
-
-                        Dispatcher.BeginInvoke(new Action(() => {
-                            MediatequeBuildNavigationScan();
-
-                            //TextBlock t = new TextBlock();
-                            //t.Text = fi.FullName;
-                            //LibNavigationContent.Children.Insert(0, t);
-                            //if (LibNavigationContent.Children.Count > 100) { LibNavigationContent.Children.RemoveAt(100); }
-                        }));
+                        
                     }
                 }
             }
@@ -468,37 +471,37 @@ namespace AnotherMusicPlayer
         private void MediatequeBuildNavigationContent(Folder fold) {
             LibNavigationContent.Children.Clear();
 
-            //ContextMenu ct = new ContextMenu();
+            ContextMenu ct = new ContextMenu();
 
-            //if (fold.Parent != null)
-            //{
-            //    MenuItem mu0 = new MenuItem()
-            //    {
-            //        Header = "GetBack",
-            //        Icon = ContextMenuItemImage_back,
-            //        Tag = fold.Parent
-            //    };
-            //    mu0.Click += (sender, e) => {
-            //        MediatequeBuildNavigationPath((Folder)((MenuItem)sender).Tag);
-            //        MediatequeBuildNavigationContent((Folder)((MenuItem)sender).Tag);
-            //    };
-            //    ct.Items.Add(mu0);
-            //}
+            if (fold.Parent != null)
+            {
+                MenuItem mu0 = new MenuItem()
+                {
+                    Header = "GetBack",
+                    Icon = ContextMenuItemImage_back,
+                    Tag = fold.Parent
+                };
+                mu0.Click += (sender, e) => {
+                    MediatequeBuildNavigationPath((Folder)((MenuItem)sender).Tag);
+                    MediatequeBuildNavigationContent((Folder)((MenuItem)sender).Tag);
+                };
+                ct.Items.Add(mu0);
+            }
 
-            //MenuItem mu1 = new MenuItem()
-            //{
-            //    Header = GetTaduction("ParamsLibItemContextMenuItem1"),
-            //    Icon = ContextMenuItemImage_add,
-            //    Tag = fold
-            //};
-            //mu1.Click += (sender, e) => {
-            //    List<string> paths = new List<string>();
-            //    paths = MediatequeCreateList((Folder)((MenuItem)sender).Tag, paths);
-            //    Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray()); }));
-            //};
-            //ct.Items.Add(mu1);
+            MenuItem mu1 = new MenuItem()
+            {
+                Header = GetTaduction("ParamsLibItemContextMenuItem1"),
+                Icon = ContextMenuItemImage_add,
+                Tag = fold
+            };
+            mu1.Click += (sender, e) => {
+                List<string> paths = new List<string>();
+                paths = MediatequeCreateList((Folder)((MenuItem)sender).Tag, paths);
+                Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray()); }));
+            };
+            ct.Items.Add(mu1);
 
-            //LibNavigationContentScroll.ContextMenu = ct;
+            LibNavigationContentScroll.ContextMenu = ct;
 
             try
             {
@@ -643,6 +646,7 @@ namespace AnotherMusicPlayer
         {
             DatabaseQuery("DELETE FROM queue;");
             int index = 1;
+            List<string> querys = new List<string>();
             foreach (string[] line in PlayList)
             {
                 string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
@@ -650,9 +654,10 @@ namespace AnotherMusicPlayer
                 query += DatabaseEscapeString(line[0]) + "',";
                 query += ((line[1] == null) ? "NULL" : "'" + DatabaseEscapeString(line[1]) + "'");
                 query += ")";
-                DatabaseQuery(query);
                 index += 1;
+                querys.Add(query);
             }
+            DatabaseQuerys(querys.ToArray());
         }
 
     }

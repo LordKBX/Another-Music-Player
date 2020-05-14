@@ -61,7 +61,7 @@ namespace AnotherMusicPlayer
                 );
             try { 
                 DatabaseConnection.Open();
-                DatabaseTansactionStart();
+                //DatabaseTansactionStart();
 
                 DatabaseDetectOrCreateTable("files", "CREATE TABLE files("
                     + "Path TEXT, "
@@ -134,19 +134,35 @@ namespace AnotherMusicPlayer
                         else { id = "" + line; }
                     }
                     else { id = "" + line; }
-                    ret.Add( id, Database_NameValueCollectionToDictionary(row, false) );
+                    try { ret.Add(id, Database_NameValueCollectionToDictionary(row, false)); } catch { }
                     //Debug.WriteLine(line.ToString());
                     line += 1;
                 }
             }
             else {
-                //if (AutoCommit) { DatabaseTansactionStart(); }
-
-                sqlite_cmd.ExecuteNonQuery();
-
-                //if (AutoCommit) { DatabaseTansactionEnd(); }
+                DatabaseTansactionStart();
+                try { sqlite_cmd.ExecuteNonQuery(); } catch { }
+                DatabaseTansactionEnd();
             }
             return ret;
+        }
+
+        /// <summary> execute SQL query </summary>
+        private static void DatabaseQuerys(string[] querys)
+        {
+            Dictionary<string, Dictionary<string, object>> ret = null;
+            SQLiteDataReader sqlite_datareader;
+            DatabaseTansactionStart();
+            foreach (string query in querys)
+            {
+                SQLiteCommand sqlite_cmd;
+                sqlite_cmd = DatabaseConnection.CreateCommand();
+                sqlite_cmd.CommandText = query;
+                string tq = query.ToUpper().Trim();
+                if (tq.StartsWith("SELECT ")) { }
+                else { try { sqlite_cmd.ExecuteNonQuery(); } catch { } }
+            }
+            DatabaseTansactionEnd();
         }
 
         /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
@@ -178,6 +194,22 @@ namespace AnotherMusicPlayer
             {
                 SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
                 sqlite_cmdTR.CommandText = "COMMIT";
+                sqlite_cmdTR.ExecuteNonQuery();
+                inTransaction = false;
+            }
+            catch { }
+        }
+
+        /// <summary> Commit transaction </summary>
+        private static void DatabaseTansactionEndAndStart()
+        {
+            if (!inTransaction) { return; }
+            try
+            {
+                SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
+                sqlite_cmdTR.CommandText = "COMMIT";
+                sqlite_cmdTR.ExecuteNonQuery();
+                sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
                 sqlite_cmdTR.ExecuteNonQuery();
                 inTransaction = false;
             }

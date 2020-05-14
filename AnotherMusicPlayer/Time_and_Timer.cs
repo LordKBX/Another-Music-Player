@@ -113,7 +113,7 @@ namespace AnotherMusicPlayer
                         if (PlayList.Count <= i) { break; }
                         else
                         {
-                            file = PlayList[i][0]; 
+                            file = PlayList[i][0];
                             item = GetMediaInfo(file, previous_items);
                             if (item != null)
                             {
@@ -127,6 +127,7 @@ namespace AnotherMusicPlayer
                         }
                     }
                     //Debug.WriteLine(JsonConvert.SerializeObject(tmp));
+                    try { player.MediaPicture(PlayList[PlayListIndex + 1][0]); } catch { }
                     PlayListView.ItemsSource = tmp;
                     PlayListView.Items.Refresh();
 
@@ -140,7 +141,7 @@ namespace AnotherMusicPlayer
                 { 
                     Timer_Count = 0; 
                     try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); } catch { }
-                    if (MediatequeScanning == true) { MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);  }
+                    try { if (MediatequeScanning == true) { MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder); } } catch { }
                 }
 
                 Timer_Count += 1;
