@@ -64,7 +64,11 @@
     <sys:String x:Key="ParamsEqualizerLabel">Equalizer</sys:String>
     <sys:String x:Key="ParamsEqualizerResetLabel">Reset</sys:String>
 
-    <sys:String x:Key="ParamsLibItemContextMenuItem1">Add to PlayList</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_GenericAddToPlayingQueue">Add to PlayList</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_AddAlbumToPlayingQueue">Add Album to PlayList</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_AddFolderToPlayingQueue">Add Folder to PlayList</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_AddTrackToPlayingQueue">Add Track to PlayList</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_GetBack">Return to parent folder</sys:String>
 
     <sys:String x:Key="LibMediaMediatequeScanning">MediatequeScanning</sys:String>
     <sys:String x:Key="LibMediaFiles">Files</sys:String>

@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.Security.Cryptography;
 
 namespace AnotherMusicPlayer
 {
@@ -221,8 +222,16 @@ namespace AnotherMusicPlayer
             return null;
         }
 
+        Dictionary<string, Dictionary<string, BitmapImage>> MediaPictureStoredCovers = new Dictionary<string, Dictionary<string, BitmapImage>>();
+        public void MediaPictureClearCache() {
+            foreach (KeyValuePair<string, Dictionary<string, BitmapImage>> pict in MediaPictureStoredCovers) {
+                //foreach (KeyValuePair<string, BitmapImage> bip in pict.Value) { bip.Value = null; }
+                pict.Value.Clear();
+            }
+            MediaPictureStoredCovers.Clear(); 
+        }
         /// <summary> Recuperate Media Cover </summary>
-        public BitmapImage MediaPicture(string FilePath, bool export = true)
+        public BitmapImage MediaPicture(string FilePath, bool export = true, int MawWidth = 400, int MawHeight = 400, bool save = true)
         {
             BitmapImage bitmap = null;
             try
@@ -234,6 +243,12 @@ namespace AnotherMusicPlayer
                     if (tags.Tag.Pictures.Length > 0)
                     {
                         TagLib.IPicture pic = tags.Tag.Pictures[0];
+                        string hash = System.Text.Encoding.Default.GetString(MD5.Create().ComputeHash(pic.Data.Data));
+                        string key = "" + MawWidth + "x" + MawHeight;
+                        if (MediaPictureStoredCovers.ContainsKey(hash)) {
+                            if (MediaPictureStoredCovers[hash].ContainsKey(key)) { return MediaPictureStoredCovers[hash][key]; }
+                        }
+
                         //Debug.WriteLine("Picture size = " + pic.Data.Data.Length);
                         MemoryStream ms = new MemoryStream(pic.Data.Data);
                         ms.Seek(0, SeekOrigin.Begin);
@@ -256,12 +271,18 @@ namespace AnotherMusicPlayer
 
                             MemoryStream ms2 = new MemoryStream(); im2.Save(ms2, ImageFormat.Jpeg); ms2.Seek(0, SeekOrigin.Begin);
 
-                            TagLib.Picture pic2 = new TagLib.Picture();
-                            pic2.Type = TagLib.PictureType.FrontCover; pic2.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg; pic2.Description = "Cover";
-                            pic2.Data = TagLib.ByteVector.FromStream(ms2); tags.Tag.Pictures = new TagLib.IPicture[1] { pic2 };
-                            try { tags.Save(); } catch { } //error if file already opened
+                            if (save)
+                            {
+                                TagLib.Picture pic2 = new TagLib.Picture();
+                                pic2.Type = TagLib.PictureType.FrontCover; pic2.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg; pic2.Description = "Cover";
+                                pic2.Data = TagLib.ByteVector.FromStream(ms2); tags.Tag.Pictures = new TagLib.IPicture[1] { pic2 };
+                                try { tags.Save(); } catch { } //error if file already opened
+                            }
                             ms2.Close();
                         }
+                        bitmap.Freeze();
+                        if (MediaPictureStoredCovers.ContainsKey(hash)) { MediaPictureStoredCovers[hash].Add(key, bitmap); }
+                        else { MediaPictureStoredCovers.Add(hash, new Dictionary<string, BitmapImage>() { { key, bitmap } }); }
                     }
                     tags.Dispose();
                 }

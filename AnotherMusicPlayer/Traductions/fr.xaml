@@ -64,7 +64,11 @@
     <sys:String x:Key="ParamsEqualizerLabel">Equalizer</sys:String>
     <sys:String x:Key="ParamsEqualizerResetLabel">Réinitialiser</sys:String>
 
-    <sys:String x:Key="ParamsLibItemContextMenuItem1">Ajouter à la liste de lecture</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_GenericAddToPlayingQueue">Ajouter à la liste de lecture</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_AddAlbumToPlayingQueue">Ajouter l'album à la liste de lecture</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_AddFolderToPlayingQueue">Ajouter le dossier à la liste de lecture</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_AddTrackToPlayingQueue">Ajouter la piste à la liste de lecture</sys:String>
+    <sys:String x:Key="ParamsLibItemContextMenuItem_GetBack">Retour au dossier parent</sys:String>
 
     <sys:String x:Key="LibMediaMediatequeScanning">Scan en cours</sys:String>
     <sys:String x:Key="LibMediaFiles">Fichiers trouvés</sys:String>

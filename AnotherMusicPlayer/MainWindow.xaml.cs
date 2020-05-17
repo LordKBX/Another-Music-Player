@@ -41,6 +41,7 @@ namespace AnotherMusicPlayer
         private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
 
         string PreviousKeyboardKey = "";
+        double PreviousKeyboardTime = 0;
 
         /// <summary> Constructor </summary>
         public MainWindow()
@@ -55,18 +56,60 @@ namespace AnotherMusicPlayer
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
             this.PreviewKeyDown += (s, e) => {  // intercept keyboard event on UI to prevent selected button activation via keyboard
+                if (e.OriginalSource.ToString().StartsWith("System.Windows.Controls.TextBox")) { return; }
+                double ntime = UnixTimestamp();
                 Debug.WriteLine("------------");
+                
                 string key = e.Key.ToString();  Debug.WriteLine(key);
                 Debug.WriteLine(e.KeyStates.ToString());
                 //List<string> autorised = new List<string>() { "Left", "Right", "Up", "Down" };
                 List<string> autorised = new List<string>() { "Tab", "Left", "Right", "Up", "Down"};
                 if (!autorised.Contains(key)) { e.Handled = true; }
-                if (PreviousKeyboardKey == "LeftCtrl" || PreviousKeyboardKey == "RightCtrl")
+                if ((PreviousKeyboardKey == "LeftCtrl" || PreviousKeyboardKey == "RightCtrl") && (PreviousKeyboardTime + 1 > ntime))
                 {
                     if (key == "Left") { PreviousTrack(); }
                     if (key == "Right") { NextTrack(); }
                 }
+                else
+                {
+                    if (key == "Space") { Pause(); }
+
+                    if (key == "Left") { LibraryFiltersPaginationPrevious_Click(null, null); }
+                    if (key == "Right") { LibraryFiltersPaginationNext_Click(null, null); }
+                    if (key == "Up") {
+                        if (TabControler.SelectedIndex == 0)
+                        {
+                            if (PlayListView.SelectedIndex > 0)
+                            {
+                                PlayListView.SelectedIndex = PlayListView.SelectedIndex - 1;
+                                PlayListView.ScrollIntoView(PlayListView.SelectedItem);
+                            }
+                        }
+                        else if (TabControler.SelectedIndex == 1)
+                        {
+                            LibNavigationContentScroll.ScrollToVerticalOffset(LibNavigationContentScroll.VerticalOffset - 15);
+                            LibNavigationContentScroll2.ScrollToVerticalOffset(LibNavigationContentScroll2.VerticalOffset - 15);
+                        }
+                    }
+                    if (key == "Down") {
+                        if (TabControler.SelectedIndex == 0)
+                        {
+                            if (PlayListView.SelectedIndex < PlayListView.Items.Count - 1)
+                            {
+                                PlayListView.SelectedIndex = PlayListView.SelectedIndex + 1;
+                                PlayListView.ScrollIntoView(PlayListView.SelectedItem);
+                            }
+                        }
+                        else if (TabControler.SelectedIndex == 1)
+                        {
+                            LibNavigationContentScroll.ScrollToVerticalOffset(LibNavigationContentScroll.VerticalOffset + 15);
+                            LibNavigationContentScroll2.ScrollToVerticalOffset(LibNavigationContentScroll2.VerticalOffset + 15);
+                        }
+                    }
+                }
                 PreviousKeyboardKey = key;
+                PreviousKeyboardTime = ntime;
+                e.Handled = true;
             };
 
             Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
@@ -119,6 +162,7 @@ namespace AnotherMusicPlayer
             KeyboardInterceptorSetUp();
 
             //Settings.LibFolder = "D:\\Music\\";
+            MediatequeSetupFilters();
             MediatequeInvokeScan();
             MediatequeLoadOldPlaylist();
         }
@@ -157,6 +201,9 @@ namespace AnotherMusicPlayer
                 tab.Width = ((TabControler.ActualWidth - 4) / 4);
             }
             ((TabItem)(TabControler.Items[TabControler.Items.Count - 1])).Width -= 1;
+
+            if (MediatequeBuildNavigationContentBlockssPanel != null) { MediatequeBuildNavigationContentBlockssPanel.Width = TabControler.ActualWidth - 22; }
+
             Settings.LastWindowWidth = win1.ActualWidth;
             Settings.LastWindowHeight = win1.ActualHeight;
             Settings.SaveSettings();

@@ -128,27 +128,58 @@
                 <Grid Background="#FFCFCFCF" Margin="0,0,4,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
+                        <RowDefinition Height="20"/>
                         <RowDefinition Height="100*"/>
                     </Grid.RowDefinitions>
-                    <Viewbox HorizontalAlignment="Left" VerticalAlignment="Stretch" FlowDirection="LeftToRight">
-                        <WrapPanel x:Name="LibNavigationPathContener" Style="{DynamicResource LibNavigationPathContener}">
-                            <TextBlock Style="{DynamicResource LibNavigationPathItem}" TextDecorations="Underline" Text="Home"/>
-                        </WrapPanel>
-                    </Viewbox>
-                    <Border Grid.Row="1" BorderThickness="0,1,0,0" BorderBrush="Black">
-                        <ScrollViewer x:Name="LibNavigationContentScroll" VerticalScrollBarVisibility="Auto">
-                            <WrapPanel x:Name="LibNavigationContent">
 
-                                <TextBlock>
-
-                                </TextBlock>
+                    <Border BorderThickness="0,0,0,1" BorderBrush="Black">
+                        <Viewbox HorizontalAlignment="Left" VerticalAlignment="Stretch" FlowDirection="LeftToRight">
+                            <WrapPanel x:Name="LibNavigationPathContener" Style="{DynamicResource LibNavigationPathContener}">
+                                <TextBlock Style="{DynamicResource LibNavigationPathItem}" TextDecorations="Underline" Text="Home"/>
                             </WrapPanel>
+                        </Viewbox>
+                    </Border>
+                    <Grid Grid.Row="1" x:Name="LibraryFiltersGrid" IsEnabled="False">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="70" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="100*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Filtre" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
+                        <ComboBox Grid.Column="1" x:Name="LibraryFiltersMode">
+                            <ComboBoxItem Tag="" Content="Aucun" Selector.IsSelected="True"/>
+                            <ComboBoxItem Tag="Name" Content="Nom"/>
+                            <ComboBoxItem Tag="Artist" Content="Artist"/>
+                            <ComboBoxItem Tag="Album" Content="Album"/>
+                            <ComboBoxItem Tag="Genre" Content="Genre"/>
+                        </ComboBox>
+                        <ComboBox Grid.Column="2" x:Name="LibraryFiltersGenreList" Visibility="Hidden"></ComboBox>
+                        <TextBox Grid.Column="3" x:Name="LibraryFiltersGenreSearchBox" Visibility="Hidden"/>
+                        <TextBox Grid.Column="2" Grid.ColumnSpan="2" x:Name="LibraryFiltersSearchBox" Visibility="Hidden"/>
+                        <Grid Grid.Column="4" x:Name="LibraryFiltersPaginationBlock" HorizontalAlignment="Right" Visibility="Hidden">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="20" />
+                                <ColumnDefinition Width="50" />
+                                <ColumnDefinition Width="20" />
+                            </Grid.ColumnDefinitions>
+                            <Button Grid.Column="0" x:Name="LibraryFiltersPaginationPrevious" FontFamily="Segoe UI Symbol" Content="◀"/>
+                            <TextBlock Grid.Column="1" x:Name="LibraryFiltersPaginationDisplay" Text="1/x" TextAlignment="Center" VerticalAlignment="Center"/>
+                            <Button Grid.Column="2" x:Name="LibraryFiltersPaginationNext" FontFamily="Segoe UI Symbol" Content="▶"/>
+                        </Grid>
+                    </Grid>
+                    <Border x:Name="LibNavigationContentB" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Black" Visibility="Visible">
+                        <ScrollViewer x:Name="LibNavigationContentScroll" VerticalScrollBarVisibility="Auto">
+                            <WrapPanel x:Name="LibNavigationContent"></WrapPanel>
                         </ScrollViewer>
                     </Border>
-                    <!--
-                    <TreeView x:Name="LibTreeView" Grid.Row="1" MouseRightButtonUp="LibTreeView_MouseRightButtonUp" MouseDoubleClick="LibTreeView_MouseDoubleClick">
-                    </TreeView>
-                    -->
+                    <Border x:Name="LibNavigationContent2B" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Black" Visibility="Collapsed">
+                        <ScrollViewer x:Name="LibNavigationContentScroll2" VerticalScrollBarVisibility="Auto">
+                            <StackPanel x:Name="LibNavigationContent2">
+                            </StackPanel>
+                        </ScrollViewer>
+                    </Border>
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">

@@ -22,8 +22,8 @@ namespace AnotherMusicPlayer
                     string re = e.KeyPressed.ToString(); 
                     //Debug.WriteLine(re);
                     //Debug.WriteLine("Focus = " + ((this.IsActive) ? "True" : "False") );
-
-                    if (re == "MediaPlayPause" || (re == "Space" && this.IsActive)) { Pause(); }
+                    
+                    if (re == "MediaPlayPause") { Pause(); }
                     if (re == "MediaPreviousTrack") { PreviousTrack(); }
                     if (re == "MediaNextTrack") { NextTrack(); }
                 };
