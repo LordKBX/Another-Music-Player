@@ -500,6 +500,7 @@ namespace AnotherMusicPlayer
             LibNavigationContent2B.Visibility = Visibility.Collapsed;
             LibraryFiltersMode.SelectedIndex = 0;
             LibraryFiltersGenreList.SelectedIndex = 0;
+            LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
 
             ContextMenu ct = new ContextMenu();
 
@@ -562,14 +563,12 @@ namespace AnotherMusicPlayer
             uint disc = 0;
             StackPanel lastPanel = null;
             BitmapImage defaultCover = Bimage("CoverImg");
-            bool nodef = true;
             if (uniqueDir) {
                 string folder = files[0].Substring(0, files[0].LastIndexOf(SeparatorChar));
                 defaultCover = (System.IO.File.Exists(folder + SeparatorChar + "Cover.jpg")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.jpg"))
                     : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : Bimage("CoverImg"));
-                nodef = (defaultCover == Bimage("CoverImg")) ? true : false;
             }
-            
+
             foreach (string fil in files)
             {
                 PlayListViewItem it = GetMediaInfo(fil);
@@ -610,7 +609,7 @@ namespace AnotherMusicPlayer
                         Source = (((nocover)?null:player.MediaPicture(fil, true, 150, 150, false)) ?? defaultCover),
                         VerticalAlignment = VerticalAlignment.Top, Style = (Style)Resources.MergedDictionaries[0]["HQImg"]
                     };
-                    if (!nodef)
+                    if (im.Source != Bimage("CoverImg"))
                     {
                         WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
                         Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };

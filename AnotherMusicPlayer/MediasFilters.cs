@@ -84,6 +84,7 @@ namespace AnotherMusicPlayer
 
         private void LibraryFiltersPaginationPrevious_Click(object sender, RoutedEventArgs e)
         {
+            if (LibraryFiltersPaginationBlock.Visibility != Visibility.Visible) { return; }
             if (LibraryFiltersPagesIndex > 0)
             {
                 LibraryFiltersPagesIndex -= 1;
@@ -97,6 +98,7 @@ namespace AnotherMusicPlayer
 
         private void LibraryFiltersPaginationNext_Click(object sender, RoutedEventArgs e)
         {
+            if (LibraryFiltersPaginationBlock.Visibility != Visibility.Visible) { return; }
             if (LibraryFiltersPagesIndex < LibraryFiltersPages.Count - 1)
             {
                 LibraryFiltersPagesIndex += 1;

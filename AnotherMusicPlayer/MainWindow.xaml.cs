@@ -53,6 +53,7 @@ namespace AnotherMusicPlayer
             PlayList = new List<string[]>();//Initialize PlayList
             player = new Player(this);//Create Player object
 
+            this.Resources.Clear();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
             this.PreviewKeyDown += (s, e) => {  // intercept keyboard event on UI to prevent selected button activation via keyboard

@@ -102,4 +102,7 @@
     <sys:String x:Key="ParamsEqualizerPresets_Soft">Doux</sys:String>
     <sys:String x:Key="ParamsEqualizerPresets_SoftRock">Soft Rock</sys:String>
     <sys:String x:Key="ParamsEqualizerPresets_Techno">Techno</sys:String>
+
+
+    <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
 </ResourceDictionary>

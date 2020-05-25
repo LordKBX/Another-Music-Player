@@ -18,8 +18,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <!--<ResourceDictionary Source="/styles.xaml" />
-                <ResourceDictionary Source="/Traductions/en.xaml" />-->
+                <ResourceDictionary Source="C:\Users\KevBo\source\repos\MediaPlayer\AnotherMusicPlayer\styles.xaml" />
+                <ResourceDictionary Source="C:\Users\KevBo\source\repos\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -124,7 +124,7 @@
                     </Grid>
                 </Grid>
             </TabItem>
-            <TabItem Header="{DynamicResource TabLibrary}" Style="{DynamicResource TabItemStyle}">
+            <TabItem Header="{DynamicResource TabLibrary}" Style="{DynamicResource TabItemStyle}" Height="32" Margin="-4,0,0,0" VerticalAlignment="Top">
                 <Grid Background="#FFCFCFCF" Margin="0,0,4,0">
                     <Grid.RowDefinitions>
                         <RowDefinition Height="20"/>
@@ -183,9 +183,42 @@
                 </Grid>
             </TabItem>
             <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Grid Background="#FFCFCFCF" Margin="0,0,4,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100" />
+                        <ColumnDefinition Width="100*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" Background="#FFCFCFCF" Margin="1,0,1,2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="100*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" Background="SlateGray" Margin="1,2,0,2" BorderThickness="0">
+                            <TextBlock Text="{DynamicResource PlayListsHeaderCol1}" Foreground="White" VerticalAlignment="Center" Height="15" TextAlignment="Center" HorizontalAlignment="Center"/>
+                        </Border>
+                        <ListView Grid.Row="1" Margin="1,0,0,0" Background="#FF999999">
+
+                        </ListView>
+                    </Grid>
+                    <Grid Grid.Column="1" Background="#FFCFCFCF" Margin="1,0,2,2">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="30"/>
+                            <RowDefinition Height="100*"/>
+                        </Grid.RowDefinitions>
+
+                        <WrapPanel Grid.Row="0" Background="SlateGray" Margin="1,2,0,2">
+
+                        </WrapPanel>
+                        <ListView Grid.Row="1" Background="#FF999999">
+
+                        </ListView>
+                    </Grid>
+                </Grid>
+                <!--
                 <UniformGrid Background="#FFCFCFCF" Margin="0,0,4,0">
                     <AccessText Text="  Comming Soon !  " Foreground="Black" Background="#FFCFCFCF" Margin="0,0,4,0" TextAlignment="Center" FontSize="48" VerticalAlignment="Center" />
                 </UniformGrid>
+                -->
             </TabItem>
             <TabItem Header="{DynamicResource TabParams}" Style="{DynamicResource TabItemStyle}">
                 <ScrollViewer Margin="0,0,4,0" VerticalScrollBarVisibility="Auto">
