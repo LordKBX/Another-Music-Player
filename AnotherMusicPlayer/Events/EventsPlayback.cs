@@ -30,8 +30,8 @@ namespace AnotherMusicPlayer
 
         /// <summary> Event Callback when the played media length change(generaly when a new media is played) </summary>
         private void Player_LengthChanged(object sender, MediaLengthChangedEventParams e) 
-        { 
-            Dispatcher.BeginInvoke(new Action(() => { UpdateSize(displayTime((long)(e.duration))); })); 
+        {
+            Dispatcher.BeginInvoke(new Action(() => { UpdateSize(displayTime((long)(e.duration))); }));
         }
 
         /// <summary> Event Callback when the media playing position chnaged </summary>

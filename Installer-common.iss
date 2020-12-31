@@ -94,11 +94,12 @@ begin
       itd_addfile('http://download.visualstudio.microsoft.com/download/pr/5954c748-86a1-4823-9e7d-d35f6039317a/169e82cbf6fdeb678c5558c5d0a83834/windowsdesktop-runtime-3.1.3-win-x64.exe',expandconstant('{tmp}\setup-runtime.exe'))
     ;
   end;
-
+  
+  // find relasese at https://www.videohelp.com/software/ffmpeg/old-versions
   if ('{#BuildVersion}' = 'X86') then
-    itd_addfile('http://sd-36502.dedibox.fr:9092/AnotherMusicPlayer/ffmpeg-win32-static.zip',expandconstant('{tmp}\ffmpeg-win32-static.zip'))
+    itd_addfile('http://sd-36502.dedibox.fr/AnotherMusicPlayer/ffmpeg-win32-static.zip',expandconstant('{tmp}\ffmpeg-win32-static.zip'))
   else
-    itd_addfile('http://sd-36502.dedibox.fr:9092/AnotherMusicPlayer/ffmpeg-win64-static.zip',expandconstant('{tmp}\ffmpeg-win64-static.zip'))
+    itd_addfile('http://sd-36502.dedibox.fr/AnotherMusicPlayer/ffmpeg-win64-static.zip',expandconstant('{tmp}\ffmpeg-win64-static.zip'))
   ;
   //Start the download after the "Ready to install" screen is shown
   itd_downloadafter(wpReady);

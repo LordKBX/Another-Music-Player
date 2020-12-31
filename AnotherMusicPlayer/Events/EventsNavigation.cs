@@ -17,8 +17,9 @@ namespace AnotherMusicPlayer
         /// <summary> Update label displaying media play time position </summary>
         private void UpdatePosition(string position) { DisplayPlaybackPosition.Content = position; }
         /// <summary> Update the ProgressBar displaying the media playing progression </summary>
-        private void UpdatePositionBar(double position) { 
+        private void UpdatePositionBar(double position) {
             DisplayPlaybackPositionBar.BeginAnimation(System.Windows.Controls.ProgressBar.ValueProperty, new DoubleAnimation((double)position, AnimationProgressBarDuration));
+            //DisplayPlaybackPositionBar.Value = (double)position;
         }
 
         /// <summary> Callback click on media ProgressBar and change playing position </summary>

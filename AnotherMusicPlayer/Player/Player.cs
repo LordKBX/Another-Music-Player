@@ -567,7 +567,7 @@ namespace AnotherMusicPlayer
                         }
                         catch { break; }
 
-                        Thread.Sleep(50);
+                        Thread.Sleep(100);
                     }
                     try { outputDevice.Stop(); } catch { }
                     outputDevice.Dispose();
