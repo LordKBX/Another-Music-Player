@@ -27,6 +27,7 @@
     <sys:String x:Key="BtnAdd10sToolTip">Add 10 seconds on current position in played music</sys:String>
     <sys:String x:Key="BtnParamsToolTip">App Parametters</sys:String>
     <sys:String x:Key="BtnLibToolTip">App Media Base</sys:String>
+    <sys:String x:Key="BtnDebugToolTip">Debug Export Vars</sys:String>
 
     <sys:String x:Key="BtnSub10sText">-10s</sys:String>
     <sys:String x:Key="BtnAdd10sText">+10s</sys:String>
@@ -42,7 +43,7 @@
     <sys:String x:Key="ParamsLanguageVals_EN">English</sys:String>
     <sys:String x:Key="ParamsLanguageVals_FR">Français</sys:String>
 
-    <sys:String x:Key="ParamsConvDisclaimerLabel">Warning; Native audio support for the folowing formats only: mp3,wma,flac</sys:String>
+    <sys:String x:Key="ParamsConvDisclaimerLabel">Warning; Native audio support for the folowing formats only: aif,mp3(incomplete support),wav,wma</sys:String>
     
     <sys:String x:Key="ParamsConvKeepLabel">Convertion:</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_TEMP">On the Fly</sys:String>
@@ -54,6 +55,10 @@
     <sys:String x:Key="ParamsConvQualityVals_192">Hight (192Kbits/s)</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_256">Very-Hight (256Kbits/s)</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_320">Extreme (320Kbits/s)</sys:String>
+
+    <sys:String x:Key="ParamsMemoryUsageLabel">Memory Usage:</sys:String>
+    <sys:String x:Key="ParamsMemoryUsage0">Low</sys:String>
+    <sys:String x:Key="ParamsMemoryUsage1">Full</sys:String>
 
     <sys:String x:Key="ParamsLibFolderLabel">Music Library Folder</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorTitle">Select a Directory</sys:String>

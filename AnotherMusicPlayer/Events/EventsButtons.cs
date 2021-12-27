@@ -7,11 +7,13 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Windows.Input;
 
+using Newtonsoft.Json;
+using System.ComponentModel;
+
 namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window
     {
-
         /// <summary> Callback Event Click on button Open File(s) </summary>
         private void Open_Button_Click(object sender, RoutedEventArgs e)
         {
@@ -19,7 +21,7 @@ namespace AnotherMusicPlayer
             win1.IsEnabled = false;
             bool DoConv = false;
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-            openFileDlg.Filter = "Audio (*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA)|*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA";
+            openFileDlg.Filter = "Audio (*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA)|*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA";
             openFileDlg.Multiselect = true;
             openFileDlg.Title = "File Selection";
             Nullable<bool> result = openFileDlg.ShowDialog();
@@ -46,6 +48,7 @@ namespace AnotherMusicPlayer
         {
             player.StopAll();
             PlayList.Clear();
+            player.ClearCurrentFile();
             PlayListIndex = -1;
             UpdateRecordedQueue();
             Settings.LastPlaylistIndex = -1;
@@ -55,6 +58,7 @@ namespace AnotherMusicPlayer
             PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = "";
             PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = "";
             FileCover.Source = Bimage("CoverImg");
+            Debug.WriteLine(JsonConvert.SerializeObject(PlayList));
         }
 
         /// <summary> Callback Event Click on Shuffle button </summary>
@@ -92,5 +96,40 @@ namespace AnotherMusicPlayer
             Settings.SaveSettingsAsync();
         }
 
+        /// <summary> Callback Event Click on Debug Export Vars </summary>
+        private void Debug_Button_Click(object sender, RoutedEventArgs e)
+        {
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            jss.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            jss.Formatting = Formatting.Indented;
+            jss.MaxDepth = 1;
+            Debug.WriteLine("----------------------                        -----------------------");
+            Debug.WriteLine("----------------------// Debug_Button_Click //-----------------------");
+            Debug.WriteLine("----------------------                        -----------------------");
+            File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayList.txt", JsonConvert.SerializeObject(PlayList, jss), System.Text.Encoding.UTF8);
+            File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListIndex.txt", ""+PlayListIndex, System.Text.Encoding.UTF8);
+            string output = "[" ;
+            foreach (PlayListViewItem item in this.PlayListView.ItemsSource)
+            {
+                output += PrintPropreties(item);
+            }
+            output += "]";
+            File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListView.txt", "" + output, System.Text.Encoding.UTF8);
+        }
+
+        private string PrintPropreties(object obj)
+        {
+            JsonSerializerSettings jss = new JsonSerializerSettings();
+            jss.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+            jss.Formatting = Formatting.Indented;
+            jss.MaxDepth = 1;
+            string ouput = "\t{";
+            foreach (PropertyDescriptor descriptor in TypeDescriptor.GetProperties(obj))
+            {
+                ouput += "\t\"" + descriptor.Name + "\" : " + JsonConvert.SerializeObject(descriptor.GetValue(obj), jss) + ",";
+            }
+            ouput += "\t},";
+            return ouput;
+        }
     }
 }

@@ -14,7 +14,6 @@ using System.Windows.Documents;
 
 namespace AnotherMusicPlayer
 {
-    /// <summary> Interaction logic for MainWindow.xaml </summary>
     public partial class MainWindow : Window
     {
         /// <summary> Object music player </summary>
@@ -56,6 +55,11 @@ namespace AnotherMusicPlayer
             this.Resources.Clear();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
+
+            PlayListIndex = Settings.LastPlaylistIndex;
+
+            Debug.WriteLine("LastPlaylistIndex: " + Settings.LastPlaylistIndex);
+
             this.PreviewKeyDown += (s, e) => {  // intercept keyboard event on UI to prevent selected button activation via keyboard
                 if (e.OriginalSource.ToString().StartsWith("System.Windows.Controls.TextBox")) { return; }
                 double ntime = UnixTimestamp();
@@ -179,21 +183,28 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window size change </summary>
         private void Win1_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (win1.ActualWidth > 800 && win1.ActualHeight > 460)
+            if (Settings.MemoryUsage == 1)
             {
-                if (WindowWidthMode != 250)
+                if (win1.ActualWidth > 800 && win1.ActualHeight > 460)
                 {
-                    Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)250);
-                    WindowWidthMode = FileCover.Width = FileCover.Height = 250;
+                    if (WindowWidthMode != 250)
+                    {
+                        Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)250);
+                        WindowWidthMode = FileCover.Width = FileCover.Height = 250;
+                    }
+                }
+                else
+                {
+                    if (WindowWidthMode != 150)
+                    {
+                        Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)150);
+                        WindowWidthMode = FileCover.Width = FileCover.Height = 150;
+                    }
                 }
             }
-            else
-            {
-                if (WindowWidthMode != 150)
-                {
-                    Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)150);
-                    WindowWidthMode = FileCover.Width = FileCover.Height = 150;
-                }
+            else {
+                Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)150);
+                WindowWidthMode = FileCover.Width = FileCover.Height = 150;
             }
             Grid1.ColumnDefinitions[1].Width = new GridLength(TabControler.ActualWidth - WindowWidthMode - 5);
 
@@ -245,7 +256,7 @@ namespace AnotherMusicPlayer
                 }
             }
 
-            if (PlayListIndex < 0) { PlayListIndex = 0; }
+            if (PlayListIndex < 0) { PlayListIndex = 0; Load = 0; }
             if (DoPlay == true) {
                 if (player.IsPlaying()) { player.StopAll(); }
                 FileOpen(PlayList[CountStart][(PlayList[CountStart][1] == null) ? 0 : 1]);
@@ -299,8 +310,9 @@ namespace AnotherMusicPlayer
                 PlayListIndex = NewPosition;
                 Settings.LastPlaylistIndex = PlayListIndex;
                 Settings.SaveSettings();
-                Debug.WriteLine("LastPlaylistIndex saved");
+                Debug.WriteLine("LastPlaylistIndex saved: "+ Settings.LastPlaylistIndex);
                 FileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
+
             }
         }
 
@@ -408,10 +420,11 @@ namespace AnotherMusicPlayer
 
                 FileCover.Source = null;
                 FileCover.ToolTip = null;
-                System.Windows.Media.Imaging.BitmapImage bi = player.MediaPicture(item.Path);
+                System.Windows.Media.Imaging.BitmapImage bi = (Settings.MemoryUsage == 1)?player.MediaPicture(item.Path, true, 400, 400): player.MediaPicture(item.Path, true, 50, 50);
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
+                player.MediaPictureClearCache();
 
-                if (bi != null && (bi.Width > 250 || bi.Height > 250))
+                if (bi != null && Settings.MemoryUsage == 1)
                 {
                     WrapPanel p = new WrapPanel() { };
                     Image im = new Image() { MaxHeight = 400, MaxWidth = 400, Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };

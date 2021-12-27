@@ -98,6 +98,7 @@ namespace AnotherMusicPlayer
                         LibraryFiltersGenreList.SelectedIndex = 0;
                         LibraryFiltersGenreList.Items.Clear();
                         LibraryFiltersSearchBox.Text = "";
+                        DatabaseQuery("DELETE FROM folders");
                         DatabaseQuery("DELETE FROM files");
                         DatabaseQuery("DELETE FROM playlists");
                         DatabaseQuery("DELETE FROM playlistsItems");
@@ -220,7 +221,6 @@ namespace AnotherMusicPlayer
                     }
 
                     DatabaseFiles = DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
-
 
                     Dispatcher.BeginInvoke(new Action(() => {
                         if (DoClean || LibraryFiltersGenreList.Items.Count == 0)
@@ -606,10 +606,12 @@ namespace AnotherMusicPlayer
 
                     System.Windows.Controls.Image im = new System.Windows.Controls.Image()
                     {
-                        Source = (((nocover)?null:player.MediaPicture(fil, true, 150, 150, false)) ?? defaultCover),
+                        Source = (Settings.MemoryUsage == 1)?
+                            (((nocover)?null:player.MediaPicture(fil, true, 150, 150, false)) ?? defaultCover):
+                            (((nocover) ? null : player.MediaPicture(fil, true, 50, 50, false)) ?? defaultCover),
                         VerticalAlignment = VerticalAlignment.Top, Style = (Style)Resources.MergedDictionaries[0]["HQImg"]
                     };
-                    if (im.Source != Bimage("CoverImg"))
+                    if (im.Source != Bimage("CoverImg") && Settings.MemoryUsage == 1)
                     {
                         WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
                         Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
@@ -690,7 +692,9 @@ namespace AnotherMusicPlayer
             BitmapImage bi = player.MediaPicture(path);
 
             Image image = new Image();
-            if (type == "folder") { image.Source = Bimage("OpenButtonImg"); }
+            if (type == "folder") { 
+                image.Source = Bimage("OpenButtonImg"); 
+            }
             if (type == "file") {
                 image.Source = (bi ?? Bimage("CoverImg"));
 
@@ -699,22 +703,25 @@ namespace AnotherMusicPlayer
                 if (it.Performers != null && it.Performers.Trim() != "") { Artists += it.Performers; }
                 if (it.Performers != null && it.Performers.Trim() != "") { if (Artists != null && Artists != "") { Artists += ", "; };  Artists += it.Composers; }
 
-                WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
-                Image imp = new Image() {Style=(Style)Resources.MergedDictionaries[0]["HQImg"] };
-                imp.Source = (bi ?? Bimage("CoverImg"));
-                imp.MaxHeight = imp.MaxWidth = 300;
-                p.Children.Add(imp);
-                p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Title2") + " " + ((it != null) ? (it.Name ?? name) : name) });
-                if (it.Album != null && it.Album.Trim() != "")
-                { 
-                    p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Album2") + " " + it.Album });
+                if(Settings.MemoryUsage == 1)
+                {
+                    WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
+                    Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
+                    imp.Source = (bi ?? Bimage("CoverImg"));
+                    imp.MaxHeight = imp.MaxWidth = 300;
+                    p.Children.Add(imp);
+                    p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Title2") + " " + ((it != null) ? (it.Name ?? name) : name) });
+                    if (it.Album != null && it.Album.Trim() != "")
+                    {
+                        p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Album2") + " " + it.Album });
+                    }
+
+                    if (Artists != "") { p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Artist2") + " " + Artists }); }
+                    if (it.Genres != null && it.Genres.Trim() != "") { p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Genres2") + " " + it.Genres }); }
+                    p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Duration2") + " " + it.DurationS });
+
+                    bt.ToolTip = p;
                 }
-
-                if (Artists != "") { p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Artist2") + " " + Artists }); }
-                if (it.Genres != null && it.Genres.Trim() != "") { p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Genres2") + " " + it.Genres }); }
-                p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Duration2") + " " + it.DurationS });
-
-                bt.ToolTip = p;
             }
             image.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemImg"];
             gr.Children.Add(image);

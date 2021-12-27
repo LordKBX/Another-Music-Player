@@ -17,11 +17,18 @@
     <RepositoryType>GitHub</RepositoryType>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <PackageProjectUrl>https://github.com/LordKBX/Another-Music-Player</PackageProjectUrl>
+    <PackageIcon>album_large.png</PackageIcon>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <ApplicationIcon>icons\icon_large.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="play.png" />
     <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+    <None Include="icons\album_large.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
@@ -47,11 +54,11 @@
 
   <ItemGroup>
     <PackageReference Include="Advexp.Settings.Local" Version="2.7.0" />
-    <PackageReference Include="NAudio" Version="1.10.0" />
+    <PackageReference Include="NAudio" Version="2.0.0-beta1" />
     <PackageReference Include="NAudio.Flac.Port" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.112.2" />
-    <PackageReference Include="System.Drawing.Common" Version="5.0.0-preview.3.20214.6" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.113.7" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
   </ItemGroup>
 

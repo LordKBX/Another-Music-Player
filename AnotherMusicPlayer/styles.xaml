@@ -62,12 +62,13 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-    
+
     <Style x:Key="BtnStyle" TargetType="{x:Type Button}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Margin" Value="5"/>
-        
+
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="Button">
@@ -252,7 +253,7 @@
         <Setter Property="MaxHeight" Value="53"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="RenderOptions.BitmapScalingMode" Value="HighQuality"/>
+        <Setter Property="RenderOptions.BitmapScalingMode" Value="LowQuality"/>
     </Style>
 
     <Style x:Key="LibNavigationContentItemViewBox" TargetType="{x:Type Viewbox}">

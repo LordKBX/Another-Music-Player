@@ -80,11 +80,15 @@
                         </Grid>
                     </Border>
                     <Grid x:Name="Grid3" Grid.Row="0" Grid.Column="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="177*"/>
+                            <ColumnDefinition Width="5*"/>
+                        </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="20px"/>
                             <RowDefinition Height="100*"/>
                         </Grid.RowDefinitions>
-                        <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1,1,1,0" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="0,0,1,0">
+                        <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1,1,1,0" Margin="0,0,1,0" Grid.ColumnSpan="2">
                             <TextBlock Foreground="White" Padding="5,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left">
                                 <TextBlock>Pistes à venir:</TextBlock><Run Text=" "/>
                                 <TextBlock x:Name="Label_PlayListDisplayedNBTracks" /><TextBlock>, Total:</TextBlock><Run Text=" "/>
@@ -92,7 +96,7 @@
                                 <TextBlock x:Name="Label_PlayListIndex" />
                             </TextBlock>
                         </Border>
-                        <ListView x:Name="PlayListView" Grid.Row="1" SelectionMode="Single" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlayListViewItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight" Margin="0,0,1,0">
+                        <ListView x:Name="PlayListView" Grid.Row="1" SelectionMode="Single" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlayListViewItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight" Margin="0,0,1,0" Grid.ColumnSpan="2">
                             <ListView.View>
                                 <GridView AllowsColumnReorder="False">
                                     <GridViewColumn x:Name="PlayListViewC1" Width="25" Header="" DisplayMemberBinding="{Binding Selected}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
@@ -149,11 +153,11 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Filtre" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
                         <ComboBox Grid.Column="1" x:Name="LibraryFiltersMode">
-                            <ComboBoxItem Tag="" Content="Aucun" Selector.IsSelected="True"/>
-                            <ComboBoxItem Tag="Name" Content="Nom"/>
-                            <ComboBoxItem Tag="Artist" Content="Artist"/>
-                            <ComboBoxItem Tag="Album" Content="Album"/>
-                            <ComboBoxItem Tag="Genre" Content="Genre"/>
+                            <ComboBoxItem x:Name="LibraryFiltersMode_none" Tag="" Content="Aucun" Selector.IsSelected="True"/>
+                            <ComboBoxItem x:Name="LibraryFiltersMode_name" Tag="Name" Content="Nom"/>
+                            <ComboBoxItem x:Name="LibraryFiltersMode_artist" Tag="Artist" Content="Artist"/>
+                            <ComboBoxItem x:Name="LibraryFiltersMode_album" Tag="Album" Content="Album"/>
+                            <ComboBoxItem x:Name="LibraryFiltersMode_genre" Tag="Genre" Content="Genre"/>
                         </ComboBox>
                         <ComboBox Grid.Column="2" x:Name="LibraryFiltersGenreList" Visibility="Hidden"></ComboBox>
                         <TextBox Grid.Column="3" x:Name="LibraryFiltersGenreSearchBox" Visibility="Hidden"/>
@@ -224,7 +228,7 @@
                 <ScrollViewer Margin="0,0,4,0" VerticalScrollBarVisibility="Auto">
                     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Background="#FFE2DBDB">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100px"/>
+                            <ColumnDefinition Width="100"/>
                             <ColumnDefinition Width="200px"/>
                             <ColumnDefinition Width="100*"/>
                         </Grid.ColumnDefinitions>
@@ -233,6 +237,8 @@
                             <RowDefinition Height="10"/>
                             <RowDefinition Height="20"/>
                             <RowDefinition Height="25"/>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition Height="10"/>
                             <RowDefinition Height="25"/>
                             <RowDefinition Height="10"/>
                             <RowDefinition Height="20"/>
@@ -244,54 +250,59 @@
                             <RowDefinition Height="100*"/>
                         </Grid.RowDefinitions>
                         <Label Content="{DynamicResource ParamsLanguageLabel}" Grid.Column="0" Grid.Row="0" VerticalAlignment="Center"/>
-                        <ComboBox  x:Name="ParamsLanguageVals" Grid.Column="1" Grid.Row="0" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                            <ComboBoxItem Tag="en-US" Content="{DynamicResource ParamsLanguageVals_EN}" IsSelected="False"/>
-                            <ComboBoxItem Tag="fr-FR" Content="{DynamicResource ParamsLanguageVals_FR}" IsSelected="True"/>
+                        <ComboBox x:Name="ParamsLanguageVals" Grid.Column="1" Grid.Row="0" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ComboBoxItem x:Name="LG_en" Tag="en-US" Content="{DynamicResource ParamsLanguageVals_EN}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="LG_fr" Tag="fr-FR" Content="{DynamicResource ParamsLanguageVals_FR}" IsSelected="True"/>
                         </ComboBox>
                         <AccessText Text="{DynamicResource ParamsConvDisclaimerLabel}" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="10,0,0,0"/>
                         <Label Content="{DynamicResource ParamsConvKeepLabel}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center"/>
-                        <ComboBox  x:Name="ParamsConvKeepVals" Grid.Column="1" Grid.Row="3" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                            <ComboBoxItem Tag="1" Content="{DynamicResource ParamsConvKeepVals_TEMP}" IsSelected="True"/>
-                            <ComboBoxItem Tag="2" Content="{DynamicResource ParamsConvKeepVals_REPLACE}" IsSelected="False"/>
+                        <ComboBox x:Name="ParamsConvKeepVals" Grid.Column="1" Grid.Row="3" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ComboBoxItem x:Name="CT1" Tag="1" Content="{DynamicResource ParamsConvKeepVals_TEMP}" IsSelected="True"/>
+                            <ComboBoxItem x:Name="CT2" Tag="2" Content="{DynamicResource ParamsConvKeepVals_REPLACE}" IsSelected="False"/>
                         </ComboBox>
                         <Label Content="{DynamicResource ParamsConvQualityLabel}" Grid.Column="0" Grid.Row="4" VerticalAlignment="Center"/>
-                        <ComboBox  x:Name="ParamsConvQualityVals" Grid.Column="1" Grid.Row="4" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                            <ComboBoxItem Tag="96" Content="{DynamicResource ParamsConvQualityVals_96}" IsSelected="False"/>
-                            <ComboBoxItem Tag="128" Content="{DynamicResource ParamsConvQualityVals_128}" IsSelected="False"/>
-                            <ComboBoxItem Tag="192" Content="{DynamicResource ParamsConvQualityVals_192}" IsSelected="False"/>
-                            <ComboBoxItem Tag="256" Content="{DynamicResource ParamsConvQualityVals_256}" IsSelected="False"/>
-                            <ComboBoxItem Tag="320" Content="{DynamicResource ParamsConvQualityVals_320}" IsSelected="False"/>
+                        <ComboBox x:Name="ParamsConvQualityVals" Grid.Column="1" Grid.Row="4" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ComboBoxItem x:Name="Q96" Tag="96" Content="{DynamicResource ParamsConvQualityVals_96}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="Q128" Tag="128" Content="{DynamicResource ParamsConvQualityVals_128}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="Q192" Tag="192" Content="{DynamicResource ParamsConvQualityVals_192}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="Q256" Tag="256" Content="{DynamicResource ParamsConvQualityVals_256}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="Q320" Tag="320" Content="{DynamicResource ParamsConvQualityVals_320}" IsSelected="False"/>
+                        </ComboBox>
+                        <Label Content="{DynamicResource ParamsMemoryUsageLabel}" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center"/>
+                        <ComboBox x:Name="ParamsMemoryUsage" Grid.Column="1" Grid.Row="6" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ComboBoxItem x:Name="MU0" Tag="0" Content="{DynamicResource ParamsMemoryUsage0}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="MU1" Tag="1" Content="{DynamicResource ParamsMemoryUsage1}" IsSelected="True"/>
                         </ComboBox>
 
-                        <AccessText Text="{DynamicResource ParamsLibFolderLabel}" Grid.Column="0" Grid.Row="6" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
-                        <TextBox x:Name="ParamsLibFolderTextBox" Grid.Column="0" Grid.Row="7" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
-                        <Button x:Name="ParamsLibFolderBtn" Grid.Column="2" Grid.Row="7" Content=" ... " HorizontalAlignment="Left" Width="30" Click="ParamsLibFolderBtn_Click"/>
+                        <AccessText Text="{DynamicResource ParamsLibFolderLabel}" Grid.Column="0" Grid.Row="8" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
+                        <TextBox x:Name="ParamsLibFolderTextBox" Grid.Column="0" Grid.Row="9" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="10,0,0,0"/>
+                        <Button x:Name="ParamsLibFolderBtn" Grid.Column="2" Grid.Row="9" Content=" ... " HorizontalAlignment="Left" Width="30" Click="ParamsLibFolderBtn_Click"/>
 
-                         
-                        <AccessText Text="{DynamicResource ParamsEqualizerLabel}" Grid.Column="0" Grid.Row="9" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
-                        <ComboBox  x:Name="ParamsEqualizerPresets" Grid.Column="1" Grid.Row="9" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
-                            <ComboBoxItem Tag="Perso" Content="{DynamicResource ParamsEqualizerPresets_Perso}" IsSelected="True"/>
-                            <ComboBoxItem Tag="Flat" Content="{DynamicResource ParamsEqualizerPresets_Flat}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Classic" Content="{DynamicResource ParamsEqualizerPresets_Classic}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Club" Content="{DynamicResource ParamsEqualizerPresets_Club}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Dance" Content="{DynamicResource ParamsEqualizerPresets_Dance}" IsSelected="False"/>
-                            <ComboBoxItem Tag="FullBass" Content="{DynamicResource ParamsEqualizerPresets_FullBass}" IsSelected="False"/>
-                            <ComboBoxItem Tag="FullBassTreble" Content="{DynamicResource ParamsEqualizerPresets_FullBassTreble}" IsSelected="False"/>
-                            <ComboBoxItem Tag="FullTreble" Content="{DynamicResource ParamsEqualizerPresets_FullTreble}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Headphones" Content="{DynamicResource ParamsEqualizerPresets_Headphones}" IsSelected="False"/>
-                            <ComboBoxItem Tag="LargeHall" Content="{DynamicResource ParamsEqualizerPresets_LargeHall}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Live" Content="{DynamicResource ParamsEqualizerPresets_Live}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Party" Content="{DynamicResource ParamsEqualizerPresets_Party}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Pop" Content="{DynamicResource ParamsEqualizerPresets_Pop}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Reggae" Content="{DynamicResource ParamsEqualizerPresets_Reggae}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Rock" Content="{DynamicResource ParamsEqualizerPresets_Rock}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Ska" Content="{DynamicResource ParamsEqualizerPresets_Ska}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Soft" Content="{DynamicResource ParamsEqualizerPresets_Soft}" IsSelected="False"/>
-                            <ComboBoxItem Tag="SoftRock" Content="{DynamicResource ParamsEqualizerPresets_SoftRock}" IsSelected="False"/>
-                            <ComboBoxItem Tag="Techno" Content="{DynamicResource ParamsEqualizerPresets_Techno}" IsSelected="False"/>
+
+                        <AccessText Text="{DynamicResource ParamsEqualizerLabel}" Grid.Column="0" Grid.Row="11" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
+                        <ComboBox  x:Name="ParamsEqualizerPresets" Grid.Column="1" Grid.Row="11" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
+                            <ComboBoxItem x:Name="EQ_perso" Tag="Perso" Content="{DynamicResource ParamsEqualizerPresets_Perso}" IsSelected="True"/>
+                            <ComboBoxItem x:Name="EQ_flat" Tag="Flat" Content="{DynamicResource ParamsEqualizerPresets_Flat}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_classic" Tag="Classic" Content="{DynamicResource ParamsEqualizerPresets_Classic}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_club" Tag="Club" Content="{DynamicResource ParamsEqualizerPresets_Club}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_dance" Tag="Dance" Content="{DynamicResource ParamsEqualizerPresets_Dance}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_fullbass" Tag="FullBass" Content="{DynamicResource ParamsEqualizerPresets_FullBass}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_fullbasstreble" Tag="FullBassTreble" Content="{DynamicResource ParamsEqualizerPresets_FullBassTreble}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_fulltreble" Tag="FullTreble" Content="{DynamicResource ParamsEqualizerPresets_FullTreble}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_headphones" Tag="Headphones" Content="{DynamicResource ParamsEqualizerPresets_Headphones}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_largehall" Tag="LargeHall" Content="{DynamicResource ParamsEqualizerPresets_LargeHall}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_live" Tag="Live" Content="{DynamicResource ParamsEqualizerPresets_Live}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_party" Tag="Party" Content="{DynamicResource ParamsEqualizerPresets_Party}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_pop" Tag="Pop" Content="{DynamicResource ParamsEqualizerPresets_Pop}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_reggae" Tag="Reggae" Content="{DynamicResource ParamsEqualizerPresets_Reggae}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_rock" Tag="Rock" Content="{DynamicResource ParamsEqualizerPresets_Rock}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_ska" Tag="Ska" Content="{DynamicResource ParamsEqualizerPresets_Ska}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_soft" Tag="Soft" Content="{DynamicResource ParamsEqualizerPresets_Soft}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_softrock" Tag="SoftRock" Content="{DynamicResource ParamsEqualizerPresets_SoftRock}" IsSelected="False"/>
+                            <ComboBoxItem x:Name="EQ_techno" Tag="Techno" Content="{DynamicResource ParamsEqualizerPresets_Techno}" IsSelected="False"/>
                         </ComboBox>
-                        <Button x:Name="EqualizerReset" Content="{DynamicResource ParamsEqualizerResetLabel}" Grid.Column="2" Grid.Row="9" VerticalAlignment="Center" Margin="12,0,0,0" Width="120" HorizontalAlignment="Left"/>
-                        <Grid Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="#FFB9AFAF" Height="150">
+                        <Button x:Name="EqualizerReset" Content="{DynamicResource ParamsEqualizerResetLabel}" Grid.Column="2" Grid.Row="11" VerticalAlignment="Center" Margin="12,0,0,0" Width="120" HorizontalAlignment="Left"/>
+                        <Grid Grid.Column="0" Grid.Row="13" Grid.ColumnSpan="3" HorizontalAlignment="Center" Background="#FFB9AFAF" Height="150">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="10*"/>
                                 <ColumnDefinition Width="10*"/>
@@ -346,7 +357,7 @@
                 <RowDefinition Height="36"/>
                 <RowDefinition Height="36"/>
                 <RowDefinition Height="36"/>
-                <RowDefinition Height="10"/>
+                <RowDefinition Height="36"/>
                 <RowDefinition Height="100*"/>
                 <!-- <RowDefinition Height="36"/> -->
             </Grid.RowDefinitions>
@@ -356,8 +367,10 @@
             <Button Grid.Row="2" x:Name="BtnPlayPause" Margin="2,0,2,0" ToolTip="{DynamicResource BtnPlayPauseToolTip}" Click="Play_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="3" x:Name="BtnNext" Margin="2,0,2,0" ToolTip="{DynamicResource BtnNexToolTipt}" Click="Next_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="4" x:Name="BtnRepeat" Margin="2,0,2,0" ToolTip="{DynamicResource BtnRepeatToolTip}" Click="BtnRepeat_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
-            <Button Grid.Row="5" x:Name="BtnShuffle" Margin="2,0,2,0" ToolTip="{DynamicResource BtnShuffleToolTip}" Click="BtnShuffle_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
+            <Button Grid.Row="5" x:Name="BtnShuffle" Margin="2,0,2,0" ToolTip="{DynamicResource BtnShuffleToolTip}" Click="BtnShuffle_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand"/>
             <Button Grid.Row="6" x:Name="BtnClearList" Margin="2,0,2,0" ToolTip="{DynamicResource BtnClearListToolTip}" Click="Clear_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
+            
+            <Button Grid.Row="7" x:Name="BtnDebug" Content="Dbg" Foreground="White" Margin="2,0,2,0" ToolTip="{DynamicResource BtnDebugToolTip}" Click="Debug_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
 
             <AccessText x:Name="DisplayPlayListInfo" Grid.Row="8" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="0,0,0,0"/>
             <!-- 

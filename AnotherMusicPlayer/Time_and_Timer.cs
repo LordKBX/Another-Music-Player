@@ -126,6 +126,7 @@ namespace AnotherMusicPlayer
                             }
                         }
                     }
+
                     //Debug.WriteLine(JsonConvert.SerializeObject(tmp));
                     try { player.MediaPicture(PlayList[PlayListIndex + 1][0]); } catch { try { player.MediaPicture(PlayList[0][0]); } catch { } }
                     PlayListView.ItemsSource = tmp;
@@ -134,6 +135,8 @@ namespace AnotherMusicPlayer
                     Label_PlayListDisplayedNBTracks.Text = "" + tmp.Count;
                     Label_PlayListNBTracks.Text = "" + PlayList.Count;
                     Label_PlayListIndex.Text = "" + ( PlayListIndex + 1);
+
+                    previous_items.Clear();
                 }
 
                 // Garbage Collector périodic summon

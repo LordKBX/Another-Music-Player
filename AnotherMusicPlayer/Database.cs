@@ -63,7 +63,15 @@ namespace AnotherMusicPlayer
                 DatabaseConnection.Open();
                 //DatabaseTansactionStart();
 
+                DatabaseDetectOrCreateTable("folders", "CREATE TABLE folders("
+                    + "Id TEXT, "
+                    + "ParentId TEXT, "
+                    + "Name TEXT, "
+                    + "Path TEXT"
+                    + ")");
+
                 DatabaseDetectOrCreateTable("files", "CREATE TABLE files("
+                    + "Folder TEXT, "
                     + "Path TEXT, "
                     + "Name TEXT, "
                     + "Performers TEXT, "

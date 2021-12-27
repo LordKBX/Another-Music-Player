@@ -1,4 +1,7 @@
-﻿using System;
+﻿//#define NAudio1
+#define NAudio2
+
+using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,9 @@ using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
 using NAudio;
-using NAudio.Flac;
+#if NAudio1
+    using NAudio.Flac;
+#endif
 using NAudio.Wave;
 using TagLib;
 using System.Diagnostics;
@@ -50,36 +55,43 @@ namespace AnotherMusicPlayer
         /// <summary> Maximum gain on an equalizer band </summary>
         public readonly int MaximumGain = 20;
 
-    /// <summary> Constructor </summary>
-    public Player(MainWindow parent = null) {
-            this.parent = parent;
-            ThreadList = new Dictionary<string, Thread>();
-            AudioList = new Dictionary<string, object>();
-            PlayStatus = new Dictionary<string, int>();
-            PlayNewPositions = new Dictionary<string, long>();
+        /// <summary> Constructor </summary>
+        public Player(MainWindow parent = null) {
+                this.parent = parent;
+                ThreadList = new Dictionary<string, Thread>();
+                AudioList = new Dictionary<string, object>();
+                PlayStatus = new Dictionary<string, int>();
+                PlayNewPositions = new Dictionary<string, long>();
 
-            var name = "PATH";
-            var scope = EnvironmentVariableTarget.Process; // or User
-            var oldValue = Environment.GetEnvironmentVariable(name, scope);
-            var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
-            Environment.SetEnvironmentVariable(name, newValue, scope);
+                var name = "PATH";
+                var scope = EnvironmentVariableTarget.Process; // or User
+                var oldValue = Environment.GetEnvironmentVariable(name, scope);
+                var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
+                Environment.SetEnvironmentVariable(name, newValue, scope);
 
-            //--- NEW ---
-            bands = new EqualizerBand[]
-                    {
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
-                        new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
-                    };
+                //--- NEW ---
+                bands = new EqualizerBand[]
+                        {
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
+                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
+                        };
+            }
+
+
+        /// <summary> clear current file value </summary>
+        public void ClearCurrentFile()
+        {
+            CurrentFile = null;
         }
-
+        
         /// <summary> update an equalizer band Gain value </summary>
         public void UpdateEqualize(int Band, float Gain) {
             try { bands[Band].Gain = Gain; } catch { }
@@ -93,7 +105,11 @@ namespace AnotherMusicPlayer
         /// <summary> Get status if repeat file playback active </summary>
         public bool IsRepeat() { return PlayRepeat; }
         /// <summary> Give the List of native accepted file extentions </summary>
-        public List<string> AcceptedExtentions() { return new List<string> { ".MP3",".mp3",".WMA",".wma",".FLAC",".flac" }; }
+        #if NAudio1
+                public string[] AcceptedExtentions = new string[] { ".AIFF", ".aiff", ".FLAC", ".flac",".MP3",".mp3",".WMA",".wma" };
+        #else
+                public string[] AcceptedExtentions = new string[] { ".AIFF", ".aiff", ".MP3", ".mp3", ".WMA", ".wma" };
+        #endif
 
         private int ConvCount = 0;
         /// <summary> Public interface for file convertion </summary>
@@ -195,10 +211,11 @@ namespace AnotherMusicPlayer
                 {
                     if (System.IO.File.Exists(FilePath))
                     {
-                        foreach (string ext in AcceptedExtentions())
+                        foreach (string ext in AcceptedExtentions)
                         {
                             if (FilePath.EndsWith(ext))
                             {
+#if NAudio1
                                 if (FilePath.EndsWith(".flac"))
                                 {
                                     FlacReader fir = new FlacReader(FilePath);
@@ -211,6 +228,11 @@ namespace AnotherMusicPlayer
                                     item.Duration = (long)fir.TotalTime.TotalMilliseconds;
                                     fir.Dispose();
                                 }
+#else
+                                AudioFileReader fir = new AudioFileReader(FilePath);
+                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
+                                fir.Dispose();
+#endif
                                 item.DurationS = MainWindow.displayTime(item.Duration);
                             }
                         }
@@ -353,13 +375,17 @@ namespace AnotherMusicPlayer
                 {
                     try
                     {
+#if NAudio1
                         if (entry.Key.EndsWith(".flac")) { ((FlacReader)entry.Value).Dispose(); } else { ((AudioFileReader)entry.Value).Dispose(); }
+#else
+                        ((AudioFileReader)entry.Value).Dispose();
+#endif
                     }
                     catch (Exception) { }
                 }
 
                 ThreadList.Clear();
-                //PlayStatus.Clear();
+                PlayStatus.Clear();
                 PlayNewPositions.Clear();
                 AudioList.Clear();
 
@@ -457,9 +483,13 @@ namespace AnotherMusicPlayer
                 if (FilePath == null) { FilePath = CurrentFile; }
                 if (!PlayStatus.ContainsKey(FilePath)) { return -1; }
                 if (position != -1) { PlayNewPositions[FilePath] = position; return position; }
-                else { 
+                else {
+#if NAudio1
                     if (FilePath.EndsWith(".flac")) { return (long)((FlacReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds; }
                     else { return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds ; }
+#else
+                    return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds;
+#endif
                 }
             }
             return -1;
@@ -472,8 +502,12 @@ namespace AnotherMusicPlayer
             {
                 if (FilePath == null) { FilePath = CurrentFile; }
                 if (!AudioList.ContainsKey(FilePath)) { return -1; }
+#if NAudio1
                 if (FilePath.EndsWith(".flac")) { return (long)((FlacReader)AudioList[FilePath]).TotalTime.TotalMilliseconds; }
                 else { return (long)((AudioFileReader)AudioList[FilePath]).TotalTime.TotalMilliseconds; }
+#else
+                return (long)((AudioFileReader)AudioList[FilePath]).TotalTime.TotalMilliseconds;
+#endif
             }
             return -1;
         }
@@ -486,10 +520,13 @@ namespace AnotherMusicPlayer
                 string FilePath = (string)file;
                 object audioFile = null;
                 bool started = false;
+#if NAudio1
                 bool IsFlac = false;
-
                 if (FilePath.EndsWith(".flac")) { audioFile = new FlacReader(FilePath); IsFlac = true; }
                 else { audioFile = new AudioFileReader(FilePath); }
+#else
+                audioFile = new AudioFileReader(FilePath);
+#endif
 
                 /***/ Equalizer equalizer = new Equalizer((ISampleProvider)audioFile, bands);
 
@@ -513,13 +550,19 @@ namespace AnotherMusicPlayer
                         {
                             outputDevice.Play(); CurrentFile = FilePath;
                             MediaLengthChangedEventParams evtp = new MediaLengthChangedEventParams();
+#if NAudio1
                             if (IsFlac) { evtp.duration = (long)( ((FlacReader)audioFile).TotalTime.TotalMilliseconds ); }
                             else { evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds); }
+#else
+                            evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
+#endif
                             LengthChanged(this, evtp);
                             started = true;
                         }
                         if (ret == 2) { outputDevice.Stop(); break; }
-                        if (ret2 != -1) { 
+                        if (ret2 != -1)
+                        {
+#if NAudio1
                             if (IsFlac)
                             {
                                 FlacReader af = ((FlacReader)audioFile);
@@ -532,11 +575,17 @@ namespace AnotherMusicPlayer
                                 long msval = af.WaveFormat.AverageBytesPerSecond / 1000;
                                 ((AudioFileReader)audioFile).Position = ret2 * msval;
                             }
+#else
+                            AudioFileReader af = ((AudioFileReader)audioFile);
+                            long msval = af.WaveFormat.AverageBytesPerSecond / 1000;
+                            ((AudioFileReader)audioFile).Position = ret2 * msval;
+#endif
                             PlayNewPositions[FilePath] = -1;
                         }
                         try
                         {
                             MediaPositionChangedEventParams evt = new MediaPositionChangedEventParams();
+#if NAudio1
                             if (IsFlac) {
                                 FlacReader a = (FlacReader)audioFile;
                                 evt.Position = (long)( a.CurrentTime.TotalMilliseconds ); 
@@ -548,13 +597,22 @@ namespace AnotherMusicPlayer
                                 evt.Position = (long)( a.CurrentTime.TotalMilliseconds );
                                 evt.duration = (long)( a.TotalTime.TotalMilliseconds );
                             }
+#else
+                            AudioFileReader a = (AudioFileReader)audioFile;
+                            evt.Position = (long)(a.CurrentTime.TotalMilliseconds);
+                            evt.duration = (long)(a.TotalTime.TotalMilliseconds);
+#endif
                             PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
                                 if (PlayRepeat)
                                 {
+#if NAudio1
                                     if (IsFlac) { ((FlacReader)audioFile).Position = 0; }
                                     else { ((AudioFileReader)audioFile).Position = 0; }
+#else
+                                    ((AudioFileReader)audioFile).Position = 0;
+#endif
                                     PlayStatus[FilePath] = 1;
                                     outputDevice.Play();
                                 }
@@ -572,14 +630,20 @@ namespace AnotherMusicPlayer
                     try { outputDevice.Stop(); } catch { }
                     outputDevice.Dispose();
                 }
-
+#if NAudio1
                 if (IsFlac) { ((FlacReader)audioFile).Close(); ((FlacReader)audioFile).Dispose(); }
                 else { ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose(); }
-
+#else
+                ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose();
+#endif
                 PlayStatus.Remove(FilePath);
                 PlayNewPositions.Remove(FilePath);
+#if NAudio1
                 if (IsFlac) { ((FlacReader)AudioList[FilePath]).Dispose(); }
                 else { ((AudioFileReader)AudioList[FilePath]).Dispose(); }
+#else
+                ((AudioFileReader)AudioList[FilePath]).Dispose();
+#endif
                 AudioList.Remove(FilePath);
                 ThreadList.Remove(FilePath);
             }

@@ -42,6 +42,9 @@ namespace AnotherMusicPlayer
         [Setting(Name = "Local.ConversionBitRate", Default = 128)]
         public static Int32 ConversionBitRate { get; set; } = 128;
 
+        [Setting(Name = "Local.MemoryUsage", Default = 1)]
+        public static Int32 MemoryUsage { get; set; } = 1;
+
         // Library Section
         [Setting(Name = "Local.LibFolder", Default = null)]
         public static string LibFolder { get; set; } = null;
@@ -117,6 +120,10 @@ namespace AnotherMusicPlayer
             else { ParamsConvKeepVals.SelectedIndex = 1; }
             ParamsConvKeepVals.SelectionChanged += ParamsConvKeepVals_SelectionChanged;
 
+            if (Settings.MemoryUsage == 1) { ParamsMemoryUsage.SelectedIndex = 1; }
+            else { ParamsMemoryUsage.SelectedIndex = 0; }
+            ParamsMemoryUsage.SelectionChanged += ParamsMemoryUsage_SelectionChanged;
+
             Int32 i = 0;
             foreach (ComboBoxItem cb in ParamsConvQualityVals.Items)
             {
@@ -128,6 +135,12 @@ namespace AnotherMusicPlayer
 
             if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }
             else { Settings.LibFolder = null; }
+        }
+
+        private void ParamsMemoryUsage_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.MemoryUsage = ((ComboBox)sender).SelectedIndex;
+            Settings.SaveSettings();
         }
 
         /// <summary> Callback parametter language combobox </summary>
