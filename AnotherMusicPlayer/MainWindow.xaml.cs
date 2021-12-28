@@ -420,15 +420,14 @@ namespace AnotherMusicPlayer
 
                 FileCover.Source = null;
                 FileCover.ToolTip = null;
-                System.Windows.Media.Imaging.BitmapImage bi = (Settings.MemoryUsage == 1)?player.MediaPicture(item.Path, true, 400, 400): player.MediaPicture(item.Path, true, 50, 50);
+                System.Windows.Media.Imaging.BitmapImage bi = player.MediaPicture(item.Path, true, 50, 50);
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
-                player.MediaPictureClearCache();
 
                 if (bi != null && Settings.MemoryUsage == 1)
                 {
                     WrapPanel p = new WrapPanel() { };
                     Image im = new Image() { MaxHeight = 400, MaxWidth = 400, Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
-                    im.Source = bi;
+                    im.Source = player.MediaPicture(item.Path, true, 400, 400);
                     p.Children.Add(im);
                     FileCover.ToolTip = p;
                 }

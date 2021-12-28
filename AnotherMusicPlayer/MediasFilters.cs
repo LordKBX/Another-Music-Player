@@ -77,7 +77,6 @@ namespace AnotherMusicPlayer
                 Dispatcher.BeginInvoke(new Action(() => {
                     LibNavigationContentB.Visibility = Visibility.Collapsed;
                     LibNavigationContent2B.Visibility = Visibility.Visible;
-                    player.MediaPictureClearCache();
                 }));
             };
         }
@@ -192,7 +191,6 @@ namespace AnotherMusicPlayer
             Dispatcher.BeginInvoke(new Action(() => {
                 LibNavigationContentB.Visibility = Visibility.Collapsed;
                 LibNavigationContent2B.Visibility = Visibility.Visible;
-                player.MediaPictureClearCache();
             }));
         }
 

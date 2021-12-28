@@ -244,32 +244,26 @@ namespace AnotherMusicPlayer
             return null;
         }
 
-        Dictionary<string, Dictionary<string, BitmapImage>> MediaPictureStoredCovers = new Dictionary<string, Dictionary<string, BitmapImage>>();
-        public void MediaPictureClearCache() {
-            foreach (KeyValuePair<string, Dictionary<string, BitmapImage>> pict in MediaPictureStoredCovers) {
-                //foreach (KeyValuePair<string, BitmapImage> bip in pict.Value) { bip.Value = null; }
-                pict.Value.Clear();
-            }
-            MediaPictureStoredCovers.Clear(); 
-        }
         /// <summary> Recuperate Media Cover </summary>
         public BitmapImage MediaPicture(string FilePath, bool export = true, int MawWidth = 400, int MawHeight = 400, bool save = true)
         {
+            if (!System.IO.File.Exists(FilePath)) { return null; }
             BitmapImage bitmap = null;
+            string FilePathExt = FilePath + "|" + MawWidth + "x" + MawHeight;
             try
             {
-                if (System.IO.File.Exists(FilePath))
-                {
+                string fileHash = MainWindow.FileHash(FilePath);
+
+                string data = MainWindow.DatabaseGetCover(FilePathExt, fileHash);
+                if (data != null) {
+                    bitmap = BitmapMagic.Base64StringToBitmap(data);
+                }
+                else {
                     TagLib.File tags = TagLib.File.Create(FilePath);
 
                     if (tags.Tag.Pictures.Length > 0)
                     {
                         TagLib.IPicture pic = tags.Tag.Pictures[0];
-                        string hash = System.Text.Encoding.Default.GetString(MD5.Create().ComputeHash(pic.Data.Data));
-                        string key = "" + MawWidth + "x" + MawHeight;
-                        if (MediaPictureStoredCovers.ContainsKey(hash)) {
-                            if (MediaPictureStoredCovers[hash].ContainsKey(key)) { return MediaPictureStoredCovers[hash][key]; }
-                        }
 
                         //Debug.WriteLine("Picture size = " + pic.Data.Data.Length);
                         MemoryStream ms = new MemoryStream(pic.Data.Data);
@@ -284,7 +278,7 @@ namespace AnotherMusicPlayer
                         if (bitmap.PixelWidth > max || bitmap.PixelHeight > max)
                         {
                             double width = bitmap.PixelWidth, height = bitmap.PixelHeight;
-                            if (width > max) {height = (height / width) * max; width = max; }
+                            if (width > max) { height = (height / width) * max; width = max; }
                             if (height > max) { width = (width / height) * max; height = max; }
 
                             ms.Seek(0, SeekOrigin.Begin); System.Drawing.Image im = System.Drawing.Image.FromStream(ms); ms.Close();
@@ -303,13 +297,24 @@ namespace AnotherMusicPlayer
                             ms2.Close();
                         }
                         bitmap.Freeze();
-                        if (MediaPictureStoredCovers.ContainsKey(hash)) { MediaPictureStoredCovers[hash].Add(key, bitmap); }
-                        else { MediaPictureStoredCovers.Add(hash, new Dictionary<string, BitmapImage>() { { key, bitmap } }); }
+
+                        MainWindow.DatabaseSaveCover(FilePathExt, fileHash,
+                            BitmapMagic.BitmapToBase64String(
+                                BitmapMagic.BitmapImage2Bitmap(bitmap),
+                                System.Drawing.Imaging.ImageFormat.Jpeg
+                                )
+                            );
+                    }
+                    else {
+                        char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
+                        string folder = FilePath.Substring(0, FilePath.LastIndexOf(SeparatorChar));
+                        bitmap = (System.IO.File.Exists(folder + SeparatorChar + "Cover.jpg")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.jpg"))
+                            : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : MainWindow.Bimage("CoverImg"));
                     }
                     tags.Dispose();
                 }
             }
-            catch { }
+            catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
             return (export)?bitmap:null;
         }
 

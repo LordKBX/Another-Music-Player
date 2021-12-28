@@ -18,8 +18,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="C:\Users\KevBo\source\repos\MediaPlayer\AnotherMusicPlayer\styles.xaml" />
-                <ResourceDictionary Source="C:\Users\KevBo\source\repos\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
+                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\styles.xaml" />
+                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -369,7 +369,7 @@
             <Button Grid.Row="4" x:Name="BtnRepeat" Margin="2,0,2,0" ToolTip="{DynamicResource BtnRepeatToolTip}" Click="BtnRepeat_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
             <Button Grid.Row="5" x:Name="BtnShuffle" Margin="2,0,2,0" ToolTip="{DynamicResource BtnShuffleToolTip}" Click="BtnShuffle_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality" Cursor="Hand"/>
             <Button Grid.Row="6" x:Name="BtnClearList" Margin="2,0,2,0" ToolTip="{DynamicResource BtnClearListToolTip}" Click="Clear_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
-            
+
             <Button Grid.Row="7" x:Name="BtnDebug" Content="Dbg" Foreground="White" Margin="2,0,2,0" ToolTip="{DynamicResource BtnDebugToolTip}" Click="Debug_Button_Click" Style="{DynamicResource BtnStyle}" RenderOptions.BitmapScalingMode="HighQuality"/>
 
             <AccessText x:Name="DisplayPlayListInfo" Grid.Row="8" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="0,0,0,0"/>

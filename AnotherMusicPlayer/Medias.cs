@@ -82,26 +82,30 @@ namespace AnotherMusicPlayer
                 {
                     MediatequeCacheQuerys.Clear();
                     MediatequeScanning = true;
-                    Dispatcher.BeginInvoke(new Action(() => {
+                    _ = Dispatcher.BeginInvoke(new Action(() => {
                         LibraryFiltersGrid.IsEnabled = false;
                         LibNavigationContent.Children.Clear();
                         MediatequeBuildNavigationScan();
                     }));
                     if (DoClean) {
-                        MediatequeCurrentFolder = null; MediatequeWatcher = null;
-                        MediatequeTotalScanedSize = 0;
-                        MediatequeTotalScanedDuration = 0;
-                        MediatequeTotalScanedFiles = 0;
-                        //DatabaseQuery("DELETE FROM files");
-                        MediatequeScanedFiles = new List<string>();
-                        LibraryFiltersMode.SelectedIndex = 0;
-                        LibraryFiltersGenreList.SelectedIndex = 0;
-                        LibraryFiltersGenreList.Items.Clear();
-                        LibraryFiltersSearchBox.Text = "";
-                        DatabaseQuery("DELETE FROM folders");
-                        DatabaseQuery("DELETE FROM files");
-                        DatabaseQuery("DELETE FROM playlists");
-                        DatabaseQuery("DELETE FROM playlistsItems");
+                        _ = Dispatcher.BeginInvoke(new Action(() => {
+                            MediatequeCurrentFolder = null; MediatequeWatcher = null;
+                            MediatequeTotalScanedSize = 0;
+                            MediatequeTotalScanedDuration = 0;
+                            MediatequeTotalScanedFiles = 0;
+                            //DatabaseQuery("DELETE FROM files");
+                            MediatequeScanedFiles = new List<string>();
+                            LibraryFiltersMode.SelectedIndex = 0;
+                            LibraryFiltersGenreList.SelectedIndex = 0;
+                            try { LibraryFiltersGenreList.Items.Clear(); }
+                            catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+                            LibraryFiltersSearchBox.Text = "";
+                            DatabaseQuery("DELETE FROM covers");
+                            DatabaseQuery("DELETE FROM folders");
+                            DatabaseQuery("DELETE FROM files");
+                            DatabaseQuery("DELETE FROM playlists");
+                            DatabaseQuery("DELETE FROM playlistsItems");
+                        }));
                     }
                     DatabaseFiles = DatabaseQuery("SELECT * FROM files ORDER BY Path ASC","Path");
                     //Debug.WriteLine(JsonConvert.SerializeObject(DatabaseFiles));
@@ -206,7 +210,7 @@ namespace AnotherMusicPlayer
                             MediatequeCacheQuerys.Clear();
                         }
 
-                        Dispatcher.BeginInvoke(new Action(() => {
+                        _ = Dispatcher.BeginInvoke(new Action(() => {
                             MediatequeBuildNavigationScan();
                         }));
                     }
@@ -222,7 +226,7 @@ namespace AnotherMusicPlayer
 
                     DatabaseFiles = DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
 
-                    Dispatcher.BeginInvoke(new Action(() => {
+                    _ = Dispatcher.BeginInvoke(new Action(() => {
                         if (DoClean || LibraryFiltersGenreList.Items.Count == 0)
                         {
                             Dictionary<string, Dictionary<string, object>> genres = DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY Genres ASC", "Genres");
@@ -552,7 +556,6 @@ namespace AnotherMusicPlayer
 
             }
             catch { }
-            player.MediaPictureClearCache();
         }
 
         private void MediatequeBuildNavigationContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)

@@ -23,6 +23,7 @@ namespace AnotherMusicPlayer
 
         /// <summary> store status if in transaction mode </summary>
         private static bool inTransaction = false;
+        private static SQLiteTransaction Transaction = null;
 
         /// <summary> Get status if in transaction mode </summary>
         public static bool IsInTransaction() { return inTransaction; }
@@ -61,7 +62,14 @@ namespace AnotherMusicPlayer
                 );
             try { 
                 DatabaseConnection.Open();
-                //DatabaseTansactionStart();
+                DatabaseTansactionStart();
+
+                DatabaseDetectOrCreateTable("covers", "CREATE TABLE covers("
+                    + "Path TEXT, "
+                    + "Hash TEXT, "
+                    + "Data BLOB, "
+                    + "PRIMARY KEY(\"Path\") "
+                    + ")");
 
                 DatabaseDetectOrCreateTable("folders", "CREATE TABLE folders("
                     + "Id TEXT, "
@@ -98,19 +106,27 @@ namespace AnotherMusicPlayer
         }
 
         private static bool DatabaseDetectOrCreateTable(string TableName, string QueryCreation) {
-            Dictionary<string, Dictionary<string, object>> ret2 = DatabaseQuery("SELECT name,sql FROM sqlite_master WHERE type = 'table' AND name = '" + TableName + "'");
-            if (ret2 == null) { Debug.WriteLine("ERROR"); }
-            else {
-                if (ret2.Count == 0) { DatabaseQuery(QueryCreation); }
-                else {
-                    if ((string)ret2["0"]["sql"] != QueryCreation) {
-                        DatabaseQuery("DROP TABLE "+TableName);
-                        DatabaseQuery(QueryCreation);
+            bool ret = true;
+            try
+            {
+                Dictionary<string, Dictionary<string, object>> ret2 = DatabaseQuery("SELECT name,sql FROM sqlite_master WHERE type = 'table' AND name = '" + TableName + "'");
+                if (ret2 == null) { Debug.WriteLine("ERROR"); }
+                else
+                {
+                    if (ret2.Count == 0) { DatabaseQuery(QueryCreation); }
+                    else
+                    {
+                        if ((string)ret2["0"]["sql"] != QueryCreation)
+                        {
+                            DatabaseQuery("DROP TABLE " + TableName);
+                            DatabaseQuery(QueryCreation);
+                        }
+                        Debug.WriteLine(JsonConvert.SerializeObject(ret2));
                     }
-                    Debug.WriteLine(JsonConvert.SerializeObject(ret2));
                 }
             }
-            return true;
+            catch { ret = false; }
+            return ret;
         }
 
         /// <summary> execute SQL query </summary>
@@ -121,7 +137,7 @@ namespace AnotherMusicPlayer
             SQLiteCommand sqlite_cmd;
             sqlite_cmd = DatabaseConnection.CreateCommand();
             sqlite_cmd.CommandText = query;
-            string tq = query.ToUpper().Trim();
+            string tq = query.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Trim();
 
             if (tq.StartsWith("SELECT "))
             {
@@ -158,19 +174,55 @@ namespace AnotherMusicPlayer
         /// <summary> execute SQL query </summary>
         private static void DatabaseQuerys(string[] querys)
         {
-            Dictionary<string, Dictionary<string, object>> ret = null;
-            SQLiteDataReader sqlite_datareader;
             DatabaseTansactionStart();
             foreach (string query in querys)
             {
                 SQLiteCommand sqlite_cmd;
                 sqlite_cmd = DatabaseConnection.CreateCommand();
                 sqlite_cmd.CommandText = query;
-                string tq = query.ToUpper().Trim();
+                string tq = query.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Trim();
                 if (tq.StartsWith("SELECT ")) { }
                 else { try { sqlite_cmd.ExecuteNonQuery(); } catch { } }
             }
             DatabaseTansactionEnd();
+        }
+
+        /// <summary> Get cover for specific hash </summary>
+        public static string DatabaseGetCover(string Path, string Hash = null)
+        {
+            SQLiteDataReader sqlite_datareader;
+            SQLiteCommand sqlite_cmd;
+
+            sqlite_cmd = DatabaseConnection.CreateCommand();
+            string query = "";
+            query = "SELECT Data, Hash FROM covers WHERE Path = '" + Path.Replace("\\", "/").Replace("'", "<") + "'";
+            sqlite_cmd.CommandText = query;
+            sqlite_datareader = sqlite_cmd.ExecuteReader();
+
+            Debug.WriteLine(sqlite_datareader.StepCount);
+            if (sqlite_datareader.HasRows) {
+                sqlite_datareader.Read();
+                NameValueCollection row = sqlite_datareader.GetValues();
+                return row.Get(0);
+            }
+            return null;
+        }
+
+        /// <summary> Save cover for specific Hash </summary>
+        public static void DatabaseSaveCover(string Path, string Hash, String CoverData)
+        {
+            try
+            {
+                Hash = Hash.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Trim();
+                CoverData = CoverData.Trim();
+                DatabaseTansactionStart();
+                SQLiteCommand sqlite_cmd;
+                sqlite_cmd = DatabaseConnection.CreateCommand();
+                sqlite_cmd.CommandText = "INSERT INTO covers(Path, Hash, Data) VALUES('" + Path.Replace("\\", "/").Replace("'", "<") + "', '" + Hash + "', '" + CoverData + "')";
+                sqlite_cmd.ExecuteNonQuery();
+                DatabaseTansactionEnd();
+            }
+            catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
         }
 
         /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
@@ -186,9 +238,7 @@ namespace AnotherMusicPlayer
             if (inTransaction) { return; }
             try
             {
-                SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
-                sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
-                sqlite_cmdTR.ExecuteNonQuery();
+                Transaction = DatabaseConnection.BeginTransaction();
                 inTransaction = true;
             }
             catch { }
@@ -200,9 +250,8 @@ namespace AnotherMusicPlayer
             if (!inTransaction) { return; }
             try
             {
-                SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
-                sqlite_cmdTR.CommandText = "COMMIT";
-                sqlite_cmdTR.ExecuteNonQuery();
+                Transaction.Commit();
+                Transaction.Dispose();
                 inTransaction = false;
             }
             catch { }
@@ -214,12 +263,12 @@ namespace AnotherMusicPlayer
             if (!inTransaction) { return; }
             try
             {
-                SQLiteCommand sqlite_cmdTR = DatabaseConnection.CreateCommand();
-                sqlite_cmdTR.CommandText = "COMMIT";
-                sqlite_cmdTR.ExecuteNonQuery();
-                sqlite_cmdTR.CommandText = "BEGIN TRANSACTION";
-                sqlite_cmdTR.ExecuteNonQuery();
+                Transaction.Commit();
+                Transaction.Dispose();
                 inTransaction = false;
+
+                Transaction = DatabaseConnection.BeginTransaction();
+                inTransaction = true;
             }
             catch { }
         }

@@ -1,9 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Windows.Controls;
+using System.Security.Cryptography;
 
 namespace AnotherMusicPlayer
 {
@@ -81,8 +81,8 @@ namespace AnotherMusicPlayer
         //public static BitmapImage MiniNextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next_24.png"));
 
         /// <summary> Add(+) image for ContextMenuItem </summary>
-        public static Image ContextMenuItemImage_add = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
-        public static Image ContextMenuItemImage_back = new Image() { Source = new BitmapImage(new Uri(BaseDirImg + "goback.png")) };
+        public static System.Windows.Controls.Image ContextMenuItemImage_add = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
+        public static System.Windows.Controls.Image ContextMenuItemImage_back = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "goback.png")) };
 
         /// <summary> Dictionary contening Image URI indexed by a string code name </summary>
         private static Dictionary<string, Uri> ImagesUriList = new Dictionary<string, Uri> {
@@ -144,5 +144,20 @@ namespace AnotherMusicPlayer
             for (int i = 0; i < dif; i++) { tstr = '0' + tstr; }
             return tstr;
         }
+
+        /// <summary> Return string hash of a byte array </summary>
+        public static string bytesHash(byte[] data)
+        {
+            return Convert.ToBase64String(SHA512.Create().ComputeHash(data)); ;
+        }
+
+        /// <summary> Return file string hash </summary>
+        public static string FileHash(string path)
+        {
+            using (FileStream s = System.IO.File.OpenRead(path)) { return Convert.ToBase64String(SHA512.Create().ComputeHash(s)); }
+        }
+
+        
+
     }
 }
