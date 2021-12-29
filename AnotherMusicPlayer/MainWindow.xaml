@@ -3,9 +3,19 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:Collections="clr-namespace:System.Collections;assembly=System.Collections.NonGeneric" 
         xmlns:local="clr-namespace:AnotherMusicPlayer"
-        x:Class="AnotherMusicPlayer.MainWindow" Name="win1" mc:Ignorable="d" Title="Another Music Player" Height="400" MinHeight="350" Width="550" MinWidth="500">
+        x:Class="AnotherMusicPlayer.MainWindow" Name="win1" mc:Ignorable="d" Title="Another Music Player"
+    Height="400" MinHeight="350" Width="550" MinWidth="500">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\styles.xaml" />
+                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Window.TaskbarItemInfo>
-        <TaskbarItemInfo x:Name="taskBarItemInfo1" Description="Taskbar Item Info Sample">
+        <TaskbarItemInfo x:Name="taskBarItemInfo1" Description="Another Media Player" >
             <TaskbarItemInfo.ThumbButtonInfos>
                 <ThumbButtonInfoCollection>
                     <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlPrev" Description="PreviousTrack" RenderOptions.BitmapScalingMode="HighQuality" />
@@ -15,14 +25,8 @@
             </TaskbarItemInfo.ThumbButtonInfos>
         </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
-    <Window.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\styles.xaml" />
-                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
-            </ResourceDictionary.MergedDictionaries>
-        </ResourceDictionary>
-    </Window.Resources>
+    
+    
     <Grid Background="#FF303030" Margin="0">
         <Grid.RowDefinitions>
             <RowDefinition Height="100*"/>

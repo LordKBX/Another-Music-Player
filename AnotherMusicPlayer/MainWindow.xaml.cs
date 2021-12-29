@@ -4,17 +4,16 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Input;
 
 using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Documents;
+using System.Drawing;
 
 namespace AnotherMusicPlayer
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : System.Windows.Window
     {
         /// <summary> Object music player </summary>
         Player player;
@@ -30,7 +29,7 @@ namespace AnotherMusicPlayer
         /// <summary> Store system language reference code </summary>
         string AppLang = System.Globalization.CultureInfo.CurrentCulture.Name;
         /// <summary> Store the application assembly name </summary>
-        public static string AppName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
+        public static string AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
         /// <summary> Store PlayList Pannel left collumn width(150 or 250) </summary>
         double WindowWidthMode = 150;
 
@@ -118,19 +117,19 @@ namespace AnotherMusicPlayer
             };
 
             Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
-            Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load settings file
-            //Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + SeparatorChar + "fr.xaml", UriKind.Absolute) });
+            Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load settings file
+            //Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + SeparatorChar + "fr.xaml", UriKind.Absolute) });
             UpdateTraduction();
             PreviewSetUp();
 
             FileCover.Source = Bimage("CoverImg");
-            BtnOpen.Background = new ImageBrush(Bimage("OpenButtonImg"));
-            BtnPrevious.Background = new ImageBrush(Bimage("PreviousButtonImg"));
-            BtnPlayPause.Background = new ImageBrush(Bimage("PlayButtonImg_Play"));
-            BtnNext.Background = new ImageBrush(Bimage("NextButtonImg"));
-            BtnClearList.Background = new ImageBrush(Bimage("ClearListButtonImg"));
-            BtnShuffle.Background = new ImageBrush(Bimage("ShuffleButtonImg"));
-            BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_None"));
+            BtnOpen.Background = new System.Windows.Media.ImageBrush(Bimage("OpenButtonImg"));
+            BtnPrevious.Background = new System.Windows.Media.ImageBrush(Bimage("PreviousButtonImg"));
+            BtnPlayPause.Background = new System.Windows.Media.ImageBrush(Bimage("PlayButtonImg_Play"));
+            BtnNext.Background = new System.Windows.Media.ImageBrush(Bimage("NextButtonImg"));
+            BtnClearList.Background = new System.Windows.Media.ImageBrush(Bimage("ClearListButtonImg"));
+            BtnShuffle.Background = new System.Windows.Media.ImageBrush(Bimage("ShuffleButtonImg"));
+            BtnRepeat.Background = new System.Windows.Media.ImageBrush(Bimage("RepeatButtonImg_None"));
 
             EventsPlaybackInit();
             PlayListView_Init(); EqualizerInitEvents();
@@ -162,7 +161,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Callback Main window loaded </summary>
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
             KeyboardInterceptorSetUp();
 
@@ -181,7 +180,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Callback Main window size change </summary>
-        private void Win1_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Win1_SizeChanged(object sender, System.Windows.SizeChangedEventArgs e)
         {
             if (Settings.MemoryUsage == 1)
             {
@@ -189,7 +188,7 @@ namespace AnotherMusicPlayer
                 {
                     if (WindowWidthMode != 250)
                     {
-                        Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)250);
+                        Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new System.Windows.GridLength((double)250);
                         WindowWidthMode = FileCover.Width = FileCover.Height = 250;
                     }
                 }
@@ -197,16 +196,16 @@ namespace AnotherMusicPlayer
                 {
                     if (WindowWidthMode != 150)
                     {
-                        Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)150);
+                        Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new System.Windows.GridLength((double)150);
                         WindowWidthMode = FileCover.Width = FileCover.Height = 150;
                     }
                 }
             }
             else {
-                Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new GridLength((double)150);
+                Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new System.Windows.GridLength((double)150);
                 WindowWidthMode = FileCover.Width = FileCover.Height = 150;
             }
-            Grid1.ColumnDefinitions[1].Width = new GridLength(TabControler.ActualWidth - WindowWidthMode - 5);
+            Grid1.ColumnDefinitions[1].Width = new System.Windows.GridLength(TabControler.ActualWidth - WindowWidthMode - 5);
 
             foreach (TabItem tab in TabControler.Items)
             {
@@ -357,31 +356,57 @@ namespace AnotherMusicPlayer
             return item;
         }
 
+        private PlayListViewItem DatabaseItemToPlayListViewItem(Dictionary<string, object> rep)
+        {
+            PlayListViewItem item = null;
+            item = new PlayListViewItem();
+            item.Path = (string)rep["Path"];
+            item.Name = (string)rep["Name"];
+            item.Album = (string)rep["Album"];
+            item.AlbumArtists = (string)rep["AlbumArtists"];
+            item.Performers = (string)rep["Performers"];
+            item.Composers = (string)rep["Composers"];
+            item.Lyrics = (string)rep["Lyrics"];
+            item.Duration = Convert.ToInt64((string)rep["Duration"]);
+            item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+            item.Genres = (string)rep["Genres"];
+            item.Copyright = (string)rep["Copyright"];
+            item.Disc = Convert.ToUInt32(rep["Disc"]);
+            item.DiscCount = Convert.ToUInt32(rep["DiscCount"]);
+            item.Track = Convert.ToUInt32(rep["Track"]);
+            item.TrackCount = Convert.ToUInt32(rep["TrackCount"]);
+            item.Year = Convert.ToUInt32(rep["Year"]);
+
+            return item;
+        }
+
         private void UpdateLeftPannelMediaInfo(PlayListViewItem item = null)
         {
             try
             {
-                if (item == null) { item = GetMediaInfo(PlayList[PlayListIndex][0]); }
+                if (item == null) { item = DatabaseItemToPlayListViewItem(DatabaseFileInfo(PlayList[PlayListIndex][0])); }
                 if (item == null) { return; }
+                if (item.Size <= 0) { item = DatabaseItemToPlayListViewItem(DatabaseFileInfo(item.Path)); }
+                
 
                 LeftPannelMediaInfo.Inlines.Clear();
-                LeftPannelMediaInfo.LineStackingStrategy = LineStackingStrategy.BlockLineHeight;
+                LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;
                 System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
-                System.Windows.Thickness tc1 = new Thickness(3,3,0,0);
-                System.Windows.Thickness tc2 = new Thickness(10,0,0,0);
-                SolidColorBrush cl2 = new SolidColorBrush(Color.FromRgb(149, 149, 149));
+                System.Windows.Thickness tc1 = new System.Windows.Thickness(3,3,0,0);
+                System.Windows.Thickness tc2 = new System.Windows.Thickness(10,0,0,0);
+                System.Windows.Media.SolidColorBrush cl2 = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 149, 149));
 
-                TextBlock t1 = new TextBlock() { Text = GetTaduction("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
+                System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
                 LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a1 = new AccessText() { Text = item.Name, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                AccessText a1 = new AccessText() { Text = item.Name, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
                 LeftPannelMediaInfo.Inlines.Add(a1);
 
                 if (item.Album != null && item.Album.Trim() != "")
                 {
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    TextBlock t2 = new TextBlock() { Text = GetTaduction("Album2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t2);
+                    System.Windows.Controls.TextBlock t2 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Album2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t2);
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a2 = new AccessText() { Text = item.Album, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    AccessText a2 = new AccessText() { Text = item.Album, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
                     LeftPannelMediaInfo.Inlines.Add(a2);
                 }
 
@@ -397,25 +422,25 @@ namespace AnotherMusicPlayer
                 if (Artists != "")
                 {
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    TextBlock t3 = new TextBlock() { Text = GetTaduction("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
+                    System.Windows.Controls.TextBlock t3 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a3 = new AccessText() { Text = item.Performers, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    AccessText a3 = new AccessText() { Text = item.Performers, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
                     LeftPannelMediaInfo.Inlines.Add(a3);
                 }
 
                 if (item.Genres != null && item.Genres.Trim() != "")
                 {
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    TextBlock t4 = new TextBlock() { Text = GetTaduction("Genres2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t4);
+                    System.Windows.Controls.TextBlock t4 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Genres2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t4);
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a4 = new AccessText() { Text = item.Genres, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    AccessText a4 = new AccessText() { Text = item.Genres, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
                     LeftPannelMediaInfo.Inlines.Add(a4);
                 }
 
                 LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                TextBlock t5 = new TextBlock() { Text = GetTaduction("Duration2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t5);
+                System.Windows.Controls.TextBlock t5 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Duration2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t5);
                 LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a5 = new AccessText() { Text = item.DurationS, Margin = tc2, TextWrapping = TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                AccessText a5 = new AccessText() { Text = item.DurationS, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
                 LeftPannelMediaInfo.Inlines.Add(a5);
 
                 FileCover.Source = null;
@@ -423,10 +448,11 @@ namespace AnotherMusicPlayer
                 System.Windows.Media.Imaging.BitmapImage bi = player.MediaPicture(item.Path, true, 50, 50);
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
 
+
                 if (bi != null && Settings.MemoryUsage == 1)
                 {
-                    WrapPanel p = new WrapPanel() { };
-                    Image im = new Image() { MaxHeight = 400, MaxWidth = 400, Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
+                    System.Windows.Controls.WrapPanel p = new System.Windows.Controls.WrapPanel() { };
+                    System.Windows.Controls.Image im = new System.Windows.Controls.Image() { MaxHeight = 400, MaxWidth = 400, Style = (System.Windows.Style)Resources.MergedDictionaries[0]["HQImg"] };
                     im.Source = player.MediaPicture(item.Path, true, 400, 400);
                     p.Children.Add(im);
                     FileCover.ToolTip = p;

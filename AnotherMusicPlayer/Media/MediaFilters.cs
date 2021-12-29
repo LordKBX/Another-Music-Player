@@ -141,7 +141,9 @@ namespace AnotherMusicPlayer
         {
             MediatequeBuildNavigationPath(MediatequeRefFolder);
             string mode = (string)((ComboBoxItem)LibraryFiltersMode.SelectedItem).Tag;
-            string genre = (string)((ComboBoxItem)LibraryFiltersGenreList.SelectedItem).Tag;
+            string genre = "";
+            try { genre = (string)((ComboBoxItem)LibraryFiltersGenreList.SelectedItem).Tag; }
+            catch { }
             if (mode != "Genre") { return; }
 
             LibNavigationContent2.Children.Clear();

@@ -20,6 +20,7 @@
     <PackageIcon>album_large.png</PackageIcon>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <ApplicationIcon>icons\icon_large.ico</ApplicationIcon>
+    <Configurations>Debug;Release</Configurations>
   </PropertyGroup>
 
   <ItemGroup>
@@ -172,6 +173,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="icons\stop.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="Player\ffmpeg.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

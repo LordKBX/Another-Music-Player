@@ -180,7 +180,9 @@ namespace AnotherMusicPlayer
                 ParamsLibFolderTextBox.Text = path;
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
-                MediatequeInvokeScan(true);
+                _ = Dispatcher.BeginInvoke(new Action(() => {
+                    MediatequeInvokeScan(true);
+                }));
             }
         }
 

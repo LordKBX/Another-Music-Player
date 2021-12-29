@@ -172,9 +172,9 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> execute SQL query </summary>
-        private static void DatabaseQuerys(string[] querys)
+        private static void DatabaseQuerys(string[] querys, bool autocommit = true)
         {
-            DatabaseTansactionStart();
+            if(autocommit)DatabaseTansactionStart();
             foreach (string query in querys)
             {
                 SQLiteCommand sqlite_cmd;
@@ -182,9 +182,9 @@ namespace AnotherMusicPlayer
                 sqlite_cmd.CommandText = query;
                 string tq = query.ToUpper(System.Globalization.CultureInfo.InvariantCulture).Trim();
                 if (tq.StartsWith("SELECT ")) { }
-                else { try { sqlite_cmd.ExecuteNonQuery(); } catch { } }
+                else { try { sqlite_cmd.ExecuteNonQuery(); } catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); } }
             }
-            DatabaseTansactionEnd();
+            if (autocommit) DatabaseTansactionEnd();
         }
 
         /// <summary> Get cover for specific hash </summary>

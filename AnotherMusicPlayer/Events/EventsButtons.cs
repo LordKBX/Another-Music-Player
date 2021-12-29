@@ -21,7 +21,7 @@ namespace AnotherMusicPlayer
             win1.IsEnabled = false;
             bool DoConv = false;
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-            openFileDlg.Filter = "Audio (*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA)|*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA";
+            openFileDlg.Filter = "Audio (*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA;*.M4A)|*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA;*.M4A";
             openFileDlg.Multiselect = true;
             openFileDlg.Title = "File Selection";
             Nullable<bool> result = openFileDlg.ShowDialog();
