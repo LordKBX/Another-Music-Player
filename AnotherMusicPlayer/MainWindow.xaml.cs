@@ -10,6 +10,8 @@ using System.Diagnostics;
 using System.ComponentModel;
 using System.Windows.Documents;
 using System.Drawing;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace AnotherMusicPlayer
 {
@@ -41,6 +43,33 @@ namespace AnotherMusicPlayer
         string PreviousKeyboardKey = "";
         double PreviousKeyboardTime = 0;
 
+        private Loading loadingScreen = null;
+        private bool _isLoading;
+        public bool IsLoading
+        {
+            get { return _isLoading; }
+            set { 
+                _isLoading = value; 
+                if (value == true) {
+                    loadingScreen = new Loading();
+                    loadingScreen.WindowStyle = WindowStyle.ToolWindow;
+                    loadingScreen.Show();
+                } 
+                else
+                {
+                    try { loadingScreen.Close(); }
+                    catch { }
+                } 
+            }
+        }
+        public void setLoadingState(bool state)
+        {
+            _ = Dispatcher.BeginInvoke(new Action(() =>
+            {
+                IsLoading = state;
+            }));
+        }
+
         /// <summary> Constructor </summary>
         public MainWindow()
         {
@@ -53,6 +82,7 @@ namespace AnotherMusicPlayer
 
             this.Resources.Clear();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
+            IsLoading = true;
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
 
             PlayListIndex = Settings.LastPlaylistIndex;
@@ -223,11 +253,13 @@ namespace AnotherMusicPlayer
         /// <summary> Load list of file in the playlist and play first element in list if music currently not played </summary>
         private bool Open(string[] files, bool DoPlay = true, int Load = -1)
         {
+            Debug.WriteLine("--> Open <--");
             bool doConv = false;
             int CountStart = PlayList.Count;
 
             if (files.Length > 0)
             {
+                Debug.WriteLine("--> Open : P1 <--");
                 if (!player.IsPlaying() && MediaTestFileExtention(files[0]) == false) { doConv = true; }
 
                 string NewFile;
@@ -254,6 +286,7 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
+            Debug.WriteLine("--> Open : P2 <--");
 
             if (PlayListIndex < 0) { PlayListIndex = 0; Load = 0; }
             if (DoPlay == true) {
@@ -261,18 +294,26 @@ namespace AnotherMusicPlayer
                 FileOpen(PlayList[CountStart][(PlayList[CountStart][1] == null) ? 0 : 1]);
                 PlayListIndex = CountStart;
             }
+            Debug.WriteLine("--> Open : P3 <--");
             if (Load >=0) {
-                try { 
-                    FileOpen(PlayList[Load][(PlayList[Load][1] == null) ? 0 : 1], false);
-                    PlayListIndex = Load;
-                    Timer_PlayListIndex = -1;
-                } catch { }
+                try {
+                    if (PlayList.Count >= Load) {
+                        FileOpen(PlayList[Load][(PlayList[Load][1] == null) ? 0 : 1], false);
+                        Debug.WriteLine("--> Open : P3-2 <--");
+                        PlayListIndex = Load;
+                        Timer_PlayListIndex = -1;
+                    }
+                } catch {
+                    Debug.WriteLine("--> Open : P3-3 <--");
+                }
             }
             if (!player.IsPlaying()) { player.Play(); }
 
             Timer_PlayListIndex = -1;
 
-            UpdateRecordedQueue();
+            Debug.WriteLine("--> Open : P4 <--");
+            //UpdateRecordedQueue();
+            Debug.WriteLine("--> Open : P5 <--");
 
             return doConv;
         }
@@ -280,10 +321,15 @@ namespace AnotherMusicPlayer
         /// <summary> Load music file and play if doPlay = true </summary>
         private void FileOpen(string FilePath, bool doPlay = true)
         {
-            PlayListViewItem it = player.MediaInfo(FilePath, false);
-            if (it == null) { return; }
-            PlaybackStopLastTime = UnixTimestamp();
-            player.Open(FilePath, doPlay);
+            Debug.WriteLine("--> FileOpen : P1 <-- >> " + FilePath);
+            if (player.TestFile(FilePath)){
+                Debug.WriteLine("--> FileOpen : P2 <--");
+                PlaybackStopLastTime = UnixTimestamp();
+                Debug.WriteLine("--> FileOpen : P3 <--");
+                player.Open(FilePath, doPlay);
+            }
+            //PlayListViewItem it = GetMediaInfo(FilePath);
+            //if (it == null) { return; }
 
             //PlayItemNameValue.ToolTip = PlayItemNameValue.Text = (it.Name!=null)?it.Name:"";
             //PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = (it.Album != null) ? it.Album : "";

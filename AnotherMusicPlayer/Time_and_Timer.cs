@@ -129,8 +129,15 @@ namespace AnotherMusicPlayer
 
                     //Debug.WriteLine(JsonConvert.SerializeObject(tmp));
                     //try { player.MediaPicture(PlayList[PlayListIndex + 1][0]); } catch { try { player.MediaPicture(PlayList[0][0]); } catch { } }
-                    PlayListView.ItemsSource = tmp;
-                    PlayListView.Items.Refresh();
+                    
+                    //Debug.WriteLine("--> BEFORE PlayListView.ItemsSource UPDATE <--");
+                    try
+                    {
+                        if (tmp.Count <= 0) { return; }
+                        PlayListView.ItemsSource = tmp;
+                        PlayListView.Items.Refresh();
+                    }
+                    catch (Exception err) { Debug.WriteLine("PlayListView.ItemsSource error"); }
 
                     Label_PlayListDisplayedNBTracks.Text = "" + tmp.Count;
                     Label_PlayListNBTracks.Text = "" + PlayList.Count;

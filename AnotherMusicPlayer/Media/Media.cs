@@ -48,11 +48,6 @@ namespace AnotherMusicPlayer
         /// <summary> status if currently MediatequeScanning Library </summary>
         private bool MediatequeScanning = false;
 
-        /// <summary> list of newly scanned files(absolute path) </summary>
-        List<string> MediatequeScanedFiles = new List<string>();
-
-        List<string> MediatequeCacheQuerys = new List<string>();
-
         /// <summary> Create a Library folder watcher </summary>
         private void MediatequeCreateWatcher()
         {
@@ -79,7 +74,7 @@ namespace AnotherMusicPlayer
             {
                 if (!MediatequeScanning) {
                     Dictionary<string, Dictionary<string, object>> rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString(path) + "' ORDER BY Path ASC", "Path");
-
+                    if (rt.Count == 0) { return null; }
                     if (Int32.Parse((string)rt[path]["Size"]) <= 0) 
                     {
                         FileInfo fi = new FileInfo(path);
@@ -127,6 +122,7 @@ namespace AnotherMusicPlayer
         /// <summary> Create context menu for objects in Library </summary>
         private ContextMenu LibMediaCreateContextMenu(string type = "folder")
         {//ContextMenuItemImage_add
+            //Debug.WriteLine("--> LibMediaCreateContextMenu <--");
             ContextMenu ct = new ContextMenu();
             MenuItem mu = new MenuItem()
             {
@@ -202,48 +198,50 @@ namespace AnotherMusicPlayer
 
         StackPanel MediatequeBuildNavigationContentBlockssPanel = null;
         /// <summary> Fill the Content zone in Library pannel with folders and files </summary>
-        private void MediatequeBuildNavigationContent(Folder fold) {
-            LibNavigationContent.Children.Clear();
-            LibNavigationContentB.Visibility = Visibility.Visible;
-            LibNavigationContent2B.Visibility = Visibility.Collapsed;
-            LibraryFiltersMode.SelectedIndex = 0;
-            LibraryFiltersGenreList.SelectedIndex = 0;
-            LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
-
-            ContextMenu ct = new ContextMenu();
-
-            if (fold.Parent != null)
-            {
-                MenuItem mu0 = new MenuItem()
-                {
-                    Header = GetTaduction("ParamsLibItemContextMenuItem_GetBack"),
-                    Icon = ContextMenuItemImage_back,
-                    Tag = fold.Parent
-                };
-                mu0.Click += (sender, e) => {
-                    MediatequeBuildNavigationPath((Folder)((MenuItem)sender).Tag);
-                    MediatequeBuildNavigationContent((Folder)((MenuItem)sender).Tag);
-                };
-                ct.Items.Add(mu0);
-            }
-
-            MenuItem mu1 = new MenuItem()
-            {
-                Header = GetTaduction("ParamsLibItemContextMenuItem_GenericAddToPlayingQueue"),
-                Icon = ContextMenuItemImage_add,
-                Tag = fold
-            };
-            mu1.Click += (sender, e) => {
-                List<string> paths = new List<string>();
-                paths = MediatequeCreateList((Folder)((MenuItem)sender).Tag, paths);
-                Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray()); }));
-            };
-            ct.Items.Add(mu1);
-
-            LibNavigationContentScroll.ContextMenu = ct;
-
+        private void MediatequeBuildNavigationContent(Folder fold)
+        {
+            //Debug.WriteLine("--> MediatequeBuildNavigationContent <--");
             try
             {
+                LibNavigationContent.Children.Clear();
+                LibNavigationContentB.Visibility = Visibility.Visible;
+                LibNavigationContent2B.Visibility = Visibility.Collapsed;
+                LibraryFiltersMode.SelectedIndex = 0;
+                LibraryFiltersGenreList.SelectedIndex = 0;
+                LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
+
+                ContextMenu ct = new ContextMenu();
+
+                if (fold.Parent != null)
+                {
+                    MenuItem mu0 = new MenuItem()
+                    {
+                        Header = GetTaduction("ParamsLibItemContextMenuItem_GetBack"),
+                        Icon = ContextMenuItemImage_back,
+                        Tag = fold.Parent
+                    };
+                    mu0.Click += (sender, e) => {
+                        MediatequeBuildNavigationPath((Folder)((MenuItem)sender).Tag);
+                        MediatequeBuildNavigationContent((Folder)((MenuItem)sender).Tag);
+                    };
+                    ct.Items.Add(mu0);
+                }
+
+                MenuItem mu1 = new MenuItem()
+                {
+                    Header = GetTaduction("ParamsLibItemContextMenuItem_GenericAddToPlayingQueue"),
+                    Icon = ContextMenuItemImage_add,
+                    Tag = fold
+                };
+                mu1.Click += (sender, e) => {
+                    List<string> paths = new List<string>();
+                    paths = MediatequeCreateList((Folder)((MenuItem)sender).Tag, paths).Distinct().ToList();
+                    Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray()); }));
+                };
+                ct.Items.Add(mu1);
+
+                LibNavigationContentScroll.ContextMenu = ct;
+
                 foreach (Folder fl in fold.Folders) { MediatequeBuildNavigationContentButton("folder", fl.Name, fl.Path, fl); }
 
                 Debug.WriteLine(fold.Path);
@@ -259,200 +257,224 @@ namespace AnotherMusicPlayer
                 MediatequeBuildNavigationContentBlocks(endFiles.ToArray(), MediatequeBuildNavigationContentBlockssPanel);
 
             }
-            catch { }
+            catch {
+                Debug.WriteLine("--> MediatequeBuildNavigationContent ERROR <--");
+            }
         }
 
         private void MediatequeBuildNavigationContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
         {
-            Button br = null;
-            List<string> brList = null;
-            string album = null;
-            uint disc = 0;
-            StackPanel lastPanel = null;
-            BitmapImage defaultCover = Bimage("CoverImg");
-            if (uniqueDir) {
-                string folder = files[0].Substring(0, files[0].LastIndexOf(SeparatorChar));
-                defaultCover = (System.IO.File.Exists(folder + SeparatorChar + "Cover.jpg")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.jpg"))
-                    : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : Bimage("CoverImg"));
-            }
-
-            foreach (string fil in files)
+            Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks START <--");
+            if (files.Length == 0) { return; }
+            try
             {
-                PlayListViewItem it = GetMediaInfo(fil);
-                bool nocover = false;
-                string al = it.Album; if (it.Album == null || it.Album.Trim() == "") {
-                    if (uniqueDir) { al = "<UNKWON ALBUM>"; }
-                    else { al = fil.Substring(0, fil.LastIndexOf(SeparatorChar)); }
-                     nocover = true;
+                if (!IsLoading) { setLoadingState(true); }
+                Button br = null;
+                List<string> brList = null;
+                string album = null;
+                uint disc = 0;
+                StackPanel lastPanel = null;
+                BitmapImage defaultCover = Bimage("CoverImg");
+                if (uniqueDir)
+                {
+                    string folder = files[0].Substring(0, files[0].LastIndexOf(SeparatorChar));
+                    string[] t = System.IO.Directory.GetFiles(folder);
+                    foreach (string file in t)
+                    {
+                        if (file.EndsWith("Cover.jpg") || file.EndsWith("Cover.png")) { defaultCover = new BitmapImage(new Uri(file)); }
+                    }
                 }
 
-                string name = it.Name;
-                if (name == null || name == "")
+                foreach (string fil in files)
                 {
-                    string[] tb = (it.Path).Split(System.IO.Path.DirectorySeparatorChar);
-                    name = tb[tb.Length - 1];
-                }
-
-
-                if (album != al)
-                {
-                    if (br != null)
+                    PlayListViewItem it = DatabaseItemToPlayListViewItem(DatabaseFileInfo(fil));
+                    bool nocover = false;
+                    string al = it.Album; if (it.Album == null || it.Album.Trim() == "")
                     {
-                        br.Tag = new object[]{ "album", brList.ToArray() };
+                        if (uniqueDir) { al = "<UNKWON ALBUM>"; }
+                        else { al = fil.Substring(0, fil.LastIndexOf(SeparatorChar)); }
+                        nocover = true;
                     }
-                    brList = new List<string>();
-                    disc = 0;
-                    br = new Button()
-                    {
-                        Style = (Style)Resources.MergedDictionaries[0]["BtnStyle2"]
-                    };
-                    br.ContextMenu = LibMediaCreateContextMenu("album");
-                    Grid gr = new Grid() { HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Stretch };
-                    gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(150, GridUnitType.Pixel) });
-                    gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(100, GridUnitType.Star) });
 
-                    System.Windows.Controls.Image im = new System.Windows.Controls.Image()
+                    string name = it.Name;
+                    if (name == null || name == "")
                     {
-                        Source = (Settings.MemoryUsage == 1)?
-                            (((nocover)?null:player.MediaPicture(fil, true, 150, 150, false)) ?? defaultCover):
-                            (((nocover) ? null : player.MediaPicture(fil, true, 50, 50, false)) ?? defaultCover),
-                        VerticalAlignment = VerticalAlignment.Top, Style = (Style)Resources.MergedDictionaries[0]["HQImg"]
-                    };
-                    if (im.Source != Bimage("CoverImg") && Settings.MemoryUsage == 1)
-                    {
-                        WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
-                        Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
-                        imp.Source = (((nocover) ? null : player.MediaPicture(fil, true)) ?? defaultCover);
-                        p.Children.Add(imp);
-                        im.ToolTip = p;
+                        string[] tb = (it.Path).Split(System.IO.Path.DirectorySeparatorChar);
+                        name = tb[tb.Length - 1];
                     }
-                    gr.Children.Add(im); Grid.SetColumn(im, 0);
 
-                    StackPanel st1 = new StackPanel() { Orientation = Orientation.Vertical, Margin = new Thickness(5, 0, 0, 0) };
-                    st1.Children.Add(new AccessText()
+
+                    if (album != al)
+                    {
+                        if (br != null)
+                        {
+                            br.Tag = new object[] { "album", brList.ToArray() };
+                        }
+                        brList = new List<string>();
+                        disc = 0;
+                        br = new Button()
+                        {
+                            Style = (Style)Resources.MergedDictionaries[0]["BtnStyle2"]
+                        };
+                        br.ContextMenu = LibMediaCreateContextMenu("album");
+                        Grid gr = new Grid() { HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Stretch };
+                        gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(150, GridUnitType.Pixel) });
+                        gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(100, GridUnitType.Star) });
+
+                        System.Windows.Controls.Image im = new System.Windows.Controls.Image()
+                        {
+                            Source = (Settings.MemoryUsage == 1) ?
+                                (((nocover) ? null : player.MediaPicture(fil, true, 150, 150, false)) ?? defaultCover) :
+                                (((nocover) ? null : player.MediaPicture(fil, true, 50, 50, false)) ?? defaultCover),
+                            VerticalAlignment = VerticalAlignment.Top,
+                            Style = (Style)Resources.MergedDictionaries[0]["HQImg"]
+                        };
+                        if (im.Source != Bimage("CoverImg") && Settings.MemoryUsage == 1)
+                        {
+                            WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
+                            Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
+                            imp.Source = (((nocover) ? null : player.MediaPicture(fil, true)) ?? defaultCover);
+                            p.Children.Add(imp);
+                            im.ToolTip = p;
+                        }
+                        gr.Children.Add(im); Grid.SetColumn(im, 0);
+
+                        StackPanel st1 = new StackPanel() { Orientation = Orientation.Vertical, Margin = new Thickness(5, 0, 0, 0) };
+                        st1.Children.Add(new AccessText()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            TextAlignment = TextAlignment.Left,
+                            Text = al,
+                            FontWeight = FontWeights.Bold
+                        });
+
+
+                        lastPanel = st1;
+                        gr.Children.Add(st1); Grid.SetColumn(st1, 1);
+                        br.Content = gr;
+                        album = al;
+                        if (contener != null) { contener.Children.Add(br); }
+                    }
+                    if (disc != it.Disc && it.DiscCount > 1)
+                    {
+                        disc = it.Disc;
+                        lastPanel.Children.Add(new AccessText()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Stretch,
+                            TextAlignment = TextAlignment.Left,
+                            Text = "Disc " + it.Disc,
+                            FontStyle = FontStyles.Italic,
+                            Margin = new Thickness(0, 5, 0, 0)
+                        });
+                    }
+
+
+                    Button btn = new Button()
                     {
                         HorizontalAlignment = HorizontalAlignment.Stretch,
-                        TextAlignment = TextAlignment.Left,
-                        Text = al,
-                        FontWeight = FontWeights.Bold
-                    });
-
-
-                    lastPanel = st1;
-                    gr.Children.Add(st1); Grid.SetColumn(st1, 1);
-                    br.Content = gr;
-                    album = al;
-                    if (contener != null) { contener.Children.Add(br); }
-                }
-                if (disc != it.Disc && it.DiscCount > 1)
-                {
-                    disc = it.Disc;
-                    lastPanel.Children.Add(new AccessText()
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Stretch,
-                        TextAlignment = TextAlignment.Left,
-                        Text = "Disc " + it.Disc,
-                        FontStyle = FontStyles.Italic,
-                        Margin = new Thickness(0, 5, 0, 0)
-                    });
-                }
-
-
-                Button btn = new Button()
-                {
-                    HorizontalAlignment = HorizontalAlignment.Stretch,
-                    Content = new AccessText()
-                    {
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        VerticalAlignment = VerticalAlignment.Center,
-                        TextAlignment = TextAlignment.Left,
-                        Text = NormalizeNumber((int)it.Track, ("" + it.TrackCount).Length) + ". " + name,
+                        Content = new AccessText()
+                        {
+                            HorizontalAlignment = HorizontalAlignment.Left,
+                            VerticalAlignment = VerticalAlignment.Center,
+                            TextAlignment = TextAlignment.Left,
+                            Text = NormalizeNumber((int)it.Track, ("" + it.TrackCount).Length) + ". " + name,
+                            FontStyle = FontStyles.Normal,
+                            Margin = new Thickness(2)
+                        },
+                        HorizontalContentAlignment = HorizontalAlignment.Left,
+                        VerticalContentAlignment = VerticalAlignment.Top,
                         FontStyle = FontStyles.Normal,
-                        Margin = new Thickness(2)
-                    },
-                    HorizontalContentAlignment = HorizontalAlignment.Left,
-                    VerticalContentAlignment = VerticalAlignment.Top,
-                    FontStyle = FontStyles.Normal,
-                    Tag = new object[] { "file", it.Path },
-                    Cursor = Cursors.Hand
-                };
-                btn.Click += MediatequeNavigationContentButtonClick;
-                btn.ContextMenu = LibMediaCreateContextMenu("file");
-                lastPanel.Children.Add(btn);
-                brList.Add(it.Path);
-            }
+                        Tag = new object[] { "file", it.Path },
+                        Cursor = Cursors.Hand
+                    };
+                    btn.Click += MediatequeNavigationContentButtonClick;
+                    btn.ContextMenu = LibMediaCreateContextMenu("file");
+                    lastPanel.Children.Add(btn);
+                    brList.Add(it.Path);
+                }
 
-            if (br != null) { br.Tag = new object[] { "album", brList.ToArray() }; }
+                if (br != null) { br.Tag = new object[] { "album", brList.ToArray() }; }
+            }
+            catch { Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks ERROR <--"); }
+            Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks END <--");
+            setLoadingState(false);
         }
 
         /// <summary> Create button for the Content zone in Library pannel </summary>
         private void MediatequeBuildNavigationContentButton(string type, string name, string path, Folder fold = null)
         {
-            //Border br = new Border(); br.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemBorder"];
-            Button bt = new Button();
-            bt.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItem"];
-            Grid gr = new Grid();
-            gr.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(40) });
-            gr.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(50) });
+            //Debug.WriteLine("--> MediatequeBuildNavigationContentButton <--");
+            try
+            {
+                //Border br = new Border(); br.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemBorder"];
+                Button bt = new Button();
+                bt.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItem"];
+                Grid gr = new Grid();
+                gr.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(40) });
+                gr.RowDefinitions.Add(new RowDefinition() { Height = new GridLength(50) });
 
-            PlayListViewItem it = GetMediaInfo(path);
-            BitmapImage bi = player.MediaPicture(path);
+                PlayListViewItem it = GetMediaInfo(path);
+                BitmapImage bi = player.MediaPicture(path);
 
-            Image image = new Image();
-            if (type == "folder") { 
-                image.Source = Bimage("OpenButtonImg"); 
-            }
-            if (type == "file") {
-                image.Source = (bi ?? Bimage("CoverImg"));
-
-
-                string Artists = "";
-                if (it.Performers != null && it.Performers.Trim() != "") { Artists += it.Performers; }
-                if (it.Performers != null && it.Performers.Trim() != "") { if (Artists != null && Artists != "") { Artists += ", "; };  Artists += it.Composers; }
-
-                if(Settings.MemoryUsage == 1)
+                Image image = new Image();
+                if (type == "folder")
                 {
-                    WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
-                    Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
-                    imp.Source = (bi ?? Bimage("CoverImg"));
-                    imp.MaxHeight = imp.MaxWidth = 300;
-                    p.Children.Add(imp);
-                    p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Title2") + " " + ((it != null) ? (it.Name ?? name) : name) });
-                    if (it.Album != null && it.Album.Trim() != "")
-                    {
-                        p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Album2") + " " + it.Album });
-                    }
-
-                    if (Artists != "") { p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Artist2") + " " + Artists }); }
-                    if (it.Genres != null && it.Genres.Trim() != "") { p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Genres2") + " " + it.Genres }); }
-                    p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Duration2") + " " + it.DurationS });
-
-                    bt.ToolTip = p;
+                    image.Source = Bimage("OpenButtonImg");
                 }
+                if (type == "file")
+                {
+                    image.Source = (bi ?? Bimage("CoverImg"));
+
+
+                    string Artists = "";
+                    if (it.Performers != null && it.Performers.Trim() != "") { Artists += it.Performers; }
+                    if (it.Performers != null && it.Performers.Trim() != "") { if (Artists != null && Artists != "") { Artists += ", "; }; Artists += it.Composers; }
+
+                    if (Settings.MemoryUsage == 1)
+                    {
+                        WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
+                        Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
+                        imp.Source = (bi ?? Bimage("CoverImg"));
+                        imp.MaxHeight = imp.MaxWidth = 300;
+                        p.Children.Add(imp);
+                        p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Title2") + " " + ((it != null) ? (it.Name ?? name) : name) });
+                        if (it.Album != null && it.Album.Trim() != "")
+                        {
+                            p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Album2") + " " + it.Album });
+                        }
+
+                        if (Artists != "") { p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Artist2") + " " + Artists }); }
+                        if (it.Genres != null && it.Genres.Trim() != "") { p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Genres2") + " " + it.Genres }); }
+                        p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Duration2") + " " + it.DurationS });
+
+                        bt.ToolTip = p;
+                    }
+                }
+                image.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemImg"];
+                gr.Children.Add(image);
+
+                string txname = (it != null) ? (it.Name ?? name) : name;
+                if (txname.Length > 30) txname = txname.Substring(0, 30) + "...";
+                AccessText tx = new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, MaxHeight = 45, Text = txname };
+                tx.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemText"];
+                //gr.Children.Add(tx);
+                //Grid.SetRow(tx, 1);
+
+                Viewbox vb = new Viewbox();
+                vb.Child = tx;
+                vb.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemViewBox"];
+                gr.Children.Add(vb);
+                Grid.SetRow(vb, 1);
+
+                bt.Tag = new object[] { type, path, fold };
+                bt.Click += MediatequeNavigationContentButtonClick;
+                bt.ContextMenu = LibMediaCreateContextMenu();
+
+                //br.Child = gr;
+                bt.Content = gr;
+                LibNavigationContent.Children.Add(bt);
             }
-            image.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemImg"];
-            gr.Children.Add(image);
-
-            string txname = (it != null) ? (it.Name ?? name) : name;
-            if (txname.Length > 30) txname = txname.Substring(0, 30) + "...";
-            AccessText tx = new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, MaxHeight = 45, Text = txname };
-            tx.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemText"];
-            //gr.Children.Add(tx);
-            //Grid.SetRow(tx, 1);
-
-            Viewbox vb = new Viewbox();
-            vb.Child = tx;
-            vb.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemViewBox"];
-            gr.Children.Add(vb);
-            Grid.SetRow(vb, 1);
-
-            bt.Tag = new object[] { type, path, fold };
-            bt.Click += MediatequeNavigationContentButtonClick;
-            bt.ContextMenu = LibMediaCreateContextMenu();
-
-            //br.Child = gr;
-            bt.Content = gr;
-            LibNavigationContent.Children.Add(bt);
+            catch { Debug.WriteLine("--> MediatequeBuildNavigationContentButton ERROR <--"); }
         }
 
         /// <summary> Library pannel Content button last time click </summary>
@@ -511,7 +533,7 @@ namespace AnotherMusicPlayer
                 List<string> paths = new List<string>();
                 Folder fold = (Folder)tab[2];
                 paths = MediatequeCreateList(fold, paths);
-                //Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
+                Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
                 Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray(), false); }));
             }
             else if ((string)tab[0] == "file")
@@ -522,25 +544,6 @@ namespace AnotherMusicPlayer
             {
                 Dispatcher.BeginInvoke(new Action(() => { Open((string[])tab[1], false); }));
             }
-        }
-
-        /// <summary> Record Playing queue in database </summary>
-        public void UpdateRecordedQueue()
-        {
-            DatabaseQuery("DELETE FROM queue;");
-            int index = 1;
-            List<string> querys = new List<string>();
-            foreach (string[] line in PlayList)
-            {
-                string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
-                query += NormalizeNumber(index, 10) + "','";
-                query += DatabaseEscapeString(line[0]) + "',";
-                query += ((line[1] == null) ? "NULL" : "'" + DatabaseEscapeString(line[1]) + "'");
-                query += ")";
-                index += 1;
-                querys.Add(query);
-            }
-            DatabaseQuerys(querys.ToArray());
         }
 
     }

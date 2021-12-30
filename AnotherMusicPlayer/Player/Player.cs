@@ -406,7 +406,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Test if file exist, if input = null remplace it with value in CurrentFile </summary>
-        private bool TestFile(string FilePath = null) {
+        public bool TestFile(string FilePath = null) {
             if (FilePath == null) { if (CurrentFile == null) { return false; }; FilePath = CurrentFile; }
             if (System.IO.File.Exists(FilePath)) { return true; }
             else { return false; }
@@ -414,7 +414,7 @@ namespace AnotherMusicPlayer
 
         /// <summary> Open a new media playing thread </summary>
         public bool Open(string FilePath, bool AutoPlay = false) {
-            if (TestFile(FilePath)) {
+            if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath)) {
                 try
                 {
                     Thread objThread = new Thread(new ParameterizedThreadStart(PlaySoundAsync));
@@ -539,7 +539,8 @@ namespace AnotherMusicPlayer
                 {
                     //outputDevice.Init((IWaveProvider)audioFile);
                     outputDevice.Init(equalizer);
-                    AudioList.Add(FilePath, audioFile);
+                    if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
+
                     int ret = -1; long ret2 = -1;
 
                     //while (outputDevice.PlaybackState == PlaybackState.Playing)
@@ -647,9 +648,12 @@ namespace AnotherMusicPlayer
                 if (IsFlac) { ((FlacReader)AudioList[FilePath]).Dispose(); }
                 else { ((AudioFileReader)AudioList[FilePath]).Dispose(); }
 #else
-                ((AudioFileReader)AudioList[FilePath]).Dispose();
+                if (AudioList.ContainsKey(FilePath))
+                {
+                    ((AudioFileReader)AudioList[FilePath]).Dispose();
+                    AudioList.Remove(FilePath);
+                }
 #endif
-                AudioList.Remove(FilePath);
                 ThreadList.Remove(FilePath);
             }
             catch { }

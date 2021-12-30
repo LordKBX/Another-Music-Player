@@ -156,14 +156,14 @@
                             <ColumnDefinition Width="100*" />
                         </Grid.ColumnDefinitions>
                         <TextBlock Text="Filtre" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="5,0,0,0"/>
-                        <ComboBox Grid.Column="1" x:Name="LibraryFiltersMode">
+                        <ComboBox Grid.Column="1" x:Name="LibraryFiltersMode" Style="{DynamicResource LibNavigationComboBox}">
                             <ComboBoxItem x:Name="LibraryFiltersMode_none" Tag="" Content="Aucun" Selector.IsSelected="True"/>
                             <ComboBoxItem x:Name="LibraryFiltersMode_name" Tag="Name" Content="Nom"/>
                             <ComboBoxItem x:Name="LibraryFiltersMode_artist" Tag="Artist" Content="Artist"/>
                             <ComboBoxItem x:Name="LibraryFiltersMode_album" Tag="Album" Content="Album"/>
                             <ComboBoxItem x:Name="LibraryFiltersMode_genre" Tag="Genre" Content="Genre"/>
                         </ComboBox>
-                        <ComboBox Grid.Column="2" x:Name="LibraryFiltersGenreList" Visibility="Hidden"></ComboBox>
+                        <ComboBox Grid.Column="2" x:Name="LibraryFiltersGenreList" Visibility="Hidden" Style="{DynamicResource LibNavigationComboBox}"></ComboBox>
                         <TextBox Grid.Column="3" x:Name="LibraryFiltersGenreSearchBox" Visibility="Hidden"/>
                         <TextBox Grid.Column="2" Grid.ColumnSpan="2" x:Name="LibraryFiltersSearchBox" Visibility="Hidden"/>
                         <Grid Grid.Column="4" x:Name="LibraryFiltersPaginationBlock" HorizontalAlignment="Right" Visibility="Hidden">

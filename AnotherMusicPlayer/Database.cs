@@ -155,9 +155,9 @@ namespace AnotherMusicPlayer
                         {
                             id = row[index];
                         }
-                        else { id = "" + line; }
                     }
-                    else { id = "" + line; }
+                    if (id == "") { id = "" + line; }
+                    if (ret.ContainsKey(id)) { line += 1; continue; }
                     try { ret.Add(id, Database_NameValueCollectionToDictionary(row, false)); } catch { }
                     //Debug.WriteLine(line.ToString());
                     line += 1;
@@ -177,6 +177,7 @@ namespace AnotherMusicPlayer
             if(autocommit)DatabaseTansactionStart();
             foreach (string query in querys)
             {
+                if(query == null) { continue; }
                 SQLiteCommand sqlite_cmd;
                 sqlite_cmd = DatabaseConnection.CreateCommand();
                 sqlite_cmd.CommandText = query;

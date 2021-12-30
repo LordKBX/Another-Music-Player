@@ -62,7 +62,7 @@ namespace AnotherMusicPlayer
 
         public WaveFormat WaveFormat => sourceProvider.WaveFormat;
 
-        public int Read(float[] buffer, int offset, int count)
+        public int Read(float[] buffer, int offset=0, int count=0)
         {
             int samplesRead = 0;
             try

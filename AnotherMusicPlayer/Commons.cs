@@ -115,7 +115,16 @@ namespace AnotherMusicPlayer
         {
             try
             {
-                MainWindow mw = ((MainWindow)Application.Current.MainWindow);
+                MainWindow mw = null;
+                foreach (Window aa in Application.Current.Windows)
+                {
+                    try {
+                        mw.GetTaduction("SizeBytesUnit");
+                        mw = ((MainWindow)aa);
+                    }
+                    catch { }
+                }
+                if (mw == null) { return null; }
                 string[] suf = {
                 mw.GetTaduction("SizeBytesUnit"),
                     mw.GetTaduction("SizeBytesKilo"),

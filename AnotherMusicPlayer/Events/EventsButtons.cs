@@ -109,7 +109,7 @@ namespace AnotherMusicPlayer
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayList.txt", JsonConvert.SerializeObject(PlayList, jss), System.Text.Encoding.UTF8);
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListIndex.txt", ""+PlayListIndex, System.Text.Encoding.UTF8);
             string output = "[" ;
-            foreach (PlayListViewItem item in this.PlayListView.ItemsSource)
+            foreach (PlayListViewItem item in PlayListView.ItemsSource)
             {
                 output += PrintPropreties(item);
             }
