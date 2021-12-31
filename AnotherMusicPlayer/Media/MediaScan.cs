@@ -17,16 +17,51 @@ namespace AnotherMusicPlayer
         List<string> MediatequeScanedFiles = new List<string>();
 
         /// <summary> Asynchronus call for MediatequeScanning Library in a new thread </summary>
-        private async void MediatequeInvokeScan(bool DoClean = false)
+        private async void MediatequeInvokeScan(bool DoClean = false, bool boot = false)
         {
-            try
+            boot = false;
+            DatabaseInit();
+            DirectoryInfo di = new DirectoryInfo(Settings.LibFolder);
+            MediatequeRefFolder = new Folder() { Name = di.Name, Path = di.FullName };
+
+            if (MediatequeWatcher == null) { MediatequeCreateWatcher(); }
+            else if (MediatequeWatcher.Path != Settings.LibFolder) { MediatequeCreateWatcher(); }
+
+            if (boot == true)
             {
-                Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScan));
+                MediatequeScanedFiles.Clear();
+                MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
+                MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
+
+                Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeLoad));
                 objThread.IsBackground = true;
                 objThread.Priority = ThreadPriority.AboveNormal;
-                objThread.Start(DoClean);
+                objThread.Start(null);
             }
-            catch { }
+            else
+            {
+                try
+                {
+                    setLoadingState(true, "Library scan");
+                    Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScan));
+                    objThread.IsBackground = true;
+                    objThread.Priority = ThreadPriority.Normal;
+                    objThread.Start(DoClean);
+                }
+                catch { }
+            }
+        }
+
+        /// <summary> Launch a scan of th Library </summary>
+        private async void MediatequeLoad(object param = null)
+        {
+            _ = Dispatcher.BeginInvoke(new Action(() => {
+                MediatequeScanning = false;
+                MediatequeBuildNavigationPath(MediatequeRefFolder);
+                MediatequeBuildNavigationContent(MediatequeRefFolder);
+                dialog1.IsOpen = false;
+            }));
+            return;
         }
 
         /// <summary> Launch a scan of th Library </summary>
@@ -35,17 +70,23 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("--> MediatequeScan <--");
             bool DoClean = false;
             try { DoClean = (bool)param; } catch { }
-
-            DatabaseInit();
             if (Settings.LibFolder == null) { return; }
             if (!System.IO.Directory.Exists(Settings.LibFolder)) { return; }
 
-            if (MediatequeWatcher == null) { MediatequeCreateWatcher(); }
-            else if (MediatequeWatcher.Path != Settings.LibFolder) { MediatequeCreateWatcher(); }
+            MediatequeScanedFiles.Clear();
+
+            MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
+            MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
+
+            MediatequeScanedFiles = MediatequeScanedFiles.Distinct().ToList();
+            Debug.WriteLine("--> MediatequeScan SUB 0 <--");
+            Debug.WriteLine(MediatequeScanedFiles.Count);
 
             List<string> MediatequeCacheQuerys = new List<string>();
 
             MediatequeScanning = true;
+
+            Debug.WriteLine("--> MediatequeScan SUB 1 <--");
             _ = Dispatcher.BeginInvoke(new Action(() => {
                 LibraryFiltersGrid.IsEnabled = false;
                 LibNavigationContent.Children.Clear();
@@ -69,21 +110,16 @@ namespace AnotherMusicPlayer
                     DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM folders", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
                 }
             }));
+            Debug.WriteLine("--> MediatequeScan SUB 2 <--");
 
-            
+
             Dictionary<string, Dictionary<string, object>> DatabaseFiles = DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
             //Debug.WriteLine(JsonConvert.SerializeObject(DatabaseFiles));
 
             //LibTreeView.Items.Clear();
-            DirectoryInfo di = new DirectoryInfo(Settings.LibFolder);
-            MediatequeRefFolder = new Folder() { Name = di.Name, Path = di.FullName };
 
-            MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
-            MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
-
-            MediatequeScanedFiles = MediatequeScanedFiles.Distinct().ToList();
-            bool test = true;
-
+            Debug.WriteLine("--> MediatequeScan SUB 3 <--");
+            Debug.WriteLine(MediatequeScanedFiles.Count);
             foreach (string file in MediatequeScanedFiles)
             {
                 MediatequeTotalScanedFiles += 1;
@@ -91,15 +127,16 @@ namespace AnotherMusicPlayer
 
                 if (DatabaseFiles.ContainsKey(file))
                 {
+                    //Debug.WriteLine("--> MediatequeScan SUB 4-1 <--");
                     Dictionary<string, object> dfi = DatabaseFileInfo(fi.FullName);
                     //Debug.WriteLine(fi.FullName);
                     //Debug.WriteLine("LastUpdate Database = " + (long)DatabaseFiles[fi.FullName]["LastUpdate"]);
                     //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
 
                     if(dfi != null)
-                    if (Convert.ToInt64((string)dfi["LastUpdate"]) < fi.LastWriteTimeUtc.ToFileTime())
+                    if (Convert.ToInt64((string)dfi["LastUpdate"]) != Convert.ToInt64(fi.LastWriteTimeUtc.ToFileTime()))
                     {
-                        Debug.WriteLine("--> update <--");
+                        //Debug.WriteLine("--> update <--");
                         MediatequeScanedFiles.Add(fi.FullName);
                         MediatequeTotalScanedDuration += Int32.Parse((string)dfi["Duration"]);
                         MediatequeTotalScanedSize += Int32.Parse((string)dfi["Size"]);
@@ -129,6 +166,7 @@ namespace AnotherMusicPlayer
                 }
                 else
                 {
+                    //Debug.WriteLine("--> MediatequeScan SUB 4-2 <--");
                     PlayListViewItem item = null;
                     
                     string query = "INSERT INTO files("
@@ -177,25 +215,24 @@ namespace AnotherMusicPlayer
 
                 if (MediatequeCacheQuerys.Count >= 100)
                 {
+                    Debug.WriteLine("--> MediatequeScan SUB 5 <--");
                     DatabaseQuerys(MediatequeCacheQuerys.ToArray());
+                    MediatequeCacheQuerys.Clear();
                     _ = Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MediatequeCacheQuerys.Clear();
-                        MediatequeBuildNavigationScan();
+                        MediatequeBuildNavigationContent(MediatequeRefFolder);
                     }));
                 }
 
 
             }
 
+            Debug.WriteLine("--> MediatequeScan SUB 6 <--");
             Debug.WriteLine(JsonConvert.SerializeObject(MediatequeCacheQuerys.ToArray()));
             DatabaseQuerys(MediatequeCacheQuerys.ToArray());
-            _ = Dispatcher.BeginInvoke(new Action(() =>
-            {
-                MediatequeCacheQuerys.Clear();
-            }));
+            MediatequeCacheQuerys.Clear();
 
-
+            Debug.WriteLine("--> MediatequeScan SUB 7 <--");
             foreach (KeyValuePair<string, Dictionary<string, object>> fi in DatabaseFiles.ToList())
             {
                 if (!MediatequeScanedFiles.Contains(fi.Key))
@@ -210,6 +247,7 @@ namespace AnotherMusicPlayer
 
             DatabaseFiles.Clear();
 
+            Debug.WriteLine("--> MediatequeScan SUB 8 <--");
             _ = Dispatcher.BeginInvoke(new Action(() => {
                 if (DoClean || LibraryFiltersGenreList.Items.Count == 0)
                 {
@@ -231,10 +269,14 @@ namespace AnotherMusicPlayer
                 LibraryFiltersGrid.IsEnabled = true;
 
                 //LibNavigationContent.Orientation = Orientation.Horizontal;
-                MediatequeBuildNavigationPath(MediatequeCurrentFolder ?? MediatequeRefFolder);
-                MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
             }));
+            Debug.WriteLine("--> MediatequeScan SUB 9 <--");
             MediatequeScanning = false;
+            _ = Dispatcher.InvokeAsync(new Action(() =>
+            {
+                MediatequeBuildNavigationPath(MediatequeRefFolder);
+                MediatequeBuildNavigationContent(MediatequeRefFolder);
+            }));
         }
 
         /// <summary> Fill the Navigation bar in Library pannel when MediatequeScanning files </summary>

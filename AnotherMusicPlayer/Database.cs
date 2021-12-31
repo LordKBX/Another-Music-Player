@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Specialized;
 using System.Collections.Generic;
 using System.Windows;
@@ -21,12 +22,60 @@ namespace AnotherMusicPlayer
         /// </summary>
         private static string DatabaseFolder = null;
 
+        /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
+        private static string DatabaseEscapeString(string str)
+        {
+            if (str == null) { return ""; }
+            else { return str.Replace("'", "''"); }
+        }
+
         /// <summary> store status if in transaction mode </summary>
         private static bool inTransaction = false;
         private static SQLiteTransaction Transaction = null;
 
         /// <summary> Get status if in transaction mode </summary>
         public static bool IsInTransaction() { return inTransaction; }
+
+        /// <summary> Initialize transaction </summary>
+        private static void DatabaseTansactionStart()
+        {
+            if (inTransaction) { return; }
+            try
+            {
+                Transaction = DatabaseConnection.BeginTransaction();
+                inTransaction = true;
+            }
+            catch { }
+        }
+
+        /// <summary> Commit transaction </summary>
+        private static void DatabaseTansactionEnd()
+        {
+            if (!inTransaction) { return; }
+            try
+            {
+                Transaction.Commit();
+                Transaction.Dispose();
+                inTransaction = false;
+            }
+            catch { }
+        }
+
+        /// <summary> Commit transaction </summary>
+        private static void DatabaseTansactionEndAndStart()
+        {
+            if (!inTransaction) { return; }
+            try
+            {
+                Transaction.Commit();
+                Transaction.Dispose();
+                inTransaction = false;
+
+                Transaction = DatabaseConnection.BeginTransaction();
+                inTransaction = true;
+            }
+            catch { }
+        }
 
         /// <summary> Convert NameValueCollection to Dictionary<string, object> </summary>
         static Dictionary<string, object> Database_NameValueCollectionToDictionary(NameValueCollection nvc, bool handleMultipleValuesPerKey)
@@ -96,7 +145,7 @@ namespace AnotherMusicPlayer
                     + "Year INTEGER, "
                     + "Duration INTEGER, "
                     + "Size INTEGER, "
-                    + "LastUpdate BIGINT"
+                    + "LastUpdate BIGINT,  PRIMARY KEY(\"Path\")"
                     + ")");
                 DatabaseDetectOrCreateTable("queue", "CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
                 DatabaseDetectOrCreateTable("playlists", "CREATE TABLE playlists(FIndex TEXT, Name TEXT, Description TEXT)");
@@ -188,6 +237,7 @@ namespace AnotherMusicPlayer
             if (autocommit) DatabaseTansactionEnd();
         }
 
+
         /// <summary> Get cover for specific hash </summary>
         public static string DatabaseGetCover(string Path, string Hash = null)
         {
@@ -226,54 +276,102 @@ namespace AnotherMusicPlayer
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
         }
 
-        /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
-        private static string DatabaseEscapeString(string str)
+        /// <summary> Get Basic Metadata of a media file if stored in database </summary>
+        private Dictionary<string, object> DatabaseFileInfo(string path)
         {
-            if (str == null) { return ""; }
-            else { return str.Replace("'", "''"); }
-        }
-
-        /// <summary> Initialize transaction </summary>
-        private static void DatabaseTansactionStart()
-        {
-            if (inTransaction) { return; }
             try
             {
-                Transaction = DatabaseConnection.BeginTransaction();
-                inTransaction = true;
+                if (!MediatequeScanning)
+                {
+                    Dictionary<string, Dictionary<string, object>> rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString(path) + "' ORDER BY Path ASC", "Path");
+                    if (rt.Count == 0) { return null; }
+                    if (Int32.Parse((string)rt[path]["Size"]) <= 0)
+                    {
+                        FileInfo fi = new FileInfo(path);
+                        PlayListViewItem item = player.MediaInfo(path, false);
+
+                        DatabaseQuerys(new string[]{"UPDATE files SET Name='" + DatabaseEscapeString(item.Name??fi.Name)
+                            + "', Album='" + DatabaseEscapeString(item.Album)
+                            + "', Performers='" + DatabaseEscapeString(item.Performers)
+                            + "', Composers='" + DatabaseEscapeString(item.Composers)
+                            + "', Genres='" + DatabaseEscapeString(item.Genres)
+                            + "', Copyright='" + DatabaseEscapeString(item.Copyright)
+                            + "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists)
+                            + "', Lyrics='" + DatabaseEscapeString(item.Lyrics)
+                            + "', Duration='" + item.Duration
+                            + "', Size='" + item.Size
+                            + "', Disc='" + item.Disc
+                            + "', DiscCount='" + item.DiscCount
+                            + "', Track='" + item.Track
+                            + "', TrackCount='" + item.TrackCount
+                            + "', Year='" + item.Year
+                            + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
+                            + "' WHERE Path='" + DatabaseEscapeString(path) + "'" }, true);
+
+                        rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString(path) + "' ORDER BY Path ASC", "Path");
+                        return rt[path];
+                    }
+                    return rt[path];
+                }
             }
             catch { }
+            return null;
         }
 
-        /// <summary> Commit transaction </summary>
-        private static void DatabaseTansactionEnd()
+        /// <summary> Get Basic Metadata from a list of file if stored in database </summary>
+        private Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths)
         {
-            if (!inTransaction) { return; }
             try
             {
-                Transaction.Commit();
-                Transaction.Dispose();
-                inTransaction = false;
+                if (!MediatequeScanning)
+                {
+                    Dictionary<string, Dictionary<string, object>> ret = new Dictionary<string, Dictionary<string, object>>();
+                    string query = "SELECT * FROM files WHERE Path IN(?) ORDER BY Album ASC, Disc ASC, Track ASC, Name ASC, Path ASC";
+                    foreach(string file in paths) { query = query.Replace("?", "'"+ DatabaseEscapeString(file) + "',?"); }
+                    query = query.Replace(",?", "");
+                    Dictionary<string, Dictionary<string, object>> data = DatabaseQuery(query, "Path");
+                    if (data.Count == 0) { return null; }
+                    foreach(KeyValuePair<string, Dictionary<string, object>> line in data)
+                    {
+                        if (Int32.Parse((string)line.Value["Size"]) <= 0)
+                        {
+                            FileInfo fi = new FileInfo((string)line.Value["Path"]);
+                            PlayListViewItem item = player.MediaInfo((string)line.Value["Path"], false);
+
+                            DatabaseQuerys(new string[]{"UPDATE files SET Name='" + DatabaseEscapeString(item.Name??fi.Name)
+                            + "', Album='" + DatabaseEscapeString(item.Album)
+                            + "', Performers='" + DatabaseEscapeString(item.Performers)
+                            + "', Composers='" + DatabaseEscapeString(item.Composers)
+                            + "', Genres='" + DatabaseEscapeString(item.Genres)
+                            + "', Copyright='" + DatabaseEscapeString(item.Copyright)
+                            + "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists)
+                            + "', Lyrics='" + DatabaseEscapeString(item.Lyrics)
+                            + "', Duration='" + item.Duration
+                            + "', Size='" + item.Size
+                            + "', Disc='" + item.Disc
+                            + "', DiscCount='" + item.DiscCount
+                            + "', Track='" + item.Track
+                            + "', TrackCount='" + item.TrackCount
+                            + "', Year='" + item.Year
+                            + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
+                            + "' WHERE Path='" + DatabaseEscapeString((string)line.Value["Path"]) + "'" }, true);
+
+                            Dictionary<string, Dictionary<string, object>> dataT = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString((string)line.Value["Path"]) + "' ORDER BY Path ASC", "Path");
+                            ret.Add((string)line.Value["Path"], dataT[(string)line.Value["Path"]]);
+                            dataT.Clear();
+                        }
+                        else
+                        {
+                            ret.Add((string)line.Value["Path"], data[(string)line.Value["Path"]]);
+                        }
+                    }
+                    data.Clear();
+                    return ret;
+                }
             }
             catch { }
+            return null;
         }
-
-        /// <summary> Commit transaction </summary>
-        private static void DatabaseTansactionEndAndStart()
-        {
-            if (!inTransaction) { return; }
-            try
-            {
-                Transaction.Commit();
-                Transaction.Dispose();
-                inTransaction = false;
-
-                Transaction = DatabaseConnection.BeginTransaction();
-                inTransaction = true;
-            }
-            catch { }
-        }
-
 
     }
 }

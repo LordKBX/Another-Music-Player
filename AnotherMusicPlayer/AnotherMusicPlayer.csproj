@@ -55,6 +55,7 @@
 
   <ItemGroup>
     <PackageReference Include="Advexp.Settings.Local" Version="2.7.0" />
+    <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="NAudio" Version="2.0.1" />
     <PackageReference Include="NAudio.Flac.Unknown" Version="1.0.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
@@ -85,6 +86,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="icons\add_white.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="icons\add.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

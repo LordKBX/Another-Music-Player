@@ -81,7 +81,7 @@ namespace AnotherMusicPlayer
         //public static BitmapImage MiniNextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next_24.png"));
 
         /// <summary> Add(+) image for ContextMenuItem </summary>
-        public static System.Windows.Controls.Image ContextMenuItemImage_add = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add.png")) };
+        public static System.Windows.Controls.Image ContextMenuItemImage_add = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add_white.png")) };
         public static System.Windows.Controls.Image ContextMenuItemImage_back = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "goback.png")) };
 
         /// <summary> Dictionary contening Image URI indexed by a string code name </summary>

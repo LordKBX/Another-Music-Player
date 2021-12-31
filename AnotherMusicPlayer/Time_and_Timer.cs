@@ -60,6 +60,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback of the timer </summary>
         protected void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
+            //return;
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 //Win1_SizeChanged(null, null);
@@ -151,7 +152,14 @@ namespace AnotherMusicPlayer
                 { 
                     Timer_Count = 0; 
                     try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); } catch { }
-                    try { if (MediatequeScanning == true) { MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder); } } catch { }
+                    try { 
+                        if (MediatequeScanning == true) {
+                            _ = Dispatcher.InvokeAsync(new Action(() =>
+                            {
+                                MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
+                            }));
+                        } 
+                    } catch { }
                 }
 
                 Timer_Count += 1;

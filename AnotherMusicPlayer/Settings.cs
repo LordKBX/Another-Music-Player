@@ -174,20 +174,20 @@ namespace AnotherMusicPlayer
         /// <summary> Callback click bouton de selection dossier </summary>
         private void ParamsLibFolderBtn_Click(object sender, RoutedEventArgs e)
         {
-            string path = OpenFolder();
+            string path = ParamsLibFolderBtn_Click_OpenFolder();
             if (path != null && path != Settings.LibFolder)
             {
                 ParamsLibFolderTextBox.Text = path;
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
-                _ = Dispatcher.BeginInvoke(new Action(() => {
+                _ = Dispatcher.InvokeAsync(new Action(() => {
                     MediatequeInvokeScan(true);
                 }));
             }
         }
 
         /// <summary> Open a window for folder selection </summary>
-        private string OpenFolder()
+        private string ParamsLibFolderBtn_Click_OpenFolder()
         {
             string path = null;
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();

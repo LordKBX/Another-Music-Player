@@ -4,11 +4,16 @@ using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 using System.Diagnostics;
 using System.ComponentModel;
-using System.Windows.Documents;
 using System.Drawing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -43,31 +48,18 @@ namespace AnotherMusicPlayer
         string PreviousKeyboardKey = "";
         double PreviousKeyboardTime = 0;
 
-        private Loading loadingScreen = null;
-        private bool _isLoading;
-        public bool IsLoading
+        public void setLoadingState(bool state, string text = "Loading", bool main = false)
         {
-            get { return _isLoading; }
-            set { 
-                _isLoading = value; 
-                if (value == true) {
-                    loadingScreen = new Loading();
-                    loadingScreen.WindowStyle = WindowStyle.ToolWindow;
-                    loadingScreen.Show();
-                } 
-                else
-                {
-                    try { loadingScreen.Close(); }
-                    catch { }
-                } 
-            }
-        }
-        public void setLoadingState(bool state)
-        {
-            _ = Dispatcher.BeginInvoke(new Action(() =>
+            if (state == true)
             {
-                IsLoading = state;
-            }));
+                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { dialog1.IsOpen = true; dialog1Text.Text = text; })); }
+                else { dialog1.IsOpen = true; dialog1Text.Text = text; }
+            }
+            else
+            {
+                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { dialog1.IsOpen = false; })); }
+                else { dialog1.IsOpen = false; }
+            }
         }
 
         /// <summary> Constructor </summary>
@@ -82,7 +74,8 @@ namespace AnotherMusicPlayer
 
             this.Resources.Clear();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
-            IsLoading = true;
+            dialog1Image.Source = new BitmapImage(new Uri(BaseDirImg + "pause.png"));
+            setLoadingState(true, "Loading", true);
             SettingsSetUp();//Initialize interface elements with stored parametters in settings
 
             PlayListIndex = Settings.LastPlaylistIndex;
@@ -147,7 +140,7 @@ namespace AnotherMusicPlayer
             };
 
             Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
-            Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load settings file
+            Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load style file
             //Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + SeparatorChar + "fr.xaml", UriKind.Absolute) });
             UpdateTraduction();
             PreviewSetUp();
@@ -162,8 +155,12 @@ namespace AnotherMusicPlayer
             BtnRepeat.Background = new System.Windows.Media.ImageBrush(Bimage("RepeatButtonImg_None"));
 
             EventsPlaybackInit();
-            PlayListView_Init(); EqualizerInitEvents();
-            DatabaseInit();
+            PlayListView_Init(); 
+            EqualizerInitEvents();
+            _ = Dispatcher.BeginInvoke(new Action(() =>
+            {
+                DatabaseInit();
+            }));
 
             TimerInterfaceSetUp();
 
@@ -197,7 +194,7 @@ namespace AnotherMusicPlayer
 
             //Settings.LibFolder = "D:\\Music\\";
             MediatequeSetupFilters();
-            MediatequeInvokeScan();
+            MediatequeInvokeScan(false, true);
             MediatequeLoadOldPlaylist();
         }
 
@@ -268,8 +265,8 @@ namespace AnotherMusicPlayer
                     NewFile = null;
                     if (MediaTestFileExtention(files[i]) == false)
                     {
-                        if (Settings.ConversionMode == 1) { NewFile = Path.GetTempPath() + Path.ChangeExtension(Path.GetFileName(files[i]), ".mp3"); }
-                        else { NewFile = Path.ChangeExtension(files[i], ".mp3"); }
+                        if (Settings.ConversionMode == 1) { NewFile = System.IO.Path.GetTempPath() + System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(files[i]), ".mp3"); }
+                        else { NewFile = System.IO.Path.ChangeExtension(files[i], ".mp3"); }
 
                         if (i == 0)
                         {
