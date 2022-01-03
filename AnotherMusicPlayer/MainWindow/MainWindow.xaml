@@ -444,13 +444,10 @@
                             <RowDefinition Height="12px"/>
                             <RowDefinition Height="12px"/>
                             <RowDefinition Height="40px"/>
+                            <RowDefinition Height="12px"/>
                         </Grid.RowDefinitions>
-                        <TextBlock Grid.Row="0" FontSize="10" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                                            Text="Scan" Foreground="White">
-                        </TextBlock>
-                        <TextBlock Grid.Row="1" FontSize="10" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center"
-                                            Text="Tags" Foreground="White">
-                        </TextBlock>
+                        <TextBlock Grid.Row="0" FontSize="10" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Scan" Foreground="White"/>
+                        <TextBlock Grid.Row="1" FontSize="10" TextAlignment="Center" HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="Tags" Foreground="White"/>
                         <Image Grid.Row="2" x:Name="BtnScanMetadataImage" Source="/AnotherMusicPlayer;component/icons/loadingx50.png" 
                                MaxHeight="25px" MaxWidth="25px" Height="25px" Width="25px" 
                                VerticalAlignment="Center" RenderTransformOrigin="0.5,0.5">
@@ -489,6 +486,8 @@
                                 </Style>
                             </Image.Style>
                         </Image>
+                        <TextBlock Grid.Row="3" x:Name="BtnScanMetadataNb" FontSize="10" TextAlignment="Center" 
+                            HorizontalAlignment="Stretch" VerticalAlignment="Center" Text="0" Foreground="White"/>
                     </Grid>
                 </Button>
                 <!-- 

@@ -99,9 +99,9 @@ namespace AnotherMusicPlayer
         private async void MediatequeScanTags(object param = null)
         {
             Debug.WriteLine("--> MediatequeScanTags <--");
-            setMetadataScanningState(true);
             string[] files = (string[])param;
-            _ = bdd.DatabaseFilesInfo(files);
+            setMetadataScanningState(true, files.Length);
+            _ = bdd.DatabaseFilesInfo(files, this);
             setMetadataScanningState(false);
             Debug.WriteLine("--> MediatequeScanTags END <--");
         }

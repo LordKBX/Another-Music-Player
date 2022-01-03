@@ -10,11 +10,20 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using TagLib.Ape;
+using System.Runtime.InteropServices;
 
 namespace AnotherMusicPlayer
 {
+
     public partial class MainWindow : Window
     {
+        [DllImport("KERNEL32.DLL", EntryPoint = "SetProcessWorkingSetSize", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        internal static extern bool SetProcessWorkingSetSize(IntPtr pProcess, int dwMinimumWorkingSetSize, int dwMaximumWorkingSetSize);
+
+        [DllImport("KERNEL32.DLL", EntryPoint = "GetCurrentProcess", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
+        internal static extern IntPtr GetCurrentProcess();
+        private static IntPtr pHandle = GetCurrentProcess();
+
         /// <summary> Convert milliseconds times in human readable string </summary>
         public static string displayTime(long time)
         {
@@ -151,7 +160,11 @@ namespace AnotherMusicPlayer
                 if (Timer_Count >= 50)
                 { 
                     Timer_Count = 0; 
-                    try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); } catch { }
+                    try { 
+                        GC.Collect(); GC.WaitForPendingFinalizers(); 
+                        GC.Collect(); GC.WaitForPendingFinalizers();
+                        SetProcessWorkingSetSize(pHandle, -1, -1);
+                    } catch { }
                     try { 
                         if (MediatequeScanning == true) {
                             _ = Dispatcher.InvokeAsync(new Action(() =>

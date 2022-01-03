@@ -335,13 +335,13 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get Basic Metadata of a media file if stored in database </summary>
-        public Dictionary<string, object> DatabaseFileInfo(string path)
+        public Dictionary<string, object> DatabaseFileInfo(string path, bool forceUpdate = false)
         {
             try
             {
                 Dictionary<string, Dictionary<string, object>> rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString(path) + "' ORDER BY Path ASC", "Path");
                 if (rt.Count == 0) { return null; }
-                if (Int32.Parse((string)rt[path]["Size"]) <= 0)
+                if (Int32.Parse((string)rt[path]["Size"]) <= 0 && forceUpdate == true)
                 {
                     FileInfo fi = new FileInfo(path);
                     PlayListViewItem item = FilesTags.MediaInfo(path, false);
@@ -372,7 +372,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get Basic Metadata from a list of file if stored in database </summary>
-        public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths)
+        public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths, MainWindow parent = null)
         {
             Dictionary<string, Dictionary<string, object>> ret = new Dictionary<string, Dictionary<string, object>>();
             List<string> filesToUpdate = new List<string>();
@@ -415,6 +415,7 @@ namespace AnotherMusicPlayer
                     if (rett != null) { ret.Add(localValue, rett); }
                     cpt += 1;
                     if (cpt % 10 == 0) { try { DatabaseTansactionEndAndStart(); } catch { } }
+                    if (parent != null) { parent.setMetadataScanningState(true, cq.Count); }
                 }
             };
             // Start 5 concurrent consuming actions.

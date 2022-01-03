@@ -78,11 +78,11 @@ namespace AnotherMusicPlayer
             get { return _MetadataScanning; }
             set { _MetadataScanning = value; }
         }
-        public void setMetadataScanningState(bool state)
+        public void setMetadataScanningState(bool state, int nb=0)
         {
             if (state == true)
             {
-                _ = Dispatcher.InvokeAsync(new Action(() => { BtnScanMetadata.Visibility = Visibility.Visible; MetadataScanning = "Visible"; }));
+                _ = Dispatcher.InvokeAsync(new Action(() => { BtnScanMetadata.Visibility = Visibility.Visible; MetadataScanning = "Visible"; BtnScanMetadataNb.Text = "" + nb; }));
             }
             else
             {

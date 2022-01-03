@@ -1,23 +1,8 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Threading;
-using System.Threading.Tasks;
 using NAudio;
 using NAudio.Wave;
 using TagLib;
-using System.Diagnostics;
-using System.Windows.Media.Imaging;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.Runtime.InteropServices;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
-using System.Security.Cryptography;
 
 namespace AnotherMusicPlayer
 {
@@ -31,7 +16,7 @@ namespace AnotherMusicPlayer
                 //Debug.WriteLine("MetaData Source: " + (OriginPath ?? FilePath));
                 TagLib.File tags;
                 if (System.IO.File.Exists(FilePath)) { tags = TagLib.File.Create(FilePath); }
-                else { tags = TagLib.File.Create(OriginPath); }
+                else { tags = TagLib.File.Create(OriginPath, ReadStyle.Average); FilePath = OriginPath; }
                 PlayListViewItem item = new PlayListViewItem();
                 item.Name = tags.Tag.Title;
                 item.Album = tags.Tag.Album;
@@ -58,17 +43,15 @@ namespace AnotherMusicPlayer
 
                 try
                 {
-                    if (System.IO.File.Exists(FilePath))
+                    foreach (string ext in Player.AcceptedExtentions)
                     {
-                        foreach (string ext in Player.AcceptedExtentions)
+                        if (FilePath.EndsWith(ext))
                         {
-                            if (FilePath.EndsWith(ext))
-                            {
-                                AudioFileReader fir = new AudioFileReader(FilePath);
-                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                                fir.Dispose();
-                                item.DurationS = MainWindow.displayTime(item.Duration);
-                            }
+                            AudioFileReader fir = new AudioFileReader(FilePath);
+                            item.Duration = (long)fir.TotalTime.TotalMilliseconds;
+                            fir.Dispose();
+                            item.DurationS = MainWindow.displayTime(item.Duration);
+                            break;
                         }
                     }
                 }

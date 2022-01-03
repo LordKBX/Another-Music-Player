@@ -1,9 +1,9 @@
 # Another Music Player
-[ ![Capture 1](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/01.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/01.png?raw=true)
-[ ![Capture 2](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/02.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/02.png?raw=true)
-[ ![Capture 3](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/03.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/03.png?raw=true)
-[ ![Capture 4](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/04.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/04.png?raw=true)
-[ ![Capture 5](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/small/05.png?raw=true)](https://github.com/LordKBX/C-.Net-Core-Media-Player/blob/master/Captures/05.png?raw=true)
+[ ![Capture 1](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/01.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/01.png?raw=true)
+[ ![Capture 2](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/02.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/02.png?raw=true)
+[ ![Capture 3](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/03.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/03.png?raw=true)
+[ ![Capture 4](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/04.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/04.png?raw=true)
+[ ![Capture 5](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/05.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/05.png?raw=true)
 ---
 ## English Documentation
 
