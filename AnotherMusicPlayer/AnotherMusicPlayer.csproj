@@ -134,6 +134,12 @@
     <None Update="icons\list.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Update="icons\loading.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icons\loadingx50.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="icons\mediatheque.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

@@ -31,7 +31,7 @@ namespace AnotherMusicPlayer
 
         private void MediatequeLoadOldPlaylistP2(object param = null)
         {
-            Dictionary<string, Dictionary<string, object>> LastPlaylist = DatabaseQuery("SELECT MIndex,Path1,Path2 FROM queue ORDER BY MIndex ASC", "MIndex");
+            Dictionary<string, Dictionary<string, object>> LastPlaylist = bdd.DatabaseQuery("SELECT MIndex,Path1,Path2 FROM queue ORDER BY MIndex ASC", "MIndex");
             if (LastPlaylist != null)
             {
                 if (LastPlaylist.Count > 0)
@@ -73,13 +73,13 @@ namespace AnotherMusicPlayer
             {
                 string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
                 query += NormalizeNumber(index, 10) + "','";
-                query += DatabaseEscapeString(line[0]) + "',";
-                query += ((line[1] == null) ? "NULL" : "'" + DatabaseEscapeString(line[1]) + "'");
+                query += Database.DatabaseEscapeString(line[0]) + "',";
+                query += ((line[1] == null) ? "NULL" : "'" + Database.DatabaseEscapeString(line[1]) + "'");
                 query += ")";
                 index += 1;
                 querys.Add(query);
             }
-            DatabaseQuerys(querys.ToArray(), true);
+            bdd.DatabaseQuerys(querys.ToArray(), true);
         }
 
 

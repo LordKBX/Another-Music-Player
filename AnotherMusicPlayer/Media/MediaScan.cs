@@ -8,6 +8,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Linq;
+using System.Windows.Input;
 
 namespace AnotherMusicPlayer
 {
@@ -19,24 +20,66 @@ namespace AnotherMusicPlayer
         /// <summary> Asynchronus call for MediatequeScanning Library in a new thread </summary>
         private async void MediatequeInvokeScan(bool DoClean = false, bool boot = false)
         {
-            boot = false;
-            DatabaseInit();
-            DirectoryInfo di = new DirectoryInfo(Settings.LibFolder);
-            MediatequeRefFolder = new Folder() { Name = di.Name, Path = di.FullName };
+            //boot = false;
+            DirectoryInfo di = new DirectoryInfo(Settings.LibFolder); 
+            Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
 
             if (MediatequeWatcher == null) { MediatequeCreateWatcher(); }
             else if (MediatequeWatcher.Path != Settings.LibFolder) { MediatequeCreateWatcher(); }
 
-            if (boot == true)
+            if (boot == true & DatabaseFiles.Count > 1)
             {
                 MediatequeScanedFiles.Clear();
                 MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
                 MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
 
-                Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeLoad));
-                objThread.IsBackground = true;
-                objThread.Priority = ThreadPriority.AboveNormal;
-                objThread.Start(null);
+                _ = Dispatcher.InvokeAsync(new Action(() => {
+                    Debug.WriteLine("MediatequeInvokeScan + boot");
+                    Debug.WriteLine("Settings.LibFolder = "+ Settings.LibFolder);
+                    MediatequeScanning = false;
+                    string[] a = Directory.GetFiles(Settings.LibFolder, "*.*");
+                    string[] b = Directory.GetDirectories(Settings.LibFolder, "*");
+                    List<string> openItems = new List<string>();
+
+                    foreach (string arrItem in a)
+                    {
+                        openItems.Add(arrItem.Replace(Settings.LibFolder + SeparatorChar, ""));
+                    }
+                    Folder fold = new Folder() { Name = "Home", Path = Settings.LibFolder, Parent = null };
+                    MediatequeLoadFiles(Settings.LibFolder, fold);
+                    MediatequeLoadSubDirectories(Settings.LibFolder, fold);
+                    _ = Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        MediatequeBuildNavigationPath(fold.Folders[0]);
+
+                        Debug.WriteLine("MediatequeInvokeScan + type(LibNavigationPathContener.Children[1]) = " + LibNavigationPathContener.Children[1].GetType().Name);
+
+                        MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
+                        args.RoutedEvent = TextBlock.MouseDownEvent;
+                        args.Source = LibNavigationPathContener.Children[1];
+                        LibNavigationPathContener.Children[1].RaiseEvent(args);
+
+                        MouseButtonEventArgs args2 = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
+                        args2.RoutedEvent = TextBlock.MouseDownEvent;
+                        args2.Source = LibNavigationPathContener.Children[0];
+                        LibNavigationPathContener.Children[0].RaiseEvent(args2);
+
+                        TabControler.SelectedIndex = 0;
+
+                        Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files WHERE Size = 0 ORDER BY Path ASC", "Path");
+                        
+                        if (DatabaseFiles.Count > 0) {
+                            string[] files = DatabaseFiles.Keys.ToArray();
+                            Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScanTags));
+                            objThread.IsBackground = true;
+                            objThread.Priority = ThreadPriority.Normal;
+                            objThread.Start(files);
+                        }
+                    }));
+
+                    //MediatequeBuildNavigationContent(MediatequeRefFolder);
+                    dialog1.IsOpen = false;
+                }));
             }
             else
             {
@@ -52,16 +95,15 @@ namespace AnotherMusicPlayer
             }
         }
 
-        /// <summary> Launch a scan of th Library </summary>
-        private async void MediatequeLoad(object param = null)
+        /// <summary> Launch a scan of the files for tag retrieval </summary>
+        private async void MediatequeScanTags(object param = null)
         {
-            _ = Dispatcher.BeginInvoke(new Action(() => {
-                MediatequeScanning = false;
-                MediatequeBuildNavigationPath(MediatequeRefFolder);
-                MediatequeBuildNavigationContent(MediatequeRefFolder);
-                dialog1.IsOpen = false;
-            }));
-            return;
+            Debug.WriteLine("--> MediatequeScanTags <--");
+            setMetadataScanningState(true);
+            string[] files = null;
+            try { files = (string[])param; } catch { }
+            bdd.DatabaseFilesInfo(files);
+            setMetadataScanningState(false);
         }
 
         /// <summary> Launch a scan of th Library </summary>
@@ -83,6 +125,7 @@ namespace AnotherMusicPlayer
             Debug.WriteLine(MediatequeScanedFiles.Count);
 
             List<string> MediatequeCacheQuerys = new List<string>();
+            List<string> NewFiles = new List<string>();
 
             MediatequeScanning = true;
 
@@ -107,13 +150,13 @@ namespace AnotherMusicPlayer
                     catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
                     LibraryFiltersSearchBox.Text = "";
 
-                    DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM folders", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
+                    bdd.DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM folders", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
                 }
             }));
             Debug.WriteLine("--> MediatequeScan SUB 2 <--");
 
 
-            Dictionary<string, Dictionary<string, object>> DatabaseFiles = DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
+            Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
             //Debug.WriteLine(JsonConvert.SerializeObject(DatabaseFiles));
 
             //LibTreeView.Items.Clear();
@@ -128,7 +171,7 @@ namespace AnotherMusicPlayer
                 if (DatabaseFiles.ContainsKey(file))
                 {
                     //Debug.WriteLine("--> MediatequeScan SUB 4-1 <--");
-                    Dictionary<string, object> dfi = DatabaseFileInfo(fi.FullName);
+                    Dictionary<string, object> dfi = bdd.DatabaseFileInfo(fi.FullName);
                     //Debug.WriteLine(fi.FullName);
                     //Debug.WriteLine("LastUpdate Database = " + (long)DatabaseFiles[fi.FullName]["LastUpdate"]);
                     //Debug.WriteLine("LastUpdate File = " + fi.LastWriteTimeUtc.ToFileTime());
@@ -140,14 +183,14 @@ namespace AnotherMusicPlayer
                         MediatequeScanedFiles.Add(fi.FullName);
                         MediatequeTotalScanedDuration += Int32.Parse((string)dfi["Duration"]);
                         MediatequeTotalScanedSize += Int32.Parse((string)dfi["Size"]);
-                        MediatequeCacheQuerys.Add("UPDATE files SET Name='" + DatabaseEscapeString((string)dfi["Name"])
-                            + "', Album='" + DatabaseEscapeString((string)dfi["Album"])
-                            + "', Performers='" + DatabaseEscapeString((string)dfi["Performers"])
-                            + "', Composers='" + DatabaseEscapeString((string)dfi["Composers"])
-                            + "', Genres='" + DatabaseEscapeString((string)dfi["Genres"])
-                            + "', Copyright='" + DatabaseEscapeString((string)dfi["Copyright"])
-                            + "', AlbumArtists='" + DatabaseEscapeString((string)dfi["AlbumArtists"])
-                            + "', Lyrics='" + DatabaseEscapeString((string)dfi["Lyrics"])
+                        MediatequeCacheQuerys.Add("UPDATE files SET Name='" + Database.DatabaseEscapeString((string)dfi["Name"])
+                            + "', Album='" + Database.DatabaseEscapeString((string)dfi["Album"])
+                            + "', Performers='" + Database.DatabaseEscapeString((string)dfi["Performers"])
+                            + "', Composers='" + Database.DatabaseEscapeString((string)dfi["Composers"])
+                            + "', Genres='" + Database.DatabaseEscapeString((string)dfi["Genres"])
+                            + "', Copyright='" + Database.DatabaseEscapeString((string)dfi["Copyright"])
+                            + "', AlbumArtists='" + Database.DatabaseEscapeString((string)dfi["AlbumArtists"])
+                            + "', Lyrics='" + Database.DatabaseEscapeString((string)dfi["Lyrics"])
                             + "', Duration='" + (string)dfi["Duration"]
                             + "', Size='" + (string)dfi["Size"]
                             + "', Disc='" + (string)dfi["Disc"]
@@ -156,7 +199,7 @@ namespace AnotherMusicPlayer
                             + "', TrackCount='" + (string)dfi["TrackCount"]
                             + "', Year='" + (string)dfi["Year"]
                             + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
-                            + "' WHERE Path='" + DatabaseEscapeString(fi.FullName) + "'");
+                            + "' WHERE Path='" + Database.DatabaseEscapeString(fi.FullName) + "'");
                     }
                     else
                     {
@@ -188,17 +231,17 @@ namespace AnotherMusicPlayer
                         + "Year,"
                         + "LastUpdate"
                         + ") VALUES('";
-                    query += DatabaseEscapeString(fi.FullName) + "',";
-                    query += "'" + DatabaseEscapeString(fi.Name) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0',";
+                    query += Database.DatabaseEscapeString(fi.FullName) + "',";
+                    query += "'" + Database.DatabaseEscapeString(fi.Name) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0',";
 
-                    //query += "'" + DatabaseEscapeString(item.Name) + "','";
-                    //query += DatabaseEscapeString(item.Album) + "','";
-                    //query += DatabaseEscapeString(item.Performers) + "','";
-                    //query += DatabaseEscapeString(item.Composers) + "','";
-                    //query += DatabaseEscapeString(item.Genres) + "','";
-                    //query += DatabaseEscapeString(item.Copyright) + "','";
-                    //query += DatabaseEscapeString(item.AlbumArtists) + "','";
-                    //query += DatabaseEscapeString(item.Lyrics) + "','";
+                    //query += "'" + Database.DatabaseEscapeString(item.Name) + "','";
+                    //query += Database.DatabaseEscapeString(item.Album) + "','";
+                    //query += Database.DatabaseEscapeString(item.Performers) + "','";
+                    //query += Database.DatabaseEscapeString(item.Composers) + "','";
+                    //query += Database.DatabaseEscapeString(item.Genres) + "','";
+                    //query += Database.DatabaseEscapeString(item.Copyright) + "','";
+                    //query += Database.DatabaseEscapeString(item.AlbumArtists) + "','";
+                    //query += Database.DatabaseEscapeString(item.Lyrics) + "','";
                     //query += item.Duration + "','";
                     //query += item.Size + "','";
                     //query += item.Disc + "','";
@@ -208,15 +251,15 @@ namespace AnotherMusicPlayer
                     //query += item.Year + "',";
 
                     query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
-                    MediatequeTotalScanedFiles = 0;
-
+                    MediatequeTotalScanedFiles += 1;
+                    NewFiles.Add(fi.FullName);
                     MediatequeCacheQuerys.Add(query);
                 }
 
                 if (MediatequeCacheQuerys.Count >= 100)
                 {
                     Debug.WriteLine("--> MediatequeScan SUB 5 <--");
-                    DatabaseQuerys(MediatequeCacheQuerys.ToArray());
+                    bdd.DatabaseQuerys(MediatequeCacheQuerys.ToArray());
                     MediatequeCacheQuerys.Clear();
                     _ = Dispatcher.BeginInvoke(new Action(() =>
                     {
@@ -229,7 +272,7 @@ namespace AnotherMusicPlayer
 
             Debug.WriteLine("--> MediatequeScan SUB 6 <--");
             Debug.WriteLine(JsonConvert.SerializeObject(MediatequeCacheQuerys.ToArray()));
-            DatabaseQuerys(MediatequeCacheQuerys.ToArray());
+            bdd.DatabaseQuerys(MediatequeCacheQuerys.ToArray());
             MediatequeCacheQuerys.Clear();
 
             Debug.WriteLine("--> MediatequeScan SUB 7 <--");
@@ -237,7 +280,7 @@ namespace AnotherMusicPlayer
             {
                 if (!MediatequeScanedFiles.Contains(fi.Key))
                 {
-                    DatabaseQuery("DELETE FROM files WHERE Path='" + DatabaseEscapeString(fi.Key) + "'");
+                    bdd.DatabaseQuery("DELETE FROM files WHERE Path='" + Database.DatabaseEscapeString(fi.Key) + "'");
                 }
             }
 
@@ -251,7 +294,7 @@ namespace AnotherMusicPlayer
             _ = Dispatcher.BeginInvoke(new Action(() => {
                 if (DoClean || LibraryFiltersGenreList.Items.Count == 0)
                 {
-                    Dictionary<string, Dictionary<string, object>> genres = DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY Genres ASC", "Genres");
+                    Dictionary<string, Dictionary<string, object>> genres = bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY Genres ASC", "Genres");
                     List<ComboBoxItem> li = new List<ComboBoxItem>();
                     //li.Add(new ComboBoxItem() { Content = "", Tag = "" });
                     foreach (string key in genres.Keys) 
@@ -276,6 +319,13 @@ namespace AnotherMusicPlayer
             {
                 MediatequeBuildNavigationPath(MediatequeRefFolder);
                 MediatequeBuildNavigationContent(MediatequeRefFolder);
+                if (NewFiles.Count > 0)
+                {
+                    Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScanTags));
+                    objThread.IsBackground = true;
+                    objThread.Priority = ThreadPriority.Normal;
+                    objThread.Start(NewFiles.ToArray());
+                }
             }));
         }
 

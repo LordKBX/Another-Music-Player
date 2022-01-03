@@ -252,9 +252,7 @@ namespace AnotherMusicPlayer
             string FilePathExt = FilePath + "|" + MawWidth + "x" + MawHeight;
             try
             {
-                string fileHash = MainWindow.FileHash(FilePath);
-
-                string data = MainWindow.DatabaseGetCover(FilePathExt, fileHash);
+                string data = parent.bdd.DatabaseGetCover(FilePathExt);
                 if (data != null) {
                     bitmap = BitmapMagic.Base64StringToBitmap(data);
                 }
@@ -298,7 +296,8 @@ namespace AnotherMusicPlayer
                         }
                         bitmap.Freeze();
 
-                        MainWindow.DatabaseSaveCover(FilePathExt, fileHash,
+                        parent.bdd.DatabaseSaveCover(
+                            FilePathExt, 
                             BitmapMagic.BitmapToBase64String(
                                 BitmapMagic.BitmapImage2Bitmap(bitmap),
                                 System.Drawing.Imaging.ImageFormat.Jpeg

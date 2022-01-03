@@ -3,7 +3,6 @@ using System.IO;
 using System.Threading;
 using System.Collections.Generic;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Input;
 using System.Windows.Controls;
 using System.Diagnostics;
@@ -27,6 +26,15 @@ namespace AnotherMusicPlayer
         public string Path = null;
         /// <summary> Reference of Folder Parent object </summary>
         public Folder Parent = null;
+    }
+
+    /// <summary> Class AsyncCoverLoadPacket for storing required data </summary>
+    public class AsyncCoverLoadPacket
+    {
+        public bool nocover = false;
+        public System.Windows.Controls.Image sender = null;
+        public string coverPath = null;
+        public BitmapImage defaultCover = null;
     }
 
     public partial class MainWindow : Window
@@ -162,17 +170,21 @@ namespace AnotherMusicPlayer
         private void MediatequeBuildNavigationContent(Folder fold)
         {
             if (fold.Path == null) { fold.Path = Settings.LibFolder; }
+            if (!isLoading() && !MediatequeScanning) { setLoadingState(true, "Loading"); }
             //setLoadingState(false);
             //return;
             //Debug.WriteLine("--> MediatequeBuildNavigationContent <--");
             try
             {
-                LibNavigationContent.Children.Clear();
+                if(LibNavigationContent.Children.Count>0)LibNavigationContent.Children.Clear();
                 LibNavigationContentB.Visibility = Visibility.Visible;
                 LibNavigationContent2B.Visibility = Visibility.Collapsed;
                 LibraryFiltersMode.SelectedIndex = 0;
                 LibraryFiltersGenreList.SelectedIndex = 0;
                 LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
+
+                MediatequeBuildNavigationContentBlockssPanel = new StackPanel() { Orientation = Orientation.Vertical, Width = LibNavigationContent.ActualWidth, Visibility = Visibility.Visible };
+                LibNavigationContent.Children.Add(MediatequeBuildNavigationContentBlockssPanel);
 
                 foreach (Folder fl in fold.Folders) { 
                     MediatequeBuildNavigationContentButton("folder", fl.Name, fl.Path, fl); 
@@ -212,7 +224,7 @@ namespace AnotherMusicPlayer
                 }));
 
                 Debug.WriteLine(fold.Path);
-                Dictionary<string, Dictionary<string, object>> files = DatabaseQuery("SELECT * FROM files WHERE Path LIKE '" + DatabaseEscapeString(fold.Path) + SeparatorChar + "%' ORDER BY LOWER(Album) ASC, Disc ASC, Track ASC, Name ASC, Path ASC", "Path");
+                Dictionary<string, Dictionary<string, object>> files = bdd.DatabaseQuery("SELECT * FROM files WHERE Path LIKE '" + Database.DatabaseEscapeString(fold.Path) + SeparatorChar + "%' ORDER BY LOWER(Album) ASC, Disc ASC, Track ASC, Name ASC, Path ASC", "Path");
 
                 List<string> endFiles = new List<string>();
                 foreach (string file in files.Keys.ToArray()) {
@@ -221,11 +233,13 @@ namespace AnotherMusicPlayer
                         endFiles.Add(file);
                     }
                 }
-
-                MediatequeBuildNavigationContentBlockssPanel = new StackPanel(){ Orientation = Orientation.Vertical, Width = LibNavigationContent.ActualWidth };
-                LibNavigationContent.Children.Add(MediatequeBuildNavigationContentBlockssPanel);
-                MediatequeBuildNavigationContentBlocks(endFiles.ToArray(), MediatequeBuildNavigationContentBlockssPanel);
-                //setLoadingState(false);
+                _ = Dispatcher.BeginInvoke(new Action(() =>
+                {
+                    endFiles.Add("");
+                    Debug.WriteLine(JsonConvert.SerializeObject(endFiles.ToArray()));
+                    MediatequeBuildNavigationContentBlocks(endFiles.ToArray(), MediatequeBuildNavigationContentBlockssPanel);
+                    LibNavigationContentScroll.ScrollToTop();
+                }));
             }
             catch {
                 Debug.WriteLine("--> MediatequeBuildNavigationContent ERROR <--");
@@ -235,8 +249,9 @@ namespace AnotherMusicPlayer
         private void MediatequeBuildNavigationContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
         {
             Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks START <--");
-            if (files.Length == 0) { return; }
-            if (contener == null) { return; }
+            while (files.Length > 0 && files[0].Length == 0) { files = files.Where(w => w != files[0]).ToArray(); }
+            if (files.Length == 0) { setLoadingState(false); return; }
+            if (contener == null) { setLoadingState(false); return; }
             try
             {
                 BitmapImage defaultCover = Bimage("CoverImg");
@@ -250,16 +265,22 @@ namespace AnotherMusicPlayer
                     }
                 }
 
-                Dictionary<string, Dictionary<string, object>>  dataFiles = DatabaseFilesInfo(files);
+                Dictionary<string, Dictionary<string, object>> dataFiles = bdd.DatabaseFilesInfo(files);
                 Dictionary<string, Dictionary<uint, Dictionary<string, PlayListViewItem>>> tab = new Dictionary<string, Dictionary<uint, Dictionary<string, PlayListViewItem>>>();
                 foreach (string fil in files)
                 {
-                    PlayListViewItem it = DatabaseItemToPlayListViewItem(dataFiles[fil]);
-                    if (!tab.ContainsKey(it.Album)) { tab.Add(it.Album, new Dictionary<uint, Dictionary<string, PlayListViewItem>>()); }
-                    if (!tab[it.Album].ContainsKey(it.Disc)) { tab[it.Album].Add(it.Disc, new Dictionary<string, PlayListViewItem>()); }
-                    if (!tab[it.Album][it.Disc].ContainsKey(it.Path)) { tab[it.Album][it.Disc].Add(it.Path, it); }
+                    if(dataFiles.ContainsKey(fil))
+                    {
+                        PlayListViewItem it = DatabaseItemToPlayListViewItem(dataFiles[fil]);
+                        if (!tab.ContainsKey(it.Album)) { tab.Add(it.Album, new Dictionary<uint, Dictionary<string, PlayListViewItem>>()); }
+                        if (!tab[it.Album].ContainsKey(it.Disc)) { tab[it.Album].Add(it.Disc, new Dictionary<string, PlayListViewItem>()); }
+                        if (!tab[it.Album][it.Disc].ContainsKey(it.Path)) { tab[it.Album][it.Disc].Add(it.Path, it); }
+                    }
+                    else {
+                        Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks ERROR - FILE '"+ fil + "' do not exist <--");
+                    }
                 }
-                
+
                 foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, PlayListViewItem>>> albumT in tab)
                 {
                     bool nocover = false;
@@ -286,35 +307,31 @@ namespace AnotherMusicPlayer
                                 VerticalAlignment = VerticalAlignment.Top,
                                 Style = (Style)Resources.MergedDictionaries[0]["HQImg"]
                             };
-                            im.Loaded += (object sender, RoutedEventArgs e) => {
-                                _ = Dispatcher.InvokeAsync(new Action(() =>
-                                {
-                                    ((System.Windows.Controls.Image)sender).Source = (Settings.MemoryUsage == 1) ?
-                                    (((nocover) ? null : player.MediaPicture(coverPath, true, 150, 150, false)) ?? defaultCover) :
-                                    (((nocover) ? null : player.MediaPicture(coverPath, true, 50, 50, false)) ?? defaultCover);
+                            im.Source = (Settings.MemoryUsage == 1) ?
+                                ((player.MediaPicture(coverPath, true, 150, 150, false)) ?? defaultCover) :
+                                ((player.MediaPicture(coverPath, true, 50, 50, false)) ?? defaultCover);
+                            if (im.Source != Bimage("CoverImg") && Settings.MemoryUsage == 1)
+                            {
+                                WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
+                                Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
+                                imp.Source = (((nocover) ? null : player.MediaPicture(coverPath, true)) ?? defaultCover);
+                                p.Children.Add(imp);
+                                im.ToolTip = p;
+                            }
 
-                                    if (im.Source != Bimage("CoverImg") && Settings.MemoryUsage == 1)
-                                    {
-                                        WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
-                                        Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
-                                        imp.Source = (((nocover) ? null : player.MediaPicture(coverPath, true)) ?? defaultCover);
-                                        p.Children.Add(imp);
-                                        ((System.Windows.Controls.Image)sender).ToolTip = p;
-                                    }
-                                }));
+                            StackPanel st1 = new StackPanel() { 
+                                Orientation = Orientation.Vertical, 
+                                HorizontalAlignment= HorizontalAlignment.Left, 
+                                Margin = new Thickness(5, 0, 0, 0) 
                             };
-                            im.Unloaded += (object sender, RoutedEventArgs e) => {
-                                im.Source = null;
-                                im.ToolTip = null;
-                            };
-
-                            StackPanel st1 = new StackPanel() { Orientation = Orientation.Vertical, Margin = new Thickness(5, 0, 0, 0) };
                             st1.Children.Add(new AccessText()
                             {
-                                HorizontalAlignment = HorizontalAlignment.Stretch,
+                                HorizontalAlignment = HorizontalAlignment.Left,
                                 TextAlignment = TextAlignment.Left,
                                 Text = al,
-                                FontWeight = FontWeights.Bold
+                                FontWeight = FontWeights.Bold,
+                                MaxWidth = 200,
+                                TextTrimming = TextTrimming.CharacterEllipsis
                             });
                             foreach (KeyValuePair<uint, Dictionary<string, PlayListViewItem>> discT in albumT.Value) 
                             {
@@ -336,32 +353,53 @@ namespace AnotherMusicPlayer
                                     else { return (int)trackcmp; }
                                     }
                                 );
+                                WrapPanel st2 = new WrapPanel()
+                                {
+                                    HorizontalAlignment = HorizontalAlignment.Stretch
+                                };
                                 foreach (KeyValuePair<string, PlayListViewItem> trackT in myList)
                                 {
                                     brList.Add(trackT.Value.Path);
+                                    string textName = ((trackT.Value.Track==0)?"":NormalizeNumber((int)trackT.Value.Track, ("" + trackT.Value.TrackCount).Length) + ". ") + trackT.Value.Name;
                                     Button btn = new Button()
                                     {
                                         HorizontalAlignment = HorizontalAlignment.Stretch,
                                         Content = new AccessText()
                                         {
                                             HorizontalAlignment = HorizontalAlignment.Left,
-                                            VerticalAlignment = VerticalAlignment.Center,
+                                            VerticalAlignment = VerticalAlignment.Stretch,
                                             TextAlignment = TextAlignment.Left,
-                                            Text = NormalizeNumber((int)trackT.Value.Track, ("" + trackT.Value.TrackCount).Length) + ". " + trackT.Value.Name,
+                                            Text = textName,
                                             FontStyle = FontStyles.Normal,
-                                            Margin = new Thickness(2)
+                                            Margin = new Thickness(2),
+                                            TextWrapping = TextWrapping.Wrap
                                         },
                                         HorizontalContentAlignment = HorizontalAlignment.Left,
-                                        VerticalContentAlignment = VerticalAlignment.Top,
+                                        VerticalContentAlignment = VerticalAlignment.Center,
                                         FontStyle = FontStyles.Normal,
                                         Tag = new object[] { "file", trackT.Value.Path },
-                                        Cursor = Cursors.Hand
+                                        Cursor = Cursors.Hand,
+                                        Width = 200, Height=50,
+                                        //ToolTip = textName,
+                                        Padding = new Thickness() { Bottom = 0, Left = 0, Right = 0, Top = 0 },
+                                        Margin = new Thickness() { Bottom = 0, Left = 0, Right = 5, Top = 5 },
+                                        Style = new Style()
                                     };
+                                    //btn.Loaded += (object sender, RoutedEventArgs e) => {
+                                    //    Button btn = (Button)sender;
+                                    //    string path = (string)btn.Tag;
+                                    //    Dispatcher.BeginInvoke(new Action(() =>
+                                    //    {
+                                    //        Dictionary<string, object> dataT = DatabaseFileInfo(path);
+                                    //        ((AccessText)btn.Content).Text = NormalizeNumber(Convert.ToInt32(dataT["Track"]), ("" + dataT["TrackCount"]).Length) + ". " + (string)dataT["Name"];
+                                    //    }));
+                                    //};
                                     btn.Click += MediatequeNavigationContentButtonClick;
                                     btn.ContextMenu = LibMediaCreateContextMenu("file");
-                                    st1.Children.Add(btn);
+                                    st2.Children.Add(btn);
                                 }
-                        }
+                                st1.Children.Add(st2);
+                    }
 
                     gr.Children.Add(im); 
                     Grid.SetColumn(im, 0);
@@ -370,6 +408,7 @@ namespace AnotherMusicPlayer
                     br.Content = gr;
                     br.Tag = new object[] { "album", brList.ToArray() };
                     contener.Children.Add(br);
+                    
                 }
                 dataFiles.Clear();
             }
@@ -513,8 +552,7 @@ namespace AnotherMusicPlayer
             catch
             {
                 // With ContextMenu from Library pannel Navigation bar
-                TextBlock tx = (TextBlock)ct.PlacementTarget;
-                tab = (object[])tx.Tag;
+                return;
             }
 
             if ((string)tab[0] == "folder") {
@@ -530,7 +568,7 @@ namespace AnotherMusicPlayer
             }
             else if ((string)tab[0] == "album")
             {
-                Dispatcher.BeginInvoke(new Action(() => { Open((string[])tab[1], false); }));
+                Dispatcher.BeginInvoke(new Action(() => { Open((string[])tab[1], false);  }));
             }
         }
 

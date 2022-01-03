@@ -23,190 +23,131 @@ using System.Windows.Documents;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 using System.Reflection;
-using Advexp;
-using Advexp.DynamicSettings;
-using Advexp.LocalDynamicSettings;
+using System.Windows.Threading;
+using System.Threading.Tasks;
 
 namespace AnotherMusicPlayer
-{   
+{
     /// <summary> Class storing application settings </summary>
-    class Settings : Advexp.Settings<Settings>
+    internal class Settings
     {
         // Lang section
-        [Setting(Name = "Local.Lang", Default = null)]
         public static string Lang { get; set; } = null;
 
         // Conversion section
-        [Setting(Name = "Local.ConversionMode", Default = 1)]
         public static Int32 ConversionMode { get; set; } = 1;
-        [Setting(Name = "Local.ConversionBitRate", Default = 128)]
         public static Int32 ConversionBitRate { get; set; } = 128;
 
-        [Setting(Name = "Local.MemoryUsage", Default = 1)]
+        // Memery usage Section
         public static Int32 MemoryUsage { get; set; } = 1;
 
         // Library Section
-        [Setting(Name = "Local.LibFolder", Default = null)]
-        public static string LibFolder { get; set; } = null;
+        public static string LibFolder { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
         // Equalizer Section
-        [Setting(Name = "Local.EqualizerPreset", Default = null)]
         public static string EqualizerPreset { get; set; } = null;
-        [Setting(Name = "Local.EqualizerBand1", Default = 0)]
         public static float EqualizerBand1 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand2", Default = 0)]
         public static float EqualizerBand2 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand3", Default = 0)]
         public static float EqualizerBand3 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand4", Default = 0)]
         public static float EqualizerBand4 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand5", Default = 0)]
         public static float EqualizerBand5 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand6", Default = 0)]
         public static float EqualizerBand6 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand7", Default = 0)]
         public static float EqualizerBand7 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand8", Default = 0)]
         public static float EqualizerBand8 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand9", Default = 0)]
         public static float EqualizerBand9 { get; set; } = 0;
-        [Setting(Name = "Local.EqualizerBand10", Default = 0)]
         public static float EqualizerBand10 { get; set; } = 0;
 
         // WindowSize section
-        [Setting(Name = "Local.LastWindowWidth", Default = 550)]
         public static double LastWindowWidth { get; set; } = 550;
-        [Setting(Name = "Local.LastWindowHeight", Default = 400)]
         public static double LastWindowHeight { get; set; } = 400;
 
         // WindowPosition section
-        [Setting(Name = "Local.LastWindowLeft", Default = 100)]
         public static double LastWindowLeft { get; set; } = 100;
-        [Setting(Name = "Local.LastWindowTop", Default = 100)]
         public static double LastWindowTop { get; set; } = 100;
 
         // Last play Section
-        [Setting(Name = "Local.LastPlaylistIndex", Default = 0)]
-        public static int LastPlaylistIndex { get; set; } = 0;
+        public static Int32 LastPlaylistIndex { get; set; } = 0;
 
         // RepeatButton Section
-        [Setting(Name = "Local.LastRepeatStatus", Default = 0)]
-        public static int LastRepeatStatus { get; set; } = 0;
-    }
+        public static Int32 LastRepeatStatus { get; set; } = 0;
 
-    public partial class MainWindow : Window
-    {
+        private static MainWindow window = null;
 
-        /// <summary> Load and Initialize settings </summary>
-        private void SettingsInit()
-        {
-            Settings.LoadSettings();
-            if (Settings.Lang == null) { Settings.Lang = (AppLang.StartsWith("fr-")) ? "fr-FR" : "en-US"; }
-            if (!System.IO.Directory.Exists(Settings.LibFolder)) { Settings.LibFolder = null; }
-            if (Settings.LibFolder == null) { Settings.LibFolder = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic); }
-            PlayRepeatStatus = Settings.LastRepeatStatus;
+        public static bool LoadSettings() {
+            window = (MainWindow)System.Windows.Application.Current.Windows[0];
+            //Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
+                Lang = window.bdd.DatabaseGetParam("Lang", "en-US");
+
+                ConversionMode = Convert.ToInt32(window.bdd.DatabaseGetParam("ConversionMode", "1"));
+                ConversionBitRate = Convert.ToInt32(window.bdd.DatabaseGetParam("ConversionBitRate", "128"));
+
+                MemoryUsage = Convert.ToInt32(window.bdd.DatabaseGetParam("MemoryUsage", "1"));
+
+                LibFolder = window.bdd.DatabaseGetParam("LibFolder", Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
+
+                EqualizerPreset = window.bdd.DatabaseGetParam("EqualizerPreset", null);
+                EqualizerBand1 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand1", "0")));
+                EqualizerBand2 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand2", "0")));
+                EqualizerBand3 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand3", "0")));
+                EqualizerBand4 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand4", "0")));
+                EqualizerBand5 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand5", "0")));
+                EqualizerBand6 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand6", "0")));
+                EqualizerBand7 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand7", "0")));
+                EqualizerBand8 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand8", "0")));
+                EqualizerBand9 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand9", "0")));
+                EqualizerBand10 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand10", "0")));
+
+                LastWindowWidth = Convert.ToDouble(window.bdd.DatabaseGetParam("LastWindowWidth", "550"));
+                LastWindowHeight = Convert.ToDouble(window.bdd.DatabaseGetParam("LastWindowHeight", "400"));
+
+                LastWindowLeft = Convert.ToDouble(window.bdd.DatabaseGetParam("LastWindowLeft", "100"));
+                LastWindowTop = Convert.ToDouble(window.bdd.DatabaseGetParam("LastWindowTop", "100"));
+
+                LastPlaylistIndex = Convert.ToInt32(window.bdd.DatabaseGetParam("LastPlaylistIndex", "0"));
+                LastRepeatStatus = Convert.ToInt32(window.bdd.DatabaseGetParam("LastRepeatStatus", "0"));
+            //}));
+            return true;
         }
 
-        /// <summary> load settings in parametters panel </summary>
-        private void SettingsSetUp()
-        {
-            //Settings.DeleteSettings(); Settings.SaveSettings();
-
-            if (Settings.Lang.StartsWith("fr-")) { ParamsLanguageVals.SelectedIndex = 1; }
-            else { ParamsLanguageVals.SelectedIndex = 0; }
-            ParamsLanguageVals.SelectionChanged += ParamsLanguageVals_SelectionChanged;
-
-            if (Settings.ConversionMode == 1) { ParamsConvKeepVals.SelectedIndex = 0; }
-            else { ParamsConvKeepVals.SelectedIndex = 1; }
-            ParamsConvKeepVals.SelectionChanged += ParamsConvKeepVals_SelectionChanged;
-
-            if (Settings.MemoryUsage == 1) { ParamsMemoryUsage.SelectedIndex = 1; }
-            else { ParamsMemoryUsage.SelectedIndex = 0; }
-            ParamsMemoryUsage.SelectionChanged += ParamsMemoryUsage_SelectionChanged;
-
-            Int32 i = 0;
-            foreach (ComboBoxItem cb in ParamsConvQualityVals.Items)
+        public static void SaveSettings() {
+            _ = Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
             {
-                if (Convert.ToInt32((string)cb.Tag) == Settings.ConversionBitRate) { ParamsConvQualityVals.SelectedIndex = (int)i; break; }
-                i += 1;
-            }
-            ParamsConvQualityVals.SelectionChanged += ParamsConvQualityVals_SelectionChanged;
-            player.ConvQuality(Settings.ConversionBitRate);
+                window.bdd.DatabaseSaveParam("Lang", Lang, "TEXT");
 
-            if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }
-            else { Settings.LibFolder = null; }
+                window.bdd.DatabaseSaveParam("ConversionMode", "" + ConversionMode, "INT");
+                window.bdd.DatabaseSaveParam("ConversionBitRate", "" + ConversionBitRate, "INT");
+
+                window.bdd.DatabaseSaveParam("MemoryUsage", "" + MemoryUsage, "INT");
+
+                window.bdd.DatabaseSaveParam("LibFolder", LibFolder, "TEXT");
+
+                window.bdd.DatabaseSaveParam("EqualizerPreset", EqualizerPreset, "TEXT");
+                window.bdd.DatabaseSaveParam("EqualizerBand1", "" + EqualizerBand1, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand2", "" + EqualizerBand2, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand3", "" + EqualizerBand3, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand4", "" + EqualizerBand4, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand5", "" + EqualizerBand5, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand6", "" + EqualizerBand6, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand7", "" + EqualizerBand7, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand8", "" + EqualizerBand8, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand9", "" + EqualizerBand9, "FLOAT");
+                window.bdd.DatabaseSaveParam("EqualizerBand10", "" + EqualizerBand10, "FLOAT");
+
+                window.bdd.DatabaseSaveParam("LastWindowWidth", "" + LastWindowWidth, "INT");
+                window.bdd.DatabaseSaveParam("LastWindowHeight", "" + LastWindowHeight, "INT");
+
+                window.bdd.DatabaseSaveParam("LastWindowLeft", "" + LastWindowLeft, "INT");
+                window.bdd.DatabaseSaveParam("LastWindowTop", "" + LastWindowTop, "INT");
+
+                window.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + LastPlaylistIndex, "INT");
+                window.bdd.DatabaseSaveParam("LastRepeatStatus", "" + LastRepeatStatus, "INT");
+            }));
         }
 
-        private void ParamsMemoryUsage_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Settings.MemoryUsage = ((ComboBox)sender).SelectedIndex;
-            Settings.SaveSettings();
-        }
-
-        /// <summary> Callback parametter language combobox </summary>
-        private void ParamsLanguageVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
-            Settings.Lang = (string)item.Tag;
-            Settings.SaveSettings();
-            UpdateTraduction();
-            if (PlayList.Count > 0 && PlayListIndex >= 0) { UpdateLeftPannelMediaInfo(); }
-            if (MediatequeScanning) {MediatequeBuildNavigationScan(); }
-            MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
-        }
-
-        /// <summary> Callback parametter conversion mode combobox </summary>
-        private void ParamsConvKeepVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            Settings.ConversionMode = ((ComboBox)sender).SelectedIndex + 1;
-            Settings.SaveSettings();
-        }
-
-        /// <summary> Callback parametter language combobox </summary>
-        private void ParamsConvQualityVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
-            Settings.ConversionBitRate = Convert.ToInt32((string)item.Tag);
-            Settings.SaveSettings();
-            player.ConvQuality(Settings.ConversionBitRate);
-        }
-
-        /// <summary> Callback click bouton de selection dossier </summary>
-        private void ParamsLibFolderBtn_Click(object sender, RoutedEventArgs e)
-        {
-            string path = ParamsLibFolderBtn_Click_OpenFolder();
-            if (path != null && path != Settings.LibFolder)
-            {
-                ParamsLibFolderTextBox.Text = path;
-                Settings.LibFolder = path;
+        public static void SaveSettingsAsync() {
+            _ = Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() => {
                 Settings.SaveSettings();
-                _ = Dispatcher.InvokeAsync(new Action(() => {
-                    MediatequeInvokeScan(true);
-                }));
-            }
-        }
-
-        /// <summary> Open a window for folder selection </summary>
-        private string ParamsLibFolderBtn_Click_OpenFolder()
-        {
-            string path = null;
-            Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
-            dialog.InitialDirectory = Settings.LibFolder; // Use current value for initial dir
-            dialog.Title = GetTaduction("ParamsLibFolderSelectorTitle"); // instead of default "Save As"
-            dialog.Filter = GetTaduction("ParamsLibFolderSelectorBlockerTitle") + "|*." + GetTaduction("ParamsLibFolderSelectorBlockerType"); // Prevents displaying files
-            dialog.FileName = GetTaduction("ParamsLibFolderSelectorBlockerName"); // Filename will then be "select.this.directory"
-            if (dialog.ShowDialog() == true)
-            {
-                path = dialog.FileName;
-                // Remove fake filename from resulting path
-                path = path.Replace("\\" + GetTaduction("ParamsLibFolderSelectorBlockerName") + "." + GetTaduction("ParamsLibFolderSelectorBlockerType"), "");
-                path = path.Replace("." + GetTaduction("ParamsLibFolderSelectorBlockerType"), "");
-                // If user has changed the filename, create the new directory
-                if (!System.IO.Directory.Exists(path)) { return null; }
-                // Our final value is in path
-                //Debug.WriteLine(path);
-            }
-            return path;
+            }));
         }
     }
 }

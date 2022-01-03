@@ -38,9 +38,9 @@ namespace AnotherMusicPlayer
                     string var = LibraryFiltersSearchBox.Text;
                     Dictionary<string, Dictionary<string, object>> files = null;
                     if (tag == "Artist") {
-                        files = DatabaseQuery("SELECT * FROM files WHERE Performers LIKE '%" + DatabaseEscapeString(var) + "%' OR Composers LIKE '%" + DatabaseEscapeString(var) + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
+                        files = bdd.DatabaseQuery("SELECT * FROM files WHERE Performers LIKE '%" + Database.DatabaseEscapeString(var) + "%' OR Composers LIKE '%" + Database.DatabaseEscapeString(var) + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
                     }
-                    else { files = DatabaseQuery("SELECT * FROM files WHERE " + tag + " LIKE '%" + DatabaseEscapeString(var) + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path"); }
+                    else { files = bdd.DatabaseQuery("SELECT * FROM files WHERE " + tag + " LIKE '%" + Database.DatabaseEscapeString(var) + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path"); }
                     
                     int countAlbums = 0;
                     int page = 0;
@@ -160,7 +160,7 @@ namespace AnotherMusicPlayer
                 }
             }
             else {
-                Dictionary<string, Dictionary<string, object>> files = DatabaseQuery("SELECT * FROM files WHERE Genres LIKE '%"+ genre + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
+                Dictionary<string, Dictionary<string, object>> files = bdd.DatabaseQuery("SELECT * FROM files WHERE Genres LIKE '%"+ genre + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
                 int countAlbums = 0;
                 int page = 0;
                 string previousAlbum = null;

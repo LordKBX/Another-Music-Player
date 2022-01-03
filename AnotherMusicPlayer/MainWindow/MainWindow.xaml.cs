@@ -23,7 +23,7 @@ namespace AnotherMusicPlayer
     public partial class MainWindow : System.Windows.Window
     {
         /// <summary> Object music player </summary>
-        Player player;
+        public Player player;
         /// <summary> Store the last time(unix) playback was stoped, used for preventing media skip since default playback status is stoped before starting </summary>
         double PlaybackStopLastTime = 0;
         /// <summary> Store the playlist current play index </summary>
@@ -44,39 +44,74 @@ namespace AnotherMusicPlayer
         public List<string[]> PlayList { get; set; }
         /// <summary> Used for storing object dependant of the Operating system </summary>
         private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
+        /// <summary>Database object </summary>
+        public Database bdd = null;
+
 
         string PreviousKeyboardKey = "";
         double PreviousKeyboardTime = 0;
 
+        private string _loading;
+        public string Loading
+        {
+            get { return _loading; }
+            set { _loading = value; }
+        }
         public void setLoadingState(bool state, string text = "Loading", bool main = false)
         {
             if (state == true)
             {
-                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { dialog1.IsOpen = true; dialog1Text.Text = text; })); }
-                else { dialog1.IsOpen = true; dialog1Text.Text = text; }
+                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { Loading = "Running";  dialog1.IsOpen = true; dialog1Text.Text = text; })); }
+                else { Loading = "Running"; dialog1.IsOpen = true; dialog1Text.Text = text; }
             }
             else
             {
-                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { dialog1.IsOpen = false; })); }
-                else { dialog1.IsOpen = false; }
+                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { Loading = "Stopped"; dialog1.IsOpen = false; })); }
+                else { Loading = "Stopped"; dialog1.IsOpen = false; }
+            }
+        }
+        public bool isLoading() { return dialog1.IsOpen; }
+
+        private string _MetadataScanning;
+        public string MetadataScanning
+        {
+            get { return _MetadataScanning; }
+            set { _MetadataScanning = value; }
+        }
+        public void setMetadataScanningState(bool state)
+        {
+            if (state == true)
+            {
+                _ = Dispatcher.BeginInvoke(new Action(() => { BtnScanMetadata.Visibility = Visibility.Visible; MetadataScanning = "Visible"; }));
+            }
+            else
+            {
+                _ = Dispatcher.BeginInvoke(new Action(() => { BtnScanMetadata.Visibility = Visibility.Hidden;  MetadataScanning = "Hidden"; }));
             }
         }
 
         /// <summary> Constructor </summary>
-        public MainWindow()
+        public MainWindow(Database obdd)
         {
-            SettingsInit();//Initialize and load settings
+            bdd = obdd;
             // Set DataContext
-            this.DataContext = this;    
+            this.DataContext = this;  
 
             PlayList = new List<string[]>();//Initialize PlayList
             player = new Player(this);//Create Player object
 
+            Settings.LoadSettings();
+
             this.Resources.Clear();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
-            dialog1Image.Source = new BitmapImage(new Uri(BaseDirImg + "pause.png"));
+            SettingsInit();//Initialize and load settings panel
+            dialog1Image.Source = new BitmapImage(new Uri(BaseDirImg + "loadingx50.png"));
+            BtnScanMetadataImage.Source = new BitmapImage(new Uri(BaseDirImg + "loadingx50.png"));
             setLoadingState(true, "Loading", true);
-            SettingsSetUp();//Initialize interface elements with stored parametters in settings
+            setMetadataScanningState(false);
+            //SettingsSetUp();//Initialize interface elements with stored parametters in settings
+            //TabControl t = new TabControl();
+            //t.cli
 
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -156,19 +191,8 @@ namespace AnotherMusicPlayer
 
             EventsPlaybackInit();
             PlayListView_Init(); 
-            EqualizerInitEvents();
-            _ = Dispatcher.BeginInvoke(new Action(() =>
-            {
-                DatabaseInit();
-            }));
 
             TimerInterfaceSetUp();
-
-            win1.Width = (Settings.LastWindowWidth > 500) ? Settings.LastWindowWidth : 500;
-            win1.Height = (Settings.LastWindowHeight > 350) ? Settings.LastWindowHeight : 350;
-
-            win1.Left = (Settings.LastWindowLeft < 0) ? 100 : Settings.LastWindowLeft;
-            win1.Top = (Settings.LastWindowTop < 0) ? 100 : Settings.LastWindowTop;
 
             this.SizeChanged += Win1_SizeChanged;
             this.LocationChanged += MainWindow_LocationChanged;
@@ -201,7 +225,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window closing / exit </summary>
         private void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (IsInTransaction()) { DatabaseTansactionEnd(); }
+            if (bdd.IsInTransaction()) { bdd.DatabaseTansactionEnd(); }
             KeyboardInterceptorDestroy();
             Settings.SaveSettings();
         }
@@ -309,7 +333,7 @@ namespace AnotherMusicPlayer
             Timer_PlayListIndex = -1;
 
             Debug.WriteLine("--> Open : P4 <--");
-            //UpdateRecordedQueue();
+            UpdateRecordedQueue();
             Debug.WriteLine("--> Open : P5 <--");
 
             return doConv;
@@ -370,7 +394,7 @@ namespace AnotherMusicPlayer
                 foreach (PlayListViewItem itm in previous_items) { if (itm.Path == path) { item = itm; break; } }
                 if (item == null)
                 {
-                    Dictionary<string, object> rep = DatabaseFileInfo(path);
+                    Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
                     if (rep != null)
                     {
                         item = new PlayListViewItem();
@@ -427,9 +451,9 @@ namespace AnotherMusicPlayer
         {
             try
             {
-                if (item == null) { item = DatabaseItemToPlayListViewItem(DatabaseFileInfo(PlayList[PlayListIndex][0])); }
+                if (item == null) { item = DatabaseItemToPlayListViewItem(bdd.DatabaseFileInfo(PlayList[PlayListIndex][0])); }
                 if (item == null) { return; }
-                if (item.Size <= 0) { item = DatabaseItemToPlayListViewItem(DatabaseFileInfo(item.Path)); }
+                if (item.Size <= 0) { item = DatabaseItemToPlayListViewItem(bdd.DatabaseFileInfo(item.Path)); }
                 
 
                 LeftPannelMediaInfo.Inlines.Clear();
@@ -492,14 +516,14 @@ namespace AnotherMusicPlayer
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
 
 
-                if (bi != null && Settings.MemoryUsage == 1)
-                {
-                    System.Windows.Controls.WrapPanel p = new System.Windows.Controls.WrapPanel() { };
-                    System.Windows.Controls.Image im = new System.Windows.Controls.Image() { MaxHeight = 400, MaxWidth = 400, Style = (System.Windows.Style)Resources.MergedDictionaries[0]["HQImg"] };
-                    im.Source = player.MediaPicture(item.Path, true, 400, 400);
-                    p.Children.Add(im);
-                    FileCover.ToolTip = p;
-                }
+                //if (bi != null && Settings.MemoryUsage == 1)
+                //{
+                //    System.Windows.Controls.WrapPanel p = new System.Windows.Controls.WrapPanel() { };
+                //    System.Windows.Controls.Image im = new System.Windows.Controls.Image() { MaxHeight = 400, MaxWidth = 400, Style = (System.Windows.Style)Resources.MergedDictionaries[0]["HQImg"] };
+                //    im.Source = player.MediaPicture(item.Path, true, 400, 400);
+                //    p.Children.Add(im);
+                //    FileCover.ToolTip = p;
+                //}
             }
             catch { }
         }

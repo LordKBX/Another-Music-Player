@@ -65,6 +65,7 @@ namespace AnotherMusicPlayer
         public int Read(float[] buffer, int offset=0, int count=0)
         {
             int samplesRead = 0;
+            if (buffer == null) { return 0; }
             try
             {
                 samplesRead = sourceProvider.Read(buffer, offset, count);

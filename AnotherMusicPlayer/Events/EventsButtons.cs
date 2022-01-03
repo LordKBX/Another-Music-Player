@@ -99,7 +99,8 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Debug Export Vars </summary>
         private void Debug_Button_Click(object sender, RoutedEventArgs e)
         {
-            setLoadingState(true);
+            //setLoadingState(true);
+            setMetadataScanningState(false);
             JsonSerializerSettings jss = new JsonSerializerSettings();
             jss.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
             jss.Formatting = Formatting.Indented;
@@ -117,7 +118,7 @@ namespace AnotherMusicPlayer
             output += "]";
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListView.txt", "" + output, System.Text.Encoding.UTF8);
 
-            setLoadingState(false);
+            //setLoadingState(false);
         }
 
         private string PrintPropreties(object obj)
