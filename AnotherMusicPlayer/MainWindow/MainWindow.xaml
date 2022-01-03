@@ -145,11 +145,11 @@
                             </Grid.RowDefinitions>
                             <Border Grid.Row="0" BorderBrush="LightGray" BorderThickness="1,1,1,0" Margin="0,0,1,0" Grid.ColumnSpan="2">
                                 <TextBlock Foreground="White" Padding="5,0,0,0" VerticalAlignment="Stretch" HorizontalAlignment="Left">
-                            <TextBlock>Pistes à venir:</TextBlock><Run Text=" "/>
-                            <TextBlock x:Name="Label_PlayListDisplayedNBTracks" /><TextBlock>, Total:</TextBlock><Run Text=" "/>
-                            <TextBlock x:Name="Label_PlayListNBTracks" /><TextBlock>, Position:</TextBlock>
-                            <TextBlock x:Name="Label_PlayListIndex" />
-                        </TextBlock>
+                                    <TextBlock>Pistes à venir:</TextBlock><Run Text=" "/>
+                                    <TextBlock x:Name="Label_PlayListDisplayedNBTracks" /><TextBlock>, Total:</TextBlock><Run Text=" "/>
+                                    <TextBlock x:Name="Label_PlayListNBTracks" /><TextBlock>, Position:</TextBlock>
+                                    <TextBlock x:Name="Label_PlayListIndex" />
+                                </TextBlock>    
                             </Border>
                             <ListView x:Name="PlayListView" Grid.Row="1" SelectionMode="Single" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlayListViewItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight" Margin="0,0,1,0" Grid.ColumnSpan="2">
                                 <ListView.View>
@@ -230,12 +230,12 @@
                             </Grid>
                         </Grid>
                         <Border x:Name="LibNavigationContentB" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="#FFACACAC" Visibility="Visible">
-                            <ScrollViewer x:Name="LibNavigationContentScroll" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer x:Name="LibNavigationContentScroll" VerticalScrollBarVisibility="Auto" Foreground="Black">
                                 <WrapPanel x:Name="LibNavigationContent"></WrapPanel>
                             </ScrollViewer>
                         </Border>
                         <Border x:Name="LibNavigationContent2B" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Black" Visibility="Collapsed">
-                            <ScrollViewer x:Name="LibNavigationContentScroll2" VerticalScrollBarVisibility="Auto">
+                            <ScrollViewer x:Name="LibNavigationContentScroll2" VerticalScrollBarVisibility="Auto" Foreground="Black">
                                 <StackPanel x:Name="LibNavigationContent2">
                                 </StackPanel>
                             </ScrollViewer>

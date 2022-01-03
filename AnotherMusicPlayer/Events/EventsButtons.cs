@@ -58,6 +58,15 @@ namespace AnotherMusicPlayer
             PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = "";
             PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = "";
             FileCover.Source = Bimage("CoverImg");
+
+            PlayListView.ItemsSource = new ObservableCollection<PlayListViewItem>();
+            PlayListView.Items.Refresh();
+            ClearLeftPannelMediaInfo();
+            StopPlaylist();
+            Label_PlayListDisplayedNBTracks.Text = "0";
+            Label_PlayListNBTracks.Text = "0";
+            Label_PlayListIndex.Text = "0";
+
             Debug.WriteLine(JsonConvert.SerializeObject(PlayList));
         }
 

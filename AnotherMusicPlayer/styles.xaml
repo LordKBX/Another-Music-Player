@@ -29,7 +29,6 @@
         
         <Setter Property="BorderBrush" Value="#FFACACAC"/>
         <Setter Property="BorderThickness" Value="0,1,0,1"/>
-        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -40,7 +39,7 @@
                             <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                         <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                     </Grid>
                 </ControlTemplate>
@@ -59,12 +58,13 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA88ff"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFEA8835" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA8835"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
             <Trigger Property="IsMouseOver"  Value="False">
                 <Setter Property="Template">
@@ -77,25 +77,26 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Arrow"/>
             </Trigger>
             <Trigger Property="IsSelected"  Value="True">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA88ff">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA8835">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFFFFFFF" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFFFFFFF"/>
                             </Grid>
                         </ControlTemplate>
@@ -115,7 +116,6 @@
         
         <Setter Property="BorderBrush" Value="#FFACACAC"/>
         <Setter Property="BorderThickness" Value="0,1,0,1"/>
-        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -126,7 +126,7 @@
                             <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                         <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                     </Grid>
                 </ControlTemplate>
@@ -145,12 +145,13 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA88ff"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFEA8835" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA8835"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
             <Trigger Property="IsMouseOver"  Value="False">
                 <Setter Property="Template">
@@ -163,25 +164,26 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Arrow"/>
             </Trigger>
             <Trigger Property="IsSelected"  Value="True">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA88ff">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA8835">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Black" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="Black"/>
                             </Grid>
                         </ControlTemplate>
@@ -201,7 +203,6 @@
         
         <Setter Property="BorderBrush" Value="#FFACACAC"/>
         <Setter Property="BorderThickness" Value="0,1,0,1"/>
-        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -212,7 +213,7 @@
                             <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                         <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                     </Grid>
                 </ControlTemplate>
@@ -231,12 +232,13 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA88ff"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFEA8835" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA8835"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
             <Trigger Property="IsMouseOver"  Value="False">
                 <Setter Property="Template">
@@ -249,25 +251,26 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Arrow"/>
             </Trigger>
             <Trigger Property="IsSelected"  Value="True">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA88ff">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA8835">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Black" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="Black"/>
                             </Grid>
                         </ControlTemplate>
@@ -287,7 +290,6 @@
         
         <Setter Property="BorderBrush" Value="#FFACACAC"/>
         <Setter Property="BorderThickness" Value="0,1,0,1"/>
-        <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TabItem}">
@@ -298,7 +300,7 @@
                             <ColumnDefinition Width="90"/>
                             <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
-                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                         <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                     </Grid>
                 </ControlTemplate>
@@ -317,12 +319,13 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA88ff"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFEA8835" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFEA8835"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Hand"/>
             </Trigger>
             <Trigger Property="IsMouseOver"  Value="False">
                 <Setter Property="Template">
@@ -335,25 +338,26 @@
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="#FFDDDDDD" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="#FFDDDDDD"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="Cursor" Value="Arrow"/>
             </Trigger>
             <Trigger Property="IsSelected"  Value="True">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA88ff">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FFEA8835">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" />
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="Black" />
                                 <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="Black"/>
                             </Grid>
                         </ControlTemplate>

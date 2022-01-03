@@ -481,7 +481,7 @@ namespace AnotherMusicPlayer
                 if (item.Performers != null && item.Performers.Trim() != "") {
                     Artists += item.Performers;
                 }
-                if (item.Performers != null && item.Performers.Trim() != "") {
+                if (item.Composers != null && item.Composers.Trim() != "") {
                     if (Artists != null && Artists != "") { Artists += ", "; }
                     Artists += item.Composers;
                 }
@@ -491,7 +491,7 @@ namespace AnotherMusicPlayer
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
                     System.Windows.Controls.TextBlock t3 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
                     LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a3 = new AccessText() { Text = item.Performers, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                    AccessText a3 = new AccessText() { Text = Artists, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
                     LeftPannelMediaInfo.Inlines.Add(a3);
                 }
 
@@ -527,5 +527,42 @@ namespace AnotherMusicPlayer
             }
             catch { }
         }
+
+        private void ClearLeftPannelMediaInfo()
+        {
+            try
+            {
+                LeftPannelMediaInfo.Inlines.Clear();
+                LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;
+                System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
+                System.Windows.Thickness tc1 = new System.Windows.Thickness(3,3,0,0);
+                System.Windows.Thickness tc2 = new System.Windows.Thickness(10,0,0,0);
+                System.Windows.Media.SolidColorBrush cl2 = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 149, 149));
+
+                System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                AccessText a1 = new AccessText() { Text = "", Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                LeftPannelMediaInfo.Inlines.Add(a1);
+
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                System.Windows.Controls.TextBlock t3 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                AccessText a3 = new AccessText() { Text = "", Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                LeftPannelMediaInfo.Inlines.Add(a3);
+
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                System.Windows.Controls.TextBlock t5 = new System.Windows.Controls.TextBlock() { Text = GetTaduction("Duration2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t5);
+                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
+                AccessText a5 = new AccessText() { Text = "00:00:00", Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
+                LeftPannelMediaInfo.Inlines.Add(a5);
+
+                FileCover.Source = null;
+                FileCover.ToolTip = null;
+                FileCover.Source = Bimage("CoverImg");
+            }
+            catch { }
+        }
+
+
     }
 }
