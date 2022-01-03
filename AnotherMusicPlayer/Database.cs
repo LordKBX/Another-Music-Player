@@ -2,12 +2,16 @@
 using System.IO;
 using System.Collections.Specialized;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Windows;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Linq;
 using System.Data.SQLite;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 
 namespace AnotherMusicPlayer
 {
@@ -340,7 +344,7 @@ namespace AnotherMusicPlayer
                 if (Int32.Parse((string)rt[path]["Size"]) <= 0)
                 {
                     FileInfo fi = new FileInfo(path);
-                    PlayListViewItem item = ((MainWindow)System.Windows.Application.Current.Windows[0]).player.MediaInfo(path, false);
+                    PlayListViewItem item = FilesTags.MediaInfo(path, false);
 
                     DatabaseQuerys(new string[]{"UPDATE files SET Name='" + DatabaseEscapeString(item.Name??fi.Name)
                         + "', Album='" + DatabaseEscapeString(item.Album)
@@ -359,9 +363,7 @@ namespace AnotherMusicPlayer
                         + "', Year='" + item.Year
                         + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
                         + "' WHERE Path='" + DatabaseEscapeString(path) + "'" }, true);
-
-                    rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString(path) + "' ORDER BY Path ASC", "Path");
-                    return rt[path];
+                    return MainWindow.PlayListViewItemToDatabaseItem(item);
                 }
                 return rt[path];
             }
@@ -372,52 +374,81 @@ namespace AnotherMusicPlayer
         /// <summary> Get Basic Metadata from a list of file if stored in database </summary>
         public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths)
         {
+            Dictionary<string, Dictionary<string, object>> ret = new Dictionary<string, Dictionary<string, object>>();
+            List<string> filesToUpdate = new List<string>();
             try
             {
-                Dictionary<string, Dictionary<string, object>> ret = new Dictionary<string, Dictionary<string, object>>();
                 string query = "SELECT * FROM files WHERE Path IN(?) ORDER BY Album ASC, Disc ASC, Track ASC, Name ASC, Path ASC";
                 foreach(string file in paths) { query = query.Replace("?", "'"+ DatabaseEscapeString(file) + "',?"); }
                 query = query.Replace(",?", "");
+
                 Dictionary<string, Dictionary<string, object>> data = DatabaseQuery(query, "Path");
                 if (data.Count == 0) { return null; }
                 foreach(KeyValuePair<string, Dictionary<string, object>> line in data)
                 {
                     if (Int32.Parse((string)line.Value["Size"]) <= 0)
                     {
-                        FileInfo fi = new FileInfo((string)line.Value["Path"]);
-                        PlayListViewItem item = ((MainWindow)System.Windows.Application.Current.Windows[0]).player.MediaInfo((string)line.Value["Path"], false);
-
-                        DatabaseQuerys(new string[]{"UPDATE files SET Name='" + DatabaseEscapeString(item.Name??fi.Name)
-                        + "', Album='" + DatabaseEscapeString(item.Album)
-                        + "', Performers='" + DatabaseEscapeString(item.Performers)
-                        + "', Composers='" + DatabaseEscapeString(item.Composers)
-                        + "', Genres='" + DatabaseEscapeString(item.Genres)
-                        + "', Copyright='" + DatabaseEscapeString(item.Copyright)
-                        + "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists)
-                        + "', Lyrics='" + DatabaseEscapeString(item.Lyrics)
-                        + "', Duration='" + item.Duration
-                        + "', Size='" + item.Size
-                        + "', Disc='" + item.Disc
-                        + "', DiscCount='" + item.DiscCount
-                        + "', Track='" + item.Track
-                        + "', TrackCount='" + item.TrackCount
-                        + "', Year='" + item.Year
-                        + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
-                        + "' WHERE Path='" + DatabaseEscapeString((string)line.Value["Path"]) + "'" }, true);
-
-                        Dictionary<string, Dictionary<string, object>> dataT = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString((string)line.Value["Path"]) + "' ORDER BY Path ASC", "Path");
-                        ret.Add((string)line.Value["Path"], dataT[(string)line.Value["Path"]]);
-                        dataT.Clear();
+                        filesToUpdate.Add((string)line.Value["Path"]);
                     }
                     else
                     {
-                        ret.Add((string)line.Value["Path"], data[(string)line.Value["Path"]]);
+                        ret.Add((string)line.Value["Path"], line.Value);
                     }
                 }
-                return ret;
             }
-            catch { }
-            return null;
+            catch (Exception err) { Debug.WriteLine("--> DatabaseFilesInfo ERROR1 <--");  Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+            //try { DatabaseTansactionEndAndStart(); } catch { }
+
+            ConcurrentQueue<string> cq = new ConcurrentQueue<string>();
+            foreach (string file in filesToUpdate) {
+                cq.Enqueue(file);
+            }
+
+            Action action = () =>
+            {
+                int cpt = 0;
+                string localValue;
+
+                while (cq.TryDequeue(out localValue)) 
+                {
+                    Dictionary<string, object> rett = UpdateFileAsync(localValue);
+                    if (rett != null) { ret.Add(localValue, rett); }
+                    cpt += 1;
+                    if (cpt % 10 == 0) { try { DatabaseTansactionEndAndStart(); } catch { } }
+                }
+            };
+            // Start 5 concurrent consuming actions.
+            Parallel.Invoke(action, action, action, action, action, action);
+
+            try { DatabaseTansactionEndAndStart(); } catch { }
+            return ret;
+        }
+
+        private Dictionary<string, object> UpdateFileAsync(object param = null)
+        {
+            string file = (string)param;
+
+            FileInfo fi = new FileInfo(file);
+            PlayListViewItem item = FilesTags.MediaInfo(file, false);
+
+            DatabaseQuerys(new string[]{"UPDATE files SET Name='" + DatabaseEscapeString(item.Name??fi.Name)
+                + "', Album='" + DatabaseEscapeString(item.Album)
+                + "', Performers='" + DatabaseEscapeString(item.Performers)
+                + "', Composers='" + DatabaseEscapeString(item.Composers)
+                + "', Genres='" + DatabaseEscapeString(item.Genres)
+                + "', Copyright='" + DatabaseEscapeString(item.Copyright)
+                + "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists)
+                + "', Lyrics='" + DatabaseEscapeString(item.Lyrics)
+                + "', Duration='" + item.Duration
+                + "', Size='" + item.Size
+                + "', Disc='" + item.Disc
+                + "', DiscCount='" + item.DiscCount
+                + "', Track='" + item.Track
+                + "', TrackCount='" + item.TrackCount
+                + "', Year='" + item.Year
+                + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
+                + "' WHERE Path='" + DatabaseEscapeString(file) + "'" }, false);
+            return (item != null) ? MainWindow.PlayListViewItemToDatabaseItem(item) : null;
         }
 
     }

@@ -68,12 +68,12 @@ namespace AnotherMusicPlayer
 
                         Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files WHERE Size = 0 ORDER BY Path ASC", "Path");
                         
-                        if (DatabaseFiles.Count > 0) {
-                            string[] files = DatabaseFiles.Keys.ToArray();
+                        if (DatabaseFiles.Count > 0)
+                        {
                             Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScanTags));
                             objThread.IsBackground = true;
                             objThread.Priority = ThreadPriority.Normal;
-                            objThread.Start(files);
+                            objThread.Start(DatabaseFiles.Keys.ToList().ToArray());
                         }
                     }));
 
@@ -100,10 +100,10 @@ namespace AnotherMusicPlayer
         {
             Debug.WriteLine("--> MediatequeScanTags <--");
             setMetadataScanningState(true);
-            string[] files = null;
-            try { files = (string[])param; } catch { }
-            bdd.DatabaseFilesInfo(files);
+            string[] files = (string[])param;
+            _ = bdd.DatabaseFilesInfo(files);
             setMetadataScanningState(false);
+            Debug.WriteLine("--> MediatequeScanTags END <--");
         }
 
         /// <summary> Launch a scan of th Library </summary>

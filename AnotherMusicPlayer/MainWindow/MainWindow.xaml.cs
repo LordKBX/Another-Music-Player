@@ -82,11 +82,11 @@ namespace AnotherMusicPlayer
         {
             if (state == true)
             {
-                _ = Dispatcher.BeginInvoke(new Action(() => { BtnScanMetadata.Visibility = Visibility.Visible; MetadataScanning = "Visible"; }));
+                _ = Dispatcher.InvokeAsync(new Action(() => { BtnScanMetadata.Visibility = Visibility.Visible; MetadataScanning = "Visible"; }));
             }
             else
             {
-                _ = Dispatcher.BeginInvoke(new Action(() => { BtnScanMetadata.Visibility = Visibility.Hidden;  MetadataScanning = "Hidden"; }));
+                _ = Dispatcher.InvokeAsync(new Action(() => { BtnScanMetadata.Visibility = Visibility.Hidden;  MetadataScanning = "Hidden"; }));
             }
         }
 
@@ -416,14 +416,14 @@ namespace AnotherMusicPlayer
                         item.Year = Convert.ToUInt32(rep["Year"]);
                     }
                 }
-                if (item == null) { item = player.MediaInfo(path, false); }
+                if (item == null) { item = FilesTags.MediaInfo(path, false); }
             }
             catch { }
             
             return item;
         }
 
-        private PlayListViewItem DatabaseItemToPlayListViewItem(Dictionary<string, object> rep)
+        public static PlayListViewItem DatabaseItemToPlayListViewItem(Dictionary<string, object> rep)
         {
             PlayListViewItem item = null;
             item = new PlayListViewItem();
@@ -445,6 +445,28 @@ namespace AnotherMusicPlayer
             item.Year = Convert.ToUInt32(rep["Year"]);
 
             return item;
+        }
+
+        public static Dictionary<string, object> PlayListViewItemToDatabaseItem(PlayListViewItem rep)
+        {
+            Dictionary<string, object> ret = new Dictionary<string, object>();
+            ret.Add("Path", rep.Path);
+            ret.Add("Name", rep.Name);
+            ret.Add("Album", rep.Album);
+            ret.Add("AlbumArtists", rep.AlbumArtists);
+            ret.Add("Performers", rep.Performers);
+            ret.Add("Composers", rep.Composers);
+            ret.Add("Lyrics", rep.Lyrics);
+            ret.Add("Duration", rep.Duration);
+            ret.Add("DurationS", displayTime(Convert.ToInt64(rep.Duration)));
+            ret.Add("Genres", rep.Genres);
+            ret.Add("Copyright", rep.Copyright);
+            ret.Add("Disc", rep.Disc);
+            ret.Add("DiscCount", rep.DiscCount);
+            ret.Add("Track", rep.Track);
+            ret.Add("TrackCount", rep.TrackCount);
+            ret.Add("Year", rep.Year);
+            return ret;
         }
 
         private void UpdateLeftPannelMediaInfo(PlayListViewItem item = null)

@@ -71,7 +71,7 @@ namespace AnotherMusicPlayer
         /// <summary> Test if the file is of the correct File extention </summary>
         private bool MediaTestFileExtention(string FilePath)
         {
-            string[] extentions = player.AcceptedExtentions;
+            string[] extentions = Player.AcceptedExtentions;
             foreach (string ext in extentions) { if (FilePath.EndsWith(ext)) { return true; } }
             return false;
         }
