@@ -1,5 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
-
+<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
     <TargetFramework>netcoreapp3.1</TargetFramework>
@@ -10,8 +9,8 @@
     <PackageId>AnotherMusicPlayer</PackageId>
     <AssemblyName>AnotherMusicPlayer</AssemblyName>
     <RootNamespace>AnotherMusicPlayer</RootNamespace>
-    <Version>0.1.5.0</Version>
-    <Copyright>LordKBX Workshop 2020</Copyright>
+    <Version>0.1.6.1</Version>
+    <Copyright>LordKBX Workshop 2022</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/LordKBX/Another-Music-Player</RepositoryUrl>
     <RepositoryType>GitHub</RepositoryType>
@@ -24,26 +23,26 @@
     <AssemblyVersion>0.1.6.1</AssemblyVersion>
     <FileVersion>0.1.6.1</FileVersion>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
-
   <ItemGroup>
     <None Remove="play.png" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
     <None Include="icons\album_large.png">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>
+      </PackagePath>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <Page Remove="styles.xaml" />
     <Page Remove="Traductions\en.xaml" />
     <Page Remove="Traductions\fr.xaml" />
   </ItemGroup>
-
   <ItemGroup>
     <None Include="styles.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -55,7 +54,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="NAudio" Version="2.0.1" />
@@ -64,13 +62,11 @@
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
   </ItemGroup>
-
   <ItemGroup>
     <ApplicationDefinition Update="App.xaml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </ApplicationDefinition>
   </ItemGroup>
-
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
@@ -78,14 +74,12 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
   <ItemGroup>
     <None Update="icons\add_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -190,5 +184,4 @@
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
 </Project>
