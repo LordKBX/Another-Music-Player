@@ -47,49 +47,6 @@ namespace AnotherMusicPlayer
         /// <summary>Database object </summary>
         public Database bdd = null;
 
-
-        string PreviousKeyboardKey = "";
-        double PreviousKeyboardTime = 0;
-
-        private string _loading;
-        public string Loading
-        {
-            get { return _loading; }
-            set { _loading = value; }
-        }
-        public void setLoadingState(bool state, string text = "Loading", bool main = false)
-        {
-            if (state == true)
-            {
-                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { Loading = "Running";  dialog1.IsOpen = true; dialog1Text.Text = text; })); }
-                else { Loading = "Running"; dialog1.IsOpen = true; dialog1Text.Text = text; }
-            }
-            else
-            {
-                if (main == false) { _ = Dispatcher.BeginInvoke(new Action(() => { Loading = "Stopped"; dialog1.IsOpen = false; })); }
-                else { Loading = "Stopped"; dialog1.IsOpen = false; }
-            }
-        }
-        public bool isLoading() { return dialog1.IsOpen; }
-
-        private string _MetadataScanning;
-        public string MetadataScanning
-        {
-            get { return _MetadataScanning; }
-            set { _MetadataScanning = value; }
-        }
-        public void setMetadataScanningState(bool state, int nb=0)
-        {
-            if (state == true)
-            {
-                _ = Dispatcher.InvokeAsync(new Action(() => { BtnScanMetadata.Visibility = Visibility.Visible; MetadataScanning = "Visible"; BtnScanMetadataNb.Text = "" + nb; }));
-            }
-            else
-            {
-                _ = Dispatcher.InvokeAsync(new Action(() => { BtnScanMetadata.Visibility = Visibility.Hidden;  MetadataScanning = "Hidden"; }));
-            }
-        }
-
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd)
         {
@@ -104,6 +61,7 @@ namespace AnotherMusicPlayer
 
             this.Resources.Clear();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
+            HideDebug();//in release mode hide debug elements
             SettingsInit();//Initialize and load settings panel
             dialog1Image.Source = new BitmapImage(new Uri(BaseDirImg + "loadingx50.png"));
             BtnScanMetadataImage.Source = new BitmapImage(new Uri(BaseDirImg + "loadingx50.png"));
@@ -117,77 +75,16 @@ namespace AnotherMusicPlayer
 
             Debug.WriteLine("LastPlaylistIndex: " + Settings.LastPlaylistIndex);
 
-            this.PreviewKeyDown += (s, e) => {  // intercept keyboard event on UI to prevent selected button activation via keyboard
-                if (e.OriginalSource.ToString().StartsWith("System.Windows.Controls.TextBox")) { return; }
-                double ntime = UnixTimestamp();
-                Debug.WriteLine("------------");
-                
-                string key = e.Key.ToString();  Debug.WriteLine(key);
-                Debug.WriteLine(e.KeyStates.ToString());
-                //List<string> autorised = new List<string>() { "Left", "Right", "Up", "Down" };
-                List<string> autorised = new List<string>() { "Tab", "Left", "Right", "Up", "Down"};
-                if (!autorised.Contains(key)) { e.Handled = true; }
-                if ((PreviousKeyboardKey == "LeftCtrl" || PreviousKeyboardKey == "RightCtrl") && (PreviousKeyboardTime + 1 > ntime))
-                {
-                    if (key == "Left") { PreviousTrack(); }
-                    if (key == "Right") { NextTrack(); }
-                }
-                else
-                {
-                    if (key == "Space") { Pause(); }
-
-                    if (key == "Left") { LibraryFiltersPaginationPrevious_Click(null, null); }
-                    if (key == "Right") { LibraryFiltersPaginationNext_Click(null, null); }
-                    if (key == "Up") {
-                        if (TabControler.SelectedIndex == 0)
-                        {
-                            if (PlayListView.SelectedIndex > 0)
-                            {
-                                PlayListView.SelectedIndex = PlayListView.SelectedIndex - 1;
-                                PlayListView.ScrollIntoView(PlayListView.SelectedItem);
-                            }
-                        }
-                        else if (TabControler.SelectedIndex == 1)
-                        {
-                            LibNavigationContentScroll.ScrollToVerticalOffset(LibNavigationContentScroll.VerticalOffset - 15);
-                            LibNavigationContentScroll2.ScrollToVerticalOffset(LibNavigationContentScroll2.VerticalOffset - 15);
-                        }
-                    }
-                    if (key == "Down") {
-                        if (TabControler.SelectedIndex == 0)
-                        {
-                            if (PlayListView.SelectedIndex < PlayListView.Items.Count - 1)
-                            {
-                                PlayListView.SelectedIndex = PlayListView.SelectedIndex + 1;
-                                PlayListView.ScrollIntoView(PlayListView.SelectedItem);
-                            }
-                        }
-                        else if (TabControler.SelectedIndex == 1)
-                        {
-                            LibNavigationContentScroll.ScrollToVerticalOffset(LibNavigationContentScroll.VerticalOffset + 15);
-                            LibNavigationContentScroll2.ScrollToVerticalOffset(LibNavigationContentScroll2.VerticalOffset + 15);
-                        }
-                    }
-                }
-                PreviousKeyboardKey = key;
-                PreviousKeyboardTime = ntime;
-                e.Handled = true;
-            };
+            
 
             Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
-            Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "styles.xaml", UriKind.Absolute) });//Load style file
+            Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "Styles" + SeparatorChar + "Dark.xaml", UriKind.Absolute) });//Load style file
             //Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + SeparatorChar + "fr.xaml", UriKind.Absolute) });
             UpdateTraduction();
+            win1.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["CustomWindowStyle"];
             PreviewSetUp();
 
             FileCover.Source = Bimage("CoverImg");
-            BtnOpen.Background = new System.Windows.Media.ImageBrush(Bimage("OpenButtonImg"));
-            BtnPrevious.Background = new System.Windows.Media.ImageBrush(Bimage("PreviousButtonImg"));
-            BtnPlayPause.Background = new System.Windows.Media.ImageBrush(Bimage("PlayButtonImg_Play"));
-            BtnNext.Background = new System.Windows.Media.ImageBrush(Bimage("NextButtonImg"));
-            BtnClearList.Background = new System.Windows.Media.ImageBrush(Bimage("ClearListButtonImg"));
-            BtnShuffle.Background = new System.Windows.Media.ImageBrush(Bimage("ShuffleButtonImg"));
-            BtnRepeat.Background = new System.Windows.Media.ImageBrush(Bimage("RepeatButtonImg_None"));
 
             EventsPlaybackInit();
             PlayListView_Init(); 
@@ -214,7 +111,8 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window loaded </summary>
         private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
-            KeyboardInterceptorSetUp();
+            KeyboardLocalListenerInit();
+            KeyboardGlobalListenerInit();
 
             //Settings.LibFolder = "D:\\Music\\";
             MediatequeSetupFilters();
@@ -223,11 +121,11 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Callback Main window closing / exit </summary>
-        private void MainWindow_Closing(object sender, CancelEventArgs e)
+        private async void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            if (bdd.IsInTransaction()) { bdd.DatabaseTansactionEnd(); }
-            KeyboardInterceptorDestroy();
-            Settings.SaveSettings();
+            await Settings.SaveSettings();
+            bdd.Finalize();
+            KeyboardGlobalListenerKill();
         }
 
         /// <summary> Callback Main window size change </summary>
@@ -280,7 +178,7 @@ namespace AnotherMusicPlayer
 
             if (files.Length > 0)
             {
-                Debug.WriteLine("--> Open : P1 <--");
+                //Debug.WriteLine("--> Open : P1 <--");
                 if (!player.IsPlaying() && MediaTestFileExtention(files[0]) == false) { doConv = true; }
 
                 string NewFile;
@@ -307,7 +205,7 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            Debug.WriteLine("--> Open : P2 <--");
+            //Debug.WriteLine("--> Open : P2 <--");
 
             if (PlayListIndex < 0) { PlayListIndex = 0; Load = 0; }
             if (DoPlay == true) {
@@ -315,12 +213,12 @@ namespace AnotherMusicPlayer
                 FileOpen(PlayList[CountStart][(PlayList[CountStart][1] == null) ? 0 : 1]);
                 PlayListIndex = CountStart;
             }
-            Debug.WriteLine("--> Open : P3 <--");
+            //Debug.WriteLine("--> Open : P3 <--");
             if (Load >=0) {
                 try {
                     if (PlayList.Count >= Load) {
                         FileOpen(PlayList[Load][(PlayList[Load][1] == null) ? 0 : 1], false);
-                        Debug.WriteLine("--> Open : P3-2 <--");
+                        //Debug.WriteLine("--> Open : P3-2 <--");
                         PlayListIndex = Load;
                         Timer_PlayListIndex = -1;
                     }
@@ -332,9 +230,9 @@ namespace AnotherMusicPlayer
 
             Timer_PlayListIndex = -1;
 
-            Debug.WriteLine("--> Open : P4 <--");
+            //Debug.WriteLine("--> Open : P4 <--");
             UpdateRecordedQueue();
-            Debug.WriteLine("--> Open : P5 <--");
+            //Debug.WriteLine("--> Open : P5 <--");
 
             return doConv;
         }
@@ -342,24 +240,13 @@ namespace AnotherMusicPlayer
         /// <summary> Load music file and play if doPlay = true </summary>
         private void FileOpen(string FilePath, bool doPlay = true)
         {
-            Debug.WriteLine("--> FileOpen : P1 <-- >> " + FilePath);
+            Debug.WriteLine("--> FileOpen >> " + FilePath);
             if (player.TestFile(FilePath)){
-                Debug.WriteLine("--> FileOpen : P2 <--");
+                //Debug.WriteLine("--> FileOpen : P2 <--");
                 PlaybackStopLastTime = UnixTimestamp();
-                Debug.WriteLine("--> FileOpen : P3 <--");
+                //Debug.WriteLine("--> FileOpen : P3 <--");
                 player.Open(FilePath, doPlay);
             }
-            //PlayListViewItem it = GetMediaInfo(FilePath);
-            //if (it == null) { return; }
-
-            //PlayItemNameValue.ToolTip = PlayItemNameValue.Text = (it.Name!=null)?it.Name:"";
-            //PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = (it.Album != null) ? it.Album : "";
-            //PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = (it.Artist != null) ? it.Artist : "";
-            //PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = it.DurationS;
-
-            //FileCover.Source = null;
-            //FileCover.Source = player.MediaPicture(FilePath);
-            //if (FileCover.Source == null) { FileCover.Source = Bimage("CoverImg"); }
         }
 
         /// <summary> Change Playlist index and load music file if the new position is accepted </summary>
@@ -376,47 +263,60 @@ namespace AnotherMusicPlayer
                 PlayListIndex = NewPosition;
                 Settings.LastPlaylistIndex = PlayListIndex;
                 Settings.SaveSettings();
-                Debug.WriteLine("LastPlaylistIndex saved: "+ Settings.LastPlaylistIndex);
+                //Debug.WriteLine("LastPlaylistIndex saved: "+ Settings.LastPlaylistIndex);
                 FileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
-
             }
         }
 
         private PlayListViewItem GetMediaInfo(string path, ObservableCollection<PlayListViewItem> previous_items = null) {
             PlayListViewItem item = null;
             try {
-                if (previous_items == null)
+                Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
+                if (rep != null)
                 {
-                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; }
-                    else { previous_items = new ObservableCollection<PlayListViewItem>(); }
-                }
+                    item = new PlayListViewItem();
+                    item.Path = path;
+                    item.Name = (string)rep["Name"];
+                    item.Album = (string)rep["Album"];
+                    item.AlbumArtists = (string)rep["AlbumArtists"];
+                    item.Performers = (string)rep["Performers"];
+                    item.Composers = (string)rep["Composers"];
+                    item.Duration = Convert.ToInt64((string)rep["Duration"]);
+                    item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
 
-                foreach (PlayListViewItem itm in previous_items) { if (itm.Path == path) { item = itm; break; } }
-                if (item == null)
-                {
-                    Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
-                    if (rep != null)
-                    {
-                        item = new PlayListViewItem();
-                        item.Path = path;
-                        item.Name = (string)rep["Name"];
-                        item.Album = (string)rep["Album"];
-                        item.AlbumArtists = (string)rep["AlbumArtists"];
-                        item.Performers = (string)rep["Performers"];
-                        item.Composers = (string)rep["Composers"];
-                        item.Lyrics = (string)rep["Lyrics"];
-                        item.Duration = Convert.ToInt64((string)rep["Duration"]);
-                        item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
-                        item.Genres = (string)rep["Genres"];
-                        item.Copyright = (string)rep["Copyright"];
-                        item.Disc = Convert.ToUInt32(rep["Disc"]);
-                        item.DiscCount = Convert.ToUInt32(rep["DiscCount"]);
-                        item.Track = Convert.ToUInt32(rep["Track"]);
-                        item.TrackCount = Convert.ToUInt32(rep["TrackCount"]);
-                        item.Year = Convert.ToUInt32(rep["Year"]);
-                    }
+                    item.Lyrics = (string)rep["Lyrics"];
+                    item.Genres = (string)rep["Genres"];
+                    item.Copyright = (string)rep["Copyright"];
+                    item.Disc = Convert.ToUInt32(rep["Disc"]);
+                    item.DiscCount = Convert.ToUInt32(rep["DiscCount"]);
+                    item.Track = Convert.ToUInt32(rep["Track"]);
+                    item.TrackCount = Convert.ToUInt32(rep["TrackCount"]);
+                    item.Year = Convert.ToUInt32(rep["Year"]);
                 }
-                if (item == null) { item = FilesTags.MediaInfo(path, false); }
+                else { item = FilesTags.MediaInfo(path, false); }
+            }
+            catch { }
+            
+            return item;
+        }
+
+        private PlayListViewItemShort GetMediaInfoShort(string path, ObservableCollection<PlayListViewItemShort> previous_items = null) {
+            PlayListViewItemShort item = null;
+            try {
+                Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
+                if (rep != null)
+                {
+                    item = new PlayListViewItemShort();
+                    item.Path = path;
+                    item.Name = (string)rep["Name"];
+                    item.Album = (string)rep["Album"];
+                    item.AlbumArtists = (string)rep["AlbumArtists"];
+                    item.Performers = (string)rep["Performers"];
+                    item.Composers = (string)rep["Composers"];
+                    item.Duration = Convert.ToInt64((string)rep["Duration"]);
+                    item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+                }
+                else { item = FilesTags.MediaInfoShort(path, false); }
             }
             catch { }
             
@@ -469,14 +369,24 @@ namespace AnotherMusicPlayer
             return ret;
         }
 
-        private void UpdateLeftPannelMediaInfo(PlayListViewItem item = null)
+        private async void UpdateLeftPannelMediaInfo(string path = null)
         {
+            //Debug.WriteLine("--> UpdateLeftPannelMediaInfo <--");
+            //Debug.WriteLine("--> path = '"+path+"' <--");
+            PlayListViewItem item = new PlayListViewItem();
             try
             {
-                if (item == null) { item = DatabaseItemToPlayListViewItem(bdd.DatabaseFileInfo(PlayList[PlayListIndex][0])); }
-                if (item == null) { return; }
-                if (item.Size <= 0) { item = DatabaseItemToPlayListViewItem(bdd.DatabaseFileInfo(item.Path)); }
-                
+                if (path == null) {
+                    if(PlayList.Count > 0) { path = PlayList[PlayListIndex][0]; }
+                    Debug.WriteLine("--> path = '" + path + "' <--");
+                }
+                if (path != null) {
+                    Dictionary<string, object>  ret = bdd.DatabaseFileInfo(path);
+                    if (ret != null) {
+                        item = null;
+                        item = DatabaseItemToPlayListViewItem(ret);
+                    }
+                }
 
                 LeftPannelMediaInfo.Inlines.Clear();
                 LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;

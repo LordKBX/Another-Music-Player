@@ -156,6 +156,7 @@ namespace AnotherMusicPlayer
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = "-i \"" + FileInput + "\" -acodec mp3 -b:a " + ConvQualityBitrates + "k -map_metadata 0:s:0 \"" + FileOutput + "\"";
 
+            Debug.WriteLine("--> ConvExe");
             Debug.WriteLine(startInfo.FileName);
             Debug.WriteLine(startInfo.Arguments);
             try
@@ -170,7 +171,7 @@ namespace AnotherMusicPlayer
             }
             catch(Exception e)
             {
-                Debug.WriteLine(JsonConvert.SerializeObject(e));
+                Debug.WriteLine("--> ConvExe ERROR : " + JsonConvert.SerializeObject(e));
             }
             return false;
         }

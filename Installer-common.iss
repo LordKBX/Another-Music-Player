@@ -5,12 +5,18 @@
 #define MyAppExeName "AnotherMusicPlayer"
 #define RunTimeName "Install Runtime .NET CORE 3.1.3"
 
+#ifndef MyInstallerVersion
+#define MyInstallerVersion "1..0.0.0"
+#endif
+
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application. Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AppId={{9F636870-C49A-477A-AF5B-C6D0383D7696}}
 AppName={#MyAppName}
 AppVersion={#MyAppVersion}
+VersionInfoVersion={#MyInstallerVersion}
+
 ;AppVerName={#MyAppName} {#MyAppVersion}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}

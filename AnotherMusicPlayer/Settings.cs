@@ -44,6 +44,9 @@ namespace AnotherMusicPlayer
         // Library Section
         public static string LibFolder { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
 
+        // Style Section
+        public static string StyleName { get; set; } = "Dark";
+
         // Equalizer Section
         public static string EqualizerPreset { get; set; } = null;
         public static float EqualizerBand1 { get; set; } = 0;
@@ -85,6 +88,8 @@ namespace AnotherMusicPlayer
 
                 LibFolder = window.bdd.DatabaseGetParam("LibFolder", Environment.GetFolderPath(Environment.SpecialFolder.MyMusic));
 
+                StyleName = window.bdd.DatabaseGetParam("StyleName", "Dark");
+
                 EqualizerPreset = window.bdd.DatabaseGetParam("EqualizerPreset", null);
                 EqualizerBand1 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand1", "0")));
                 EqualizerBand2 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand2", "0")));
@@ -109,8 +114,8 @@ namespace AnotherMusicPlayer
             return true;
         }
 
-        public static void SaveSettings() {
-            _ = Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+        public static async Task<bool> SaveSettings() {
+            await Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() =>
             {
                 window.bdd.DatabaseSaveParam("Lang", Lang, "TEXT");
 
@@ -120,6 +125,8 @@ namespace AnotherMusicPlayer
                 window.bdd.DatabaseSaveParam("MemoryUsage", "" + MemoryUsage, "INT");
 
                 window.bdd.DatabaseSaveParam("LibFolder", LibFolder, "TEXT");
+
+                window.bdd.DatabaseSaveParam("StyleName", StyleName, "TEXT");
 
                 window.bdd.DatabaseSaveParam("EqualizerPreset", EqualizerPreset, "TEXT");
                 window.bdd.DatabaseSaveParam("EqualizerBand1", "" + EqualizerBand1, "FLOAT");
@@ -142,6 +149,7 @@ namespace AnotherMusicPlayer
                 window.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + LastPlaylistIndex, "INT");
                 window.bdd.DatabaseSaveParam("LastRepeatStatus", "" + LastRepeatStatus, "INT");
             }));
+            return true;
         }
 
         public static void SaveSettingsAsync() {

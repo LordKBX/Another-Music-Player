@@ -20,6 +20,7 @@ namespace AnotherMusicPlayer
         /// <summary> Asynchronus call for MediatequeScanning Library in a new thread </summary>
         private async void MediatequeInvokeScan(bool DoClean = false, bool boot = false)
         {
+            Debug.WriteLine("MediatequeInvokeScan(DoClean="+((DoClean)?"true":"false")+ ", boot=" + ((boot) ? "true" : "false") + ")");
             //boot = false;
             DirectoryInfo di = new DirectoryInfo(Settings.LibFolder); 
             Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
@@ -34,8 +35,6 @@ namespace AnotherMusicPlayer
                 MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
 
                 _ = Dispatcher.InvokeAsync(new Action(() => {
-                    Debug.WriteLine("MediatequeInvokeScan + boot");
-                    Debug.WriteLine("Settings.LibFolder = "+ Settings.LibFolder);
                     MediatequeScanning = false;
                     string[] a = Directory.GetFiles(Settings.LibFolder, "*.*");
                     string[] b = Directory.GetDirectories(Settings.LibFolder, "*");
@@ -52,8 +51,6 @@ namespace AnotherMusicPlayer
                     {
                         MediatequeBuildNavigationPath(fold.Folders[0]);
 
-                        Debug.WriteLine("MediatequeInvokeScan + type(LibNavigationPathContener.Children[1]) = " + LibNavigationPathContener.Children[1].GetType().Name);
-
                         MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
                         args.RoutedEvent = TextBlock.MouseDownEvent;
                         args.Source = LibNavigationPathContener.Children[1];
@@ -67,13 +64,17 @@ namespace AnotherMusicPlayer
                         TabControler.SelectedIndex = 0;
 
                         Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files WHERE Size = 0 ORDER BY Path ASC", "Path");
-                        
+
                         if (DatabaseFiles.Count > 0)
                         {
                             Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScanTags));
                             objThread.IsBackground = true;
                             objThread.Priority = ThreadPriority.Normal;
                             objThread.Start(DatabaseFiles.Keys.ToList().ToArray());
+                        }
+                        else
+                        {
+                            MediatequeEnableFilters();
                         }
                     }));
 
@@ -95,6 +96,30 @@ namespace AnotherMusicPlayer
             }
         }
 
+        private void MediatequeEnableFilters() {
+            bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = NULL WHERE TRIM(Genres) = ''" }, true);
+            Dictionary<string, Dictionary<string, object>> genres = bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY TRIM(Genres) ASC", "Genres");
+            List<ComboBoxItem> li = new List<ComboBoxItem>();
+            //li.Add(new ComboBoxItem() { Content = "", Tag = "" });
+            Debug.WriteLine(JsonConvert.SerializeObject(genres.Keys));
+            foreach (string key in genres.Keys)
+            {
+                li.Add(new ComboBoxItem()
+                {
+                    Content = (key == "0")?"------":key,
+                    Tag = (key == "0") ? null : key,
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    VerticalContentAlignment = VerticalAlignment.Center
+                });
+            }
+            _ = Dispatcher.BeginInvoke(new Action(() =>
+            {
+                if (LibraryFiltersGenreList.ItemsSource != null) { ((List<ComboBoxItem>)LibraryFiltersGenreList.ItemsSource).Clear(); }
+                LibraryFiltersGenreList.ItemsSource = li;
+                LibraryFiltersGrid.IsEnabled = true;
+            }));
+        }
+
         /// <summary> Launch a scan of the files for tag retrieval </summary>
         private async void MediatequeScanTags(object param = null)
         {
@@ -102,6 +127,7 @@ namespace AnotherMusicPlayer
             string[] files = (string[])param;
             setMetadataScanningState(true, files.Length);
             _ = bdd.DatabaseFilesInfo(files, this);
+            MediatequeEnableFilters();
             setMetadataScanningState(false);
             Debug.WriteLine("--> MediatequeScanTags END <--");
         }
@@ -121,15 +147,15 @@ namespace AnotherMusicPlayer
             MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
 
             MediatequeScanedFiles = MediatequeScanedFiles.Distinct().ToList();
-            Debug.WriteLine("--> MediatequeScan SUB 0 <--");
-            Debug.WriteLine(MediatequeScanedFiles.Count);
+            //Debug.WriteLine("--> MediatequeScan SUB 0 <--");
+            //Debug.WriteLine(MediatequeScanedFiles.Count);
 
             List<string> MediatequeCacheQuerys = new List<string>();
             List<string> NewFiles = new List<string>();
 
             MediatequeScanning = true;
 
-            Debug.WriteLine("--> MediatequeScan SUB 1 <--");
+            //Debug.WriteLine("--> MediatequeScan SUB 1 <--");
             _ = Dispatcher.BeginInvoke(new Action(() => {
                 LibraryFiltersGrid.IsEnabled = false;
                 LibNavigationContent.Children.Clear();
@@ -153,7 +179,7 @@ namespace AnotherMusicPlayer
                     bdd.DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM folders", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
                 }
             }));
-            Debug.WriteLine("--> MediatequeScan SUB 2 <--");
+            //Debug.WriteLine("--> MediatequeScan SUB 2 <--");
 
 
             Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
@@ -161,8 +187,8 @@ namespace AnotherMusicPlayer
 
             //LibTreeView.Items.Clear();
 
-            Debug.WriteLine("--> MediatequeScan SUB 3 <--");
-            Debug.WriteLine(MediatequeScanedFiles.Count);
+            //Debug.WriteLine("--> MediatequeScan SUB 3 <--");
+            //Debug.WriteLine(MediatequeScanedFiles.Count);
             foreach (string file in MediatequeScanedFiles)
             {
                 MediatequeTotalScanedFiles += 1;
@@ -180,7 +206,6 @@ namespace AnotherMusicPlayer
                     if (Convert.ToInt64((string)dfi["LastUpdate"]) != Convert.ToInt64(fi.LastWriteTimeUtc.ToFileTime()))
                     {
                         //Debug.WriteLine("--> update <--");
-                        MediatequeScanedFiles.Add(fi.FullName);
                         MediatequeTotalScanedDuration += Int32.Parse((string)dfi["Duration"]);
                         MediatequeTotalScanedSize += Int32.Parse((string)dfi["Size"]);
                         MediatequeCacheQuerys.Add("UPDATE files SET Name='" + Database.DatabaseEscapeString((string)dfi["Name"])
@@ -234,22 +259,6 @@ namespace AnotherMusicPlayer
                     query += Database.DatabaseEscapeString(fi.FullName) + "',";
                     query += "'" + Database.DatabaseEscapeString(fi.Name) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0',";
 
-                    //query += "'" + Database.DatabaseEscapeString(item.Name) + "','";
-                    //query += Database.DatabaseEscapeString(item.Album) + "','";
-                    //query += Database.DatabaseEscapeString(item.Performers) + "','";
-                    //query += Database.DatabaseEscapeString(item.Composers) + "','";
-                    //query += Database.DatabaseEscapeString(item.Genres) + "','";
-                    //query += Database.DatabaseEscapeString(item.Copyright) + "','";
-                    //query += Database.DatabaseEscapeString(item.AlbumArtists) + "','";
-                    //query += Database.DatabaseEscapeString(item.Lyrics) + "','";
-                    //query += item.Duration + "','";
-                    //query += item.Size + "','";
-                    //query += item.Disc + "','";
-                    //query += item.DiscCount + "','";
-                    //query += item.Track + "','";
-                    //query += item.TrackCount + "','";
-                    //query += item.Year + "',";
-
                     query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
                     MediatequeTotalScanedFiles += 1;
                     NewFiles.Add(fi.FullName);
@@ -258,7 +267,7 @@ namespace AnotherMusicPlayer
 
                 if (MediatequeCacheQuerys.Count >= 100)
                 {
-                    Debug.WriteLine("--> MediatequeScan SUB 5 <--");
+                    //Debug.WriteLine("--> MediatequeScan SUB 5 <--");
                     bdd.DatabaseQuerys(MediatequeCacheQuerys.ToArray());
                     MediatequeCacheQuerys.Clear();
                     _ = Dispatcher.BeginInvoke(new Action(() =>
@@ -270,12 +279,12 @@ namespace AnotherMusicPlayer
 
             }
 
-            Debug.WriteLine("--> MediatequeScan SUB 6 <--");
-            Debug.WriteLine(JsonConvert.SerializeObject(MediatequeCacheQuerys.ToArray()));
+            //Debug.WriteLine("--> MediatequeScan SUB 6 <--");
+            //Debug.WriteLine(JsonConvert.SerializeObject(MediatequeCacheQuerys.ToArray()));
             bdd.DatabaseQuerys(MediatequeCacheQuerys.ToArray());
             MediatequeCacheQuerys.Clear();
 
-            Debug.WriteLine("--> MediatequeScan SUB 7 <--");
+            //Debug.WriteLine("--> MediatequeScan SUB 7 <--");
             foreach (KeyValuePair<string, Dictionary<string, object>> fi in DatabaseFiles.ToList())
             {
                 if (!MediatequeScanedFiles.Contains(fi.Key))
@@ -290,30 +299,9 @@ namespace AnotherMusicPlayer
 
             DatabaseFiles.Clear();
 
-            Debug.WriteLine("--> MediatequeScan SUB 8 <--");
-            _ = Dispatcher.BeginInvoke(new Action(() => {
-                if (DoClean || LibraryFiltersGenreList.Items.Count == 0)
-                {
-                    Dictionary<string, Dictionary<string, object>> genres = bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY Genres ASC", "Genres");
-                    List<ComboBoxItem> li = new List<ComboBoxItem>();
-                    //li.Add(new ComboBoxItem() { Content = "", Tag = "" });
-                    foreach (string key in genres.Keys) 
-                    { 
-                        li.Add(new ComboBoxItem() { 
-                            Content = key, Tag = key,
-                            HorizontalContentAlignment = HorizontalAlignment.Left,
-                            VerticalContentAlignment = VerticalAlignment.Center
-                        });
-                    }
-                    LibraryFiltersGenreList.ItemsSource = li;
-                    //LibraryFiltersGenreList.Visibility = Visibility.Visible;
-                }
-
-                LibraryFiltersGrid.IsEnabled = true;
-
-                //LibNavigationContent.Orientation = Orientation.Horizontal;
-            }));
-            Debug.WriteLine("--> MediatequeScan SUB 9 <--");
+            //Debug.WriteLine("--> MediatequeScan SUB 8 <--");
+            MediatequeEnableFilters();
+            //Debug.WriteLine("--> MediatequeScan SUB 9 <--");
             MediatequeScanning = false;
             _ = Dispatcher.InvokeAsync(new Action(() =>
             {

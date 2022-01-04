@@ -40,11 +40,12 @@
   </ItemGroup>
   <ItemGroup>
     <Page Remove="styles.xaml" />
+    <Page Remove="Styles\Dark.xaml" />
     <Page Remove="Traductions\en.xaml" />
     <Page Remove="Traductions\fr.xaml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="styles.xaml">
+    <None Include="Styles\Dark.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Traductions\en.xaml">

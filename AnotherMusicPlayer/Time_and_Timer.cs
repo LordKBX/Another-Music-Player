@@ -17,13 +17,6 @@ namespace AnotherMusicPlayer
 
     public partial class MainWindow : Window
     {
-        [DllImport("KERNEL32.DLL", EntryPoint = "SetProcessWorkingSetSize", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        internal static extern bool SetProcessWorkingSetSize(IntPtr pProcess, int dwMinimumWorkingSetSize, int dwMaximumWorkingSetSize);
-
-        [DllImport("KERNEL32.DLL", EntryPoint = "GetCurrentProcess", SetLastError = true, CallingConvention = CallingConvention.StdCall)]
-        internal static extern IntPtr GetCurrentProcess();
-        private static IntPtr pHandle = GetCurrentProcess();
-
         /// <summary> Convert milliseconds times in human readable string </summary>
         public static string displayTime(long time)
         {
@@ -78,60 +71,69 @@ namespace AnotherMusicPlayer
                 if (player.IsPlaying()) {
                     if (Timer_IsPlaying == false)
                     {
-                        Timer_IsPlaying = true; BtnPlayPause.Background = null; PreviewCtrlPause.ImageSource = null;
-                        BtnPlayPause.Background = new ImageBrush(Bimage("PlayButtonImg_Pause"));
-                        PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Pause");
+                        Timer_IsPlaying = true; 
+                        BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPause"]; 
+                        PreviewCtrlPause.ImageSource = null; PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Pause");
                     }
                 }
                 else
                 {
                     if (Timer_IsPlaying == true)
                     {
-                        Timer_IsPlaying = false; BtnPlayPause.Background = null; PreviewCtrlPause.ImageSource = null;
-                        BtnPlayPause.Background = new ImageBrush(Bimage("PlayButtonImg_Play"));
-                        PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Play");
+                        Timer_IsPlaying = false; 
+                        BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPlay"]; 
+                        PreviewCtrlPause.ImageSource = null; PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Play");
                     }
                 }
 
                 // Section PlayBack Repeat Status
                 if (PlayRepeatStatus == 0)
                 {
-                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_None")); }
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { 
+                        BtnRepeat.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnRepeatNone"];
+                        player.Repeat(false);
+                    }
                 }
                 else if (PlayRepeatStatus == 1)
                 {
-                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_One")); }
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { 
+                        BtnRepeat.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnRepeatOne"];
+                        player.Repeat(true);
+                    }
                 }
                 else
                 {
-                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { BtnRepeat.Background = null; BtnRepeat.Background = new ImageBrush(Bimage("RepeatButtonImg_All")); }
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { 
+                        BtnRepeat.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnRepeatAll"];
+                        player.Repeat(false);
+                    }
                 }
                 Timer_PlayRepeatStatus = PlayRepeatStatus;
 
                 // Section PlayList
                 if (Timer_PlayListIndex != PlayListIndex)
                 {
-                    ObservableCollection<PlayListViewItem> previous_items;
-                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; } else { previous_items = new ObservableCollection<PlayListViewItem>(); }
+                    ObservableCollection<PlayListViewItemShort> previous_items;
+                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItemShort>)PlayListView.ItemsSource; } else { previous_items = new ObservableCollection<PlayListViewItemShort>(); }
                     Timer_PlayListIndex = PlayListIndex;
-                    ObservableCollection<PlayListViewItem> tmp = new ObservableCollection<PlayListViewItem>();
+                    ObservableCollection<PlayListViewItemShort> tmp = new ObservableCollection<PlayListViewItemShort>();
                     int min = (PlayListIndex != -1) ? PlayListIndex : 0;
                     int max = PlayListIndex + 100; //int max = PlayList.Count;  // test full list
-                    string file; PlayListViewItem item;
+                    string file; PlayListViewItemShort item;
                     for (int i = min; i < max; i++)
                     {
                         if (PlayList.Count <= i) { break; }
                         else
                         {
                             file = PlayList[i][0];
-                            item = GetMediaInfo(file, previous_items);
+                            item = GetMediaInfoShort(file, previous_items);
                             if (item != null)
                             {
                                 if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
                                 if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
                                 tmp.Add(item);
                                 if (i == min) {
-                                    UpdateLeftPannelMediaInfo(item);
+                                    UpdateLeftPannelMediaInfo(file);
                                 }
                             }
                         }
@@ -144,8 +146,10 @@ namespace AnotherMusicPlayer
                     try
                     {
                         if (tmp.Count <= 0) { return; }
+                        ((ObservableCollection < PlayListViewItemShort>)PlayListView.ItemsSource).Clear();
                         PlayListView.ItemsSource = tmp;
                         PlayListView.Items.Refresh();
+                        PlayListView.ScrollIntoView(PlayListView.Items[0]);
                     }
                     catch (Exception err) { Debug.WriteLine("PlayListView.ItemsSource error"); }
 
@@ -163,7 +167,6 @@ namespace AnotherMusicPlayer
                     try { 
                         GC.Collect(); GC.WaitForPendingFinalizers(); 
                         GC.Collect(); GC.WaitForPendingFinalizers();
-                        SetProcessWorkingSetSize(pHandle, -1, -1);
                     } catch { }
                     try { 
                         if (MediatequeScanning == true) {

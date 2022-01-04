@@ -72,8 +72,9 @@ namespace AnotherMusicPlayer
         /// <summary> GetCallback when Mediateque Watcher detect a change </summary>
         private void MediatequeChanged(object source, FileSystemEventArgs e)
         {
-            //Debug.WriteLine(e.Name);
-            Dispatcher.InvokeAsync(new Action(() => { MediatequeScan(); }));
+            Debug.WriteLine("MediatequeChanged => "+e.Name);
+            bdd.UpdateFileAsync(Settings.LibFolder + SeparatorChar + e.Name, true);
+            //Dispatcher.InvokeAsync(new Action(() => { MediatequeScan(); }));
         }
 
         /// <summary> Recursive function for filling a List<string> with all the files Stored in the hierarchy of an Folder object </summary>
@@ -223,7 +224,6 @@ namespace AnotherMusicPlayer
                     LibNavigationContentScroll.ContextMenu = ct;
                 }));
 
-                Debug.WriteLine(fold.Path);
                 Dictionary<string, Dictionary<string, object>> files = bdd.DatabaseQuery("SELECT * FROM files WHERE Path LIKE '" + Database.DatabaseEscapeString(fold.Path) + SeparatorChar + "%' ORDER BY LOWER(Album) ASC, Disc ASC, Track ASC, Name ASC, Path ASC", "Path");
 
                 List<string> endFiles = new List<string>();
@@ -235,8 +235,6 @@ namespace AnotherMusicPlayer
                 }
                 _ = Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    endFiles.Add("");
-                    Debug.WriteLine(JsonConvert.SerializeObject(endFiles.ToArray()));
                     MediatequeBuildNavigationContentBlocks(endFiles.ToArray(), MediatequeBuildNavigationContentBlockssPanel);
                     LibNavigationContentScroll.ScrollToTop();
                 }));
@@ -248,7 +246,7 @@ namespace AnotherMusicPlayer
 
         private void MediatequeBuildNavigationContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
         {
-            Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks START <--");
+            //Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks START <--");
             while (files.Length > 0 && files[0].Length == 0) { files = files.Where(w => w != files[0]).ToArray(); }
             if (files.Length == 0) { setLoadingState(false); return; }
             if (contener == null) { setLoadingState(false); return; }
@@ -413,7 +411,7 @@ namespace AnotherMusicPlayer
                 dataFiles.Clear();
             }
             catch { Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks ERROR <--"); }
-            Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks END <--");
+            //Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks END <--");
             setLoadingState(false);
         }
 
@@ -511,7 +509,7 @@ namespace AnotherMusicPlayer
         /// <summary> Click Callback content button in Library pannel </summary>
         private void MediatequeNavigationContentButtonClick(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("MediatequeNavigationContentButtonClick");
+            //Debug.WriteLine("MediatequeNavigationContentButtonClick");
             double tmpt = UnixTimestamp();
             object[] re = (object[])((Button)sender).Tag;
             if ((string)re[0] == "folder")
@@ -540,7 +538,7 @@ namespace AnotherMusicPlayer
         /// <summary> Click Callback on ContextMenuItem </summary>
         public void MediatequeCT_Open(object sender, RoutedEventArgs e)
         {
-            Debug.WriteLine("MediatequeCT_Open");
+            //Debug.WriteLine("MediatequeCT_Open");
             MenuItem mi = (MenuItem)sender;
             ContextMenu ct = (ContextMenu)mi.Parent;
             object[] tab;
@@ -559,7 +557,7 @@ namespace AnotherMusicPlayer
                 List<string> paths = new List<string>();
                 Folder fold = (Folder)tab[2];
                 paths = MediatequeCreateList(fold, paths);
-                Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
+                //Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
                 Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray(), false); }));
             }
             else if ((string)tab[0] == "file")

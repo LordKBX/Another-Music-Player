@@ -13,7 +13,7 @@ namespace AnotherMusicPlayer
         /// <summary>
         /// Initialize Global Keyboard listener for Media Buttons
         /// </summary>
-        private void KeyboardInterceptorSetUp()
+        private void KeyboardGlobalListenerInit()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
@@ -35,7 +35,7 @@ namespace AnotherMusicPlayer
         /// <summary>
         /// Destroy Global Keyboard listener
         /// </summary>
-        private void KeyboardInterceptorDestroy()
+        private void KeyboardGlobalListenerKill()
         {
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {

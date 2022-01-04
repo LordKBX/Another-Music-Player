@@ -105,8 +105,8 @@ namespace AnotherMusicPlayer
         private void ParamsEqualizerPresets_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string tag = (string)((ComboBoxItem)e.AddedItems[0]).Tag;
-            Debug.WriteLine("ParamsEqualizerPresets_SelectionChanged");
-            Debug.WriteLine(tag);
+            //Debug.WriteLine("ParamsEqualizerPresets_SelectionChanged");
+            //Debug.WriteLine(tag);
             if (EqualizerPresetsTab.ContainsKey(tag))
             {
                 float[] preset = EqualizerPresetsTab[tag];

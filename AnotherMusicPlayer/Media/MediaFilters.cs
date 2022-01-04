@@ -31,7 +31,7 @@ namespace AnotherMusicPlayer
             LibraryFiltersPaginationNext.Click += LibraryFiltersPaginationNext_Click;
 
             LibraryFiltersSearchBox.KeyDown += (sender, e) => {
-                Debug.WriteLine(e.Key.ToString());
+                //Debug.WriteLine(e.Key.ToString());
                 if (e.Key.ToString() == "Return") {
                     LibNavigationContent2.Children.Clear();
                     string tag = (string)((ComboBoxItem)LibraryFiltersMode.SelectedItem).Tag;
@@ -114,7 +114,7 @@ namespace AnotherMusicPlayer
             LibraryFiltersPages = null; LibraryFiltersPagesIndex = 0;
             MediatequeBuildNavigationPath(MediatequeRefFolder);
             string tag = (string)((ComboBoxItem)LibraryFiltersMode.SelectedItem).Tag;
-            Debug.WriteLine(tag);
+            //Debug.WriteLine(tag);
             if (tag == "") {
                 LibraryFiltersGenreList.Visibility = Visibility.Collapsed;
                 LibraryFiltersSearchBox.Visibility = Visibility.Collapsed;
@@ -199,6 +199,7 @@ namespace AnotherMusicPlayer
         /// <summary> Create button for the Content zone in Library pannel </summary>
         private Button MediatequeBuildNavigationContentButtonFilter(string type, string name, string path)
         {
+            if (type == null || name == null || path == null) { return null; }
             Button bt = new Button() { Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItem2"] };
             StackPanel gr = new StackPanel() { HorizontalAlignment = HorizontalAlignment.Stretch, Orientation = Orientation.Vertical };
 

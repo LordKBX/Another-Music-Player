@@ -47,6 +47,34 @@ namespace AnotherMusicPlayer
             Disc = DiscCount = Track = TrackCount = Year = 0;
         }
     }
+    /// <summary> Class PlayListViewItem, a storae structure for Music Media Basic MetaData </summary>
+    public class PlayListViewItemShort
+    {
+        public string Selected { get; set; }
+        public string Path { get; set; }
+        public string OriginPath { get; set; }
+        public string Name { get; set; }
+        public string Album { get; set; }
+        public long Duration { get; set; }
+        public string DurationS { get; set; }
+        public string Performers { get; set; }
+        public string Composers { get; set; }
+        public string AlbumArtists { get; set; }
+
+        public PlayListViewItemShort()
+        {
+            Path = OriginPath
+                = Selected
+                = Name 
+                = Album 
+                = DurationS 
+                = Performers
+                = Composers
+                = AlbumArtists
+                = "";
+            Duration = 0;
+        }
+    }
 
 
     public partial class MainWindow : Window
