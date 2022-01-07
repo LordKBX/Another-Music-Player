@@ -15,27 +15,27 @@ namespace AnotherMusicPlayer
     public partial class MainWindow : Window
     {
         /// <summary> list of newly scanned files(absolute path) </summary>
-        List<string> MediatequeScanedFiles = new List<string>();
+        List<string> LibraryScanedFiles = new List<string>();
 
-        /// <summary> Asynchronus call for MediatequeScanning Library in a new thread </summary>
-        private async void MediatequeInvokeScan(bool DoClean = false, bool boot = false)
+        /// <summary> Asynchronus call for LibraryScanning Library in a new thread </summary>
+        private async void LibraryInvokeScan(bool DoClean = false, bool boot = false)
         {
-            Debug.WriteLine("MediatequeInvokeScan(DoClean="+((DoClean)?"true":"false")+ ", boot=" + ((boot) ? "true" : "false") + ")");
+            Debug.WriteLine("LibraryInvokeScan(DoClean="+((DoClean)?"true":"false")+ ", boot=" + ((boot) ? "true" : "false") + ")");
             //boot = false;
             DirectoryInfo di = new DirectoryInfo(Settings.LibFolder); 
             Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
 
-            if (MediatequeWatcher == null) { MediatequeCreateWatcher(); }
-            else if (MediatequeWatcher.Path != Settings.LibFolder) { MediatequeCreateWatcher(); }
+            if (LibraryWatcher == null) { LibraryCreateWatcher(); }
+            else if (LibraryWatcher.Path != Settings.LibFolder) { LibraryCreateWatcher(); }
 
             if (boot == true & DatabaseFiles.Count > 1)
             {
-                MediatequeScanedFiles.Clear();
-                MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
-                MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
+                LibraryScanedFiles.Clear();
+                LibraryLoadFiles(Settings.LibFolder, LibraryRefFolder);
+                LibraryLoadSubDirectories(Settings.LibFolder, LibraryRefFolder);
 
                 _ = Dispatcher.InvokeAsync(new Action(() => {
-                    MediatequeScanning = false;
+                    LibraryScanning = false;
                     string[] a = Directory.GetFiles(Settings.LibFolder, "*.*");
                     string[] b = Directory.GetDirectories(Settings.LibFolder, "*");
                     List<string> openItems = new List<string>();
@@ -45,11 +45,11 @@ namespace AnotherMusicPlayer
                         openItems.Add(arrItem.Replace(Settings.LibFolder + SeparatorChar, ""));
                     }
                     Folder fold = new Folder() { Name = "Home", Path = Settings.LibFolder, Parent = null };
-                    MediatequeLoadFiles(Settings.LibFolder, fold);
-                    MediatequeLoadSubDirectories(Settings.LibFolder, fold);
+                    LibraryLoadFiles(Settings.LibFolder, fold);
+                    LibraryLoadSubDirectories(Settings.LibFolder, fold);
                     _ = Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MediatequeBuildNavigationPath(fold.Folders[0]);
+                        LibraryBuildNavigationPath(fold.Folders[0]);
 
                         MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
                         args.RoutedEvent = TextBlock.MouseDownEvent;
@@ -67,18 +67,18 @@ namespace AnotherMusicPlayer
 
                         if (DatabaseFiles.Count > 0)
                         {
-                            Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScanTags));
+                            Thread objThread = new Thread(new ParameterizedThreadStart(LibraryScanTags));
                             objThread.IsBackground = true;
                             objThread.Priority = ThreadPriority.Normal;
                             objThread.Start(DatabaseFiles.Keys.ToList().ToArray());
                         }
                         else
                         {
-                            MediatequeEnableFilters();
+                            LibraryEnableFilters();
                         }
                     }));
 
-                    //MediatequeBuildNavigationContent(MediatequeRefFolder);
+                    //LibraryBuildNavigationContent(LibraryRefFolder);
                     dialog1.IsOpen = false;
                 }));
             }
@@ -87,7 +87,7 @@ namespace AnotherMusicPlayer
                 try
                 {
                     setLoadingState(true, "Library scan");
-                    Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScan));
+                    Thread objThread = new Thread(new ParameterizedThreadStart(LibraryScan));
                     objThread.IsBackground = true;
                     objThread.Priority = ThreadPriority.Normal;
                     objThread.Start(DoClean);
@@ -96,7 +96,7 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private void MediatequeEnableFilters() {
+        private void LibraryEnableFilters() {
             bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = NULL WHERE TRIM(Genres) = ''" }, true);
             Dictionary<string, Dictionary<string, object>> genres = bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY TRIM(Genres) ASC", "Genres");
             List<ComboBoxItem> li = new List<ComboBoxItem>();
@@ -121,55 +121,55 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Launch a scan of the files for tag retrieval </summary>
-        private async void MediatequeScanTags(object param = null)
+        private async void LibraryScanTags(object param = null)
         {
-            Debug.WriteLine("--> MediatequeScanTags <--");
+            Debug.WriteLine("--> LibraryScanTags <--");
             string[] files = (string[])param;
             setMetadataScanningState(true, files.Length);
             _ = bdd.DatabaseFilesInfo(files, this);
-            MediatequeEnableFilters();
+            LibraryEnableFilters();
             setMetadataScanningState(false);
-            Debug.WriteLine("--> MediatequeScanTags END <--");
+            Debug.WriteLine("--> LibraryScanTags END <--");
         }
 
         /// <summary> Launch a scan of th Library </summary>
-        private async void MediatequeScan(object param = null)
+        private async void LibraryScan(object param = null)
         {
-            Debug.WriteLine("--> MediatequeScan <--");
+            Debug.WriteLine("--> LibraryScan <--");
             bool DoClean = false;
             try { DoClean = (bool)param; } catch { }
             if (Settings.LibFolder == null) { return; }
             if (!System.IO.Directory.Exists(Settings.LibFolder)) { return; }
 
-            MediatequeScanedFiles.Clear();
+            LibraryScanedFiles.Clear();
 
-            MediatequeLoadFiles(Settings.LibFolder, MediatequeRefFolder);
-            MediatequeLoadSubDirectories(Settings.LibFolder, MediatequeRefFolder);
+            LibraryLoadFiles(Settings.LibFolder, LibraryRefFolder);
+            LibraryLoadSubDirectories(Settings.LibFolder, LibraryRefFolder);
 
-            MediatequeScanedFiles = MediatequeScanedFiles.Distinct().ToList();
-            //Debug.WriteLine("--> MediatequeScan SUB 0 <--");
-            //Debug.WriteLine(MediatequeScanedFiles.Count);
+            LibraryScanedFiles = LibraryScanedFiles.Distinct().ToList();
+            //Debug.WriteLine("--> LibraryScan SUB 0 <--");
+            //Debug.WriteLine(LibraryScanedFiles.Count);
 
-            List<string> MediatequeCacheQuerys = new List<string>();
+            List<string> LibraryCacheQuerys = new List<string>();
             List<string> NewFiles = new List<string>();
 
-            MediatequeScanning = true;
+            LibraryScanning = true;
 
-            //Debug.WriteLine("--> MediatequeScan SUB 1 <--");
+            //Debug.WriteLine("--> LibraryScan SUB 1 <--");
             _ = Dispatcher.BeginInvoke(new Action(() => {
                 LibraryFiltersGrid.IsEnabled = false;
                 LibNavigationContent.Children.Clear();
-                MediatequeBuildNavigationScan();
+                LibraryBuildNavigationScan();
 
                 if (DoClean)
                 {
-                    MediatequeCurrentFolder = null; 
-                    MediatequeWatcher = null;
-                    MediatequeTotalScanedSize = 0;
-                    MediatequeTotalScanedDuration = 0;
-                    MediatequeTotalScanedFiles = 0;
+                    LibraryCurrentFolder = null; 
+                    LibraryWatcher = null;
+                    LibraryTotalScanedSize = 0;
+                    LibraryTotalScanedDuration = 0;
+                    LibraryTotalScanedFiles = 0;
                     //DatabaseQuery("DELETE FROM files");
-                    MediatequeScanedFiles = new List<string>();
+                    LibraryScanedFiles = new List<string>();
                     LibraryFiltersMode.SelectedIndex = 0;
                     LibraryFiltersGenreList.SelectedIndex = 0;
                     try { LibraryFiltersGenreList.Items.Clear(); }
@@ -179,7 +179,7 @@ namespace AnotherMusicPlayer
                     bdd.DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM folders", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
                 }
             }));
-            //Debug.WriteLine("--> MediatequeScan SUB 2 <--");
+            //Debug.WriteLine("--> LibraryScan SUB 2 <--");
 
 
             Dictionary<string, Dictionary<string, object>> DatabaseFiles = bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
@@ -187,16 +187,16 @@ namespace AnotherMusicPlayer
 
             //LibTreeView.Items.Clear();
 
-            //Debug.WriteLine("--> MediatequeScan SUB 3 <--");
-            //Debug.WriteLine(MediatequeScanedFiles.Count);
-            foreach (string file in MediatequeScanedFiles)
+            //Debug.WriteLine("--> LibraryScan SUB 3 <--");
+            //Debug.WriteLine(LibraryScanedFiles.Count);
+            foreach (string file in LibraryScanedFiles)
             {
-                MediatequeTotalScanedFiles += 1;
+                LibraryTotalScanedFiles += 1;
                 FileInfo fi = new FileInfo(file);
 
                 if (DatabaseFiles.ContainsKey(file))
                 {
-                    //Debug.WriteLine("--> MediatequeScan SUB 4-1 <--");
+                    //Debug.WriteLine("--> LibraryScan SUB 4-1 <--");
                     Dictionary<string, object> dfi = bdd.DatabaseFileInfo(fi.FullName);
                     //Debug.WriteLine(fi.FullName);
                     //Debug.WriteLine("LastUpdate Database = " + (long)DatabaseFiles[fi.FullName]["LastUpdate"]);
@@ -206,9 +206,9 @@ namespace AnotherMusicPlayer
                     if (Convert.ToInt64((string)dfi["LastUpdate"]) != Convert.ToInt64(fi.LastWriteTimeUtc.ToFileTime()))
                     {
                         //Debug.WriteLine("--> update <--");
-                        MediatequeTotalScanedDuration += Int32.Parse((string)dfi["Duration"]);
-                        MediatequeTotalScanedSize += Int32.Parse((string)dfi["Size"]);
-                        MediatequeCacheQuerys.Add("UPDATE files SET Name='" + Database.DatabaseEscapeString((string)dfi["Name"])
+                        LibraryTotalScanedDuration += Int32.Parse((string)dfi["Duration"]);
+                        LibraryTotalScanedSize += Int32.Parse((string)dfi["Size"]);
+                        LibraryCacheQuerys.Add("UPDATE files SET Name='" + Database.DatabaseEscapeString((string)dfi["Name"])
                             + "', Album='" + Database.DatabaseEscapeString((string)dfi["Album"])
                             + "', Performers='" + Database.DatabaseEscapeString((string)dfi["Performers"])
                             + "', Composers='" + Database.DatabaseEscapeString((string)dfi["Composers"])
@@ -228,13 +228,13 @@ namespace AnotherMusicPlayer
                     }
                     else
                     {
-                        MediatequeTotalScanedDuration += Convert.ToInt64(DatabaseFiles[fi.FullName]["Duration"]);
-                        MediatequeTotalScanedSize += Convert.ToInt64(DatabaseFiles[fi.FullName]["Size"]);
+                        LibraryTotalScanedDuration += Convert.ToInt64(DatabaseFiles[fi.FullName]["Duration"]);
+                        LibraryTotalScanedSize += Convert.ToInt64(DatabaseFiles[fi.FullName]["Size"]);
                     }
                 }
                 else
                 {
-                    //Debug.WriteLine("--> MediatequeScan SUB 4-2 <--");
+                    //Debug.WriteLine("--> LibraryScan SUB 4-2 <--");
                     PlayListViewItem item = null;
                     
                     string query = "INSERT INTO files("
@@ -260,56 +260,56 @@ namespace AnotherMusicPlayer
                     query += "'" + Database.DatabaseEscapeString(fi.Name) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0',";
 
                     query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
-                    MediatequeTotalScanedFiles += 1;
+                    LibraryTotalScanedFiles += 1;
                     NewFiles.Add(fi.FullName);
-                    MediatequeCacheQuerys.Add(query);
+                    LibraryCacheQuerys.Add(query);
                 }
 
-                if (MediatequeCacheQuerys.Count >= 100)
+                if (LibraryCacheQuerys.Count >= 100)
                 {
-                    //Debug.WriteLine("--> MediatequeScan SUB 5 <--");
-                    bdd.DatabaseQuerys(MediatequeCacheQuerys.ToArray());
-                    MediatequeCacheQuerys.Clear();
+                    //Debug.WriteLine("--> LibraryScan SUB 5 <--");
+                    bdd.DatabaseQuerys(LibraryCacheQuerys.ToArray());
+                    LibraryCacheQuerys.Clear();
                     _ = Dispatcher.BeginInvoke(new Action(() =>
                     {
-                        MediatequeBuildNavigationContent(MediatequeRefFolder);
+                        LibraryBuildNavigationContent(LibraryRefFolder);
                     }));
                 }
 
 
             }
 
-            //Debug.WriteLine("--> MediatequeScan SUB 6 <--");
-            //Debug.WriteLine(JsonConvert.SerializeObject(MediatequeCacheQuerys.ToArray()));
-            bdd.DatabaseQuerys(MediatequeCacheQuerys.ToArray());
-            MediatequeCacheQuerys.Clear();
+            //Debug.WriteLine("--> LibraryScan SUB 6 <--");
+            //Debug.WriteLine(JsonConvert.SerializeObject(LibraryCacheQuerys.ToArray()));
+            bdd.DatabaseQuerys(LibraryCacheQuerys.ToArray());
+            LibraryCacheQuerys.Clear();
 
-            //Debug.WriteLine("--> MediatequeScan SUB 7 <--");
+            //Debug.WriteLine("--> LibraryScan SUB 7 <--");
             foreach (KeyValuePair<string, Dictionary<string, object>> fi in DatabaseFiles.ToList())
             {
-                if (!MediatequeScanedFiles.Contains(fi.Key))
+                if (!LibraryScanedFiles.Contains(fi.Key))
                 {
                     bdd.DatabaseQuery("DELETE FROM files WHERE Path='" + Database.DatabaseEscapeString(fi.Key) + "'");
                 }
             }
 
             _ = Dispatcher.BeginInvoke(new Action(() => {
-                MediatequeBuildNavigationScan();
+                LibraryBuildNavigationScan();
             }));
 
             DatabaseFiles.Clear();
 
-            //Debug.WriteLine("--> MediatequeScan SUB 8 <--");
-            MediatequeEnableFilters();
-            //Debug.WriteLine("--> MediatequeScan SUB 9 <--");
-            MediatequeScanning = false;
+            //Debug.WriteLine("--> LibraryScan SUB 8 <--");
+            LibraryEnableFilters();
+            //Debug.WriteLine("--> LibraryScan SUB 9 <--");
+            LibraryScanning = false;
             _ = Dispatcher.InvokeAsync(new Action(() =>
             {
-                MediatequeBuildNavigationPath(MediatequeRefFolder);
-                MediatequeBuildNavigationContent(MediatequeRefFolder);
+                LibraryBuildNavigationPath(LibraryRefFolder);
+                LibraryBuildNavigationContent(LibraryRefFolder);
                 if (NewFiles.Count > 0)
                 {
-                    Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeScanTags));
+                    Thread objThread = new Thread(new ParameterizedThreadStart(LibraryScanTags));
                     objThread.IsBackground = true;
                     objThread.Priority = ThreadPriority.Normal;
                     objThread.Start(NewFiles.ToArray());
@@ -317,37 +317,37 @@ namespace AnotherMusicPlayer
             }));
         }
 
-        /// <summary> Fill the Navigation bar in Library pannel when MediatequeScanning files </summary>
-        private void MediatequeBuildNavigationScan()
+        /// <summary> Fill the Navigation bar in Library pannel when LibraryScanning files </summary>
+        private void LibraryBuildNavigationScan()
         {
             LibNavigationPathContener.Children.Clear();
             TextBlock tb2 = new TextBlock();
-            tb2.Text = "<< " + GetTaduction("LibMediaMediatequeScanning") + " >>, " + GetTaduction("LibMediaFiles") + ": ";
+            tb2.Text = "<< " + GetTranslation("LibMediaLibraryScanning") + " >>, " + GetTranslation("LibMediaFiles") + ": ";
             tb2.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb2);
 
             TextBlock tb3 = new TextBlock();
-            tb3.Text = "" + MediatequeTotalScanedFiles;
+            tb3.Text = "" + LibraryTotalScanedFiles;
             tb3.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb3);
 
             TextBlock tb4 = new TextBlock();
-            tb4.Text = ", " + GetTaduction("LibMediaTotalSize") + ": ";
+            tb4.Text = ", " + GetTranslation("LibMediaTotalSize") + ": ";
             tb4.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb4);
 
             TextBlock tb5 = new TextBlock();
-            tb5.Text = "" + BytesLengthToString((long)MediatequeTotalScanedSize);
+            tb5.Text = "" + BytesLengthToString((long)LibraryTotalScanedSize);
             tb5.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb5);
 
             TextBlock tb6 = new TextBlock();
-            tb6.Text = ", " + GetTaduction("LibMediaTotalDuration") + ": ";
+            tb6.Text = ", " + GetTranslation("LibMediaTotalDuration") + ": ";
             tb6.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb6);
 
             TextBlock tb7 = new TextBlock();
-            tb7.Text = "" + displayTime((long)MediatequeTotalScanedDuration);
+            tb7.Text = "" + displayTime((long)LibraryTotalScanedDuration);
             tb7.FontSize = 8;
             LibNavigationPathContener.Children.Add(tb7);
 
@@ -356,8 +356,8 @@ namespace AnotherMusicPlayer
 
 
 
-        /// <summary> Sub Recursive Function for MediatequeScanning folder </summary>
-        private void MediatequeLoadSubDirectories(string dir, Folder fold, bool DatabaseUpdate = true)
+        /// <summary> Sub Recursive Function for LibraryScanning folder </summary>
+        private void LibraryLoadSubDirectories(string dir, Folder fold, bool DatabaseUpdate = true)
         {
             // Get all subdirectories  
             string[] subdirectoryEntries = Directory.GetDirectories(dir);
@@ -367,15 +367,15 @@ namespace AnotherMusicPlayer
                 DirectoryInfo di = new DirectoryInfo(subdirectory);
                 if (di.Name.StartsWith('.')) { continue; }
                 Folder fold2 = new Folder() { Name = di.Name, Path = di.FullName, Parent = fold };
-                MediatequeLoadFiles(subdirectory, fold2, DatabaseUpdate);
-                MediatequeLoadSubDirectories(subdirectory, fold2, DatabaseUpdate);
-                if (MediatequeCurrentFolderS == di.FullName) { MediatequeCurrentFolder = fold2; }
+                LibraryLoadFiles(subdirectory, fold2, DatabaseUpdate);
+                LibraryLoadSubDirectories(subdirectory, fold2, DatabaseUpdate);
+                if (LibraryCurrentFolderS == di.FullName) { LibraryCurrentFolder = fold2; }
                 fold.Folders.Add(fold2);
             }
         }
 
-        /// <summary> Sub Function for MediatequeScanning folder, fill the file list </summary>
-        private void MediatequeLoadFiles(string dir, Folder fold, bool DatabaseUpdate = true)
+        /// <summary> Sub Function for LibraryScanning folder, fill the file list </summary>
+        private void LibraryLoadFiles(string dir, Folder fold, bool DatabaseUpdate = true)
         {
             string[] Files = Directory.GetFiles(dir, "*.*");
             bool ok = false;
@@ -392,7 +392,7 @@ namespace AnotherMusicPlayer
                 if (ok)
                 {
                     fold.Files.Add(file);
-                    MediatequeScanedFiles.Add(file);
+                    LibraryScanedFiles.Add(file);
                     if (DatabaseUpdate)
                     {
 

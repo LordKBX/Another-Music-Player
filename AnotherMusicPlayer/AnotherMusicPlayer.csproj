@@ -31,6 +31,7 @@
       <Pack>True</Pack>
       <PackagePath>
       </PackagePath>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Include="icons\album_large.png">
       <Pack>True</Pack>
@@ -41,10 +42,15 @@
   <ItemGroup>
     <Page Remove="styles.xaml" />
     <Page Remove="Styles\Dark.xaml" />
+    <Page Remove="Styles\Red.xaml" />
     <Page Remove="Traductions\en.xaml" />
     <Page Remove="Traductions\fr.xaml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Styles\Red.xaml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <Generator>MSBuild:Compile</Generator>
+    </None>
     <None Include="Styles\Dark.xaml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

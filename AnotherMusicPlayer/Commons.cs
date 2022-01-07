@@ -147,20 +147,20 @@ namespace AnotherMusicPlayer
                 foreach (Window aa in Application.Current.Windows)
                 {
                     try {
-                        mw.GetTaduction("SizeBytesUnit");
+                        mw.GetTranslation("SizeBytesUnit");
                         mw = ((MainWindow)aa);
                     }
                     catch { }
                 }
                 if (mw == null) { return null; }
                 string[] suf = {
-                mw.GetTaduction("SizeBytesUnit"),
-                    mw.GetTaduction("SizeBytesKilo"),
-                    mw.GetTaduction("SizeBytesMega"),
-                    mw.GetTaduction("SizeBytesGiga"),
-                    mw.GetTaduction("SizeBytesTera"),
-                    mw.GetTaduction("SizeBytesPeta"),
-                    mw.GetTaduction("SizeBytesExa")
+                mw.GetTranslation("SizeBytesUnit"),
+                    mw.GetTranslation("SizeBytesKilo"),
+                    mw.GetTranslation("SizeBytesMega"),
+                    mw.GetTranslation("SizeBytesGiga"),
+                    mw.GetTranslation("SizeBytesTera"),
+                    mw.GetTranslation("SizeBytesPeta"),
+                    mw.GetTranslation("SizeBytesExa")
                 }; //Longs run out around EB
                 if (byteCount == 0)
                     return "0" + suf[0];

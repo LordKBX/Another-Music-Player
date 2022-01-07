@@ -40,7 +40,26 @@ namespace AnotherMusicPlayer
             PlayRepeatStatus = Settings.LastRepeatStatus;
             SettingsSetUp();
             EqualizerInitEvents();
-            UpdateTraduction();
+            TranslationUpdate();
+            StyleUpdate();
+            string[] styles = StyleList();
+            List<ComboBoxItem> li = new List<ComboBoxItem>();
+            Debug.WriteLine(JsonConvert.SerializeObject(styles));
+
+            int pos = 0;
+            foreach (string file in styles)
+            {
+                li.Add(new ComboBoxItem()
+                {
+                    Content = file,
+                    Tag = file,
+                    HorizontalContentAlignment = HorizontalAlignment.Left,
+                    VerticalContentAlignment = VerticalAlignment.Center
+                });
+                if (file == Settings.StyleName) { pos = li.Count - 1; }
+            }
+            ParamsStyleVals.ItemsSource = li;
+            ParamsStyleVals.SelectedIndex = pos;
         }
 
         /// <summary> load settings in parametters panel </summary>
@@ -51,6 +70,7 @@ namespace AnotherMusicPlayer
             if (Settings.Lang.StartsWith("fr-")) { ParamsLanguageVals.SelectedIndex = 1; }
             else { ParamsLanguageVals.SelectedIndex = 0; }
             ParamsLanguageVals.SelectionChanged += ParamsLanguageVals_SelectionChanged;
+            ParamsStyleVals.SelectionChanged += ParamsStyleVals_SelectionChanged;
 
             if (Settings.ConversionMode == 1) { ParamsConvKeepVals.SelectedIndex = 0; }
             else { ParamsConvKeepVals.SelectedIndex = 1; }
@@ -95,15 +115,24 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Callback parametter language combobox </summary>
+        private void ParamsStyleVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            Settings.StyleName = (string)item.Tag;
+            Settings.SaveSettings();
+            StyleUpdate();
+        }
+
+        /// <summary> Callback parametter language combobox </summary>
         private void ParamsLanguageVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
             Settings.Lang = (string)item.Tag;
             Settings.SaveSettings();
-            UpdateTraduction();
+            TranslationUpdate();
             if (PlayList.Count > 0 && PlayListIndex >= 0) { UpdateLeftPannelMediaInfo(); }
-            if (MediatequeScanning) { MediatequeBuildNavigationScan(); }
-            MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
+            if (LibraryScanning) { LibraryBuildNavigationScan(); }
+            LibraryBuildNavigationContent(LibraryCurrentFolder ?? LibraryRefFolder);
         }
 
         /// <summary> Callback parametter conversion mode combobox </summary>
@@ -133,7 +162,7 @@ namespace AnotherMusicPlayer
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
                 _ = Dispatcher.InvokeAsync(new Action(() => {
-                    MediatequeInvokeScan(true);
+                    LibraryInvokeScan(true);
                 }));
             }
         }
@@ -144,15 +173,15 @@ namespace AnotherMusicPlayer
             string path = null;
             Microsoft.Win32.SaveFileDialog dialog = new Microsoft.Win32.SaveFileDialog();
             dialog.InitialDirectory = Settings.LibFolder; // Use current value for initial dir
-            dialog.Title = GetTaduction("ParamsLibFolderSelectorTitle"); // instead of default "Save As"
-            dialog.Filter = GetTaduction("ParamsLibFolderSelectorBlockerTitle") + "|*." + GetTaduction("ParamsLibFolderSelectorBlockerType"); // Prevents displaying files
-            dialog.FileName = GetTaduction("ParamsLibFolderSelectorBlockerName"); // Filename will then be "select.this.directory"
+            dialog.Title = GetTranslation("ParamsLibFolderSelectorTitle"); // instead of default "Save As"
+            dialog.Filter = GetTranslation("ParamsLibFolderSelectorBlockerTitle") + "|*." + GetTranslation("ParamsLibFolderSelectorBlockerType"); // Prevents displaying files
+            dialog.FileName = GetTranslation("ParamsLibFolderSelectorBlockerName"); // Filename will then be "select.this.directory"
             if (dialog.ShowDialog() == true)
             {
                 path = dialog.FileName;
                 // Remove fake filename from resulting path
-                path = path.Replace("\\" + GetTaduction("ParamsLibFolderSelectorBlockerName") + "." + GetTaduction("ParamsLibFolderSelectorBlockerType"), "");
-                path = path.Replace("." + GetTaduction("ParamsLibFolderSelectorBlockerType"), "");
+                path = path.Replace("\\" + GetTranslation("ParamsLibFolderSelectorBlockerName") + "." + GetTranslation("ParamsLibFolderSelectorBlockerType"), "");
+                path = path.Replace("." + GetTranslation("ParamsLibFolderSelectorBlockerType"), "");
                 // If user has changed the filename, create the new directory
                 if (!System.IO.Directory.Exists(path)) { return null; }
                 // Our final value is in path

@@ -43,6 +43,8 @@
     <sys:String x:Key="ParamsLanguageVals_EN">English</sys:String>
     <sys:String x:Key="ParamsLanguageVals_FR">Français</sys:String>
 
+    <sys:String x:Key="ParamsStyleLabel">Style</sys:String>
+
     <sys:String x:Key="ParamsConvDisclaimerLabel">Warning; Native audio support for the folowing formats only: aif,mp3(incomplete support),wav,wma</sys:String>
     
     <sys:String x:Key="ParamsConvKeepLabel">Convertion:</sys:String>
@@ -75,7 +77,7 @@
     <sys:String x:Key="ParamsLibItemContextMenuItem_AddTrackToPlayingQueue">Add Track to PlayList</sys:String>
     <sys:String x:Key="ParamsLibItemContextMenuItem_GetBack">Return to parent folder</sys:String>
 
-    <sys:String x:Key="LibMediaMediatequeScanning">MediatequeScanning</sys:String>
+    <sys:String x:Key="LibMediaLibraryScanning">LibraryScanning</sys:String>
     <sys:String x:Key="LibMediaFiles">Files</sys:String>
     <sys:String x:Key="LibMediaTotalSize">Total Size</sys:String>
     <sys:String x:Key="LibMediaTotalDuration">Total Duration</sys:String>

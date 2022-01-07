@@ -13,7 +13,7 @@ namespace AnotherMusicPlayer
     {
 
         /// <summary> Reload traduction file with selection of the file based on Settings.Lang </summary>
-        private void UpdateTraduction()
+        private void TranslationUpdate()
         {
             if (Resources.MergedDictionaries.Count < 2) { Resources.MergedDictionaries.Add(new ResourceDictionary()); }
             string end = "";
@@ -25,7 +25,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get string stored in traduction file </summary>
-        private string GetTaduction(string reference) {
+        private string GetTranslation(string reference) {
             try { return (string)Resources.MergedDictionaries[1][reference]; }
             catch { return ""; }
         }

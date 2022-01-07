@@ -127,7 +127,7 @@ namespace AnotherMusicPlayer
             int col = Convert.ToInt32(((Slider)sender).Tag);
             NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalDigits = 2, NumberGroupSizes = new int[] { 2, 2, 3} };
             float NewValue = (float)Math.Round(e.NewValue, 2);
-            player.UpdateEqualize(col, NewValue);
+            player.UpdateEqualizer(col, NewValue);
             if (EqualizerBandFocusNb > 0) { Settings.EqualizerPreset = "Perso"; }
 
             if (col == 0) { EqualizerLabel1.Text = Convert.ToString(NewValue); Settings.EqualizerBand1 = NewValue; }

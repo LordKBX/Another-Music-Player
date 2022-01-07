@@ -17,11 +17,11 @@ namespace AnotherMusicPlayer
 {
     public partial class MainWindow : Window {
         /// <summary> Asynchronus call for loading old playlist in a new thread </summary>
-        private async void MediatequeLoadOldPlaylist()
+        private async void LibraryLoadOldPlaylist()
         {
             try
             {
-                Thread objThread = new Thread(new ParameterizedThreadStart(MediatequeLoadOldPlaylistP2));
+                Thread objThread = new Thread(new ParameterizedThreadStart(LibraryLoadOldPlaylistP2));
                 objThread.IsBackground = true;
                 objThread.Priority = ThreadPriority.AboveNormal;
                 objThread.Start(null);
@@ -29,7 +29,7 @@ namespace AnotherMusicPlayer
             catch { }
         }
 
-        private void MediatequeLoadOldPlaylistP2(object param = null)
+        private void LibraryLoadOldPlaylistP2(object param = null)
         {
             Dictionary<string, Dictionary<string, object>> LastPlaylist = bdd.DatabaseQuery("SELECT MIndex,Path1,Path2 FROM queue ORDER BY MIndex ASC", "MIndex");
             if (LastPlaylist != null)

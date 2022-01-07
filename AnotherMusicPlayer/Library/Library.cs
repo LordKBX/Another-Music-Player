@@ -28,61 +28,52 @@ namespace AnotherMusicPlayer
         public Folder Parent = null;
     }
 
-    /// <summary> Class AsyncCoverLoadPacket for storing required data </summary>
-    public class AsyncCoverLoadPacket
-    {
-        public bool nocover = false;
-        public System.Windows.Controls.Image sender = null;
-        public string coverPath = null;
-        public BitmapImage defaultCover = null;
-    }
-
     public partial class MainWindow : Window
     {
         /// <summary> Object Folder of scaned Library </summary>
-        private Folder MediatequeRefFolder = new Folder();
+        private Folder LibraryRefFolder = new Folder();
         /// <summary> Object Folder of current position in Library </summary>
-        private Folder MediatequeCurrentFolder = null;
+        private Folder LibraryCurrentFolder = null;
         /// <summary> String Path of current position in Library </summary>
-        private string MediatequeCurrentFolderS = null;
+        private string LibraryCurrentFolderS = null;
         /// <summary> Object Watcher for detecting Library Modifications </summary>
-        private FileSystemWatcher MediatequeWatcher = null;
+        private FileSystemWatcher LibraryWatcher = null;
         /// <summary> Counter of Total number of scaned files </summary>
-        private double MediatequeTotalScanedFiles = 0;
+        private double LibraryTotalScanedFiles = 0;
         /// <summary> Counter of Total scaned Size </summary>
-        private double MediatequeTotalScanedSize = 0;
+        private double LibraryTotalScanedSize = 0;
         /// <summary> Counter of Total scaned Duration </summary>
-        private double MediatequeTotalScanedDuration = 0;
-        /// <summary> status if currently MediatequeScanning Library </summary>
-        private bool MediatequeScanning = false;
+        private double LibraryTotalScanedDuration = 0;
+        /// <summary> status if currently LibraryScanning Library </summary>
+        private bool LibraryScanning = false;
 
         /// <summary> Create a Library folder watcher </summary>
-        private void MediatequeCreateWatcher()
+        private void LibraryCreateWatcher()
         {
-            if (MediatequeWatcher != null) { MediatequeWatcher.Dispose(); }
-            MediatequeWatcher = new FileSystemWatcher();
-            MediatequeWatcher.Path = Settings.LibFolder;
-            MediatequeWatcher.IncludeSubdirectories = true;
-            MediatequeWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
-            MediatequeWatcher.Filter = "*.*";
-            MediatequeWatcher.Changed += new FileSystemEventHandler(MediatequeChanged);
-            MediatequeWatcher.EnableRaisingEvents = true;
+            if (LibraryWatcher != null) { LibraryWatcher.Dispose(); }
+            LibraryWatcher = new FileSystemWatcher();
+            LibraryWatcher.Path = Settings.LibFolder;
+            LibraryWatcher.IncludeSubdirectories = true;
+            LibraryWatcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            LibraryWatcher.Filter = "*.*";
+            LibraryWatcher.Changed += new FileSystemEventHandler(LibraryChanged);
+            LibraryWatcher.EnableRaisingEvents = true;
         }
 
-        /// <summary> GetCallback when Mediateque Watcher detect a change </summary>
-        private void MediatequeChanged(object source, FileSystemEventArgs e)
+        /// <summary> GetCallback when Library Watcher detect a change </summary>
+        private void LibraryChanged(object source, FileSystemEventArgs e)
         {
-            Debug.WriteLine("MediatequeChanged => "+e.Name);
+            Debug.WriteLine("LibraryChanged => "+e.Name);
             bdd.UpdateFileAsync(Settings.LibFolder + SeparatorChar + e.Name, true);
-            //Dispatcher.InvokeAsync(new Action(() => { MediatequeScan(); }));
+            //Dispatcher.InvokeAsync(new Action(() => { LibraryScan(); }));
         }
 
         /// <summary> Recursive function for filling a List<string> with all the files Stored in the hierarchy of an Folder object </summary>
-        private List<string> MediatequeCreateList(Folder fold, List<string> liste)
+        private List<string> LibraryCreateList(Folder fold, List<string> liste)
         {
             if (fold.Folders != null)
             {
-                foreach (Folder fl in fold.Folders) { liste = MediatequeCreateList(fl, liste); }
+                foreach (Folder fl in fold.Folders) { liste = LibraryCreateList(fl, liste); }
             }
             foreach (string fi in fold.Files) { liste.Add(fi); }
             return liste;
@@ -95,20 +86,20 @@ namespace AnotherMusicPlayer
             ContextMenu ct = new ContextMenu();
             MenuItem mu = new MenuItem()
             {
-                Header = GetTaduction((type == "folder")? "ParamsLibItemContextMenuItem_AddFolderToPlayingQueue" : ((type == "file") ? "ParamsLibItemContextMenuItem_AddTrackToPlayingQueue" : "ParamsLibItemContextMenuItem_AddAlbumToPlayingQueue")),
+                Header = GetTranslation((type == "folder")? "ParamsLibItemContextMenuItem_AddFolderToPlayingQueue" : ((type == "file") ? "ParamsLibItemContextMenuItem_AddTrackToPlayingQueue" : "ParamsLibItemContextMenuItem_AddAlbumToPlayingQueue")),
                 Icon = ContextMenuItemImage_add
             };
-            mu.Click += MediatequeCT_Open;
+            mu.Click += LibraryCT_Open;
             ct.Items.Add(mu);
             return ct;
         }
 
         /// <summary> Fill the Navigation bar in Library pannel with current location </summary>
-        private void MediatequeBuildNavigationPath(Folder fold) {
+        private void LibraryBuildNavigationPath(Folder fold) {
             if(fold.Path == null) { fold.Path = Settings.LibFolder; }
             LibNavigationPathContener.Children.Clear();
-            MediatequeCurrentFolder = fold;
-            MediatequeCurrentFolderS = fold.Path;
+            LibraryCurrentFolder = fold;
+            LibraryCurrentFolderS = fold.Path;
             string basePath = "Home/"+((fold.Path == Settings.LibFolder)?"": fold.Path.Replace(Settings.LibFolder, "").Replace(SeparatorChar, '/').Replace("//", "/"));
             string[] tabPath = basePath.Split('/');
             List<Folder> tabFold = new List<Folder>();
@@ -143,7 +134,7 @@ namespace AnotherMusicPlayer
                     tb3.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationPathItem"];
                     tb3.Text = pa;
                     tb3.Tag = new object[] { "folder", tabFold[l1].Path, tabFold[l1] };
-                    tb3.MouseDown += MediatequeBuildNavigationPathClick;
+                    tb3.MouseDown += LibraryBuildNavigationPathClick;
                     tb3.ContextMenu = LibMediaCreateContextMenu();
 
                     LibNavigationPathContener.Children.Add(tb3);
@@ -154,27 +145,27 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Callback click Navigation item in Navigation bar, used for changing location in library </summary>
-        private void MediatequeBuildNavigationPathClick(object sender, MouseButtonEventArgs e)
+        private void LibraryBuildNavigationPathClick(object sender, MouseButtonEventArgs e)
         {
             object[] ob = (object[])((TextBlock)sender).Tag;
             Folder v = (Folder)(ob[2]);
-            MediatequeCurrentFolder = v;
+            LibraryCurrentFolder = v;
             //Debug.WriteLine(v.Name);
-            MediatequeBuildNavigationPath(v);
-            MediatequeBuildNavigationContent(v);
+            LibraryBuildNavigationPath(v);
+            LibraryBuildNavigationContent(v);
             LibraryFiltersMode.SelectedIndex = 0;
             LibraryFiltersGenreList.SelectedIndex = 0;
         }
 
-        StackPanel MediatequeBuildNavigationContentBlockssPanel = null;
+        StackPanel LibraryBuildNavigationContentBlockssPanel = null;
         /// <summary> Fill the Content zone in Library pannel with folders and files </summary>
-        private void MediatequeBuildNavigationContent(Folder fold)
+        private void LibraryBuildNavigationContent(Folder fold)
         {
             if (fold.Path == null) { fold.Path = Settings.LibFolder; }
-            if (!isLoading() && !MediatequeScanning) { setLoadingState(true, "Loading"); }
+            if (!isLoading() && !LibraryScanning) { setLoadingState(true, "Loading"); }
             //setLoadingState(false);
             //return;
-            //Debug.WriteLine("--> MediatequeBuildNavigationContent <--");
+            //Debug.WriteLine("--> LibraryBuildNavigationContent <--");
             try
             {
                 if(LibNavigationContent.Children.Count>0)LibNavigationContent.Children.Clear();
@@ -184,11 +175,11 @@ namespace AnotherMusicPlayer
                 LibraryFiltersGenreList.SelectedIndex = 0;
                 LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
 
-                MediatequeBuildNavigationContentBlockssPanel = new StackPanel() { Orientation = Orientation.Vertical, Width = LibNavigationContent.ActualWidth, Visibility = Visibility.Visible };
-                LibNavigationContent.Children.Add(MediatequeBuildNavigationContentBlockssPanel);
+                LibraryBuildNavigationContentBlockssPanel = new StackPanel() { Orientation = Orientation.Vertical, Width = LibNavigationContent.ActualWidth, Visibility = Visibility.Visible };
+                LibNavigationContent.Children.Add(LibraryBuildNavigationContentBlockssPanel);
 
                 foreach (Folder fl in fold.Folders) { 
-                    MediatequeBuildNavigationContentButton("folder", fl.Name, fl.Path, fl); 
+                    LibraryBuildNavigationContentButton("folder", fl.Name, fl.Path, fl); 
                 }
 
                 _ = Dispatcher.InvokeAsync(new Action(() =>
@@ -198,26 +189,26 @@ namespace AnotherMusicPlayer
                     {
                         MenuItem mu0 = new MenuItem()
                         {
-                            Header = GetTaduction("ParamsLibItemContextMenuItem_GetBack"),
+                            Header = GetTranslation("ParamsLibItemContextMenuItem_GetBack"),
                             Icon = ContextMenuItemImage_back,
                             Tag = fold.Parent
                         };
                         mu0.Click += (sender, e) => {
-                            MediatequeBuildNavigationPath((Folder)((MenuItem)sender).Tag);
-                            MediatequeBuildNavigationContent((Folder)((MenuItem)sender).Tag);
+                            LibraryBuildNavigationPath((Folder)((MenuItem)sender).Tag);
+                            LibraryBuildNavigationContent((Folder)((MenuItem)sender).Tag);
                         };
                         ct.Items.Add(mu0);
                     }
 
                     MenuItem mu1 = new MenuItem()
                     {
-                        Header = GetTaduction("ParamsLibItemContextMenuItem_GenericAddToPlayingQueue"),
+                        Header = GetTranslation("ParamsLibItemContextMenuItem_GenericAddToPlayingQueue"),
                         Icon = ContextMenuItemImage_add,
                         Tag = fold
                     };
                     mu1.Click += (sender, e) => {
                         List<string> paths = new List<string>();
-                        paths = MediatequeCreateList((Folder)((MenuItem)sender).Tag, paths).Distinct().ToList();
+                        paths = LibraryCreateList((Folder)((MenuItem)sender).Tag, paths).Distinct().ToList();
                         Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray()); }));
                     };
                     ct.Items.Add(mu1);
@@ -235,18 +226,18 @@ namespace AnotherMusicPlayer
                 }
                 _ = Dispatcher.BeginInvoke(new Action(() =>
                 {
-                    MediatequeBuildNavigationContentBlocks(endFiles.ToArray(), MediatequeBuildNavigationContentBlockssPanel);
+                    LibraryBuildNavigationContentBlocks(endFiles.ToArray(), LibraryBuildNavigationContentBlockssPanel);
                     LibNavigationContentScroll.ScrollToTop();
                 }));
             }
             catch {
-                Debug.WriteLine("--> MediatequeBuildNavigationContent ERROR <--");
+                Debug.WriteLine("--> LibraryBuildNavigationContent ERROR <--");
             }
         }
 
-        private void MediatequeBuildNavigationContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
+        private void LibraryBuildNavigationContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
         {
-            //Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks START <--");
+            //Debug.WriteLine("--> LibraryBuildNavigationContentBlocks START <--");
             while (files.Length > 0 && files[0].Length == 0) { files = files.Where(w => w != files[0]).ToArray(); }
             if (files.Length == 0) { setLoadingState(false); return; }
             if (contener == null) { setLoadingState(false); return; }
@@ -275,7 +266,7 @@ namespace AnotherMusicPlayer
                         if (!tab[it.Album][it.Disc].ContainsKey(it.Path)) { tab[it.Album][it.Disc].Add(it.Path, it); }
                     }
                     else {
-                        Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks ERROR - FILE '"+ fil + "' do not exist <--");
+                        Debug.WriteLine("--> LibraryBuildNavigationContentBlocks ERROR - FILE '"+ fil + "' do not exist <--");
                     }
                 }
 
@@ -306,13 +297,13 @@ namespace AnotherMusicPlayer
                                 Style = (Style)Resources.MergedDictionaries[0]["HQImg"]
                             };
                             im.Source = (Settings.MemoryUsage == 1) ?
-                                ((player.MediaPicture(coverPath, true, 150, 150, false)) ?? defaultCover) :
-                                ((player.MediaPicture(coverPath, true, 50, 50, false)) ?? defaultCover);
+                                ((FilesTags.MediaPicture(coverPath, bdd, true, 150, 150, false)) ?? defaultCover) :
+                                ((FilesTags.MediaPicture(coverPath, bdd, true, 50, 50, false)) ?? defaultCover);
                             if (im.Source != Bimage("CoverImg") && Settings.MemoryUsage == 1)
                             {
                                 WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
                                 Image imp = new Image() { Style = (Style)Resources.MergedDictionaries[0]["HQImg"] };
-                                imp.Source = (((nocover) ? null : player.MediaPicture(coverPath, true)) ?? defaultCover);
+                                imp.Source = (((nocover) ? null : FilesTags.MediaPicture(coverPath, bdd, true)) ?? defaultCover);
                                 p.Children.Add(imp);
                                 im.ToolTip = p;
                             }
@@ -392,7 +383,7 @@ namespace AnotherMusicPlayer
                                     //        ((AccessText)btn.Content).Text = NormalizeNumber(Convert.ToInt32(dataT["Track"]), ("" + dataT["TrackCount"]).Length) + ". " + (string)dataT["Name"];
                                     //    }));
                                     //};
-                                    btn.Click += MediatequeNavigationContentButtonClick;
+                                    btn.Click += LibraryNavigationContentButtonClick;
                                     btn.ContextMenu = LibMediaCreateContextMenu("file");
                                     st2.Children.Add(btn);
                                 }
@@ -410,15 +401,15 @@ namespace AnotherMusicPlayer
                 }
                 dataFiles.Clear();
             }
-            catch { Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks ERROR <--"); }
-            //Debug.WriteLine("--> MediatequeBuildNavigationContentBlocks END <--");
+            catch { Debug.WriteLine("--> LibraryBuildNavigationContentBlocks ERROR <--"); }
+            //Debug.WriteLine("--> LibraryBuildNavigationContentBlocks END <--");
             setLoadingState(false);
         }
 
         /// <summary> Create button for the Content zone in Library pannel </summary>
-        private void MediatequeBuildNavigationContentButton(string type, string name, string path, Folder fold = null)
+        private void LibraryBuildNavigationContentButton(string type, string name, string path, Folder fold = null)
         {
-            //Debug.WriteLine("--> MediatequeBuildNavigationContentButton <--");
+            //Debug.WriteLine("--> LibraryBuildNavigationContentButton <--");
             try
             {
                 //Border br = new Border(); br.Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItemBorder"];
@@ -450,7 +441,7 @@ namespace AnotherMusicPlayer
                     bt.Loaded += (object sender, RoutedEventArgs e) => {
                         _ = Dispatcher.InvokeAsync(new Action(() =>
                         {
-                            BitmapImage bi = player.MediaPicture(path);
+                            BitmapImage bi = FilesTags.MediaPicture(path, bdd);
                             ((Image)((Grid)((System.Windows.Controls.Button)sender).Content).Children[0]).Source = (bi ?? Bimage("CoverImg"));
 
                             if (Settings.MemoryUsage == 1)
@@ -460,15 +451,15 @@ namespace AnotherMusicPlayer
                                 imp.Source = (bi ?? Bimage("CoverImg"));
                                 imp.MaxHeight = imp.MaxWidth = 300;
                                 p.Children.Add(imp);
-                                p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Title2") + " " + ((it != null) ? (it.Name ?? name) : name) });
+                                p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTranslation("Title2") + " " + ((it != null) ? (it.Name ?? name) : name) });
                                 if (it.Album != null && it.Album.Trim() != "")
                                 {
-                                    p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Album2") + " " + it.Album });
+                                    p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTranslation("Album2") + " " + it.Album });
                                 }
 
-                                if (Artists != "") { p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Artist2") + " " + Artists }); }
-                                if (it.Genres != null && it.Genres.Trim() != "") { p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Genres2") + " " + it.Genres }); }
-                                p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTaduction("Duration2") + " " + it.DurationS });
+                                if (Artists != "") { p.Children.Add(new AccessText() { MaxWidth = 300, TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTranslation("Artist2") + " " + Artists }); }
+                                if (it.Genres != null && it.Genres.Trim() != "") { p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTranslation("Genres2") + " " + it.Genres }); }
+                                p.Children.Add(new AccessText() { TextWrapping = TextWrapping.WrapWithOverflow, Text = GetTranslation("Duration2") + " " + it.DurationS });
 
                                 ((System.Windows.Controls.Button)sender).ToolTip = p;
                             }
@@ -492,34 +483,34 @@ namespace AnotherMusicPlayer
                 Grid.SetRow(vb, 1);
 
                 bt.Tag = new object[] { type, path, fold };
-                bt.Click += MediatequeNavigationContentButtonClick;
+                bt.Click += LibraryNavigationContentButtonClick;
                 bt.ContextMenu = LibMediaCreateContextMenu();
 
                 //br.Child = gr;
                 bt.Content = gr;
                 LibNavigationContent.Children.Add(bt);
             }
-            catch { Debug.WriteLine("--> MediatequeBuildNavigationContentButton ERROR <--"); }
+            catch { Debug.WriteLine("--> LibraryBuildNavigationContentButton ERROR <--"); }
         }
 
         /// <summary> Library pannel Content button last time click </summary>
-        double MediatequeNavigationContentButtonClick_LastTime = 0;
+        double LibraryNavigationContentButtonClick_LastTime = 0;
         /// <summary> Library pannel Content button last reference click </summary>
-        string MediatequeNavigationContentButtonClick_LastRef = "";
+        string LibraryNavigationContentButtonClick_LastRef = "";
         /// <summary> Click Callback content button in Library pannel </summary>
-        private void MediatequeNavigationContentButtonClick(object sender, RoutedEventArgs e)
+        private void LibraryNavigationContentButtonClick(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("MediatequeNavigationContentButtonClick");
+            //Debug.WriteLine("LibraryNavigationContentButtonClick");
             double tmpt = UnixTimestamp();
             object[] re = (object[])((Button)sender).Tag;
             if ((string)re[0] == "folder")
             {
-                MediatequeBuildNavigationPath((Folder)re[2]);
-                MediatequeBuildNavigationContent((Folder)re[2]);
+                LibraryBuildNavigationPath((Folder)re[2]);
+                LibraryBuildNavigationContent((Folder)re[2]);
             }
             else
             {
-                if (MediatequeNavigationContentButtonClick_LastTime + 1 > tmpt && MediatequeNavigationContentButtonClick_LastRef == (string)re[1])
+                if (LibraryNavigationContentButtonClick_LastTime + 1 > tmpt && LibraryNavigationContentButtonClick_LastRef == (string)re[1])
                 {
                     //Debug.WriteLine(((Grid)sender).Tag);
                     if (System.IO.File.Exists((string)re[1]))
@@ -531,14 +522,14 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            MediatequeNavigationContentButtonClick_LastTime = tmpt;
-            MediatequeNavigationContentButtonClick_LastRef = (string)re[1];
+            LibraryNavigationContentButtonClick_LastTime = tmpt;
+            LibraryNavigationContentButtonClick_LastRef = (string)re[1];
         }
 
         /// <summary> Click Callback on ContextMenuItem </summary>
-        public void MediatequeCT_Open(object sender, RoutedEventArgs e)
+        public void LibraryCT_Open(object sender, RoutedEventArgs e)
         {
-            //Debug.WriteLine("MediatequeCT_Open");
+            //Debug.WriteLine("LibraryCT_Open");
             MenuItem mi = (MenuItem)sender;
             ContextMenu ct = (ContextMenu)mi.Parent;
             object[] tab;
@@ -556,7 +547,7 @@ namespace AnotherMusicPlayer
             if ((string)tab[0] == "folder") {
                 List<string> paths = new List<string>();
                 Folder fold = (Folder)tab[2];
-                paths = MediatequeCreateList(fold, paths);
+                paths = LibraryCreateList(fold, paths);
                 //Debug.WriteLine(JsonConvert.SerializeObject(paths.ToArray()));
                 Dispatcher.BeginInvoke(new Action(() => { Open(paths.ToArray(), false); }));
             }

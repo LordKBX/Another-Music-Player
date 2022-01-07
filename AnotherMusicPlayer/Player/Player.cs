@@ -1,7 +1,4 @@
-﻿//#define NAudio1
-#define NAudio2
-
-using System;
+﻿using System;
 using System.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +7,6 @@ using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
 using NAudio;
-#if NAudio1
-    using NAudio.Flac;
-#endif
 using NAudio.Wave;
 using TagLib;
 using System.Diagnostics;
@@ -30,6 +24,9 @@ namespace AnotherMusicPlayer
     /// <summary> Player class, user for retrieving media file info or playing music </summary>
     public partial class Player
     {
+        /// <summary> Give the List of native accepted file extentions </summary>
+        public static readonly string[] AcceptedExtentions = new string[] { ".aiff", ".mp3", ".wma" };
+
         /// <summary> List of audio threads by file path </summary>
         private Dictionary<string, Thread> ThreadList = null;
         /// <summary> List of audio objects by file path </summary>
@@ -38,12 +35,18 @@ namespace AnotherMusicPlayer
         private Dictionary<string, int> PlayStatus = null;
         /// <summary> List of playing new position by file path </summary>
         private Dictionary<string, long> PlayNewPositions = null;
+
+        /// <summary> List of file path for the audio playlist </summary>
+        private List<string> PlayList = null;
+        /// <summary> PlayList current position </summary>
+        private int PlayListIndex = 0;
+        /// <summary> PlayList access Semaphore </summary>
+        private Semaphore PlayListSemaphore;
+
         /// <summary> Last played file </summary>
         private string CurrentFile = null;
         /// <summary> Status if repeat file playback active </summary>
         private bool PlayRepeat = false;
-        /// <summary> Conversion quality for output MP3 file </summary>
-        private Int32 ConvQualityBitrates = 128;
 
         /// <summary> reference object of the application window </summary>
         private MainWindow parent;
@@ -55,250 +58,82 @@ namespace AnotherMusicPlayer
         /// <summary> Maximum gain on an equalizer band </summary>
         public readonly int MaximumGain = 20;
 
+        /// <summary>
+        /// Dispose all used resources.
+        /// </summary>
+        public void Dispose()
+        {
+            StopAll();
+            ThreadList = null;
+            AudioList = null;
+            PlayStatus = null;
+            PlayNewPositions = null;
+
+            PlayList.Clear();
+            PlayList = null;
+
+            parent = null;
+
+            GC.SuppressFinalize(this);
+        }
+
+
         /// <summary> Constructor </summary>
-        public Player(MainWindow parent = null) {
-                this.parent = parent;
-                ThreadList = new Dictionary<string, Thread>();
-                AudioList = new Dictionary<string, object>();
-                PlayStatus = new Dictionary<string, int>();
-                PlayNewPositions = new Dictionary<string, long>();
+        public Player(MainWindow parent = null) 
+        {
+            this.parent = parent;
+            ThreadList = new Dictionary<string, Thread>();
+            AudioList = new Dictionary<string, object>();
+            PlayStatus = new Dictionary<string, int>();
+            PlayNewPositions = new Dictionary<string, long>();
 
-                var name = "PATH";
-                var scope = EnvironmentVariableTarget.Process; // or User
-                var oldValue = Environment.GetEnvironmentVariable(name, scope);
-                var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
-                Environment.SetEnvironmentVariable(name, newValue, scope);
+            PlayList = new List<string>();
+            PlayListSemaphore = new Semaphore(0, 1);
 
-                //--- NEW ---
-                bands = new EqualizerBand[]
-                        {
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
-                            new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
-                        };
-            }
+            var name = "PATH";
+            var scope = EnvironmentVariableTarget.Process; // or User
+            var oldValue = Environment.GetEnvironmentVariable(name, scope);
+            var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
+            Environment.SetEnvironmentVariable(name, newValue, scope);
+
+            //--- NEW ---
+            bands = new EqualizerBand[]
+                {
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
+                };
+        }
 
 
         /// <summary> clear current file value </summary>
-        public void ClearCurrentFile()
-        {
-            CurrentFile = null;
-        }
+        public void ClearCurrentFile() { CurrentFile = null; }
         
         /// <summary> update an equalizer band Gain value </summary>
-        public void UpdateEqualize(int Band, float Gain) {
+        public void UpdateEqualizer(int Band, float Gain) {
             try { bands[Band].Gain = Gain; } catch { }
             //Debug.WriteLine("Equalizer Band("+Band+") = Gain " + Gain);
         }
 
-        /// <summary> Define conversion quality for output MP3 file </summary>
-        public Int32 ConvQuality(Int32 newQuality = -1) { if (newQuality != -1)  { return ConvQualityBitrates = newQuality; } else { return ConvQualityBitrates; } }
+        /// <summary> update an equalizer with List<(int,float)>, int = band indicator, float = band gain </summary>
+        public void UpdateEqualizer(List<(int,float)> tab) {
+            foreach ((int, float) band in tab)
+            {
+                try { bands[band.Item1].Gain = band.Item2; } catch { }
+            }
+        }
+
         /// <summary> Define status if repeat file playback active </summary>
         public void Repeat(bool rep) { PlayRepeat = rep; }
         /// <summary> Get status if repeat file playback active </summary>
         public bool IsRepeat() { return PlayRepeat; }
-        /// <summary> Give the List of native accepted file extentions </summary>
-        #if NAudio1
-                public static string[] AcceptedExtentions = new string[] { ".AIFF", ".aiff", ".FLAC", ".flac",".MP3",".mp3",".WMA",".wma" };
-        #else
-                public static string[] AcceptedExtentions = new string[] { ".AIFF", ".aiff", ".MP3", ".mp3", ".WMA", ".wma" };
-        #endif
-
-        private int ConvCount = 0;
-        /// <summary> Public interface for file convertion </summary>
-        public async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
-        {
-            ConvCount += 1;
-            bool replace = false;
-            if (FileOutput == null) {FileOutput = Path.ChangeExtension(FileInput, ".mp3"); deleteOrigin = true; }
-            //Debug.WriteLine("Task_Start");
-            //Debug.WriteLine(FileInput);
-            //Debug.WriteLine(FileOutput);
-
-            //Test if output file already exist
-            if (System.IO.File.Exists(FileOutput)) { System.IO.File.Delete(FileOutput); }
-            
-            bool ret = await ConvExe(FileInput, FileOutput);
-            if (ret == true && deleteOrigin == true) { System.IO.File.Delete(FileInput); }
-            ConvCount -= 1;
-            if (ConvCount == 0) { parent.UnsetLockScreen(); }
-            //Debug.WriteLine("ret conv : " + ((ret) ? "True" : "False"));
-            return true;
-        }
-
-        /// <summary> Private interface for file convertion usign ffmpeg birary </summary>
-        private async Task<bool> ConvExe(string FileInput, string FileOutput)
-        {
-            string AppName = Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            char sep = System.IO.Path.DirectorySeparatorChar;
-            string convPath1 = "", convPath2 = "", convPath3 = "";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                convPath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg-win64-static.exe";
-                convPath2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg-win32-static.exe";
-                convPath3 = AppDomain.CurrentDomain.BaseDirectory + sep + "Player" + sep + "ffmpeg.exe";
-            }
-
-            // Use ProcessStartInfo class
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            startInfo.CreateNoWindow = true;
-            startInfo.UseShellExecute = false;
-            if (System.IO.File.Exists(convPath1)) { startInfo.FileName = convPath1; }
-            else if (System.IO.File.Exists(convPath2)) { startInfo.FileName = convPath2; }
-            else if (System.IO.File.Exists(convPath3)) { startInfo.FileName = convPath3; }
-            startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = "-i \"" + FileInput + "\" -acodec mp3 -b:a " + ConvQualityBitrates + "k -map_metadata 0:s:0 \"" + FileOutput + "\"";
-
-            Debug.WriteLine("--> ConvExe");
-            Debug.WriteLine(startInfo.FileName);
-            Debug.WriteLine(startInfo.Arguments);
-            try
-            {
-                // Start the process with the info we specified.
-                // Call WaitForExit and then the using statement will close.
-                using (Process exeProcess = Process.Start(startInfo))
-                {
-                    exeProcess.WaitForExit();
-                    return true;
-                }
-            }
-            catch(Exception e)
-            {
-                Debug.WriteLine("--> ConvExe ERROR : " + JsonConvert.SerializeObject(e));
-            }
-            return false;
-        }
-
-        /// <summary> Recuperate Media Cover </summary>
-        public BitmapImage MediaPicture(string FilePath, bool export = true, int MawWidth = 400, int MawHeight = 400, bool save = true)
-        {
-            if (!System.IO.File.Exists(FilePath)) { return null; }
-            BitmapImage bitmap = null;
-            string FilePathExt = FilePath + "|" + MawWidth + "x" + MawHeight;
-            try
-            {
-                string data = parent.bdd.DatabaseGetCover(FilePathExt);
-                if (data != null) {
-                    bitmap = BitmapMagic.Base64StringToBitmap(data);
-                }
-                else {
-                    TagLib.File tags = TagLib.File.Create(FilePath);
-
-                    if (tags.Tag.Pictures.Length > 0)
-                    {
-                        TagLib.IPicture pic = tags.Tag.Pictures[0];
-
-                        //Debug.WriteLine("Picture size = " + pic.Data.Data.Length);
-                        MemoryStream ms = new MemoryStream(pic.Data.Data);
-                        ms.Seek(0, SeekOrigin.Begin);
-                        // ImageSource for System.Windows.Controls.Image
-                        bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.StreamSource = ms;
-                        bitmap.EndInit();
-                        int max = 400;
-
-                        if (bitmap.PixelWidth > max || bitmap.PixelHeight > max)
-                        {
-                            double width = bitmap.PixelWidth, height = bitmap.PixelHeight;
-                            if (width > max) { height = (height / width) * max; width = max; }
-                            if (height > max) { width = (width / height) * max; height = max; }
-
-                            ms.Seek(0, SeekOrigin.Begin); System.Drawing.Image im = System.Drawing.Image.FromStream(ms); ms.Close();
-                            System.Drawing.Bitmap im2 = ResizeImage(im, Convert.ToInt32(width), Convert.ToInt32(height));
-                            bitmap = null; bitmap = ConvertBitmapToBitmapImage(im2);
-
-                            MemoryStream ms2 = new MemoryStream(); im2.Save(ms2, ImageFormat.Jpeg); ms2.Seek(0, SeekOrigin.Begin);
-
-                            if (save)
-                            {
-                                TagLib.Picture pic2 = new TagLib.Picture();
-                                pic2.Type = TagLib.PictureType.FrontCover; pic2.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg; pic2.Description = "Cover";
-                                pic2.Data = TagLib.ByteVector.FromStream(ms2); tags.Tag.Pictures = new TagLib.IPicture[1] { pic2 };
-                                try { tags.Save(); } catch { } //error if file already opened
-                            }
-                            ms2.Close();
-                        }
-                        bitmap.Freeze();
-
-                        parent.bdd.DatabaseSaveCover(
-                            FilePathExt, 
-                            BitmapMagic.BitmapToBase64String(
-                                BitmapMagic.BitmapImage2Bitmap(bitmap),
-                                System.Drawing.Imaging.ImageFormat.Jpeg
-                                )
-                            );
-                    }
-                    else {
-                        char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
-                        string folder = FilePath.Substring(0, FilePath.LastIndexOf(SeparatorChar));
-                        bitmap = (System.IO.File.Exists(folder + SeparatorChar + "Cover.jpg")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.jpg"))
-                            : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : MainWindow.Bimage("CoverImg"));
-                    }
-                    tags.Dispose();
-                }
-            }
-            catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-            return (export)?bitmap:null;
-        }
-
-
-        private void MediaPictureInvoked(object FilePath = null) { MediaPicture((string)FilePath, false); }
-        public void MediaPictureAsync(string FilePath) {
-            Thread objThread = new Thread(new ParameterizedThreadStart(MediaPictureInvoked));
-            objThread.IsBackground = true;
-            objThread.Priority = ThreadPriority.AboveNormal;
-            objThread.Start(FilePath);
-        }
-
-        /// <summary>
-        /// Takes a bitmap and converts it to an image that can be handled by WPF ImageBrush
-        /// </summary>
-        /// <param name="src">A bitmap image</param>
-        /// <returns>The image as a BitmapImage for WPF</returns>
-        private BitmapImage ConvertBitmapToBitmapImage(Bitmap src)
-        {
-            MemoryStream ms = new MemoryStream();
-            ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            ms.Seek(0, SeekOrigin.Begin);
-            image.StreamSource = ms;
-            image.EndInit();
-            return image;
-        }
-
-        private Bitmap ResizeImage(System.Drawing.Image image, int width, int height)
-        {
-            var destRect = new System.Drawing.Rectangle(0, 0, width, height);
-            var destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (Graphics graphics = Graphics.FromImage(destImage))
-            {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
-            }
-
-            return destImage;
-        }
 
         /// <summary> Stop all currently playing threads </summary>
         public void StopAll() {
@@ -309,14 +144,7 @@ namespace AnotherMusicPlayer
                 }
                 foreach (KeyValuePair<string, object> entry in AudioList)
                 {
-                    try
-                    {
-#if NAudio1
-                        if (entry.Key.EndsWith(".flac")) { ((FlacReader)entry.Value).Dispose(); } else { ((AudioFileReader)entry.Value).Dispose(); }
-#else
-                        ((AudioFileReader)entry.Value).Dispose();
-#endif
-                    }
+                    try { ((AudioFileReader)entry.Value).Dispose(); }
                     catch (Exception) { }
                 }
 
@@ -324,6 +152,7 @@ namespace AnotherMusicPlayer
                 PlayStatus.Clear();
                 PlayNewPositions.Clear();
                 AudioList.Clear();
+                CurrentFile = null;
 
                 try
                 {
@@ -341,6 +170,66 @@ namespace AnotherMusicPlayer
             if (FilePath == null) { if (CurrentFile == null) { return false; }; FilePath = CurrentFile; }
             if (System.IO.File.Exists(FilePath)) { return true; }
             else { return false; }
+        }
+
+        /// <summary> Add media into playlist </summary>
+        public bool PlaylistEnqueue(string[] files, bool random = false)
+        {
+            PlayListSemaphore.WaitOne();
+            int initialNbFiles = PlayList.Count;
+            int goodFiles = 0;
+            if (random == true)
+            {
+                List<string> tmp = new List<string>();
+                Random rnd = new Random();
+                int index = -1;
+                while (tmp.Count < files.Length)
+                {
+                    index = rnd.Next(0, files.Length);
+                    if (tmp.Contains(files[index])) { continue; }
+                    tmp.Add(files[index]);
+                }
+                files = tmp.ToArray();
+            }
+            foreach (string file in files)
+            {
+                if (TestFile(file))
+                {
+                    PlayList.Add(file);
+                    goodFiles += 1;
+                }
+            }
+            PlayListSemaphore.Release();
+            if (initialNbFiles == 0) { Open(PlayList[0], true); PlayListIndex = 0; }
+            return (goodFiles > 0) ? true : false;
+        }
+
+        /// <summary> Randomize playlist </summary>
+        public void PlaylistRandomize()
+        {
+            PlayListSemaphore.WaitOne();
+            List<string> tmp = new List<string>();
+            Random rnd = new Random();
+            int initialIndex = PlayListIndex;
+            string cFile = CurrentFile;
+            if (PlayList.Count < initialIndex)
+            {
+                if (PlayList[initialIndex] != cFile) { cFile = PlayList[initialIndex]; }
+            }
+            int size = PlayList.Count;
+
+            int index = -1;
+            while (tmp.Count < size)
+            {
+                index = rnd.Next(0, size);
+                if (tmp.Contains(PlayList[index])) { continue; }
+                tmp.Add(PlayList[index]);
+                if (PlayList[index] == cFile) { initialIndex = tmp.Count - 1; }
+            }
+
+            PlayList = tmp;
+            PlayListIndex = initialIndex;
+            PlayListSemaphore.Release();
         }
 
         /// <summary> Open a new media playing thread </summary>
@@ -366,14 +255,16 @@ namespace AnotherMusicPlayer
         /// <summary> Start media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Play(string FilePath = null)
         {
+            if (FilePath == null) { FilePath = CurrentFile; }
+            if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
             if (TestFile(FilePath))
             {
-                if (FilePath == null) { FilePath = CurrentFile; }
                 if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
                 else { return Open(FilePath, true); }
             }
             return false;
         }
+
         /// <summary> Resume media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Resume(string FilePath = null) { return Play(FilePath); }
 
@@ -419,16 +310,40 @@ namespace AnotherMusicPlayer
                 if (FilePath == null) { FilePath = CurrentFile; }
                 if (!PlayStatus.ContainsKey(FilePath)) { return -1; }
                 if (position != -1) { PlayNewPositions[FilePath] = position; return position; }
-                else {
-#if NAudio1
-                    if (FilePath.EndsWith(".flac")) { return (long)((FlacReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds; }
-                    else { return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds ; }
-#else
-                    return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds;
-#endif
-                }
+                else { return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds; }
             }
             return -1;
+        }
+
+        /// <summary> advance playing time of current file by 5 seconds </summary>
+        public void PlayTimeAdvance(long seconds)
+        {
+            if (CurrentFile == null) { return; }
+            if (TestFile(CurrentFile))
+            {
+                if (!PlayStatus.ContainsKey(CurrentFile)) { return; }
+                long pos = ((AudioFileReader)AudioList[CurrentFile]).Position;
+                long lg = ((AudioFileReader)AudioList[CurrentFile]).Length;
+                long coef = lg / (long)((AudioFileReader)AudioList[CurrentFile]).TotalTime.TotalMilliseconds;
+                long newPos = (pos + (seconds * 1000 * coef));
+                if (newPos >= lg) { return; }
+                ((AudioFileReader)AudioList[CurrentFile]).Position = newPos;
+            }
+        }
+
+        /// <summary> rewing playing time of current file by 5 seconds </summary>
+        public void PlayTimeRewind(long seconds)
+        {
+            if (CurrentFile == null) { return; }
+            if (TestFile(CurrentFile))
+            {
+                long pos = ((AudioFileReader)AudioList[CurrentFile]).Position;
+                long lg = ((AudioFileReader)AudioList[CurrentFile]).Length;
+                long coef = lg / (long)((AudioFileReader)AudioList[CurrentFile]).TotalTime.TotalMilliseconds;
+                long newPos = (pos - (seconds * 1000 * coef));
+                if (newPos <= 0) { return; }
+                ((AudioFileReader)AudioList[CurrentFile]).Position = newPos;
+            }
         }
 
         /// <summary> Get media length of FilePath or CurrentFile if FilePath is null </summary>
@@ -438,12 +353,7 @@ namespace AnotherMusicPlayer
             {
                 if (FilePath == null) { FilePath = CurrentFile; }
                 if (!AudioList.ContainsKey(FilePath)) { return -1; }
-#if NAudio1
-                if (FilePath.EndsWith(".flac")) { return (long)((FlacReader)AudioList[FilePath]).TotalTime.TotalMilliseconds; }
-                else { return (long)((AudioFileReader)AudioList[FilePath]).TotalTime.TotalMilliseconds; }
-#else
                 return (long)((AudioFileReader)AudioList[FilePath]).TotalTime.TotalMilliseconds;
-#endif
             }
             return -1;
         }
@@ -456,15 +366,9 @@ namespace AnotherMusicPlayer
                 string FilePath = (string)file;
                 object audioFile = null;
                 bool started = false;
-#if NAudio1
-                bool IsFlac = false;
-                if (FilePath.EndsWith(".flac")) { audioFile = new FlacReader(FilePath); IsFlac = true; }
-                else { audioFile = new AudioFileReader(FilePath); }
-#else
                 audioFile = new AudioFileReader(FilePath);
-#endif
 
-                /***/ Equalizer equalizer = new Equalizer((ISampleProvider)audioFile, bands);
+                Equalizer equalizer = new Equalizer((ISampleProvider)audioFile, bands);
 
                 using (var outputDevice = new WaveOutEvent())
                 {
@@ -487,69 +391,30 @@ namespace AnotherMusicPlayer
                         {
                             outputDevice.Play(); CurrentFile = FilePath;
                             MediaLengthChangedEventParams evtp = new MediaLengthChangedEventParams();
-#if NAudio1
-                            if (IsFlac) { evtp.duration = (long)( ((FlacReader)audioFile).TotalTime.TotalMilliseconds ); }
-                            else { evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds); }
-#else
                             evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
-#endif
                             LengthChanged(this, evtp);
                             started = true;
                         }
                         if (ret == 2) { outputDevice.Stop(); break; }
                         if (ret2 != -1)
                         {
-#if NAudio1
-                            if (IsFlac)
-                            {
-                                FlacReader af = ((FlacReader)audioFile);
-                                long msval = af.WaveFormat.AverageBytesPerSecond / 1000;
-                                ((FlacReader)audioFile).Position = ret2 * msval;
-                            }
-                            else
-                            {
-                                AudioFileReader af = ((AudioFileReader)audioFile);
-                                long msval = af.WaveFormat.AverageBytesPerSecond / 1000;
-                                ((AudioFileReader)audioFile).Position = ret2 * msval;
-                            }
-#else
                             AudioFileReader af = ((AudioFileReader)audioFile);
                             long msval = af.WaveFormat.AverageBytesPerSecond / 1000;
                             ((AudioFileReader)audioFile).Position = ret2 * msval;
-#endif
                             PlayNewPositions[FilePath] = -1;
                         }
                         try
                         {
                             MediaPositionChangedEventParams evt = new MediaPositionChangedEventParams();
-#if NAudio1
-                            if (IsFlac) {
-                                FlacReader a = (FlacReader)audioFile;
-                                evt.Position = (long)( a.CurrentTime.TotalMilliseconds ); 
-                                evt.duration = (long)( a.TotalTime.TotalMilliseconds ); 
-                            }
-                            else
-                            {
-                                AudioFileReader a = (AudioFileReader)audioFile;
-                                evt.Position = (long)( a.CurrentTime.TotalMilliseconds );
-                                evt.duration = (long)( a.TotalTime.TotalMilliseconds );
-                            }
-#else
                             AudioFileReader a = (AudioFileReader)audioFile;
                             evt.Position = (long)(a.CurrentTime.TotalMilliseconds);
                             evt.duration = (long)(a.TotalTime.TotalMilliseconds);
-#endif
                             PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
                                 if (PlayRepeat)
                                 {
-#if NAudio1
-                                    if (IsFlac) { ((FlacReader)audioFile).Position = 0; }
-                                    else { ((AudioFileReader)audioFile).Position = 0; }
-#else
                                     ((AudioFileReader)audioFile).Position = 0;
-#endif
                                     PlayStatus[FilePath] = 1;
                                     outputDevice.Play();
                                 }
@@ -567,24 +432,14 @@ namespace AnotherMusicPlayer
                     try { outputDevice.Stop(); } catch { }
                     outputDevice.Dispose();
                 }
-#if NAudio1
-                if (IsFlac) { ((FlacReader)audioFile).Close(); ((FlacReader)audioFile).Dispose(); }
-                else { ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose(); }
-#else
                 ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose();
-#endif
                 PlayStatus.Remove(FilePath);
                 PlayNewPositions.Remove(FilePath);
-#if NAudio1
-                if (IsFlac) { ((FlacReader)AudioList[FilePath]).Dispose(); }
-                else { ((AudioFileReader)AudioList[FilePath]).Dispose(); }
-#else
                 if (AudioList.ContainsKey(FilePath))
                 {
                     ((AudioFileReader)AudioList[FilePath]).Dispose();
                     AudioList.Remove(FilePath);
                 }
-#endif
                 ThreadList.Remove(FilePath);
             }
             catch { }

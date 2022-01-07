@@ -22,7 +22,7 @@ namespace AnotherMusicPlayer
         private Dictionary<int, List<string>> LibraryFiltersPages = null;
         private int LibraryFiltersPagesIndex = 0;
 
-        private void MediatequeSetupFilters() {
+        private void LibrarySetupFilters() {
             LibraryFiltersMode.SelectedIndex = 0;
             LibraryFiltersMode.SelectionChanged += LibraryFiltersMode_SelectionChanged;
             LibraryFiltersGenreList.SelectionChanged += LibraryFiltersGenreList_SelectionChanged;
@@ -65,13 +65,13 @@ namespace AnotherMusicPlayer
                         LibraryFiltersPaginationPrevious.IsEnabled = false;
                         LibraryFiltersPaginationNext.IsEnabled = true;
                         LibraryFiltersPaginationDisplay.Text = "1 / " + pages.Count;
-                        MediatequeBuildNavigationContentBlocks(pages[0].ToArray(), LibNavigationContent2, false);
+                        LibraryBuildNavigationContentBlocks(pages[0].ToArray(), LibNavigationContent2, false);
                         LibraryFiltersPages = pages; LibraryFiltersPagesIndex = 0;
                     }
                     else
                     {
                         LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
-                        MediatequeBuildNavigationContentBlocks(files.Keys.ToArray(), LibNavigationContent2, false);
+                        LibraryBuildNavigationContentBlocks(files.Keys.ToArray(), LibNavigationContent2, false);
                     }
                 }
                 Dispatcher.BeginInvoke(new Action(() => {
@@ -91,7 +91,7 @@ namespace AnotherMusicPlayer
                 LibraryFiltersPaginationDisplay.Text = "" + (LibraryFiltersPagesIndex + 1) + " / " + LibraryFiltersPages.Count;
                 LibNavigationContent2.Children.Clear();
                 LibNavigationContentScroll2.ScrollToVerticalOffset(0);
-                MediatequeBuildNavigationContentBlocks(LibraryFiltersPages[LibraryFiltersPagesIndex].ToArray(), LibNavigationContent2, false);
+                LibraryBuildNavigationContentBlocks(LibraryFiltersPages[LibraryFiltersPagesIndex].ToArray(), LibNavigationContent2, false);
             }
         }
 
@@ -105,22 +105,22 @@ namespace AnotherMusicPlayer
                 LibraryFiltersPaginationDisplay.Text = "" + (LibraryFiltersPagesIndex + 1) + " / " + LibraryFiltersPages.Count;
                 LibNavigationContent2.Children.Clear();
                 LibNavigationContentScroll2.ScrollToVerticalOffset(0);
-                MediatequeBuildNavigationContentBlocks(LibraryFiltersPages[LibraryFiltersPagesIndex].ToArray(), LibNavigationContent2, false);
+                LibraryBuildNavigationContentBlocks(LibraryFiltersPages[LibraryFiltersPagesIndex].ToArray(), LibNavigationContent2, false);
             }
         }
 
         private void LibraryFiltersMode_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             LibraryFiltersPages = null; LibraryFiltersPagesIndex = 0;
-            MediatequeBuildNavigationPath(MediatequeRefFolder);
+            LibraryBuildNavigationPath(LibraryRefFolder);
             string tag = (string)((ComboBoxItem)LibraryFiltersMode.SelectedItem).Tag;
             //Debug.WriteLine(tag);
             if (tag == "") {
                 LibraryFiltersGenreList.Visibility = Visibility.Collapsed;
                 LibraryFiltersSearchBox.Visibility = Visibility.Collapsed;
                 //Debug.WriteLine(v.Name);
-                MediatequeBuildNavigationPath(MediatequeRefFolder);
-                MediatequeBuildNavigationContent(MediatequeRefFolder);
+                LibraryBuildNavigationPath(LibraryRefFolder);
+                LibraryBuildNavigationContent(LibraryRefFolder);
 
             }
             else if (tag == "Name" || tag == "Artist" || tag == "Album")
@@ -139,7 +139,7 @@ namespace AnotherMusicPlayer
 
         private void LibraryFiltersGenreList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            MediatequeBuildNavigationPath(MediatequeRefFolder);
+            LibraryBuildNavigationPath(LibraryRefFolder);
             string mode = (string)((ComboBoxItem)LibraryFiltersMode.SelectedItem).Tag;
             string genre = "";
             try { genre = (string)((ComboBoxItem)LibraryFiltersGenreList.SelectedItem).Tag; }
@@ -156,7 +156,7 @@ namespace AnotherMusicPlayer
                 {
                     i += 1;
                     if ((string)cbi.Tag == "") { continue; }
-                    btl.Add(MediatequeBuildNavigationContentButtonFilter("genre", (string)cbi.Tag, ""+i));
+                    btl.Add(LibraryBuildNavigationContentButtonFilter("genre", (string)cbi.Tag, ""+i));
                 }
             }
             else {
@@ -181,12 +181,12 @@ namespace AnotherMusicPlayer
                     LibraryFiltersPaginationPrevious.IsEnabled = false;
                     LibraryFiltersPaginationNext.IsEnabled = true;
                     LibraryFiltersPaginationDisplay.Text = "1 / " + pages.Count;
-                    MediatequeBuildNavigationContentBlocks(pages[0].ToArray(), LibNavigationContent2, false);
+                    LibraryBuildNavigationContentBlocks(pages[0].ToArray(), LibNavigationContent2, false);
                     LibraryFiltersPages = pages; LibraryFiltersPagesIndex = 0;
                 }
                 else {
                     LibraryFiltersPaginationBlock.Visibility = Visibility.Collapsed;
-                    MediatequeBuildNavigationContentBlocks(files.Keys.ToArray(), LibNavigationContent2, false);
+                    LibraryBuildNavigationContentBlocks(files.Keys.ToArray(), LibNavigationContent2, false);
                 }
 
             }
@@ -197,7 +197,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Create button for the Content zone in Library pannel </summary>
-        private Button MediatequeBuildNavigationContentButtonFilter(string type, string name, string path)
+        private Button LibraryBuildNavigationContentButtonFilter(string type, string name, string path)
         {
             if (type == null || name == null || path == null) { return null; }
             Button bt = new Button() { Style = (Style)Resources.MergedDictionaries[0]["LibNavigationContentItem2"] };
@@ -217,8 +217,8 @@ namespace AnotherMusicPlayer
             }
 
             bt.Tag = new object[] { type, path };
-            if (type == "file") { bt.MouseDoubleClick += MediatequeNavigationContentButtonFilter_DoubleClick; }
-            else { bt.Click += MediatequeNavigationContentButtonFilter_Click; }
+            if (type == "file") { bt.MouseDoubleClick += LibraryNavigationContentButtonFilter_DoubleClick; }
+            else { bt.Click += LibraryNavigationContentButtonFilter_Click; }
             
             bt.ContextMenu = LibMediaCreateContextMenu();
 
@@ -227,20 +227,20 @@ namespace AnotherMusicPlayer
             return bt;
         }
 
-        private void MediatequeNavigationContentButtonFilter_DoubleClick(object sender, MouseButtonEventArgs e)
+        private void LibraryNavigationContentButtonFilter_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             throw new NotImplementedException();
         }
 
-        private void MediatequeNavigationContentButtonFilter_Click(object sender, RoutedEventArgs e)
+        private void LibraryNavigationContentButtonFilter_Click(object sender, RoutedEventArgs e)
         {
             object[] re = (object[])((Button)sender).Tag;
             if ((string)re[1] == "genre") {
                 LibraryFiltersGenreList.SelectedIndex = Convert.ToInt32((string)re[1]);
             }
 
-            //MediatequeBuildNavigationPath((Folder)re[2]);
-            //MediatequeBuildNavigationContent((Folder)re[2]);
+            //LibraryBuildNavigationPath((Folder)re[2]);
+            //LibraryBuildNavigationContent((Folder)re[2]);
         }
     }
 }

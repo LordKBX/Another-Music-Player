@@ -140,8 +140,8 @@ namespace AnotherMusicPlayer
                     }
 
                     //Debug.WriteLine(JsonConvert.SerializeObject(tmp));
-                    //try { player.MediaPicture(PlayList[PlayListIndex + 1][0]); } catch { try { player.MediaPicture(PlayList[0][0]); } catch { } }
-                    
+                    //try { FilesTags.MediaPicture(PlayList[PlayListIndex + 1][0], bdd); } catch { try { FilesTags.MediaPicture(PlayList[0][0], bdd); } catch { } }
+
                     //Debug.WriteLine("--> BEFORE PlayListView.ItemsSource UPDATE <--");
                     try
                     {
@@ -169,10 +169,10 @@ namespace AnotherMusicPlayer
                         GC.Collect(); GC.WaitForPendingFinalizers();
                     } catch { }
                     try { 
-                        if (MediatequeScanning == true) {
+                        if (LibraryScanning == true) {
                             _ = Dispatcher.InvokeAsync(new Action(() =>
                             {
-                                MediatequeBuildNavigationContent(MediatequeCurrentFolder ?? MediatequeRefFolder);
+                                LibraryBuildNavigationContent(LibraryCurrentFolder ?? LibraryRefFolder);
                             }));
                         } 
                     } catch { }

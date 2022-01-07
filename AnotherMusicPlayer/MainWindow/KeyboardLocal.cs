@@ -29,8 +29,8 @@ namespace AnotherMusicPlayer
                 {
                     if (key == "Space") { Pause(); }
 
-                    if (key == "Left") { LibraryFiltersPaginationPrevious_Click(null, null); }
-                    if (key == "Right") { LibraryFiltersPaginationNext_Click(null, null); }
+                    if (key == "Left") { player.PlayTimeRewind(5); }
+                    if (key == "Right") { player.PlayTimeAdvance(5); }
                     if (key == "Up")
                     {
                         if (TabControler.SelectedIndex == 0)
