@@ -7,7 +7,7 @@ using System.Security.Cryptography;
 
 namespace AnotherMusicPlayer
 {
-    /// <summary> Class PlayListViewItem, a storae structure for Music Media Basic MetaData </summary>
+    /// <summary> Class MediaItem, a storae structure for Music Media Basic MetaData </summary>
     public class PlayListViewItem
     {
         public string Selected { get; set; }
@@ -15,53 +15,13 @@ namespace AnotherMusicPlayer
         public string OriginPath { get; set; }
         public string Name { get; set; }
         public string Album { get; set; }
-        public long Size { get; set; }
         public long Duration { get; set; }
         public string DurationS { get; set; }
-        public string Genres { get; set; }
         public string Performers { get; set; }
         public string Composers { get; set; }
-        public string Copyright { get; set; }
-        public uint Disc { get; set; }
-        public uint DiscCount { get; set; }
         public string AlbumArtists { get; set; }
-        public string Lyrics { get; set; }
-        public uint Track { get; set; }
-        public uint TrackCount { get; set; }
-        public uint Year { get; set; }
 
         public PlayListViewItem()
-        {
-            Path = OriginPath
-                = Selected
-                = Name 
-                = Album 
-                = DurationS 
-                = Performers
-                = Composers
-                = Copyright
-                = AlbumArtists
-                = Lyrics
-                = "";
-            Duration = Size = 0;
-            Disc = DiscCount = Track = TrackCount = Year = 0;
-        }
-    }
-    /// <summary> Class PlayListViewItem, a storae structure for Music Media Basic MetaData </summary>
-    public class PlayListViewItemShort
-    {
-        public string Selected { get; set; }
-        public string Path { get; set; }
-        public string OriginPath { get; set; }
-        public string Name { get; set; }
-        public string Album { get; set; }
-        public long Duration { get; set; }
-        public string DurationS { get; set; }
-        public string Performers { get; set; }
-        public string Composers { get; set; }
-        public string AlbumArtists { get; set; }
-
-        public PlayListViewItemShort()
         {
             Path = OriginPath
                 = Selected
@@ -75,7 +35,6 @@ namespace AnotherMusicPlayer
             Duration = 0;
         }
     }
-
 
     public partial class MainWindow : Window
     {
@@ -173,7 +132,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Normalize a int into a fixed string length by adding 0 before the number until wanted string length reached </summary>
-        public string NormalizeNumber(int number, int length)
+        public static string NormalizeNumber(int number, int length)
         {
             string tstr = "" + number;
             int dif = length - tstr.Length;

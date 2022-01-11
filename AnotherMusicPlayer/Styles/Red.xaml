@@ -731,7 +731,7 @@
         <Setter Property="Visibility" Value="Collapsed" />
     </Style>
 
-    <Style TargetType="{x:Type ListViewItem}" x:Key="PlayListViewItem">
+    <Style TargetType="{x:Type ListViewItem}" x:Key="MediaItem">
         <!--<Setter Property="ToolTip">
             <Setter.Value>
                 <UniformGrid Columns="1">
@@ -838,20 +838,20 @@
     
     
 
-    <Style x:Key="LibNavigationPathContener" TargetType="{x:Type WrapPanel}">
+    <Style x:Key="LibibraryNavigationPathContener" TargetType="{x:Type WrapPanel}">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="FlowDirection" Value="LeftToRight"/>
     </Style>
 
-    <Style x:Key="LibNavigationPathItem" TargetType="{x:Type TextBlock}">
+    <Style x:Key="LibibraryNavigationPathItem" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="4,0,4,2"/>
         <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
         <Setter Property="TextDecorations" Value="Underline"/>
         <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItem" TargetType="{x:Type Button}">
+    <Style x:Key="LibibraryNavigationContentItem" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="90"/>
@@ -862,14 +862,14 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItemBorder" TargetType="{x:Type Border}">
+    <Style x:Key="LibibraryNavigationContentItemBorder" TargetType="{x:Type Border}">
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
         <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItemImg" TargetType="{x:Type Image}">
+    <Style x:Key="LibibraryNavigationContentItemImg" TargetType="{x:Type Image}">
         <Setter Property="MaxWidth" Value="53"/>
         <Setter Property="MaxHeight" Value="53"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -877,13 +877,13 @@
         <Setter Property="RenderOptions.BitmapScalingMode" Value="LowQuality"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItemViewBox" TargetType="{x:Type Viewbox}">
+    <Style x:Key="LibibraryNavigationContentItemViewBox" TargetType="{x:Type Viewbox}">
         <Setter Property="MinWidth" Value="90"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItemText" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibibraryNavigationContentItemText" TargetType="{x:Type AccessText}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="TextAlignment" Value="Center"/>
@@ -894,13 +894,13 @@
         <Setter Property="Margin" Value="0,0,5,0"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItem2" TargetType="{x:Type Button}">
+    <Style x:Key="LibibraryNavigationContentItem2" TargetType="{x:Type Button}">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
     </Style>
 
-    <Style x:Key="LibNavigationContentItemText2" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibibraryNavigationContentItemText2" TargetType="{x:Type AccessText}">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="TextAlignment" Value="Center"/>
@@ -909,7 +909,7 @@
         <Setter Property="Margin" Value="0,0,5,0"/>
     </Style>
 
-    <Style x:Key="LibNavigationComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
+    <Style x:Key="LibibraryNavigationComboBox" TargetType="{x:Type ComboBox}" BasedOn="{StaticResource MaterialDesignComboBox}">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -946,7 +946,7 @@
         <Setter Property="Background" Value="Gray"/>
         <Setter Property="BorderThickness" Value="0"/>
     </Style>
-    <Style x:Key="TabItemStyleSettingsForLibraryButton" TargetType="{x:Type Button}">
+    <Style x:Key="TabItemStyleSettingsForLibraryFolderButton" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="Gray"/>
         <Setter Property="Foreground" Value="Black"/>
         <Setter Property="BorderBrush" Value="Black"/>

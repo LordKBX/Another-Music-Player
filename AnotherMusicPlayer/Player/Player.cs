@@ -18,6 +18,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Security.Cryptography;
+using System.Windows.Threading;
 
 namespace AnotherMusicPlayer
 {
@@ -37,9 +38,14 @@ namespace AnotherMusicPlayer
         private Dictionary<string, long> PlayNewPositions = null;
 
         /// <summary> List of file path for the audio playlist </summary>
-        private List<string> PlayList = null;
+        public readonly List<string> PlayList = null;
         /// <summary> PlayList current position </summary>
         private int PlayListIndex = 0;
+        public int Index
+        {
+            get { return PlayListIndex; }
+            set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : value; }
+        }
         /// <summary> PlayList access Semaphore </summary>
         private Semaphore PlayListSemaphore;
 
@@ -70,7 +76,6 @@ namespace AnotherMusicPlayer
             PlayNewPositions = null;
 
             PlayList.Clear();
-            PlayList = null;
 
             parent = null;
 
@@ -88,7 +93,8 @@ namespace AnotherMusicPlayer
             PlayNewPositions = new Dictionary<string, long>();
 
             PlayList = new List<string>();
-            PlayListSemaphore = new Semaphore(0, 1);
+            //PlayListSemaphore = new Semaphore(0, 1);
+            
 
             var name = "PATH";
             var scope = EnvironmentVariableTarget.Process; // or User
@@ -173,11 +179,12 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Add media into playlist </summary>
-        public bool PlaylistEnqueue(string[] files, bool random = false)
+        public bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0)
         {
-            PlayListSemaphore.WaitOne();
+            
             int initialNbFiles = PlayList.Count;
             int goodFiles = 0;
+            string[] Tfiles = files;
             if (random == true)
             {
                 List<string> tmp = new List<string>();
@@ -189,9 +196,9 @@ namespace AnotherMusicPlayer
                     if (tmp.Contains(files[index])) { continue; }
                     tmp.Add(files[index]);
                 }
-                files = tmp.ToArray();
+                Tfiles = tmp.ToArray();
             }
-            foreach (string file in files)
+            foreach (string file in Tfiles)
             {
                 if (TestFile(file))
                 {
@@ -199,15 +206,30 @@ namespace AnotherMusicPlayer
                     goodFiles += 1;
                 }
             }
-            PlayListSemaphore.Release();
-            if (initialNbFiles == 0) { Open(PlayList[0], true); PlayListIndex = 0; }
+
+            if (initialNbFiles == 0) {
+                if (PlayList.Count > playIndex && playIndex >= 0)
+                {
+                    Play(PlayList[playIndex]);
+                    PlayListIndex = playIndex;
+                }
+            }
+
+            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
+            evt.playlist = PlayList.ToArray();
+            PlaylistChanged(this, evt);
+
+            PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
+            evt2.Position = PlayListIndex;
+            PlaylistPositionChanged(this, evt2);
+
             return (goodFiles > 0) ? true : false;
         }
 
         /// <summary> Randomize playlist </summary>
         public void PlaylistRandomize()
         {
-            PlayListSemaphore.WaitOne();
+            
             List<string> tmp = new List<string>();
             Random rnd = new Random();
             int initialIndex = PlayListIndex;
@@ -227,13 +249,77 @@ namespace AnotherMusicPlayer
                 if (PlayList[index] == cFile) { initialIndex = tmp.Count - 1; }
             }
 
-            PlayList = tmp;
+            PlayList.Clear();
+            PlayList.AddRange(tmp);
             PlayListIndex = initialIndex;
-            PlayListSemaphore.Release();
+
+            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
+            evt.playlist = PlayList.ToArray();
+            PlaylistChanged(this, evt);
+
+            PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
+            evt2.Position = PlayListIndex;
+            PlaylistPositionChanged(this, evt2);
+        }
+
+        /// <summary> Clear playlist </summary>
+        public void PlaylistClear()
+        {
+            
+            StopAll();
+            PlayList.Clear();
+            PlayListIndex = 0;
+            CurrentFile = null;
+
+            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
+            evt.playlist = PlayList.ToArray();
+            PlaylistChanged(this, evt);
+
+            PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
+            evt2.Position = PlayListIndex;
+            PlaylistPositionChanged(this, evt2);
+        }
+
+        /// <summary> Read playlist </summary>
+        public void PlaylistReadIndex(int index)
+        {
+            if (index >= PlayList.Count) { return; }
+            Debug.WriteLine("--> PlaylistReadIndex <--");
+            Stop(PlayList[PlayListIndex]);
+            PlayListIndex = index;
+            Play(PlayList[PlayListIndex]);
+            CurrentFile = PlayList[PlayListIndex];
+
+            PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
+            evt.Position = PlayListIndex;
+            PlaylistPositionChanged(this, evt);
+        }
+
+        /// <summary> Read next index in playlist </summary>
+        public void PlaylistNext()
+        {
+            Debug.WriteLine("--> PlaylistNext <--");
+            PlayListIndex = ((PlayListIndex+1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
+            Play(PlayList[PlayListIndex]);
+            CurrentFile = PlayList[PlayListIndex];
+
+            PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
+            evt.Position = PlayListIndex;
+            PlaylistPositionChanged(this, evt);
+        }
+
+        /// <summary> Preload next index in playlist </summary>
+        public void PlaylistPreloadNext()
+        {
+            //Debug.WriteLine("--> PlaylistPreloadNext <--");
+            int nextIndex = ((PlayListIndex+1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
+            if (ThreadList.ContainsKey(PlayList[nextIndex])) { return; }
+            Open(PlayList[nextIndex], false);
         }
 
         /// <summary> Open a new media playing thread </summary>
         public bool Open(string FilePath, bool AutoPlay = false) {
+            //if (IsPlaying(FilePath)) { return false; }
             if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath)) {
                 try
                 {
@@ -244,7 +330,7 @@ namespace AnotherMusicPlayer
                     ThreadList.Add(FilePath, objThread);
                     PlayStatus.Add(FilePath, (AutoPlay)?1:0);
                     PlayNewPositions.Add(FilePath, -1);
-                    CurrentFile = FilePath;
+                    if(AutoPlay)CurrentFile = FilePath;
                     return true;
                 }
                 catch { }
@@ -256,12 +342,16 @@ namespace AnotherMusicPlayer
         public bool Play(string FilePath = null)
         {
             if (FilePath == null) { FilePath = CurrentFile; }
-            if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
-            if (TestFile(FilePath))
+            try
             {
-                if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
-                else { return Open(FilePath, true); }
+                if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
+                if (TestFile(FilePath))
+                {
+                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
+                    else { return Open(FilePath, true); }
+                }
             }
+            catch { }
             return false;
         }
 
@@ -293,12 +383,16 @@ namespace AnotherMusicPlayer
         /// <summary> Test if FilePath played for FilePath or CurrentFile if FilePath is null </summary>
         public bool IsPlaying(string FilePath = null)
         {
-            if (TestFile(FilePath))
+            try
             {
-                if (FilePath == null) { FilePath = CurrentFile; }
-                if (!PlayStatus.ContainsKey(FilePath)) { return false; }
-                if (PlayStatus[FilePath] == 1) { return true; }
+                if (TestFile(FilePath))
+                {
+                    if (FilePath == null) { FilePath = CurrentFile; }
+                    if (!PlayStatus.ContainsKey(FilePath)) { return false; }
+                    if (PlayStatus[FilePath] == 1) { return true; }
+                }
             }
+            catch { }
             return false;
         }
 
@@ -390,7 +484,7 @@ namespace AnotherMusicPlayer
                         if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
                         {
                             outputDevice.Play(); CurrentFile = FilePath;
-                            MediaLengthChangedEventParams evtp = new MediaLengthChangedEventParams();
+                            PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
                             evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
                             LengthChanged(this, evtp);
                             started = true;
@@ -405,11 +499,11 @@ namespace AnotherMusicPlayer
                         }
                         try
                         {
-                            MediaPositionChangedEventParams evt = new MediaPositionChangedEventParams();
+                            PlayerPositionChangedEventParams evt = new PlayerPositionChangedEventParams();
                             AudioFileReader a = (AudioFileReader)audioFile;
                             evt.Position = (long)(a.CurrentTime.TotalMilliseconds);
                             evt.duration = (long)(a.TotalTime.TotalMilliseconds);
-                            PositionChanged(this, evt);
+                            if(FilePath == CurrentFile) PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
                                 if (PlayRepeat)
@@ -420,10 +514,16 @@ namespace AnotherMusicPlayer
                                 }
                                 else
                                 {
-                                    PlayStoped(this, evt);
+                                    PlaylistNext();
+                                    //Thread objThread = new Thread(new ParameterizedThreadStart(PlaylistNext));
+                                    //objThread.IsBackground = true;
+                                    //objThread.Priority = ThreadPriority.AboveNormal;
+                                    //objThread.Start();
                                     break;
                                 }
                             }
+
+                            if (evt.Position >= evt.duration - 5000) { PlaylistPreloadNext(); }
                         }
                         catch { break; }
 

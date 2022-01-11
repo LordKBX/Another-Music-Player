@@ -107,8 +107,8 @@ namespace AnotherMusicPlayer
 
             MouseButtonEventArgs args = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
             args.RoutedEvent = TextBlock.MouseDownEvent;
-            args.Source = LibNavigationPathContener.Children[LibNavigationPathContener.Children.Count - 1];
-            LibNavigationPathContener.Children[LibNavigationPathContener.Children.Count - 1].RaiseEvent(args);
+            args.Source = LibibraryNavigationPathContener.Children[LibibraryNavigationPathContener.Children.Count - 1];
+            LibibraryNavigationPathContener.Children[LibibraryNavigationPathContener.Children.Count - 1].RaiseEvent(args);
             TabControler.SelectedIndex = 3;
 
             Settings.SaveSettings();
@@ -131,8 +131,7 @@ namespace AnotherMusicPlayer
             Settings.SaveSettings();
             TranslationUpdate();
             if (PlayList.Count > 0 && PlayListIndex >= 0) { UpdateLeftPannelMediaInfo(); }
-            if (LibraryScanning) { LibraryBuildNavigationScan(); }
-            LibraryBuildNavigationContent(LibraryCurrentFolder ?? LibraryRefFolder);
+            if (!library.Scanning) { library.DisplayPath(library.CurrentPath); }
         }
 
         /// <summary> Callback parametter conversion mode combobox </summary>
@@ -162,7 +161,7 @@ namespace AnotherMusicPlayer
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
                 _ = Dispatcher.InvokeAsync(new Action(() => {
-                    LibraryInvokeScan(true);
+                    library.Scan(true);
                 }));
             }
         }

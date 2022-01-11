@@ -46,6 +46,8 @@ namespace AnotherMusicPlayer
         private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
         /// <summary>Database object </summary>
         public Database bdd = null;
+        /// <summary>Library object </summary>
+        public Library library = null;
 
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd)
@@ -110,10 +112,13 @@ namespace AnotherMusicPlayer
             KeyboardLocalListenerInit();
             KeyboardGlobalListenerInit();
 
-            //Settings.LibFolder = "D:\\Music\\";
-            LibrarySetupFilters();
-            LibraryInvokeScan(false, true);
+            //LibrarySetupFilters();
             LibraryLoadOldPlaylist();
+
+            library = new Library(this, Settings.LibFolder);
+            Dispatcher.InvokeAsync(new Action(() => {
+                library.DisplayPath(Settings.LibFolder);
+            }));
         }
 
         /// <summary> Callback Main window closing / exit </summary>
@@ -159,7 +164,7 @@ namespace AnotherMusicPlayer
             }
             ((TabItem)(TabControler.Items[TabControler.Items.Count - 1])).Width -= 1;
 
-            if (LibraryBuildNavigationContentBlockssPanel != null) { LibraryBuildNavigationContentBlockssPanel.Width = TabControler.ActualWidth - 22; }
+            //if (LibraryBuildNavigationContentBlockssPanel != null) { LibraryBuildNavigationContentBlockssPanel.Width = TabControler.ActualWidth - 22; }
 
             Settings.LastWindowWidth = win1.ActualWidth;
             Settings.LastWindowHeight = win1.ActualHeight;
@@ -167,83 +172,11 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Load list of file in the playlist and play first element in list if music currently not played </summary>
-        private bool Open(string[] files, bool DoPlay = true, int Load = -1)
+        private bool Open(string[] files, bool replace = false, bool random = false, int playIndex = 0)
         {
             Debug.WriteLine("--> Open <--");
-            bool doConv = false;
-            int CountStart = PlayList.Count;
-
-            if (files.Length > 0)
-            {
-                //Debug.WriteLine("--> Open : P1 <--");
-                if (!player.IsPlaying() && MediaTestFileExtention(files[0]) == false) { doConv = true; }
-
-                string NewFile;
-                for (int i = 0; i < files.Length; i++)
-                {
-                    NewFile = null;
-                    if (MediaTestFileExtention(files[i]) == false)
-                    {
-                        if (Settings.ConversionMode == 1) { NewFile = System.IO.Path.GetTempPath() + System.IO.Path.ChangeExtension(System.IO.Path.GetFileName(files[i]), ".mp3"); }
-                        else { NewFile = System.IO.Path.ChangeExtension(files[i], ".mp3"); }
-
-                        if (i == 0)
-                        {
-                            doConv = true;
-                            player.Conv(files[i], NewFile, (Settings.ConversionMode == 1) ? false : true);
-                        }
-                        else { player.Conv(files[i], NewFile, (Settings.ConversionMode == 1) ? false : true); }
-                        //LoadFileAsync(files[i]);
-                    }
-                    string[] tmp = new string[] { files[i], NewFile };
-
-                    if (!PlayList.Contains(tmp)) {
-                        PlayList.Add(tmp);
-                    }
-                }
-            }
-            //Debug.WriteLine("--> Open : P2 <--");
-
-            if (PlayListIndex < 0) { PlayListIndex = 0; Load = 0; }
-            if (DoPlay == true) {
-                if (player.IsPlaying()) { player.StopAll(); }
-                FileOpen(PlayList[CountStart][(PlayList[CountStart][1] == null) ? 0 : 1]);
-                PlayListIndex = CountStart;
-            }
-            //Debug.WriteLine("--> Open : P3 <--");
-            if (Load >=0) {
-                try {
-                    if (PlayList.Count >= Load) {
-                        FileOpen(PlayList[Load][(PlayList[Load][1] == null) ? 0 : 1], false);
-                        //Debug.WriteLine("--> Open : P3-2 <--");
-                        PlayListIndex = Load;
-                        Timer_PlayListIndex = -1;
-                    }
-                } catch {
-                    Debug.WriteLine("--> Open : P3-3 <--");
-                }
-            }
-            if (!player.IsPlaying()) { player.Play(); }
-
-            Timer_PlayListIndex = -1;
-
-            //Debug.WriteLine("--> Open : P4 <--");
-            UpdateRecordedQueue();
-            //Debug.WriteLine("--> Open : P5 <--");
-
-            return doConv;
-        }
-
-        /// <summary> Load music file and play if doPlay = true </summary>
-        private void FileOpen(string FilePath, bool doPlay = true)
-        {
-            Debug.WriteLine("--> FileOpen >> " + FilePath);
-            if (player.TestFile(FilePath)){
-                //Debug.WriteLine("--> FileOpen : P2 <--");
-                PlaybackStopLastTime = UnixTimestamp();
-                //Debug.WriteLine("--> FileOpen : P3 <--");
-                player.Open(FilePath, doPlay);
-            }
+            if (replace == true) { player.PlaylistClear(); }
+            return player.PlaylistEnqueue(files, random, playIndex);
         }
 
         /// <summary> Change Playlist index and load music file if the new position is accepted </summary>
@@ -252,26 +185,16 @@ namespace AnotherMusicPlayer
             if (PlayList.Count == 0) { return; }
             if (NewPosition < 0) { NewPosition = 0; }
             if (NewPosition >= PlayList.Count) { NewPosition = 0; }
-            //Debug.WriteLine("NewPosition = " + NewPosition);
-            if (NewPosition >= 0 && NewPosition != PlayListIndex)
-            {
-                //StopPlaylist();
-                player.StopAll();
-                PlayListIndex = NewPosition;
-                Settings.LastPlaylistIndex = PlayListIndex;
-                Settings.SaveSettings();
-                //Debug.WriteLine("LastPlaylistIndex saved: "+ Settings.LastPlaylistIndex);
-                FileOpen(PlayList[NewPosition][(PlayList[NewPosition][1] == null) ? 0 : 1], DoPlay);
-            }
+            if (NewPosition != PlayListIndex) { player.PlaylistReadIndex(NewPosition); }
         }
 
-        private PlayListViewItem GetMediaInfo(string path, ObservableCollection<PlayListViewItem> previous_items = null) {
-            PlayListViewItem item = null;
+        private MediaItem GetMediaInfo(string path, ObservableCollection<MediaItem> previous_items = null) {
+            MediaItem item = null;
             try {
                 Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
                 if (rep != null)
                 {
-                    item = new PlayListViewItem();
+                    item = new MediaItem();
                     item.Path = path;
                     item.Name = (string)rep["Name"];
                     item.Album = (string)rep["Album"];
@@ -297,13 +220,13 @@ namespace AnotherMusicPlayer
             return item;
         }
 
-        private PlayListViewItemShort GetMediaInfoShort(string path, ObservableCollection<PlayListViewItemShort> previous_items = null) {
-            PlayListViewItemShort item = null;
+        private PlayListViewItem GetMediaInfoShort(string path, ObservableCollection<PlayListViewItem> previous_items = null) {
+            PlayListViewItem item = null;
             try {
                 Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
                 if (rep != null)
                 {
-                    item = new PlayListViewItemShort();
+                    item = new PlayListViewItem();
                     item.Path = path;
                     item.Name = (string)rep["Name"];
                     item.Album = (string)rep["Album"];
@@ -320,10 +243,10 @@ namespace AnotherMusicPlayer
             return item;
         }
 
-        public static PlayListViewItem DatabaseItemToPlayListViewItem(Dictionary<string, object> rep)
+        public static MediaItem DatabaseItemToMediaItem(Dictionary<string, object> rep)
         {
-            PlayListViewItem item = null;
-            item = new PlayListViewItem();
+            MediaItem item = null;
+            item = new MediaItem();
             item.Path = (string)rep["Path"];
             item.Name = (string)rep["Name"];
             item.Album = (string)rep["Album"];
@@ -344,7 +267,7 @@ namespace AnotherMusicPlayer
             return item;
         }
 
-        public static Dictionary<string, object> PlayListViewItemToDatabaseItem(PlayListViewItem rep)
+        public static Dictionary<string, object> MediaItemToDatabaseItem(MediaItem rep)
         {
             Dictionary<string, object> ret = new Dictionary<string, object>();
             ret.Add("Path", rep.Path);
@@ -370,7 +293,7 @@ namespace AnotherMusicPlayer
         {
             //Debug.WriteLine("--> UpdateLeftPannelMediaInfo <--");
             //Debug.WriteLine("--> path = '"+path+"' <--");
-            PlayListViewItem item = new PlayListViewItem();
+            MediaItem item = new MediaItem();
             try
             {
                 if (path == null) {
@@ -381,7 +304,7 @@ namespace AnotherMusicPlayer
                     Dictionary<string, object>  ret = bdd.DatabaseFileInfo(path);
                     if (ret != null) {
                         item = null;
-                        item = DatabaseItemToPlayListViewItem(ret);
+                        item = DatabaseItemToMediaItem(ret);
                     }
                 }
 

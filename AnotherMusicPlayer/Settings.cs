@@ -43,6 +43,8 @@ namespace AnotherMusicPlayer
 
         // Library Section
         public static string LibFolder { get; set; } = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+        public static bool LibFolderShowHiden { get; set; } = false;
+        public static bool LibFolderShowUnixHiden { get; set; } = false;
 
         // Style Section
         public static string StyleName { get; set; } = "Dark";

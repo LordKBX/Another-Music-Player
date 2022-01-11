@@ -3,6 +3,7 @@ using System.Windows;
 using System.Diagnostics;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace AnotherMusicPlayer
 {
@@ -26,16 +27,40 @@ namespace AnotherMusicPlayer
             player.LengthChanged += Player_LengthChanged;
             player.PositionChanged += Player_PositionChanged;
             player.PlayStoped += Player_PlayStoped;
+            player.PlaylistChanged += Player_PlaylistChanged;
+            player.PlaylistPositionChanged += Player_PlaylistPositionChanged;
+        }
+
+        private void Player_PlaylistPositionChanged(object sender, PlayerPlaylistPositionChangeParams e)
+        {
+            Debug.WriteLine("Player_PlaylistPositionChanged");
+            Debug.WriteLine(JsonConvert.SerializeObject(e));
+            PlayListIndex = e.Position;
+            Settings.LastPlaylistIndex = PlayListIndex;
+            Settings.SaveSettings();
+        }
+
+        private void Player_PlaylistChanged(object sender, PlayerPlaylistChangeParams e)
+        {
+            Debug.WriteLine("Player_PlaylistChanged");
+            Debug.WriteLine(JsonConvert.SerializeObject(e));
+            PlayList.Clear();
+            foreach (string file in e.playlist)
+            {
+                PlayList.Add(new string[] { file, "" });
+            }
+            UpdateRecordedQueue();
+            Timer_Elapsed(null, null);
         }
 
         /// <summary> Event Callback when the played media length change(generaly when a new media is played) </summary>
-        private void Player_LengthChanged(object sender, MediaLengthChangedEventParams e) 
+        private void Player_LengthChanged(object sender, PlayerLengthChangedEventParams e) 
         {
             Dispatcher.BeginInvoke(new Action(() => { UpdateSize(displayTime((long)(e.duration))); }));
         }
 
         /// <summary> Event Callback when the media playing position chnaged </summary>
-        private void Player_PositionChanged(object sender, MediaPositionChangedEventParams e)
+        private void Player_PositionChanged(object sender, PlayerPositionChangedEventParams e)
         {
             Dispatcher.BeginInvoke(new Action(() => { UpdatePosition(displayTime((long)(e.Position))); }));
             if (PreventUpdateSlider) { return; }
@@ -46,7 +71,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Event Callback when the played media is stoped(not paused) </summary>
-        private void Player_PlayStoped(object sender, MediaPositionChangedEventParams e)
+        private void Player_PlayStoped(object sender, PlayerPositionChangedEventParams e)
         {
             //Debug.WriteLine("Player_PlayStoped");
             //Wait a second befor allowing to proceed with the nex event, by default loading a new media in the player generate a stoped event

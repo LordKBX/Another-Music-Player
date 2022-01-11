@@ -31,7 +31,7 @@ namespace AnotherMusicPlayer
         private SQLiteConnection DatabaseConnection = null;
 
         /// <summary> Used for excape string when building SQL string for preventing sql error </summary>
-        public static string DatabaseEscapeString(string str)
+        public static string EscapeString(string str)
         {
             if (str == null) { return ""; }
             else { return str.Replace("'", "''"); }
@@ -319,7 +319,7 @@ namespace AnotherMusicPlayer
         public string DatabaseGetParam(string Param, string Default)
         {
             SQLiteCommand sqlite_cmd = DatabaseConnection.CreateCommand();
-            sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + DatabaseEscapeString(Param) + "'";
+            sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + EscapeString(Param) + "'";
             SQLiteDataReader sqlite_datareader = sqlite_cmd.ExecuteReader();
             if (sqlite_datareader.HasRows) {
                 sqlite_datareader.Read();
@@ -337,18 +337,18 @@ namespace AnotherMusicPlayer
                 SQLiteDataReader sqlite_datareader;
                 SQLiteCommand sqlite_cmd;
                 sqlite_cmd = DatabaseConnection.CreateCommand();
-                sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + DatabaseEscapeString(Param) + "'";
+                sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + EscapeString(Param) + "'";
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
                 if (!IsInTransaction() && autoCommit) { DatabaseTansactionStart(); }
                 SQLiteCommand sqlite_cmd2;
                 sqlite_cmd2 = DatabaseConnection.CreateCommand();
                 if (sqlite_datareader.HasRows)
                 {
-                    sqlite_cmd2.CommandText = "UPDATE params SET ParamValue = '" + DatabaseEscapeString(Value) + "' WHERE ParamName = '" + DatabaseEscapeString(Param) + "'";
+                    sqlite_cmd2.CommandText = "UPDATE params SET ParamValue = '" + EscapeString(Value) + "' WHERE ParamName = '" + EscapeString(Param) + "'";
                 }
                 else
                 {
-                    sqlite_cmd2.CommandText = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES('" + DatabaseEscapeString(Param) + "', '" + DatabaseEscapeString(ParamType) + "', '" + DatabaseEscapeString(Value) + "')";
+                    sqlite_cmd2.CommandText = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES('" + EscapeString(Param) + "', '" + EscapeString(ParamType) + "', '" + EscapeString(Value) + "')";
                 }
                 sqlite_cmd2.ExecuteNonQuery();
                 if(autoCommit)DatabaseTansactionEnd();
@@ -361,7 +361,7 @@ namespace AnotherMusicPlayer
         {
             try
             {
-                Dictionary<string, Dictionary<string, object>> rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + DatabaseEscapeString(path) + "' ORDER BY Path ASC", "Path");
+                Dictionary<string, Dictionary<string, object>> rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + EscapeString(path) + "' ORDER BY Path ASC", "Path");
                 if (rt.Count == 0) { return null; }
                 if (Int32.Parse((string)rt[path]["Size"]) <= 0 && forceUpdate == true)
                 {
@@ -374,21 +374,21 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get Basic Metadata from a list of file if stored in database </summary>
-        public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths, MainWindow parent = null)
+        public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths, MainWindow parent = null, bool forceUpdate = false)
         {
             Dictionary<string, Dictionary<string, object>> ret = new Dictionary<string, Dictionary<string, object>>();
             List<string> filesToUpdate = new List<string>();
             try
             {
                 string query = "SELECT * FROM files WHERE Path IN(?) ORDER BY Album ASC, Disc ASC, Track ASC, Name ASC, Path ASC";
-                foreach(string file in paths) { query = query.Replace("?", "'"+ DatabaseEscapeString(file) + "',?"); }
+                foreach(string file in paths) { query = query.Replace("?", "'"+ EscapeString(file) + "',?"); }
                 query = query.Replace(",?", "");
 
                 Dictionary<string, Dictionary<string, object>> data = DatabaseQuery(query, "Path");
                 if (data.Count == 0) { return null; }
                 foreach(KeyValuePair<string, Dictionary<string, object>> line in data)
                 {
-                    if (Int32.Parse((string)line.Value["Size"]) <= 0)
+                    if (Int32.Parse((string)line.Value["Size"]) <= 0 || forceUpdate)
                     {
                         filesToUpdate.Add((string)line.Value["Path"]);
                     }
@@ -433,15 +433,15 @@ namespace AnotherMusicPlayer
             if(!System.IO.File.Exists(file)) { return null; }
 
             FileInfo fi = new FileInfo(file);
-            PlayListViewItem item = FilesTags.MediaInfo(file, false);
-            string query = "UPDATE files SET Name='" + DatabaseEscapeString(item.Name ?? fi.Name);
-            if (item.Album != null && item.Album.Trim() != "") query += "', Album='" + DatabaseEscapeString(item.Album);
-            if (item.Performers != null && item.Performers.Trim() != "") query += "', Performers='" + DatabaseEscapeString(item.Performers);
-            if (item.Composers != null && item.Composers.Trim() != "") query += "', Composers='" + DatabaseEscapeString(item.Composers);
-            if (item.Genres != null && item.Genres.Trim() != "") query += "', Genres='" + DatabaseEscapeString(item.Genres);
-            if (item.Copyright != null && item.Copyright.Trim() != "") query += "', Copyright='" + DatabaseEscapeString(item.Copyright);
-            if (item.AlbumArtists != null && item.AlbumArtists.Trim() != "") query += "', AlbumArtists='" + DatabaseEscapeString(item.AlbumArtists);
-            if (item.Lyrics != null && item.Lyrics.Trim() != "") query += "', Lyrics='" + DatabaseEscapeString(item.Lyrics);
+            MediaItem item = FilesTags.MediaInfo(file, false);
+            string query = "UPDATE files SET Name='" + EscapeString(item.Name ?? fi.Name);
+            if (item.Album != null && item.Album.Trim() != "") query += "', Album='" + EscapeString(item.Album);
+            if (item.Performers != null && item.Performers.Trim() != "") query += "', Performers='" + EscapeString(item.Performers);
+            if (item.Composers != null && item.Composers.Trim() != "") query += "', Composers='" + EscapeString(item.Composers);
+            if (item.Genres != null && item.Genres.Trim() != "") query += "', Genres='" + EscapeString(item.Genres);
+            if (item.Copyright != null && item.Copyright.Trim() != "") query += "', Copyright='" + EscapeString(item.Copyright);
+            if (item.AlbumArtists != null && item.AlbumArtists.Trim() != "") query += "', AlbumArtists='" + EscapeString(item.AlbumArtists);
+            if (item.Lyrics != null && item.Lyrics.Trim() != "") query += "', Lyrics='" + EscapeString(item.Lyrics);
             query += "', Duration='" + item.Duration
                 + "', Size='" + item.Size
                 + "', Disc='" + item.Disc
@@ -450,10 +450,10 @@ namespace AnotherMusicPlayer
                 + "', TrackCount='" + item.TrackCount
                 + "', Year='" + item.Year
                 + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
-                + "' WHERE Path='" + DatabaseEscapeString(file) + "'";
+                + "' WHERE Path='" + EscapeString(file) + "'";
 
             DatabaseQuerys(new string[]{ query }, commit);
-            return (item != null) ? MainWindow.PlayListViewItemToDatabaseItem(item) : null;
+            return (item != null) ? MainWindow.MediaItemToDatabaseItem(item) : null;
         }
 
     }

@@ -111,15 +111,15 @@ namespace AnotherMusicPlayer
                 Timer_PlayRepeatStatus = PlayRepeatStatus;
 
                 // Section PlayList
-                if (Timer_PlayListIndex != PlayListIndex)
+                if (Timer_PlayListIndex != PlayListIndex || sender == null)
                 {
-                    ObservableCollection<PlayListViewItemShort> previous_items;
-                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItemShort>)PlayListView.ItemsSource; } else { previous_items = new ObservableCollection<PlayListViewItemShort>(); }
+                    ObservableCollection<PlayListViewItem> previous_items;
+                    if (PlayListView.ItemsSource != null) { previous_items = (ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource; } else { previous_items = new ObservableCollection<PlayListViewItem>(); }
                     Timer_PlayListIndex = PlayListIndex;
-                    ObservableCollection<PlayListViewItemShort> tmp = new ObservableCollection<PlayListViewItemShort>();
+                    ObservableCollection<PlayListViewItem> tmp = new ObservableCollection<PlayListViewItem>();
                     int min = (PlayListIndex != -1) ? PlayListIndex : 0;
                     int max = PlayListIndex + 100; //int max = PlayList.Count;  // test full list
-                    string file; PlayListViewItemShort item;
+                    string file; PlayListViewItem item;
                     for (int i = min; i < max; i++)
                     {
                         if (PlayList.Count <= i) { break; }
@@ -146,7 +146,7 @@ namespace AnotherMusicPlayer
                     try
                     {
                         if (tmp.Count <= 0) { return; }
-                        ((ObservableCollection < PlayListViewItemShort>)PlayListView.ItemsSource).Clear();
+                        ((ObservableCollection < PlayListViewItem>)PlayListView.ItemsSource).Clear();
                         PlayListView.ItemsSource = tmp;
                         PlayListView.Items.Refresh();
                         PlayListView.ScrollIntoView(PlayListView.Items[0]);
@@ -167,14 +167,6 @@ namespace AnotherMusicPlayer
                     try { 
                         GC.Collect(); GC.WaitForPendingFinalizers(); 
                         GC.Collect(); GC.WaitForPendingFinalizers();
-                    } catch { }
-                    try { 
-                        if (LibraryScanning == true) {
-                            _ = Dispatcher.InvokeAsync(new Action(() =>
-                            {
-                                LibraryBuildNavigationContent(LibraryCurrentFolder ?? LibraryRefFolder);
-                            }));
-                        } 
                     } catch { }
                 }
 

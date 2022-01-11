@@ -46,23 +46,17 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Clear List button </summary>
         private void Clear_Button_Click(object sender, RoutedEventArgs e)
         {
-            player.StopAll();
-            PlayList.Clear();
-            player.ClearCurrentFile();
-            PlayListIndex = -1;
-            UpdateRecordedQueue();
-            Settings.LastPlaylistIndex = -1;
+            player.PlaylistClear();
 
-            PlayItemNameValue.ToolTip = PlayItemNameValue.Text = "";
-            PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = "";
-            PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = "";
-            PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = "";
-            FileCover.Source = Bimage("CoverImg");
+            //PlayItemNameValue.ToolTip = PlayItemNameValue.Text = "";
+            //PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = "";
+            //PlayItemArtistsValue.ToolTip = PlayItemArtistsValue.Text = "";
+            //PlayItemDurationValue.ToolTip = PlayItemDurationValue.Text = "";
+            //FileCover.Source = Bimage("CoverImg");
 
-            PlayListView.ItemsSource = new ObservableCollection<PlayListViewItemShort>();
+            PlayListView.ItemsSource = new ObservableCollection<PlayListViewItem>();
             PlayListView.Items.Refresh();
             ClearLeftPannelMediaInfo();
-            StopPlaylist();
             Label_PlayListDisplayedNBTracks.Text = "0";
             Label_PlayListNBTracks.Text = "0";
             Label_PlayListIndex.Text = "0";
@@ -71,26 +65,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Shuffle button </summary>
         private void BtnShuffle_Click(object sender, RoutedEventArgs e)
         {
-            List<string[]> tmpList = new List<string[]>();
-            List<int> pasts = new List<int>();
-            Random rnd = new Random();
-            string currentFile = (PlayListIndex > -1) ? PlayList[PlayListIndex][0] : null;
-            int newIndex = PlayListIndex;
-
-            int index = 0;
-            while (tmpList.Count < PlayList.Count)
-            {
-                index = rnd.Next(0, PlayList.Count);
-                if (pasts.Contains(index)) { continue; }
-                tmpList.Add(PlayList[index]);
-                pasts.Add(index);
-                if (PlayList[index][0] == currentFile) { newIndex = tmpList.Count -1; }
-            }
-
-            PlayList = tmpList;
-            PlayListIndex = newIndex;
-            Timer_PlayListIndex = -1;
-            UpdateRecordedQueue();
+            player.PlaylistRandomize();
         }
 
         /// <summary> Callback Event Click on Repeat button </summary>
@@ -118,7 +93,7 @@ namespace AnotherMusicPlayer
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayList.txt", JsonConvert.SerializeObject(PlayList, jss), System.Text.Encoding.UTF8);
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListIndex.txt", ""+PlayListIndex, System.Text.Encoding.UTF8);
             string output = "[" ;
-            foreach (PlayListViewItemShort item in PlayListView.ItemsSource)
+            foreach (PlayListViewItem item in PlayListView.ItemsSource)
             {
                 output += PrintPropreties(item);
             }

@@ -10,7 +10,7 @@ namespace AnotherMusicPlayer
         /// <summary> Initialisation variables and events configuration of PlayListView </summary>
         private void PlayListView_Init()
         {
-            PlayListView.ItemsSource = new ObservableCollection<PlayListViewItemShort>();
+            PlayListView.ItemsSource = new ObservableCollection<PlayListViewItem>();
             PlayListViewC1.Width = 25;
             PlayListViewC2.Width = PlayListViewC3.Width = PlayListViewC4.Width = 200;
             if (PlayListView.ActualWidth > 500) { PlayListViewC5.Width = 60; } else { PlayListViewC5.Width = 70; }

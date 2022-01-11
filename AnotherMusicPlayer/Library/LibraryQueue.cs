@@ -58,7 +58,7 @@ namespace AnotherMusicPlayer
                     if (fails > 0) { newIndex = 0; }
                     else { newIndex = Settings.LastPlaylistIndex; }
 
-                    Open(gl.ToArray(), false, newIndex);
+                    Open(gl.ToArray(), false, false, newIndex);
                     //player.Stop();
                 }
             }
@@ -72,9 +72,9 @@ namespace AnotherMusicPlayer
             foreach (string[] line in PlayList)
             {
                 string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
-                query += NormalizeNumber(index, 10) + "','";
-                query += Database.DatabaseEscapeString(line[0]) + "',";
-                query += ((line[1] == null) ? "NULL" : "'" + Database.DatabaseEscapeString(line[1]) + "'");
+                query += MainWindow.NormalizeNumber(index, 10) + "','";
+                query += Database.EscapeString(line[0]) + "',";
+                query += ((line[1] == null) ? "NULL" : "'" + Database.EscapeString(line[1]) + "'");
                 query += ")";
                 index += 1;
                 querys.Add(query);

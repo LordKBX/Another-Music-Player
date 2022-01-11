@@ -74,7 +74,7 @@
             </Grid>
         </materialDesign:DialogHost.DialogContent>
 
-        <Grid Background="#FF303030" Margin="0">
+        <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
             <Grid.RowDefinitions>
                 <RowDefinition Height="100*"/>
                 <RowDefinition Height="40px"/>
@@ -152,7 +152,7 @@
                                     <TextBlock x:Name="Label_PlayListIndex" />
                                 </TextBlock>
                             </Border>
-                            <ListView x:Name="PlayListView" Grid.Row="1" SelectionMode="Multiple" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlayListViewItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight" Margin="0,0,1,0" Grid.ColumnSpan="3">
+                            <ListView x:Name="PlayListView" Grid.Row="1" SelectionMode="Extended" Background="Gray" IsTextSearchEnabled="False" AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" ListView.ItemContainerStyle="{DynamicResource ResourceKey=MediaItem}" AlternationCount="2" HorizontalContentAlignment="Left" BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" VerticalContentAlignment="Center" FlowDirection="LeftToRight" Margin="0,0,1,0" Grid.ColumnSpan="3">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
                                         <GridViewColumn x:Name="PlayListViewC1" Width="25" Header="" DisplayMemberBinding="{Binding Selected}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
@@ -194,12 +194,12 @@
 
                         <Border BorderThickness="0,1,0,1" BorderBrush="#FFACACAC">
                             <Viewbox HorizontalAlignment="Left" VerticalAlignment="Stretch" FlowDirection="LeftToRight">
-                                <WrapPanel x:Name="LibNavigationPathContener" Style="{DynamicResource LibNavigationPathContener}">
-                                    <TextBlock Style="{DynamicResource LibNavigationPathItem}" TextDecorations="Underline" Text="Home"/>
+                                <WrapPanel x:Name="LibibraryNavigationPathContener" Style="{DynamicResource LibibraryNavigationPathContener}">
+                                    <TextBlock Style="{DynamicResource LibibraryNavigationPathItem}" TextDecorations="Underline" Text="Home"/>
                                 </WrapPanel>
                             </Viewbox>
                         </Border>
-                        <Grid Grid.Row="1" x:Name="LibraryFiltersGrid" IsEnabled="False">
+                        <Grid Grid.Row="1" x:Name="LibraryFiltersGrid">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="13" />
                                 <ColumnDefinition Width="57"/>
@@ -209,15 +209,15 @@
                                 <ColumnDefinition Width="100*" />
                             </Grid.ColumnDefinitions>
                             <TextBlock Text="Filtre" VerticalAlignment="Center" Margin="5,0,0,0" Grid.ColumnSpan="2"/>
-                            <ComboBox Grid.Column="2" x:Name="LibraryFiltersMode" Style="{DynamicResource LibNavigationComboBox}">
+                            <ComboBox Grid.Column="2" x:Name="LibraryFiltersMode" Style="{DynamicResource LibibraryNavigationComboBox}">
                                 <ComboBoxItem x:Name="LibraryFiltersMode_none" Tag="" Content="Aucun" Selector.IsSelected="True"/>
                                 <ComboBoxItem x:Name="LibraryFiltersMode_name" Tag="Name" Content="Nom"/>
                                 <ComboBoxItem x:Name="LibraryFiltersMode_artist" Tag="Artist" Content="Artist"/>
                                 <ComboBoxItem x:Name="LibraryFiltersMode_album" Tag="Album" Content="Album"/>
                                 <ComboBoxItem x:Name="LibraryFiltersMode_genre" Tag="Genre" Content="Genre"/>
                             </ComboBox>
-                            <ComboBox Grid.Column="3" x:Name="LibraryFiltersGenreList" Visibility="Hidden" Style="{DynamicResource LibNavigationComboBox}"></ComboBox>
-                            <TextBox Grid.Column="4" x:Name="LibraryFiltersGenreSearchBox" Visibility="Hidden"/>
+                            <ComboBox Grid.Column="3" x:Name="LibraryFiltersGenreList" Visibility="Hidden" Style="{DynamicResource LibibraryNavigationComboBox}"></ComboBox>
+                            <TextBox Grid.Column="4" x:Name="LibraryFiltersGenreSearchBox" Visibility="Hidden" Cursor="IBeam"/>
                             <TextBox Grid.Column="3" Grid.ColumnSpan="2" x:Name="LibraryFiltersSearchBox" Visibility="Hidden"/>
                             <Grid Grid.Column="5" x:Name="LibraryFiltersPaginationBlock" HorizontalAlignment="Left" Visibility="Hidden" Margin="38,0,0,0">
                                 <Grid.ColumnDefinitions>
@@ -230,17 +230,18 @@
                                 <Button Grid.Column="2" x:Name="LibraryFiltersPaginationNext" FontFamily="Segoe UI Symbol" Content="▶"/>
                             </Grid>
                         </Grid>
-                        <Border x:Name="LibNavigationContentB" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="#FFACACAC" Visibility="Visible">
-                            <ScrollViewer x:Name="LibNavigationContentScroll" VerticalScrollBarVisibility="Auto" Foreground="Black">
-                                <WrapPanel x:Name="LibNavigationContent"></WrapPanel>
+                        <Border x:Name="LibibraryNavigationContentB" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="#FFACACAC" Visibility="Visible">
+                            <ScrollViewer x:Name="LibibraryNavigationContentScroll" VerticalScrollBarVisibility="Auto" Foreground="Black">
+                                <WrapPanel x:Name="LibibraryNavigationContent"></WrapPanel>
                             </ScrollViewer>
                         </Border>
-                        <Border x:Name="LibNavigationContent2B" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Black" Visibility="Collapsed">
-                            <ScrollViewer x:Name="LibNavigationContentScroll2" VerticalScrollBarVisibility="Auto" Foreground="Black">
-                                <StackPanel x:Name="LibNavigationContent2">
+                        <Border x:Name="LibibraryNavigationContent2B" Grid.Row="2" BorderThickness="0,1,0,0" BorderBrush="Black" Visibility="Collapsed">
+                            <ScrollViewer x:Name="LibibraryNavigationContentScroll2" VerticalScrollBarVisibility="Auto" Foreground="Black">
+                                <StackPanel x:Name="LibibraryNavigationContent2">
                                 </StackPanel>
                             </ScrollViewer>
                         </Border>
+                        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="2" Margin="36,13,0,0" VerticalAlignment="Top" Width="63"/>
                     </Grid>
                 </TabItem>
                 <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle3}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
@@ -319,11 +320,11 @@
                                     <ComboBoxItem x:Name="LG_en" Tag="en-US" Content="{DynamicResource ParamsLanguageVals_EN}" IsSelected="False"/>
                                     <ComboBoxItem x:Name="LG_fr" Tag="fr-FR" Content="{DynamicResource ParamsLanguageVals_FR}" IsSelected="True"/>
                                 </ComboBox>
-                                
+
                                 <Label Content="{DynamicResource ParamsStyleLabel}" Style="{DynamicResource TabItemStyleSettingsText}" Grid.Column="0" Grid.Row="3" VerticalAlignment="Center"/>
                                 <ComboBox x:Name="ParamsStyleVals" Style="{DynamicResource TabItemStyleSettingsComboBox}" Grid.Column="1" Grid.Row="3" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
                                 </ComboBox>
-                                
+
                                 <AccessText Text="{DynamicResource ParamsConvDisclaimerLabel}" Style="{DynamicResource TabItemStyleSettingsText2}" Grid.Column="0" Grid.Row="5" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="10,0,0,0"/>
                                 <Label Content="{DynamicResource ParamsConvKeepLabel}" Style="{DynamicResource TabItemStyleSettingsText}" Grid.Column="0" Grid.Row="6" VerticalAlignment="Center"/>
                                 <ComboBox x:Name="ParamsConvKeepVals" Style="{DynamicResource TabItemStyleSettingsComboBox}" Grid.Column="1" Grid.Row="6" MinWidth="100" HorizontalAlignment="Stretch" VerticalAlignment="Center">
@@ -346,7 +347,7 @@
 
                                 <AccessText Text="{DynamicResource ParamsLibFolderLabel}" Style="{DynamicResource TabItemStyleSettingsText2}" Grid.Column="0" Grid.Row="11" Grid.ColumnSpan="3" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
                                 <TextBox x:Name="ParamsLibFolderTextBox" Style="{DynamicResource TabItemStyleSettingsTextBox}" Grid.Column="0" Grid.Row="12" Grid.ColumnSpan="2" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" VerticalContentAlignment="Center" Margin="10,0,0,0" Padding="0"/>
-                                <Button x:Name="ParamsLibFolderBtn" Style="{DynamicResource TabItemStyleSettingsForLibraryButton}" Grid.Column="2" Grid.Row="12" Content=" ... " HorizontalAlignment="Left" Width="30" Click="ParamsLibFolderBtn_Click" Padding="0,0,0,0" VerticalAlignment="Stretch"/>
+                                <Button x:Name="ParamsLibFolderBtn" Style="{DynamicResource TabItemStyleSettingsForLibraryFolderButton}" Grid.Column="2" Grid.Row="12" Content=" ... " HorizontalAlignment="Left" Width="30" Click="ParamsLibFolderBtn_Click" Padding="0,0,0,0" VerticalAlignment="Stretch"/>
 
 
                                 <AccessText Text="{DynamicResource ParamsEqualizerLabel}" Style="{DynamicResource TabItemStyleSettingsText2}" Grid.Column="0" Grid.Row="14" VerticalAlignment="Center" TextWrapping="WrapWithOverflow" Margin="12,0,0,0"/>
@@ -442,7 +443,7 @@
                 <Button Grid.Row="0" x:Name="BtnOpen" Margin="2,0,2,0" ToolTip="{DynamicResource BtnOpenToolTip}" Click="Open_Button_Click" Style="{DynamicResource PlaybackBtnOpen}"/>
                 <Button Grid.Row="2" x:Name="BtnPrevious" Margin="2,0,2,0" ToolTip="{DynamicResource BtnPreviousToolTip}" Click="Previous_Button_Click" Style="{DynamicResource PlaybackBtnTrackPrev}"/>
                 <Button Grid.Row="4" x:Name="BtnPlayPause" Margin="2,0,2,0" ToolTip="{DynamicResource BtnPlayPauseToolTip}" Click="Play_Button_Click" Style="{DynamicResource PlaybackBtnPlay}"/>
-                <Button Grid.Row="6" x:Name="BtnNext" Margin="2,0,2,0" ToolTip="{DynamicResource BtnNexToolTipt}" Click="Next_Button_Click" Style="{DynamicResource PlaybackBtnTrackNext}"/>
+                <Button Grid.Row="6" x:Name="BtnNext" Margin="2,0,2,0" ToolTip="{DynamicResource BtnNexToolTip}" Click="Next_Button_Click" Style="{DynamicResource PlaybackBtnTrackNext}"/>
                 <Button Grid.Row="8" x:Name="BtnRepeat" Margin="2,0,2,0" ToolTip="{DynamicResource BtnRepeatToolTip}" Click="BtnRepeat_Click" Style="{DynamicResource PlaybackBtnRepeatNone}"/>
                 <Button Grid.Row="10" x:Name="BtnShuffle" Margin="2,0,2,0" ToolTip="{DynamicResource BtnShuffleToolTip}" Click="BtnShuffle_Click" Style="{DynamicResource PlaybackBtnShuffle}"/>
                 <Button Grid.Row="12" x:Name="BtnClearList" Margin="2,0,2,0" ToolTip="{DynamicResource BtnClearListToolTip}" Click="Clear_Button_Click" Style="{DynamicResource PlaybackBtnClearPlaylist}"/>

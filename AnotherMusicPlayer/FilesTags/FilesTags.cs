@@ -13,10 +13,51 @@ using System.Threading;
 
 namespace AnotherMusicPlayer
 {
+    /// <summary> Class MediaItem, a storae structure for Music Media Basic MetaData </summary>
+    public class MediaItem
+    {
+        public string Selected { get; set; }
+        public string Path { get; set; }
+        public string OriginPath { get; set; }
+        public string Name { get; set; }
+        public string Album { get; set; }
+        public long Size { get; set; }
+        public long Duration { get; set; }
+        public string DurationS { get; set; }
+        public string Genres { get; set; }
+        public string Performers { get; set; }
+        public string Composers { get; set; }
+        public string Copyright { get; set; }
+        public uint Disc { get; set; }
+        public uint DiscCount { get; set; }
+        public string AlbumArtists { get; set; }
+        public string Lyrics { get; set; }
+        public uint Track { get; set; }
+        public uint TrackCount { get; set; }
+        public uint Year { get; set; }
+
+        public MediaItem()
+        {
+            Path = OriginPath
+                = Selected
+                = Name
+                = Album
+                = DurationS
+                = Performers
+                = Composers
+                = Copyright
+                = AlbumArtists
+                = Lyrics
+                = "";
+            Duration = Size = 0;
+            Disc = DiscCount = Track = TrackCount = Year = 0;
+        }
+    }
+
     class FilesTags
     {
         /// <summary> Recuperate Media MetaData(cover excluded) </summary>
-        public static PlayListViewItem MediaInfo(string FilePath, bool Selected, string OriginPath = null)
+        public static MediaItem MediaInfo(string FilePath, bool Selected, string OriginPath = null)
         {
             if (System.IO.File.Exists(FilePath) || System.IO.File.Exists(OriginPath))
             {
@@ -24,7 +65,7 @@ namespace AnotherMusicPlayer
                 TagLib.File tags;
                 if (System.IO.File.Exists(FilePath)) { tags = TagLib.File.Create(FilePath); }
                 else { tags = TagLib.File.Create(OriginPath, ReadStyle.Average); FilePath = OriginPath; }
-                PlayListViewItem item = new PlayListViewItem();
+                MediaItem item = new MediaItem();
                 item.Name = tags.Tag.Title;
                 item.Album = tags.Tag.Album;
                 item.Path = FilePath;
@@ -69,7 +110,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Recuperate Media MetaData(cover excluded) </summary>
-        public static PlayListViewItemShort MediaInfoShort(string FilePath, bool Selected, string OriginPath = null)
+        public static PlayListViewItem MediaInfoShort(string FilePath, bool Selected, string OriginPath = null)
         {
             if (System.IO.File.Exists(FilePath) || System.IO.File.Exists(OriginPath))
             {
@@ -77,7 +118,7 @@ namespace AnotherMusicPlayer
                 TagLib.File tags;
                 if (System.IO.File.Exists(FilePath)) { tags = TagLib.File.Create(FilePath); }
                 else { tags = TagLib.File.Create(OriginPath, ReadStyle.Average); FilePath = OriginPath; }
-                PlayListViewItemShort item = new PlayListViewItemShort();
+                PlayListViewItem item = new PlayListViewItem();
                 item.Name = tags.Tag.Title;
                 item.Album = tags.Tag.Album;
                 item.Path = FilePath;
