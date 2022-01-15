@@ -1,5 +1,8 @@
-﻿using System.Windows;
+﻿using System;
+using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace AnotherMusicPlayer
 {
@@ -174,13 +177,42 @@ namespace AnotherMusicPlayer
         private void CM_EditTrack(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            string track = (string)((Button)item.Tag).Tag;
+            Button btn = (Button)item.Tag;
+            string track = (string)btn.Tag;
+            TagsEditor tags = new TagsEditor(Parent, "track", new string[] { track });
+            e.Handled = true;
+            bool? ret = tags.ShowDialog2(Parent);
 
+            if (tags.Saved)
+            {
+                if (tags.CoverChanged == true) { Bdd.DatabaseClearCover(track); }
+                Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
+                    Thread.Sleep(200);
+                    DisplayPath(CurrentPath);
+                }));
+            }
             //throw new System.NotImplementedException();
         }
 
         private void CM_EditAlbum(object sender, RoutedEventArgs e)
         {
+            MenuItem item = (MenuItem)sender;
+            Button btn = (Button)item.Tag;
+            string[] tracks = (string[])btn.Tag;
+            TagsEditor tags = new TagsEditor(Parent, "album", tracks);
+            e.Handled = true;
+            bool? ret = tags.ShowDialog2(Parent);
+
+            if (tags.Saved)
+            {
+                if (tags.CoverChanged == true) { 
+                    foreach(string track in tracks)Bdd.DatabaseClearCover(track);
+                }
+                Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
+                    Thread.Sleep(500);
+                    DisplayPath(CurrentPath);
+                }));
+            }
             //throw new System.NotImplementedException();
         }
 

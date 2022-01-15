@@ -14,7 +14,7 @@ namespace AnotherMusicPlayer
             {
                 Resources.MergedDictionaries[0].Clear();
                 Resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri(filePath, UriKind.Absolute) };
-                win1.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["CustomWindowStyle"];
+                win1.Style = FindResource("CustomWindowStyle") as Style;
             }
         }
 

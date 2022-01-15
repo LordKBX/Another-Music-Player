@@ -72,7 +72,7 @@ namespace AnotherMusicPlayer
             _Scanning = false;
         }
 
-        private void InsertBddFile(FileInfo fi = null)
+        private void InsertBddFile(FileInfo fi = null, bool commit = false)
         {
             if (fi == null) { return; }
             string query = "INSERT INTO files(Path, Name, Album, Performers, Composers, Genres, Copyright, AlbumArtists, Lyrics, Duration, Size, Disc, " +
@@ -81,13 +81,17 @@ namespace AnotherMusicPlayer
             query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0',";
 
             query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
-            CacheQuerys.Add(query);
 
-            if (CacheQuerys.Count >= 100)
+            if (commit == true) { Bdd.DatabaseQuerys(new string[] { query }); }
+            else
             {
-                Bdd.DatabaseQuerys(CacheQuerys.ToArray());
-                CacheQuerys.Clear();
+                if (CacheQuerys.Count >= 100)
+                {
+                    Bdd.DatabaseQuerys(CacheQuerys.ToArray());
+                    CacheQuerys.Clear();
+                }
             }
+            CacheQuerys.Add(query);
         }
 
         /// <summary> Launch a scan of the files for tag retrieval </summary>

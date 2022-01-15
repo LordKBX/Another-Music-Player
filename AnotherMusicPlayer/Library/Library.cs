@@ -70,19 +70,60 @@ namespace AnotherMusicPlayer
             Watcher = new FileSystemWatcher();
             Watcher.Path = Settings.LibFolder;
             Watcher.IncludeSubdirectories = true;
-            Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName;
+            Watcher.NotifyFilter = NotifyFilters.LastWrite | NotifyFilters.FileName | NotifyFilters.CreationTime | NotifyFilters.DirectoryName;
             Watcher.Filter = "*.*";
-            Watcher.Changed += new FileSystemEventHandler(LibraryChanged);
+            Watcher.Changed += LibraryFileChanged;
+            Watcher.Renamed += LibraryFileRenamed;
+            Watcher.Deleted += LibraryFileDeleted;
+            Watcher.Created += LibraryFileCreated;
             Watcher.EnableRaisingEvents = true;
         }
 
         /// <summary> Callback for when Library Watcher detect a change </summary>
-        private void LibraryChanged(object source, FileSystemEventArgs e)
+        private void LibraryFileChanged(object source, FileSystemEventArgs e)
         {
-            Debug.WriteLine("LibraryChanged => " + e.Name);
+            Debug.WriteLine("LibraryFileChanged => " + e.FullPath);
             if (Player.AcceptedExtentions.Contains(Path.GetExtension(e.Name).ToLower()))
-            { 
-                Bdd.UpdateFileAsync(Settings.LibFolder + MainWindow.SeparatorChar + e.Name, true); 
+            {
+                Thread.Sleep(200);
+                Bdd.UpdateFileAsync(e.FullPath, true);
+            }
+        }
+
+        /// <summary> Callback for when Library Watcher detect a change </summary>
+        private void LibraryFileRenamed(object source, RenamedEventArgs e)
+        {
+            if (Player.AcceptedExtentions.Contains(Path.GetExtension(e.Name).ToLower()))
+            {
+                Debug.WriteLine("--> LibraryFileRenamed");
+                Debug.WriteLine("Old Name => " + e.OldFullPath);
+                Debug.WriteLine("New Name => " + e.FullPath);
+                Thread.Sleep(200);
+                Bdd.DeleteFileAsync(e.OldFullPath);
+                Bdd.DatabaseClearCover(e.OldFullPath);
+                Bdd.UpdateFileAsync(e.FullPath, true);
+            }
+        }
+
+        private void LibraryFileDeleted(object sender, FileSystemEventArgs e)
+        {
+            Debug.WriteLine("--> LibraryFileDeleted");
+            if (Player.AcceptedExtentions.Contains(Path.GetExtension(e.Name).ToLower()))
+            {
+                Thread.Sleep(200);
+                Bdd.DeleteFileAsync(e.FullPath);
+                Bdd.DatabaseClearCover(e.FullPath);
+            }
+        }
+
+        private void LibraryFileCreated(object sender, FileSystemEventArgs e)
+        {
+            Debug.WriteLine("--> LibraryFileCreated");
+            if (Player.AcceptedExtentions.Contains(Path.GetExtension(e.Name).ToLower()))
+            {
+                Thread.Sleep(200);
+                InsertBddFile(new FileInfo(e.FullPath), true);
+                Bdd.UpdateFileAsync(e.FullPath, true);
             }
         }
 
@@ -138,8 +179,8 @@ namespace AnotherMusicPlayer
             pathNavigator.Display(path);
             SearchResultsContener.Children.Clear();
             NavigationContener.Children.Clear();
-            NavigationContener.ContextMenu = null;
-            NavigationContener.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false);
+            NavigationContenerScoller.ContextMenu = null;
+            NavigationContenerScoller.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false);
 
             string[] dirs = Directory.GetDirectories(path);
             foreach (string dir in dirs) {
@@ -155,9 +196,9 @@ namespace AnotherMusicPlayer
                 }
                 string[] tab = dir.Split(MainWindow.SeparatorChar);
                 LibraryFolderButton btn = new LibraryFolderButton(tab[tab.Length - 1], dir) { 
-                    Style = Parent.FindResource("LibibraryNavigationContentItem") as Style
+                    Style = Parent.FindResource("LibibraryNavigationContentFolderButton") as Style
                 };
-                btn.Icon.Style = Parent.FindResource("LibibraryNavigationContentItemPackIcon") as Style;
+                btn.Icon.Style = Parent.FindResource("LibibraryNavigationContentFolderButtonPackIcon") as Style;
                 btn.Click += BtnFolder_Click;
                 btn.ContextMenu = MakeContextMenu(btn, "folder");
                 NavigationContener.Children.Add(btn);
@@ -223,41 +264,60 @@ namespace AnotherMusicPlayer
 
                 foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> albumT in tab)
                 {
-                    bool nocover = false;
                     string coverPath = albumT.Value.Values.First().First().Value.Path;
                     string al = albumT.Key;
+
+                    List<string> brList = new List<string>();
+                    Button br = new Button() { Style = Parent.FindResource("LibibraryNavigationContentAlbum") as Style };
                     if (al == null || al.Trim() == "")
                     {
                         if (uniqueDir) { al = "<UNKWON ALBUM>"; }
                         else { al = albumT.Value.Values.First().First().Value.Name; }
-                        nocover = true;
+                        br.ContextMenu = new ContextMenu();
                     }
-
-                    List<string> brList = new List<string>();
-                    Button br = new Button()
-                    {
-                        Style = Parent.FindResource("BtnStyle2") as Style
-                    };
-                    br.ContextMenu = MakeContextMenu(br, "album");
+                    else { br.ContextMenu = MakeContextMenu(br, "album"); }
                     Grid gr = new Grid() { HorizontalAlignment = HorizontalAlignment.Stretch, VerticalAlignment = VerticalAlignment.Stretch };
                     gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(150, GridUnitType.Pixel) });
                     gr.ColumnDefinitions.Add(new ColumnDefinition() { Width = new GridLength(100, GridUnitType.Star) });
                     System.Windows.Controls.Image im = new System.Windows.Controls.Image()
                     {
                         VerticalAlignment = VerticalAlignment.Top,
-                        Style = Parent.FindResource("HQImg") as Style
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        MaxWidth = 150
                     };
-                    im.Source = (Settings.MemoryUsage == 1) ?
-                        ((FilesTags.MediaPicture(coverPath, Bdd, true, 150, 150, false)) ?? defaultCover) :
-                        ((FilesTags.MediaPicture(coverPath, Bdd, true, 50, 50, false)) ?? defaultCover);
-                    if (im.Source != MainWindow.Bimage("CoverImg") && Settings.MemoryUsage == 1)
+                    im.Source = FilesTags.MediaPicture(coverPath, Bdd, true, 150, 150, false) ?? defaultCover;
+                    if (im.Source != defaultCover && Settings.MemoryUsage == 1)
                     {
                         WrapPanel p = new WrapPanel() { Orientation = Orientation.Vertical };
                         Image imp = new Image() { Style = Parent.FindResource("HQImg") as Style };
-                        imp.Source = (((nocover) ? null : FilesTags.MediaPicture(coverPath, Bdd, true)) ?? defaultCover);
+                        string ret = Bdd.DatabaseGetCover(coverPath);
+                        imp.Source = FilesTags.MediaPicture(coverPath, Bdd, true, 0, 0, false) ?? defaultCover;
                         p.Children.Add(imp);
                         im.ToolTip = p;
                     }
+
+                    if (((BitmapImage)im.Source).PixelWidth < 150)
+                    {
+                        double marge = (150 - ((BitmapImage)im.Source).PixelWidth) / 2;
+                        im.Margin = new Thickness(marge, 0, marge, 0);
+                    }
+
+                    if (((BitmapImage)im.Source).PixelHeight < 150)
+                    {
+                        double marge = (150 - ((BitmapImage)im.Source).PixelHeight) / 2;
+                        im.Margin = new Thickness(0, marge, 0, marge);
+                    }
+
+                    if (((BitmapImage)im.Source).PixelHeight > 150) { im.Height = 150; }
+
+                    StackPanel st0 = new StackPanel()
+                    {
+                        Orientation = Orientation.Horizontal,
+                        VerticalAlignment = VerticalAlignment.Top,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        Style = Parent.FindResource("thumbnailBlock") as Style
+                    };
+                    st0.Children.Add(im);
 
                     StackPanel st1 = new StackPanel()
                     {
@@ -308,11 +368,11 @@ namespace AnotherMusicPlayer
                                 Content = new AccessText()
                                 {
                                     Text = textName,
-                                    Style = Parent.FindResource("LibibraryNavigationContentItemTrackButtonAccessText") as Style
+                                    Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButtonAccessText") as Style
                                 },
                                 Tag = trackT.Value.Path,
                                 //ToolTip = textName,
-                                Style = Parent.FindResource("LibibraryNavigationContentItemTrackButton") as Style
+                                Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButton") as Style
                             };
                             //btn.Click += BtnTrack_Click;
                             btn.MouseDoubleClick += BtnTrack_MouseDoubleClick;
@@ -323,8 +383,8 @@ namespace AnotherMusicPlayer
                     }
                     br.Tag = brList.ToArray();
 
-                    gr.Children.Add(im);
-                    Grid.SetColumn(im, 0);
+                    gr.Children.Add(st0);
+                    Grid.SetColumn(st0, 0);
                     gr.Children.Add(st1);
                     Grid.SetColumn(st1, 1);
                     br.Content = gr;

@@ -218,7 +218,7 @@
                             </ComboBox>
                             <ComboBox Grid.Column="3" x:Name="LibraryFiltersGenreList" Visibility="Hidden" Style="{DynamicResource LibibraryNavigationComboBox}"></ComboBox>
                             <TextBox Grid.Column="4" x:Name="LibraryFiltersGenreSearchBox" Visibility="Hidden" Cursor="IBeam"/>
-                            <TextBox Grid.Column="3" Grid.ColumnSpan="2" x:Name="LibraryFiltersSearchBox" Visibility="Hidden"/>
+                            <TextBox Grid.Column="3" Grid.ColumnSpan="2" x:Name="LibraryFiltersSearchBox" Style="{DynamicResource LibibraryNavigationFilterInput}" Visibility="Collapsed"/>
                             <Grid Grid.Column="5" x:Name="LibraryFiltersPaginationBlock" HorizontalAlignment="Left" Visibility="Hidden" Margin="38,0,0,0">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="20" />

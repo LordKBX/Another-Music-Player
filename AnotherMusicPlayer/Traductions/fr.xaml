@@ -135,4 +135,27 @@
 
 
     <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
+
+    <!--#region LIBRARY TAG EDITOR-->
+    <sys:String x:Key="EditorTagSeparateEntrys">Séparer les membres avec le ;</sys:String>
+
+    <sys:String x:Key="EditorTagLabelLyrics">Paroles</sys:String>
+    <sys:String x:Key="EditorTagLabelTitle">Titre</sys:String>
+    <sys:String x:Key="EditorTagLabelPerformers">Interprètes</sys:String>
+    <sys:String x:Key="EditorTagLabelComposers">Compositeurs</sys:String>
+    <sys:String x:Key="EditorTagLabelAlbum">Album</sys:String>
+    <sys:String x:Key="EditorTagLabelGenres">Genres</sys:String>
+    <sys:String x:Key="EditorTagLabelAlbumArtists">Album Artistes</sys:String>
+    <sys:String x:Key="EditorTagLabelAlbumYear">Année de sortie</sys:String>
+    <sys:String x:Key="EditorTagLabelDisc">Disque</sys:String>
+    <sys:String x:Key="EditorTagLabelTrack">Piste</sys:String>
+    <sys:String x:Key="EditorTagLabelCopyright">Copyright</sys:String>
+
+    <sys:String x:Key="EditorTagSave">Sauvegarder</sys:String>
+    
+    <sys:String x:Key="EditorTagCoverTooltip">Glisser ici une nouvelle image pour ajout/remplacement\nou Clicker droit pour plus d'option</sys:String>
+    <sys:String x:Key="EditorTagCoverCMPreview">Apperçus Image</sys:String>
+    <sys:String x:Key="EditorTagCoverCMClear">Supprimer Image</sys:String>
+    <sys:String x:Key="EditorTagCoverCMAdd">Ajouter/remplacer Image</sys:String>
+    <!--#endregion-->
 </ResourceDictionary>

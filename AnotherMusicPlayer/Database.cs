@@ -298,6 +298,19 @@ namespace AnotherMusicPlayer
             return null;
         }
 
+        /// <summary> Get cover for specific path </summary>
+        public void DatabaseClearCover(string Path)
+        {
+            SQLiteCommand sqlite_cmd;
+
+            sqlite_cmd = DatabaseConnection.CreateCommand();
+            string query = "";
+            query = "DELETE FROM covers WHERE Path LIKE '" + Path.Replace("\\", "/").Replace("'", "<") + "%'";
+            sqlite_cmd.CommandText = query;
+            sqlite_cmd.ExecuteNonQuery();
+            DatabaseTansactionEnd();
+        }
+
         /// <summary> Save cover for specific path </summary>
         public void DatabaseSaveCover(string Path, String CoverData)
         {
@@ -376,6 +389,8 @@ namespace AnotherMusicPlayer
         /// <summary> Get Basic Metadata from a list of file if stored in database </summary>
         public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths, MainWindow parent = null, bool forceUpdate = false)
         {
+            if (paths == null) { return null; }
+            if (paths.Length == 0) { return null; }
             Dictionary<string, Dictionary<string, object>> ret = new Dictionary<string, Dictionary<string, object>>();
             List<string> filesToUpdate = new List<string>();
             try
@@ -427,13 +442,14 @@ namespace AnotherMusicPlayer
             return ret;
         }
 
-        public Dictionary<string, object> UpdateFileAsync(string file, bool commit=false)
+        public Dictionary<string, object> UpdateFileAsync(string file, bool commit = false)
         {
             if (file == null) { return null; }
             if(!System.IO.File.Exists(file)) { return null; }
 
             FileInfo fi = new FileInfo(file);
             MediaItem item = FilesTags.MediaInfo(file, false);
+            if (item == null) { Debug.WriteLine("item = null"); return null; }
             string query = "UPDATE files SET Name='" + EscapeString(item.Name ?? fi.Name);
             if (item.Album != null && item.Album.Trim() != "") query += "', Album='" + EscapeString(item.Album);
             if (item.Performers != null && item.Performers.Trim() != "") query += "', Performers='" + EscapeString(item.Performers);
@@ -454,6 +470,15 @@ namespace AnotherMusicPlayer
 
             DatabaseQuerys(new string[]{ query }, commit);
             return (item != null) ? MainWindow.MediaItemToDatabaseItem(item) : null;
+        }
+
+        public bool DeleteFileAsync(string file, bool commit = false)
+        {
+            if (file == null) { return false; }
+            if(System.IO.File.Exists(file)) { return false; }
+            try { DatabaseQuerys(new string[] { "DELETE FROM files WHERE Path='" + EscapeString(file) + "'" }, commit); }
+            catch { return false; }
+            return true;
         }
 
     }

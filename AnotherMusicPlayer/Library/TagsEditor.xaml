@@ -5,38 +5,110 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AnotherMusicPlayer"
-        mc:Ignorable="d"
-        Title="TagsEditor" Height="450" Width="800">
+        mc:Ignorable="d" ShowInTaskbar="False" WindowStyle="ToolWindow"
+        Title="TagsEditor" MinHeight="570" MinWidth="320" MaxHeight="570" MaxWidth="500">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/AnotherMusicPlayer;component/Styles/Dark.xaml" />
-                <ResourceDictionary Source="/AnotherMusicPlayer;component/Traductions\en.xaml" />
+                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Styles\Dark.xaml" />
+                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="100*"/>
+            <ColumnDefinition Width="3"/>
         </Grid.ColumnDefinitions>
 
-        <Grid Grid.Column="0">
+        <Grid Grid.Column="1" Margin="0,3,0,3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="150"/>
+                <RowDefinition Height="30"/>
                 <RowDefinition Height="100*"/>
             </Grid.RowDefinitions>
+
+            <Border BorderBrush="White" BorderThickness="1" ToolTip="{DynamicResource EditorTagCoverTooltip}">
+                <Image x:Name="Cover" Source="/AnotherMusicPlayer;component/icons/album_small.png" AllowDrop="True"/>
+                <Border.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Name="CoverCMPreview" Header="{DynamicResource EditorTagCoverCMPreview}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="ImageSearch"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="CoverCMClear" Header="{DynamicResource EditorTagCoverCMClear}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="ImageRemove"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Name="CoverCMAdd" Header="{DynamicResource EditorTagCoverCMAdd}">
+                            <MenuItem.Icon>
+                                <materialDesign:PackIcon Kind="ImagePlus"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </Border.ContextMenu>
+            </Border>
+            <AccessText Grid.Row="1" x:Name="LyricsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelLyrics}" VerticalAlignment="Bottom" Margin="0,0,0,3" HorizontalAlignment="Left"/>
+            <TextBox Grid.Row="2" x:Name="LyricsInput" Style="{DynamicResource InputStyle}" ScrollViewer.CanContentScroll="True"/>
         </Grid>
+        <ScrollViewer Grid.Column="3" Margin="0,3,0,3" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto">
+            <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                <AccessText x:Name="TitleLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTitle}"/>
+                <TextBox x:Name="TitleInput" Style="{DynamicResource InputStyle}"/>
 
-        <StackPanel Grid.Column="1">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="100"/>
-                    <ColumnDefinition Width="100*"/>
-                </Grid.ColumnDefinitions>
+                <AccessText x:Name="PerformersLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelPerformers}"/>
+                <TextBox x:Name="PerformersInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="Title" Style="{DynamicResource EditorInputLabel}" Text="Track Name"/>
-            </Grid>
-        </StackPanel>
+                <AccessText x:Name="ComposersLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelComposers}"/>
+                <TextBox x:Name="ComposersInput" Style="{DynamicResource InputStyle}"/>
+
+                <AccessText x:Name="AlbumLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbum}"/>
+                <TextBox x:Name="AlbumInput" Style="{DynamicResource InputStyle}"/>
+
+                <AccessText x:Name="GenresLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelGenres}"/>
+                <TextBox x:Name="GenresInput" Style="{DynamicResource InputStyle}"/>
+
+                <AccessText x:Name="AlbumArtistsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbumArtists}"/>
+                <TextBox x:Name="AlbumArtistsInput" Style="{DynamicResource InputStyle}"/>
+
+                <AccessText x:Name="YearLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbumYear}"/>
+                <TextBox x:Name="YearInput" Style="{DynamicResource InputStyle}"/>
+
+                <AccessText x:Name="DiscLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelDisc}"/>
+                <Grid x:Name="DiscGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="DiscInput" Style="{DynamicResource InputStyle}" Cursor="IBeam"/>
+                    <AccessText Grid.Column="1" Text=" / "/>
+                    <TextBox Grid.Column="2" x:Name="DiscCountInput" Style="{DynamicResource InputStyle}"/>
+                </Grid>
+
+                <AccessText x:Name="TrackLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTrack}"/>
+                <Grid x:Name="TrackGrid">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="100*"/>
+                        <ColumnDefinition Width="10"/>
+                        <ColumnDefinition Width="100*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBox Grid.Column="0" x:Name="TrackInput" Style="{DynamicResource InputStyle}"/>
+                    <AccessText Grid.Column="1" Text=" / "/>
+                    <TextBox Grid.Column="2" x:Name="TrackCountInput" Style="{DynamicResource InputStyle}"/>
+                </Grid>
+
+                <AccessText x:Name="CopyrightLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelCopyright}"/>
+                <TextBox x:Name="CopyrightInput" Style="{DynamicResource InputStyle}"/>
+
+                <Expander Height="20" />
+                <Button x:Name="SaveButton" Style="{DynamicResource EditorButton1}" Content="{DynamicResource EditorTagSave}" IsEnabled="False" />
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

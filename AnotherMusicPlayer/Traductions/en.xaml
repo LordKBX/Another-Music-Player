@@ -107,7 +107,6 @@
     <sys:String x:Key="LibraryContextMenuEditFile">Edit File</sys:String>
     <!--#endregion-->
     
-    
 
     <sys:String x:Key="LibraryLibraryScanning">LibraryScanning</sys:String>
     <sys:String x:Key="LibraryFiles">Files</sys:String>
@@ -136,4 +135,27 @@
 
 
     <sys:String x:Key="PlayListsHeaderCol1">Playlist</sys:String>
+
+    <!--#region LIBRARY TAG EDITOR-->
+    <sys:String x:Key="EditorTagSeparateEntrys">Separate entrys with ;</sys:String>
+
+    <sys:String x:Key="EditorTagLabelLyrics">Lyrics</sys:String>
+    <sys:String x:Key="EditorTagLabelTitle">Title</sys:String>
+    <sys:String x:Key="EditorTagLabelPerformers">Performers</sys:String>
+    <sys:String x:Key="EditorTagLabelComposers">Composers</sys:String>
+    <sys:String x:Key="EditorTagLabelAlbum">Album</sys:String>
+    <sys:String x:Key="EditorTagLabelGenres">Genres</sys:String>
+    <sys:String x:Key="EditorTagLabelAlbumArtists">Album Artists</sys:String>
+    <sys:String x:Key="EditorTagLabelYear">Year</sys:String>
+    <sys:String x:Key="EditorTagLabelDisc">Disc</sys:String>
+    <sys:String x:Key="EditorTagLabelTrack">Track</sys:String>
+    <sys:String x:Key="EditorTagLabelCopyright">Copyright</sys:String>
+
+    <sys:String x:Key="EditorTagSave">Save</sys:String>
+    
+    <sys:String x:Key="EditorTagCoverTooltip">Drop cover image for add/replacement\nor click right for more options</sys:String>
+    <sys:String x:Key="EditorTagCoverCMPreview">Preview Image</sys:String>
+    <sys:String x:Key="EditorTagCoverCMClear">Delete Image Cover</sys:String>
+    <sys:String x:Key="EditorTagCoverCMAdd">Add/Replace Image</sys:String>
+    <!--#endregion-->
 </ResourceDictionary>
