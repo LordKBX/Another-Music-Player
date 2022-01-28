@@ -84,7 +84,19 @@ namespace AnotherMusicPlayer
                 cpt += 1;
             }
 
-            Parent.PlaylistsTree.Items.Add(new TreeViewItem() { Header = "Test", Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style });
+            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description FROM playlists ORDER BY Name", "FIndex");
+            foreach (KeyValuePair<string, Dictionary<string, object>> row in rez)
+            {
+                TreeViewItem item = new TreeViewItem()
+                {
+                    Header = row.Value["Name"] as string,
+                    ToolTip = row.Value["Description"] as string,
+                    Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
+                    Tag = Convert.ToInt32(row.Value["FIndex"])
+                };
+                item.MouseLeftButtonUp += userlistClick;
+                Parent.PlaylistsTree.Items.Add(item);
+            }
         }
 
         private void autolistClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -115,6 +127,21 @@ namespace AnotherMusicPlayer
             }
             catch (System.NullReferenceException err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+        }
+
+        private void userlistClick(object sender, MouseButtonEventArgs e)
+        {
+            int id = (int)((TreeViewItem)sender).Tag;
+            Debug.WriteLine("--> Item_MouseLeftButtonUp, Id: " + id);
+            string query = "SELECT PIndex,LOrder,Path FROM playlistsItems WHERE LIndex = " + id + " ORDER BY LOrder ASC";
+            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery(query, "LOrder");
+            Parent.PlaylistsContentsC0.Width = 0;
+
+            if (rez == null) { Parent.PlaylistsContents.ItemsSource = new ObservableCollection<MediaItem>(); return; }
+            List<string> files = new List<string>();
+            foreach (Dictionary<string, object> row in rez.Values) { files.Add(row["Path"] as string); }
+            Debug.WriteLine("--> Display build");
+            fillContentSpace(files.ToArray(), null);
         }
 
         private void fillContentSpace(string[] files, Dictionary<string, int> countList = null)

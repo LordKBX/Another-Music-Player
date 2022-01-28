@@ -158,15 +158,16 @@ namespace AnotherMusicPlayer
                     + "LastUpdate BIGINT,  PRIMARY KEY(\"Path\")"
                     + ")");
                 DatabaseDetectOrCreateTable("queue", "CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
-                DatabaseDetectOrCreateTable("playlists", "CREATE TABLE playlists(FIndex TEXT, Name TEXT, Description TEXT)");
-                DatabaseDetectOrCreateTable("playlistsItems", "CREATE TABLE playlistsItems(PIndex TEXT, LIndex Text, Name TEXT, Path TEXT)");
+                DatabaseDetectOrCreateTable("playlists", "CREATE TABLE playlists(FIndex INTEGER, Name TEXT, Description TEXT, PRIMARY KEY(\"FIndex\" AUTOINCREMENT))");
+                DatabaseDetectOrCreateTable("playlistsItems", "CREATE TABLE playlistsItems (PIndex INTEGER, LIndex INTEGER NOT NULL DEFAULT 0, Path TEXT, LOrder INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(\"PIndex\" AUTOINCREMENT))");
                 DatabaseDetectOrCreateTable("playCounts", "CREATE TABLE playCounts(Path TEXT, Cpt INTEGER NOT NULL DEFAULT 1, LastPlay NUMERIC NOT NULL DEFAULT 0, PRIMARY KEY(\"Path\"))");
                 DatabaseTansactionEnd();
             }
-            catch  { Debug.WriteLine("--> Database() : Catch ERROR <--"); }
+            catch { Debug.WriteLine("--> Database() : Catch ERROR <--"); }
         }
 
-        private bool DatabaseDetectOrCreateTable(string TableName, string QueryCreation) {
+        private bool DatabaseDetectOrCreateTable(string TableName, string QueryCreation)
+        {
             bool ret = true;
             try
             {
@@ -213,7 +214,8 @@ namespace AnotherMusicPlayer
                         NameValueCollection row = sqlite_datareader.GetValues();
 
                         row.AllKeys.Contains(index);
-                        if (index != null) {
+                        if (index != null)
+                        {
                             if (row.AllKeys.Contains(index))
                             {
                                 id = row[index];
@@ -226,7 +228,8 @@ namespace AnotherMusicPlayer
                         line += 1;
                     }
                 }
-                else {
+                else
+                {
 
                     bool previousTransaction = false;
                     if (AutoCommit)
@@ -241,9 +244,10 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            catch (Exception err){ 
-                Debug.WriteLine("DatabaseQuery => " + query); 
-                Debug.WriteLine("DatabaseQuery => " + JsonConvert.SerializeObject(err)); 
+            catch (Exception err)
+            {
+                Debug.WriteLine("DatabaseQuery => " + query);
+                Debug.WriteLine("DatabaseQuery => " + JsonConvert.SerializeObject(err));
             }
             return ret;
         }
@@ -252,12 +256,13 @@ namespace AnotherMusicPlayer
         public void DatabaseQuerys(string[] querys, bool autocommit = true)
         {
             bool previousTransaction = false;
-            if (autocommit) {
+            if (autocommit)
+            {
                 if (!IsInTransaction()) { DatabaseTansactionStart(); }
             }
             foreach (string query in querys)
             {
-                if(query == null) { continue; }
+                if (query == null) { continue; }
                 SQLiteCommand sqlite_cmd;
                 sqlite_cmd = DatabaseConnection.CreateCommand();
                 sqlite_cmd.CommandText = query;
@@ -265,7 +270,8 @@ namespace AnotherMusicPlayer
                 if (tq.StartsWith("SELECT ")) { }
                 else { try { sqlite_cmd.ExecuteNonQuery(); } catch (Exception err) { Debug.WriteLine("--> DatabaseQuerys error => " + JsonConvert.SerializeObject(err)); } }
             }
-            if (autocommit) {
+            if (autocommit)
+            {
                 DatabaseTansactionEnd();
             }
         }
@@ -284,7 +290,8 @@ namespace AnotherMusicPlayer
             sqlite_datareader = sqlite_cmd.ExecuteReader();
 
             //Debug.WriteLine(sqlite_datareader.StepCount);
-            if (sqlite_datareader.HasRows) {
+            if (sqlite_datareader.HasRows)
+            {
                 sqlite_datareader.Read();
                 NameValueCollection row = sqlite_datareader.GetValues();
                 return row.Get(0);
@@ -328,10 +335,11 @@ namespace AnotherMusicPlayer
             SQLiteCommand sqlite_cmd = DatabaseConnection.CreateCommand();
             sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + EscapeString(Param) + "'";
             SQLiteDataReader sqlite_datareader = sqlite_cmd.ExecuteReader();
-            if (sqlite_datareader.HasRows) {
+            if (sqlite_datareader.HasRows)
+            {
                 sqlite_datareader.Read();
                 NameValueCollection row = sqlite_datareader.GetValues();
-                return (row.Get(0) == null)?Default:((row.Get(0).Trim() == "")?Default: row.Get(0));
+                return (row.Get(0) == null) ? Default : ((row.Get(0).Trim() == "") ? Default : row.Get(0));
             }
             return Default;
         }
@@ -358,7 +366,7 @@ namespace AnotherMusicPlayer
                     sqlite_cmd2.CommandText = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES('" + EscapeString(Param) + "', '" + EscapeString(ParamType) + "', '" + EscapeString(Value) + "')";
                 }
                 sqlite_cmd2.ExecuteNonQuery();
-                if(autoCommit)DatabaseTansactionEnd();
+                if (autoCommit) DatabaseTansactionEnd();
             }
             catch (Exception err) { Debug.WriteLine("--> DatabaseSaveParam ERROR : " + JsonConvert.SerializeObject(err)); }
         }
@@ -390,12 +398,12 @@ namespace AnotherMusicPlayer
             try
             {
                 string query = "SELECT * FROM files WHERE Path IN(?) ORDER BY Album ASC, Disc ASC, Track ASC, Name ASC, Path ASC";
-                foreach(string file in paths) { query = query.Replace("?", "'"+ EscapeString(file) + "',?"); }
+                foreach (string file in paths) { query = query.Replace("?", "'" + EscapeString(file) + "',?"); }
                 query = query.Replace(",?", "");
 
                 Dictionary<string, Dictionary<string, object>> data = DatabaseQuery(query, "Path");
                 if (data.Count == 0) { return null; }
-                foreach(KeyValuePair<string, Dictionary<string, object>> line in data)
+                foreach (KeyValuePair<string, Dictionary<string, object>> line in data)
                 {
                     if (Int32.Parse((string)line.Value["Size"]) <= 0 || forceUpdate)
                     {
@@ -407,11 +415,12 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            catch (Exception err) { Debug.WriteLine("--> DatabaseFilesInfo ERROR1 <--");  Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+            catch (Exception err) { Debug.WriteLine("--> DatabaseFilesInfo ERROR1 <--"); Debug.WriteLine(JsonConvert.SerializeObject(err)); }
             //try { DatabaseTansactionEndAndStart(); } catch { }
 
             ConcurrentQueue<string> cq = new ConcurrentQueue<string>();
-            foreach (string file in filesToUpdate) {
+            foreach (string file in filesToUpdate)
+            {
                 cq.Enqueue(file);
             }
 
@@ -421,7 +430,7 @@ namespace AnotherMusicPlayer
                 int cpt = 0;
                 string localValue;
 
-                while (cq.TryDequeue(out localValue)) 
+                while (cq.TryDequeue(out localValue))
                 {
                     Dictionary<string, object> rett = UpdateFileAsync(localValue);
                     if (rett != null) { ret.Add(localValue, rett); }
@@ -439,7 +448,7 @@ namespace AnotherMusicPlayer
         public Dictionary<string, object> UpdateFileAsync(string file, bool commit = false)
         {
             if (file == null) { return null; }
-            if(!System.IO.File.Exists(file)) { return null; }
+            if (!System.IO.File.Exists(file)) { return null; }
 
             FileInfo fi = new FileInfo(file);
             MediaItem item = FilesTags.MediaInfo(file, false);
@@ -463,14 +472,14 @@ namespace AnotherMusicPlayer
                 + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
                 + "' WHERE Path='" + EscapeString(file) + "'";
 
-            DatabaseQuerys(new string[]{ query }, commit);
+            DatabaseQuerys(new string[] { query }, commit);
             return (item != null) ? MainWindow.MediaItemToDatabaseItem(item) : null;
         }
 
         public bool DeleteFileAsync(string file, bool commit = false)
         {
             if (file == null) { return false; }
-            if(System.IO.File.Exists(file)) { return false; }
+            if (System.IO.File.Exists(file)) { return false; }
             try { DatabaseQuerys(new string[] { "DELETE FROM files WHERE Path='" + EscapeString(file) + "'" }, commit); }
             catch { return false; }
             return true;
@@ -480,15 +489,16 @@ namespace AnotherMusicPlayer
         {
             if (fileIn == null) { return false; }
             if (fileOut == null) { return false; }
-            if(System.IO.File.Exists(fileIn)) { return false; }
-            try { 
+            if (System.IO.File.Exists(fileIn)) { return false; }
+            try
+            {
                 DatabaseQuerys(new string[] {
-                    "UPDATE files SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'", 
+                    "UPDATE files SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'",
                     "UPDATE covers SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'",
                     "UPDATE playCounts SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'" ,
                     "UPDATE playlistsItems SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'",
-                    "UPDATE queue SET Path1 = '" + EscapeString(fileOut) + "' WHERE Path1='" + EscapeString(fileIn) + "'" 
-                }, commit); 
+                    "UPDATE queue SET Path1 = '" + EscapeString(fileOut) + "' WHERE Path1='" + EscapeString(fileIn) + "'"
+                }, commit);
             }
             catch { return false; }
             return true;
@@ -497,11 +507,12 @@ namespace AnotherMusicPlayer
         public bool playCountUpdate(string path, bool commit = true)
         {
             if (path == null) { return false; }
-            if(!System.IO.File.Exists(path)) { return false; }
-            try { 
+            if (!System.IO.File.Exists(path)) { return false; }
+            try
+            {
                 DatabaseQuerys(new string[] {
-                    "INSERT OR REPLACE INTO playCounts(Path, Cpt, LastPlay) VALUES ('" + EscapeString(path) + "', (SELECT Cpt FROM playCounts where Path = '" + EscapeString(path) + "') + 1, '" + Common.TimeStamp() + "')" 
-                }, commit); 
+                    "INSERT OR REPLACE INTO playCounts(Path, Cpt, LastPlay) VALUES ('" + EscapeString(path) + "', (SELECT Cpt FROM playCounts where Path = '" + EscapeString(path) + "') + 1, '" + Common.TimeStamp() + "')"
+                }, commit);
             }
             catch { return false; }
             return true;
