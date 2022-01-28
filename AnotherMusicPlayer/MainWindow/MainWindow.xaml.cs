@@ -54,7 +54,7 @@ namespace AnotherMusicPlayer
         {
             bdd = obdd;
             // Set DataContext
-            this.DataContext = this;  
+            this.DataContext = this;
 
             PlayList = new List<string[]>();//Initialize PlayList
             player = new Player(this);//Create Player object
@@ -72,6 +72,7 @@ namespace AnotherMusicPlayer
             //SettingsSetUp();//Initialize interface elements with stored parametters in settings
             //TabControl t = new TabControl();
             //t.cli
+            TabControler.SelectedIndex = 2;
 
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -85,7 +86,7 @@ namespace AnotherMusicPlayer
             FileCover.Source = Bimage("CoverImg");
 
             EventsPlaybackInit();
-            PlayListView_Init(); 
+            PlayListView_Init();
 
             TimerInterfaceSetUp();
 
@@ -93,6 +94,8 @@ namespace AnotherMusicPlayer
             this.LocationChanged += MainWindow_LocationChanged;
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
+
+            PlayLists playLists = new PlayLists(this);
         }
 
         /// <summary> Function unlocking window interface </summary>
@@ -116,9 +119,43 @@ namespace AnotherMusicPlayer
             LibraryLoadOldPlaylist();
 
             library = new Library(this, Settings.LibFolder);
-            Dispatcher.InvokeAsync(new Action(() => {
+            Dispatcher.InvokeAsync(new Action(() =>
+            {
                 library.DisplayPath(Settings.LibFolder);
             }));
+
+
+
+            MouseButtonEventArgs args2 = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
+            args2.RoutedEvent = TextBlock.MouseLeftButtonUpEvent;
+            args2.Source = (TreeViewItem)((TreeViewItem)PlaylistsTree.Items[0]).Items[3];
+            ((TreeViewItem)((TreeViewItem)PlaylistsTree.Items[0]).Items[3]).RaiseEvent(args2);
+
+            var tvi = FindTviFromObjectRecursive(PlaylistsTree, PlaylistsTree.Items[0]);
+            if (tvi != null)
+            {
+                tvi.IsSelected = true;
+                tvi.ExpandSubtree();
+            }
+            var tvi2 = FindTviFromObjectRecursive(PlaylistsTree, (TreeViewItem)((TreeViewItem)PlaylistsTree.Items[0]).Items[3]);
+            if (tvi2 != null) tvi2.IsSelected = true;
+        }
+
+        public static TreeViewItem FindTviFromObjectRecursive(ItemsControl ic, object o)
+        {
+            //Search for the object model in first level children (recursively)
+            if (ic == null) { return null; }
+            TreeViewItem tvi = ic.ItemContainerGenerator.ContainerFromItem(o) as TreeViewItem;
+            if (tvi != null) return tvi;
+            //Loop through user object models
+            foreach (object i in ic.Items)
+            {
+                //Get the TreeViewItem associated with the iterated object model
+                TreeViewItem tvi2 = ic.ItemContainerGenerator.ContainerFromItem(i) as TreeViewItem;
+                tvi = FindTviFromObjectRecursive(tvi2, o);
+                if (tvi != null) return tvi;
+            }
+            return null;
         }
 
         /// <summary> Callback Main window closing / exit </summary>
@@ -152,7 +189,8 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            else {
+            else
+            {
                 Grid1.ColumnDefinitions[0].Width = Grid2.RowDefinitions[0].Height = new System.Windows.GridLength((double)150);
                 WindowWidthMode = FileCover.Width = FileCover.Height = 150;
             }
@@ -188,9 +226,11 @@ namespace AnotherMusicPlayer
             if (NewPosition != PlayListIndex) { player.PlaylistReadIndex(NewPosition); }
         }
 
-        private MediaItem GetMediaInfo(string path, ObservableCollection<MediaItem> previous_items = null) {
+        private MediaItem GetMediaInfo(string path, ObservableCollection<MediaItem> previous_items = null)
+        {
             MediaItem item = null;
-            try {
+            try
+            {
                 Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
                 if (rep != null)
                 {
@@ -216,13 +256,15 @@ namespace AnotherMusicPlayer
                 else { item = FilesTags.MediaInfo(path, false); }
             }
             catch { }
-            
+
             return item;
         }
 
-        private PlayListViewItem GetMediaInfoShort(string path, ObservableCollection<PlayListViewItem> previous_items = null) {
+        private PlayListViewItem GetMediaInfoShort(string path, ObservableCollection<PlayListViewItem> previous_items = null)
+        {
             PlayListViewItem item = null;
-            try {
+            try
+            {
                 Dictionary<string, object> rep = bdd.DatabaseFileInfo(path);
                 if (rep != null)
                 {
@@ -239,7 +281,7 @@ namespace AnotherMusicPlayer
                 else { item = FilesTags.MediaInfoShort(path, false); }
             }
             catch { }
-            
+
             return item;
         }
 
@@ -263,6 +305,7 @@ namespace AnotherMusicPlayer
             item.Track = Convert.ToUInt32(rep["Track"]);
             item.TrackCount = Convert.ToUInt32(rep["TrackCount"]);
             item.Year = Convert.ToUInt32(rep["Year"]);
+            item.Rating = Convert.ToDouble((rep["Rating"] as string).Replace(".", ","));
 
             return item;
         }
@@ -296,13 +339,16 @@ namespace AnotherMusicPlayer
             MediaItem item = new MediaItem();
             try
             {
-                if (path == null) {
-                    if(PlayList.Count > 0) { path = PlayList[PlayListIndex][0]; }
+                if (path == null)
+                {
+                    if (PlayList.Count > 0) { path = PlayList[PlayListIndex][0]; }
                     Debug.WriteLine("--> path = '" + path + "' <--");
                 }
-                if (path != null) {
-                    Dictionary<string, object>  ret = bdd.DatabaseFileInfo(path);
-                    if (ret != null) {
+                if (path != null)
+                {
+                    Dictionary<string, object> ret = bdd.DatabaseFileInfo(path);
+                    if (ret != null)
+                    {
                         item = null;
                         item = DatabaseItemToMediaItem(ret);
                     }
@@ -311,8 +357,8 @@ namespace AnotherMusicPlayer
                 LeftPannelMediaInfo.Inlines.Clear();
                 LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;
                 System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
-                System.Windows.Thickness tc1 = new System.Windows.Thickness(3,3,0,0);
-                System.Windows.Thickness tc2 = new System.Windows.Thickness(10,0,0,0);
+                System.Windows.Thickness tc1 = new System.Windows.Thickness(3, 3, 0, 0);
+                System.Windows.Thickness tc2 = new System.Windows.Thickness(10, 0, 0, 0);
                 System.Windows.Media.SolidColorBrush cl2 = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 149, 149));
 
                 System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
@@ -330,10 +376,12 @@ namespace AnotherMusicPlayer
                 }
 
                 string Artists = "";
-                if (item.Performers != null && item.Performers.Trim() != "") {
+                if (item.Performers != null && item.Performers.Trim() != "")
+                {
                     Artists += item.Performers;
                 }
-                if (item.Composers != null && item.Composers.Trim() != "") {
+                if (item.Composers != null && item.Composers.Trim() != "")
+                {
                     if (Artists != null && Artists != "") { Artists += ", "; }
                     Artists += item.Composers;
                 }
@@ -364,7 +412,7 @@ namespace AnotherMusicPlayer
 
                 FileCover.Source = null;
                 FileCover.ToolTip = null;
-                System.Windows.Media.Imaging.BitmapImage bi = FilesTags.MediaPicture(item.Path, bdd, true, 50, 50);
+                System.Windows.Media.Imaging.BitmapImage bi = FilesTags.MediaPicture(item.Path, bdd, true, 150, 150);
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
 
 
@@ -387,8 +435,8 @@ namespace AnotherMusicPlayer
                 LeftPannelMediaInfo.Inlines.Clear();
                 LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;
                 System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
-                System.Windows.Thickness tc1 = new System.Windows.Thickness(3,3,0,0);
-                System.Windows.Thickness tc2 = new System.Windows.Thickness(10,0,0,0);
+                System.Windows.Thickness tc1 = new System.Windows.Thickness(3, 3, 0, 0);
+                System.Windows.Thickness tc2 = new System.Windows.Thickness(10, 0, 0, 0);
                 System.Windows.Media.SolidColorBrush cl2 = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 149, 149));
 
                 System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
@@ -415,6 +463,15 @@ namespace AnotherMusicPlayer
             catch { }
         }
 
+        public void RatingRateChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Rating rater = (Rating)sender;
+            string filePath = (string)rater.Tag;
+            Debug.WriteLine("Rate Changed !");
+            Debug.WriteLine("filePath=" + filePath);
+            Debug.WriteLine("Old value=" + e.OldValue);
+            Debug.WriteLine("New value=" + e.NewValue);
+        }
 
     }
 }

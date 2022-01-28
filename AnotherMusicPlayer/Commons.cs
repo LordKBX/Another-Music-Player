@@ -25,14 +25,27 @@ namespace AnotherMusicPlayer
         {
             Path = OriginPath
                 = Selected
-                = Name 
-                = Album 
-                = DurationS 
+                = Name
+                = Album
+                = DurationS
                 = Performers
                 = Composers
                 = AlbumArtists
                 = "";
             Duration = 0;
+        }
+    }
+
+    public class Common
+    {
+        public static Int32 TimeStamp() { return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; }
+
+        public static bool IsFileLocked(string path)
+        {
+            FileInfo file = new FileInfo(path);
+            try { using (FileStream stream = file.Open(FileMode.Open, FileAccess.Read, FileShare.None)) { stream.Close(); } }
+            catch (IOException) { return true; }
+            return false; //file is not locked
         }
     }
 
@@ -93,7 +106,8 @@ namespace AnotherMusicPlayer
         };
 
         /// <summary> Create BitmapImage from ImagesUriList </summary>
-        public static BitmapImage Bimage(string index) {
+        public static BitmapImage Bimage(string index)
+        {
             if (ImagesUriList.ContainsKey(index)) { return new BitmapImage(ImagesUriList[index]); } else { return null; }
         }
 
@@ -105,7 +119,8 @@ namespace AnotherMusicPlayer
                 MainWindow mw = null;
                 foreach (Window aa in Application.Current.Windows)
                 {
-                    try {
+                    try
+                    {
                         mw.GetTranslation("SizeBytesUnit");
                         mw = ((MainWindow)aa);
                     }
@@ -153,7 +168,7 @@ namespace AnotherMusicPlayer
             using (FileStream s = System.IO.File.OpenRead(path)) { return Convert.ToBase64String(SHA512.Create().ComputeHash(s)); }
         }
 
-        
+
 
     }
 }

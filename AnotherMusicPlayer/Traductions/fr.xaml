@@ -19,12 +19,15 @@
     <sys:String x:Key="Artist">Artistes</sys:String>
     <sys:String x:Key="Duration">Durée</sys:String>
     <sys:String x:Key="Genre">Genre</sys:String>
+    <sys:String x:Key="Rating">Note</sys:String>
+    <sys:String x:Key="Count">Joué</sys:String>
 
     <sys:String x:Key="Title2">Titre:</sys:String>
     <sys:String x:Key="Album2">Album:</sys:String>
     <sys:String x:Key="Artist2">Artistes:</sys:String>
     <sys:String x:Key="Duration2">Durée:</sys:String>
     <sys:String x:Key="Genres2">Genre:</sys:String>
+    <sys:String x:Key="Rating2">Note:</sys:String>
 
     <sys:String x:Key="BtnOpenToolTip">Ouvrir un/des fichier(s)</sys:String>
     <sys:String x:Key="BtnPreviousToolTip">Piste Précédente</sys:String>
@@ -43,6 +46,7 @@
     <sys:String x:Key="TabRecordedPlaylists">PlayLists</sys:String>
     <sys:String x:Key="TabParams">Paramètres</sys:String>
 
+    <!--#region SETTINGS-->
     <sys:String x:Key="ParamsLanguageLabel">Langue</sys:String>
     <sys:String x:Key="ParamsLanguageVals_EN">English</sys:String>
     <sys:String x:Key="ParamsLanguageVals_FR">Français</sys:String>
@@ -74,6 +78,27 @@
     
     <sys:String x:Key="ParamsEqualizerLabel">Equalizer</sys:String>
     <sys:String x:Key="ParamsEqualizerResetLabel">Réinitialiser</sys:String>
+
+    <sys:String x:Key="ParamsEqualizerPresets_Perso">Personalisé</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Flat">Plat</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Classic">Classique</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Club">Club</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Dance">Dance</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_FullBass">Graves</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_FullBassTreble">Graves &amp; Aiguës</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_FullTreble">Aiguës</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Headphones">Casque</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_LargeHall">Grand Hall</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Live">Live</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Party">Fête</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Pop">Pop</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Reggae">Reggae</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Rock">Rock</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Ska">Ska</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Soft">Doux</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_SoftRock">Soft Rock</sys:String>
+    <sys:String x:Key="ParamsEqualizerPresets_Techno">Techno</sys:String>
+    <!--#endregion-->
 
     <sys:String x:Key="LibraryNavigatorItemHome">Index</sys:String>
     
@@ -107,31 +132,12 @@
     <sys:String x:Key="LibraryContextMenuEditFile">Editer le Fichier</sys:String>
     <!--#endregion-->
     
-
+    <!--#region LIBRARY SCAN-->
     <sys:String x:Key="LibraryLibraryScanning">Scan en cours</sys:String>
     <sys:String x:Key="LibraryFiles">Fichiers trouvés</sys:String>
     <sys:String x:Key="LibraryTotalSize">Taille Totale</sys:String>
     <sys:String x:Key="LibraryTotalDuration">Durée Totale</sys:String>
-
-    <sys:String x:Key="ParamsEqualizerPresets_Perso">Personalisé</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Flat">Plat</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Classic">Classique</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Club">Club</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Dance">Dance</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_FullBass">Graves</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_FullBassTreble">Graves &amp; Aiguës</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_FullTreble">Aiguës</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Headphones">Casque</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_LargeHall">Grand Hall</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Live">Live</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Party">Fête</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Pop">Pop</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Reggae">Reggae</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Rock">Rock</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Ska">Ska</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Soft">Doux</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_SoftRock">Soft Rock</sys:String>
-    <sys:String x:Key="ParamsEqualizerPresets_Techno">Techno</sys:String>
+    <!--#endregion-->
 
 
     <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
@@ -158,4 +164,17 @@
     <sys:String x:Key="EditorTagCoverCMClear">Supprimer Image</sys:String>
     <sys:String x:Key="EditorTagCoverCMAdd">Ajouter/remplacer Image</sys:String>
     <!--#endregion-->
+
+    <!--#region LIBRARY RENAME-->
+    <sys:String x:Key="RenemaWindowTitle">Renomer dossier</sys:String>
+    <sys:String x:Key="RenemaWindowLabel">Nouveau nom</sys:String>
+    <!--#endregion-->
+
+    <!--#region PlayLists-->
+    <sys:String x:Key="PlayListsAuto_lastImports">Derniers arrivages</sys:String>
+    <sys:String x:Key="PlayListsAuto_mostPlayed">Les plus joués</sys:String>
+    <sys:String x:Key="PlayListsAuto_mostRecentlyPlayed">Reçament joué</sys:String>
+    <sys:String x:Key="PlayListsAuto_bestRating">Les mieux notées</sys:String>
+    <!--#endregion-->
+    
 </ResourceDictionary>

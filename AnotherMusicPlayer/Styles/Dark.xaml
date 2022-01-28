@@ -13,6 +13,7 @@
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Button.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TabControl.xaml" />
         <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Menu.xaml" />
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.TreeView.xaml" />
     </ResourceDictionary.MergedDictionaries>
 
     <!--#region COLORS -->
@@ -50,6 +51,11 @@
         </Style>
 
         <Style x:Key="CustomWindowBackgroundStyle" TargetType="{x:Type Grid}">
+            <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+            <Setter Property="Margin" Value="0"/>
+        </Style>
+
+        <Style x:Key="CustomWindowBackgroundStyleAlt" TargetType="{x:Type StackPanel}">
             <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
             <Setter Property="Margin" Value="0"/>
         </Style>
@@ -958,7 +964,8 @@
                 <Setter Property="Margin" Value="0, 5, 5, 0"/>
                 <Setter Property="Padding" Value="0"/>
                 <Setter Property="Width" Value="200"/>
-                <Setter Property="Height" Value="50"/>
+                <Setter Property="MinHeight" Value="50"/>
+                <Setter Property="MaxHeight" Value="70"/>
                 <Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="FontStyle" Value="Normal"/>
                 <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -973,6 +980,7 @@
                 <Setter Property="FontStyle" Value="Normal"/>
                 <Setter Property="Margin" Value="2"/>
                 <Setter Property="TextWrapping" Value="Wrap"/>
+                <Setter Property="MaxHeight" Value="50"/>
             </Style>
 
             <Style x:Key="LibibraryNavigationContentFolderButtonBorder" TargetType="{x:Type Border}">
@@ -1126,7 +1134,7 @@
     <!--#endregion-->
     
     <!--#region Tags Editor Window-->
-    <Style x:Key="EditorInputLabel" TargetType="{x:Type AccessText}">
+    <Style x:Key="EditorInputLabel" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="#FFFFFF"/>
         <Setter Property="Margin" Value="0, 5, 0, 0"/>
     </Style>
@@ -1167,6 +1175,18 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    <!--#endregion-->
+    
+    <!--#region PLAYLISTS -->
+    <Style x:Key="PlaylistsTreeStyle" TargetType="{x:Type TreeView}" BasedOn="{StaticResource MaterialDesignTreeView}">
+        <Setter Property="Padding" Value="3"/>
+    </Style>
+    <Style x:Key="PlaylistsTreeStyleItem" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
+        <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="15"/>
+        <Setter Property="materialDesign:TreeViewAssist.ShowSelection" Value="True"/>
+        <Setter Property="Padding" Value="3"/>
+        <Setter Property="FontSize" Value="13"/>
     </Style>
     <!--#endregion-->
 </ResourceDictionary>

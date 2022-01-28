@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -218,6 +222,68 @@ namespace AnotherMusicPlayer
 
         private void CM_EditFolder(object sender, RoutedEventArgs e)
         {
+            MenuItem item = (MenuItem)sender;
+            Button btn = (Button)item.Tag;
+            string folderPath = ((string)btn.Tag).Trim().TrimEnd(MainWindow.SeparatorChar);
+            Debug.WriteLine("--> CM_EditFolder, folderPath='" + folderPath + "'");
+            string[] pathTab = folderPath.Split(MainWindow.SeparatorChar);
+            Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
+
+            Window win = new Window();
+            win.Owner = Parent;
+            win.Style = Parent.FindResource("CustomWindowStyle") as Style;
+            win.Resources.MergedDictionaries.Add(Parent.Resources.MergedDictionaries[0]);
+            win.Title = Parent.FindResource("RenemaWindowTitle") as string;
+            win.WindowStyle = WindowStyle.ToolWindow;
+            win.Width = win.MinWidth = win.MaxWidth = 300;
+            win.Height = win.MinHeight = win.MaxHeight = 200;
+            StackPanel st = new StackPanel() { 
+                Orientation = Orientation.Vertical, 
+                Style = win.FindResource("CustomWindowBackgroundStyleAlt") as Style
+            };
+            st.Children.Add(new TextBlock()
+            {
+                Text = Parent.FindResource("RenemaWindowLabel") as string,
+                Style = win.FindResource("EditorInputLabel") as Style,
+                Margin = new Thickness(5,5,5,3)
+            });
+
+            TextBox input = new TextBox() { 
+                Text = pathTab[pathTab.Length - 1], 
+                Style = win.FindResource("InputStyle") as Style,
+                Margin = new Thickness(5, 0, 5, 3)
+            };
+            st.Children.Add(input);
+
+            Button saveBtn = new Button() { 
+                Content = Parent.FindResource("EditorTagSave") as string, 
+                Style = win.FindResource("EditorButton1") as Style,
+                IsEnabled = false,
+                Margin = new Thickness(5, 0, 5, 3)
+            };
+            saveBtn.Click += (object sender, RoutedEventArgs e) => {
+                Regex rx = new Regex("(<|>|:|\"|/|\\|?|*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                if (input.Text.Trim() == "" || input.Text.Contains("|", StringComparison.Ordinal) || rx.IsMatch(input.Text))
+                {
+                    MessageBox.Show("Folder name invalid,\nplease remove the folowing characters:\n < > : \" / \\ | ? *", "Error !", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return;
+                }
+                List<string> list = new List<string>(pathTab);
+                list.Remove(pathTab[pathTab.Length - 1]);
+
+                Directory.Move(folderPath, string.Join(MainWindow.SeparatorChar, list.ToArray()) + MainWindow.SeparatorChar + input.Text.Trim());
+                win.Close();
+            };
+            input.TextChanged += (object sender, TextChangedEventArgs e) => {
+                saveBtn.IsEnabled = true;
+            };
+
+            st.Children.Add(saveBtn);
+
+            win.Content = st;
+            win.ShowInTaskbar = false;
+            win.ShowDialog();
+
             //throw new System.NotImplementedException();
         }
         #endregion

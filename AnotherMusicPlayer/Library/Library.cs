@@ -99,9 +99,10 @@ namespace AnotherMusicPlayer
                 Debug.WriteLine("Old Name => " + e.OldFullPath);
                 Debug.WriteLine("New Name => " + e.FullPath);
                 Thread.Sleep(200);
-                Bdd.DeleteFileAsync(e.OldFullPath);
-                Bdd.DatabaseClearCover(e.OldFullPath);
-                Bdd.UpdateFileAsync(e.FullPath, true);
+                Bdd.RenameFileAsync(e.OldFullPath, e.FullPath);
+                //Bdd.DeleteFileAsync(e.OldFullPath);
+                //Bdd.DatabaseClearCover(e.OldFullPath);
+                //Bdd.UpdateFileAsync(e.FullPath, true);
             }
         }
 
@@ -161,9 +162,10 @@ namespace AnotherMusicPlayer
         /// <summary> Update var RootPath and return if value is valid or not </summary>
         public bool UpdateRootPath(string root) { if (Directory.Exists(root)) { RootPath = root; return true; } else { return false; } }
 
-        public void DisplayPath(string path = null) {
-            if(path == null) { path = Settings.LibFolder; }
-            if (!Directory.Exists(path)){ return; }
+        public void DisplayPath(string path = null)
+        {
+            if (path == null) { path = Settings.LibFolder; }
+            if (!Directory.Exists(path)) { return; }
             _CurrentPath = path;
 
             NavigationContenerScollerBorder.Visibility = Visibility.Visible;
@@ -183,7 +185,8 @@ namespace AnotherMusicPlayer
             NavigationContenerScoller.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false);
 
             string[] dirs = Directory.GetDirectories(path);
-            foreach (string dir in dirs) {
+            foreach (string dir in dirs)
+            {
                 if (Settings.LibFolderShowHiden == false)
                 {
                     DirectoryInfo dirInfo = new DirectoryInfo(dir);
@@ -195,12 +198,14 @@ namespace AnotherMusicPlayer
                     if (name[0] == '.') { continue; }
                 }
                 string[] tab = dir.Split(MainWindow.SeparatorChar);
-                LibraryFolderButton btn = new LibraryFolderButton(tab[tab.Length - 1], dir) { 
+                LibraryFolderButton btn = new LibraryFolderButton(tab[tab.Length - 1], dir)
+                {
                     Style = Parent.FindResource("LibibraryNavigationContentFolderButton") as Style
                 };
                 btn.Icon.Style = Parent.FindResource("LibibraryNavigationContentFolderButtonPackIcon") as Style;
                 btn.Click += BtnFolder_Click;
                 btn.ContextMenu = MakeContextMenu(btn, "folder");
+                btn.Tag = dir;
                 NavigationContener.Children.Add(btn);
             }
 
@@ -220,12 +225,13 @@ namespace AnotherMusicPlayer
 
             ContentBlocks(endFiles.ToArray(), panel);
             NavigationContenerScoller.ScrollToHome();
-            Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() => {
+            Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() =>
+            {
                 Parent.setLoadingState(false);
             }));
         }
 
-        private async Task<bool> ContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
+        public async Task<bool> ContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
         {
             Debug.WriteLine("--> ContentBlocks START <--");
             if (files.Length == 0) { Debug.WriteLine("--> ContentBlocks NO FILE 1 <--"); return false; }
@@ -363,13 +369,30 @@ namespace AnotherMusicPlayer
                         {
                             brList.Add(trackT.Value.Path);
                             string textName = ((trackT.Value.Track == 0) ? "" : MainWindow.NormalizeNumber((int)trackT.Value.Track, ("" + trackT.Value.TrackCount).Length) + ". ") + trackT.Value.Name;
+                            StackPanel pan = new StackPanel();
+                            pan.Children.Add(new AccessText()
+                            {
+                                Text = textName,
+                                Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButtonAccessText") as Style
+                            });
+                            Rating rt = new Rating()
+                            {
+                                Rate = trackT.Value.Rating,
+                                //ToolTip = trackT.Value.Rating,
+                                IsReadOnly = false,
+                                Zoom = 0.5,
+                                VerticalAlignment = VerticalAlignment.Bottom,
+                                HorizontalAlignment = HorizontalAlignment.Left,
+                                Margin = new Thickness(2),
+                                Tag = trackT.Value.Path
+                            };
+                            rt.setAltLeftClick();
+                            rt.RateChanged += Library_RateChanged;
+                            pan.Children.Add(rt);
+
                             Button btn = new Button()
                             {
-                                Content = new AccessText()
-                                {
-                                    Text = textName,
-                                    Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButtonAccessText") as Style
-                                },
+                                Content = pan,
                                 Tag = trackT.Value.Path,
                                 //ToolTip = textName,
                                 Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButton") as Style
@@ -393,13 +416,27 @@ namespace AnotherMusicPlayer
                 }
                 dataFiles.Clear();
             }
-            catch (Exception err){
+            catch (Exception err)
+            {
                 Debug.WriteLine("--> ContentBlocks ERROR <--");
                 Debug.WriteLine(JsonConvert.SerializeObject(err));
                 return false;
             }
             Debug.WriteLine("--> ContentBlocks END <--");
             return true;
+        }
+
+        private void Library_RateChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Rating rater = (Rating)sender;
+            string filePath = (string)rater.Tag;
+            Debug.WriteLine("Library Rate Changed !");
+            Debug.WriteLine("filePath=" + filePath);
+            Debug.WriteLine("Old value=" + e.OldValue);
+            Debug.WriteLine("New value=" + e.NewValue);
+            FilesTags.SaveRating(filePath, e.NewValue, Parent.player);
+            //rater.ToolTip = e.NewValue;
+            //throw new NotImplementedException();
         }
 
         private void BtnTrack_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -420,18 +457,22 @@ namespace AnotherMusicPlayer
         {
             Debug.WriteLine("--> BtnFolder_Click END <--");
             LibraryFolderButton btn = (LibraryFolderButton)sender;
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
                 Parent.setLoadingState(true);
             }));
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
+            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+            {
                 DisplayPath(btn.Path);
             }));
         }
 
-        private string[] getDirectoryMediaFIles(string path, bool subdir = false) {
+        private string[] getDirectoryMediaFIles(string path, bool subdir = false)
+        {
             string[] files = Directory.GetFiles(path, "*.*", (subdir is true) ? SearchOption.AllDirectories : SearchOption.TopDirectoryOnly);
             List<string> tracks = new List<string>();
-            foreach (string file in files) {
+            foreach (string file in files)
+            {
                 string ext = Path.GetExtension(file).ToLower();
                 if (Player.AcceptedExtentions.Contains(ext))
                 {

@@ -10,6 +10,7 @@ using System.Drawing.Imaging;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace AnotherMusicPlayer
 {
@@ -35,6 +36,8 @@ namespace AnotherMusicPlayer
         public uint Track { get; set; }
         public uint TrackCount { get; set; }
         public uint Year { get; set; }
+        public double Rating { get; set; }
+        public uint PlayCount { get; set; }
 
         public MediaItem()
         {
@@ -50,12 +53,18 @@ namespace AnotherMusicPlayer
                 = Lyrics
                 = "";
             Duration = Size = 0;
-            Disc = DiscCount = Track = TrackCount = Year = 0;
+            Disc = DiscCount = Track = TrackCount = Year = PlayCount = 0;
+            Rating = 0.0;
         }
     }
 
-    class FilesTags
+    public partial class FilesTags
     {
+        private static Dictionary<byte, double> TableRateWindows = new Dictionary<byte, double>() { { 0, 0.0 }, { 1, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
+        private static Dictionary<double, byte> ReverseTableRateWindows = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 1 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
+        private static Dictionary<byte, double> TableRatePlayer = new Dictionary<byte, double>() { { 0, 0.0 }, { 2, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
+        private static Dictionary<double, byte> ReverseTableRatePlayer = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 2 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
+
         /// <summary> Recuperate Media MetaData(cover excluded) </summary>
         public static MediaItem MediaInfo(string FilePath, bool Selected, string OriginPath = null)
         {
@@ -89,6 +98,18 @@ namespace AnotherMusicPlayer
                     item.TrackCount = tags.Tag.TrackCount;
                     item.Year = tags.Tag.Year;
 
+                    TagLib.Tag tag = tags.GetTag(TagLib.TagTypes.Id3v2);
+                    byte rate1 = 0;
+
+                    try { rate1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true).Rating; } catch { }
+
+                    if (TableRatePlayer.ContainsKey(rate1)) { item.Rating = TableRatePlayer[rate1]; }
+                    else
+                    {
+                        byte min = 255;
+                        foreach (byte i in TableRatePlayer.Keys) { if (i >= rate1) { min = i; break; } }
+                        if (min == 255) { item.Rating = 0; } else { item.Rating = (double)(TableRatePlayer[min] + 0.5); }
+                    }
                     tags.Dispose();
 
                     try
@@ -97,11 +118,8 @@ namespace AnotherMusicPlayer
                         {
                             if (FilePath.ToLower().EndsWith(ext))
                             {
-                                AudioFileReader fir = new AudioFileReader(FilePath);
-                                item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                                fir.Dispose();
-                                item.DurationS = MainWindow.displayTime(item.Duration);
-                                break;
+                                item.Duration = (long)((new AudioFileReader(FilePath)).TotalTime.TotalMilliseconds);
+                                item.DurationS = MainWindow.displayTime(item.Duration); break;
                             }
                         }
                     }
@@ -109,7 +127,8 @@ namespace AnotherMusicPlayer
                     return item;
                 }
             }
-            catch (Exception err) {
+            catch (Exception err)
+            {
                 Debug.WriteLine("--> FilesTags.MediaItem ERROR <--");
                 Debug.WriteLine(err.Message);
                 Debug.WriteLine(err.ToString());
@@ -148,11 +167,8 @@ namespace AnotherMusicPlayer
                     {
                         if (FilePath.ToLower().EndsWith(ext))
                         {
-                            AudioFileReader fir = new AudioFileReader(FilePath);
-                            item.Duration = (long)fir.TotalTime.TotalMilliseconds;
-                            fir.Dispose();
-                            item.DurationS = MainWindow.displayTime(item.Duration);
-                            break;
+                            item.Duration = (long)((new AudioFileReader(FilePath)).TotalTime.TotalMilliseconds);
+                            item.DurationS = MainWindow.displayTime(item.Duration); break;
                         }
                     }
                 }
@@ -162,123 +178,37 @@ namespace AnotherMusicPlayer
             return null;
         }
 
-        /// <summary> Recuperate Media Cover </summary>
-        public static BitmapImage MediaPicture(string FilePath, Database bdd = null, bool export = true, int MaxWidth = 400, int MaxHeight = 400, bool save = true)
+        public static bool SaveRating(string FilePath, double Rating, Player player)
         {
-            if (!System.IO.File.Exists(FilePath)) { return null; }
-            BitmapImage bitmap = null;
-            string FilePathExt = FilePath + "|" + MaxWidth + "x" + MaxHeight;
-            try
+            if (!System.IO.File.Exists(FilePath)) { return false; }
+            if (Rating < 0 || Rating > 5.0) { return false; }
+            if (Common.IsFileLocked(FilePath) && player.GetCurrentFile() != FilePath) { return false; }
+            Debug.WriteLine("FilesTags.SaveRating");
+            Debug.WriteLine("Rating = " + Rating);
+            Debug.WriteLine("Math.Truncate(Rating) = " + Math.Truncate(Rating));
+            Debug.WriteLine("ReverseTableRateWindows[Math.Truncate(Rating)] = " + ReverseTableRateWindows[Math.Truncate(Rating)]);
+            Debug.WriteLine("ReverseTableRatePlayer[Math.Truncate(Rating)] = " + ReverseTableRatePlayer[Math.Truncate(Rating)]);
+
+            TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
+
+            TagLib.File fi = TagLib.File.Create(FilePath, ReadStyle.Average);
+            TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
+            TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
+            if (ReverseTableRateWindows.ContainsKey(Rating)) { frame1.Rating = ReverseTableRatePlayer[Rating]; }
+            else
             {
-                string data = null;
-                if (bdd != null) { data = bdd.DatabaseGetCover(FilePathExt); }
-                if (data != null)
-                {
-                    bitmap = BitmapMagic.Base64StringToBitmap(data);
-                }
-                else
-                {
-                    TagLib.File tags = TagLib.File.Create(FilePath);
-
-                    if (tags.Tag.Pictures.Length > 0)
-                    {
-                        TagLib.IPicture pic = tags.Tag.Pictures[0];
-
-                        //Debug.WriteLine("Picture size = " + pic.Data.Data.Length);
-                        MemoryStream ms = new MemoryStream(pic.Data.Data);
-                        ms.Seek(0, SeekOrigin.Begin);
-                        // ImageSource for System.Windows.Controls.Image
-                        bitmap = new BitmapImage();
-                        bitmap.BeginInit();
-                        bitmap.StreamSource = ms;
-                        bitmap.EndInit();
-
-                        if ((bitmap.PixelWidth > MaxWidth || bitmap.PixelHeight > MaxHeight) && MaxWidth > 0 && MaxHeight > 0)
-                        {
-                            double width = bitmap.PixelWidth, height = bitmap.PixelHeight;
-                            if (width > MaxWidth) { height = (height / width) * MaxWidth; width = MaxWidth; }
-                            if (height > MaxHeight) { width = (width / height) * MaxHeight; height = MaxHeight; }
-
-                            ms.Seek(0, SeekOrigin.Begin); System.Drawing.Image im = System.Drawing.Image.FromStream(ms); ms.Close();
-                            System.Drawing.Bitmap im2 = ResizeImage(im, Convert.ToInt32(width), Convert.ToInt32(height));
-                            bitmap = null; bitmap = ConvertBitmapToBitmapImage(im2);
-
-                            MemoryStream ms2 = new MemoryStream(); im2.Save(ms2, ImageFormat.Jpeg); ms2.Seek(0, SeekOrigin.Begin);
-
-                            if (save)
-                            {
-                                TagLib.Picture pic2 = new TagLib.Picture();
-                                pic2.Type = TagLib.PictureType.FrontCover; pic2.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg; pic2.Description = "Cover";
-                                pic2.Data = TagLib.ByteVector.FromStream(ms2); tags.Tag.Pictures = new TagLib.IPicture[1] { pic2 };
-                                try { tags.Save(); } catch { } //error if file already opened
-                            }
-                            ms2.Close();
-                        }
-                        bitmap.Freeze();
-
-                        if (bdd != null) {
-                            bdd.DatabaseSaveCover(
-                            FilePathExt,
-                            BitmapMagic.BitmapToBase64String(
-                                BitmapMagic.BitmapImage2Bitmap(bitmap),
-                                System.Drawing.Imaging.ImageFormat.Jpeg
-                                )
-                            ); }
-                    }
-                    else
-                    {
-                        char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
-                        string folder = FilePath.Substring(0, FilePath.LastIndexOf(SeparatorChar));
-                        bitmap = (System.IO.File.Exists(folder + SeparatorChar + "Cover.jpg")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.jpg"))
-                            : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : MainWindow.Bimage("CoverImg"));
-                    }
-                    tags.Dispose();
-                }
+                double r = Rating - Math.Round(Rating);
+                frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(Rating)] + 1);
             }
-            catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-            return (export) ? bitmap : null;
-        }
-
-        /// <summary>
-        /// Takes a bitmap and converts it to an image that can be handled by WPF ImageBrush
-        /// </summary>
-        /// <param name="src">A bitmap image</param>
-        /// <returns>The image as a BitmapImage for WPF</returns>
-        private static BitmapImage ConvertBitmapToBitmapImage(Bitmap src)
-        {
-            MemoryStream ms = new MemoryStream();
-            ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
-            BitmapImage image = new BitmapImage();
-            image.BeginInit();
-            ms.Seek(0, SeekOrigin.Begin);
-            image.StreamSource = ms;
-            image.EndInit();
-            return image;
-        }
-
-        public static Bitmap ResizeImage(System.Drawing.Image image, int width, int height)
-        {
-            System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, width, height);
-            Bitmap destImage = new Bitmap(width, height);
-
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
-
-            using (Graphics graphics = Graphics.FromImage(destImage))
+            if (player.GetCurrentFile() == FilePath)
             {
-                graphics.CompositingMode = CompositingMode.SourceCopy;
-                graphics.CompositingQuality = CompositingQuality.HighQuality;
-                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
-                graphics.SmoothingMode = SmoothingMode.HighQuality;
-                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
-
-                using (var wrapMode = new ImageAttributes())
-                {
-                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
-                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
-                }
+                player.Suspend();
+                Thread.Sleep(200);
+                fi.Save();
+                player.Resume();
             }
-
-            return destImage;
+            else { fi.Save(); }
+            return true;
         }
 
     }

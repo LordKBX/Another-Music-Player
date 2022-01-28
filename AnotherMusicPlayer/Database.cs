@@ -137,15 +137,7 @@ namespace AnotherMusicPlayer
                     + "PRIMARY KEY(\"Path\") "
                     + ")");
 
-                DatabaseDetectOrCreateTable("folders", "CREATE TABLE folders("
-                    + "Id TEXT, "
-                    + "ParentId TEXT, "
-                    + "Name TEXT, "
-                    + "Path TEXT"
-                    + ")");
-
                 DatabaseDetectOrCreateTable("files", "CREATE TABLE files("
-                    + "Folder TEXT, "
                     + "Path TEXT, "
                     + "Name TEXT, "
                     + "Performers TEXT, "
@@ -160,6 +152,7 @@ namespace AnotherMusicPlayer
                     + "Track INTEGER, "
                     + "TrackCount INTEGER, "
                     + "Year INTEGER, "
+                    + "Rating REAL NOT NULL DEFAULT 0, "
                     + "Duration INTEGER, "
                     + "Size INTEGER, "
                     + "LastUpdate BIGINT,  PRIMARY KEY(\"Path\")"
@@ -167,6 +160,7 @@ namespace AnotherMusicPlayer
                 DatabaseDetectOrCreateTable("queue", "CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
                 DatabaseDetectOrCreateTable("playlists", "CREATE TABLE playlists(FIndex TEXT, Name TEXT, Description TEXT)");
                 DatabaseDetectOrCreateTable("playlistsItems", "CREATE TABLE playlistsItems(PIndex TEXT, LIndex Text, Name TEXT, Path TEXT)");
+                DatabaseDetectOrCreateTable("playCounts", "CREATE TABLE playCounts(Path TEXT, Cpt INTEGER NOT NULL DEFAULT 1, LastPlay NUMERIC NOT NULL DEFAULT 0, PRIMARY KEY(\"Path\"))");
                 DatabaseTansactionEnd();
             }
             catch  { Debug.WriteLine("--> Database() : Catch ERROR <--"); }
@@ -465,6 +459,7 @@ namespace AnotherMusicPlayer
                 + "', Track='" + item.Track
                 + "', TrackCount='" + item.TrackCount
                 + "', Year='" + item.Year
+                + "', Rating='" + item.Rating
                 + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
                 + "' WHERE Path='" + EscapeString(file) + "'";
 
@@ -477,6 +472,37 @@ namespace AnotherMusicPlayer
             if (file == null) { return false; }
             if(System.IO.File.Exists(file)) { return false; }
             try { DatabaseQuerys(new string[] { "DELETE FROM files WHERE Path='" + EscapeString(file) + "'" }, commit); }
+            catch { return false; }
+            return true;
+        }
+
+        public bool RenameFileAsync(string fileIn, string fileOut, bool commit = false)
+        {
+            if (fileIn == null) { return false; }
+            if (fileOut == null) { return false; }
+            if(System.IO.File.Exists(fileIn)) { return false; }
+            try { 
+                DatabaseQuerys(new string[] {
+                    "UPDATE files SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'", 
+                    "UPDATE covers SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'",
+                    "UPDATE playCounts SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'" ,
+                    "UPDATE playlistsItems SET Path = '" + EscapeString(fileOut) + "' WHERE Path='" + EscapeString(fileIn) + "'",
+                    "UPDATE queue SET Path1 = '" + EscapeString(fileOut) + "' WHERE Path1='" + EscapeString(fileIn) + "'" 
+                }, commit); 
+            }
+            catch { return false; }
+            return true;
+        }
+
+        public bool playCountUpdate(string path, bool commit = true)
+        {
+            if (path == null) { return false; }
+            if(!System.IO.File.Exists(path)) { return false; }
+            try { 
+                DatabaseQuerys(new string[] {
+                    "INSERT OR REPLACE INTO playCounts(Path, Cpt, LastPlay) VALUES ('" + EscapeString(path) + "', (SELECT Cpt FROM playCounts where Path = '" + EscapeString(path) + "') + 1, '" + Common.TimeStamp() + "')" 
+                }, commit); 
+            }
             catch { return false; }
             return true;
         }

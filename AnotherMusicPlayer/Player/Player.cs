@@ -51,6 +51,7 @@ namespace AnotherMusicPlayer
 
         /// <summary> Last played file </summary>
         private string CurrentFile = null;
+        public string GetCurrentFile() { return CurrentFile; }
         /// <summary> Status if repeat file playback active </summary>
         private bool PlayRepeat = false;
 
@@ -84,7 +85,7 @@ namespace AnotherMusicPlayer
 
 
         /// <summary> Constructor </summary>
-        public Player(MainWindow parent = null) 
+        public Player(MainWindow parent = null)
         {
             this.parent = parent;
             ThreadList = new Dictionary<string, Thread>();
@@ -94,7 +95,7 @@ namespace AnotherMusicPlayer
 
             PlayList = new List<string>();
             //PlayListSemaphore = new Semaphore(0, 1);
-            
+
 
             var name = "PATH";
             var scope = EnvironmentVariableTarget.Process; // or User
@@ -121,15 +122,17 @@ namespace AnotherMusicPlayer
 
         /// <summary> clear current file value </summary>
         public void ClearCurrentFile() { CurrentFile = null; }
-        
+
         /// <summary> update an equalizer band Gain value </summary>
-        public void UpdateEqualizer(int Band, float Gain) {
+        public void UpdateEqualizer(int Band, float Gain)
+        {
             try { bands[Band].Gain = Gain; } catch { }
             //Debug.WriteLine("Equalizer Band("+Band+") = Gain " + Gain);
         }
 
         /// <summary> update an equalizer with List<(int,float)>, int = band indicator, float = band gain </summary>
-        public void UpdateEqualizer(List<(int,float)> tab) {
+        public void UpdateEqualizer(List<(int, float)> tab)
+        {
             foreach ((int, float) band in tab)
             {
                 try { bands[band.Item1].Gain = band.Item2; } catch { }
@@ -142,10 +145,12 @@ namespace AnotherMusicPlayer
         public bool IsRepeat() { return PlayRepeat; }
 
         /// <summary> Stop all currently playing threads </summary>
-        public void StopAll() {
+        public void StopAll()
+        {
             if (ThreadList.Count > 0)
             {
-                foreach (KeyValuePair<string, Thread> entry in ThreadList) {
+                foreach (KeyValuePair<string, Thread> entry in ThreadList)
+                {
                     PlayStatus[entry.Key] = 2;
                 }
                 foreach (KeyValuePair<string, object> entry in AudioList)
@@ -172,7 +177,8 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Test if file exist, if input = null remplace it with value in CurrentFile </summary>
-        public bool TestFile(string FilePath = null) {
+        public bool TestFile(string FilePath = null)
+        {
             if (FilePath == null) { if (CurrentFile == null) { return false; }; FilePath = CurrentFile; }
             if (System.IO.File.Exists(FilePath)) { return true; }
             else { return false; }
@@ -181,7 +187,7 @@ namespace AnotherMusicPlayer
         /// <summary> Add media into playlist </summary>
         public bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0)
         {
-            
+
             int initialNbFiles = PlayList.Count;
             int goodFiles = 0;
             string[] Tfiles = files;
@@ -207,7 +213,8 @@ namespace AnotherMusicPlayer
                 }
             }
 
-            if (initialNbFiles == 0) {
+            if (initialNbFiles == 0)
+            {
                 if (PlayList.Count > playIndex && playIndex >= 0)
                 {
                     Play(PlayList[playIndex]);
@@ -229,7 +236,7 @@ namespace AnotherMusicPlayer
         /// <summary> Randomize playlist </summary>
         public void PlaylistRandomize()
         {
-            
+
             List<string> tmp = new List<string>();
             Random rnd = new Random();
             int initialIndex = PlayListIndex;
@@ -265,7 +272,7 @@ namespace AnotherMusicPlayer
         /// <summary> Clear playlist </summary>
         public void PlaylistClear()
         {
-            
+
             StopAll();
             PlayList.Clear();
             PlayListIndex = 0;
@@ -299,7 +306,7 @@ namespace AnotherMusicPlayer
         public void PlaylistNext()
         {
             Debug.WriteLine("--> PlaylistNext <--");
-            PlayListIndex = ((PlayListIndex+1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
+            PlayListIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
             Play(PlayList[PlayListIndex]);
             CurrentFile = PlayList[PlayListIndex];
 
@@ -312,15 +319,17 @@ namespace AnotherMusicPlayer
         public void PlaylistPreloadNext()
         {
             //Debug.WriteLine("--> PlaylistPreloadNext <--");
-            int nextIndex = ((PlayListIndex+1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
+            int nextIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
             if (ThreadList.ContainsKey(PlayList[nextIndex])) { return; }
             Open(PlayList[nextIndex], false);
         }
 
         /// <summary> Open a new media playing thread </summary>
-        public bool Open(string FilePath, bool AutoPlay = false) {
+        public bool Open(string FilePath, bool AutoPlay = false)
+        {
             //if (IsPlaying(FilePath)) { return false; }
-            if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath)) {
+            if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath))
+            {
                 try
                 {
                     Thread objThread = new Thread(new ParameterizedThreadStart(PlaySoundAsync));
@@ -328,9 +337,9 @@ namespace AnotherMusicPlayer
                     objThread.Priority = ThreadPriority.AboveNormal;
                     objThread.Start(FilePath);
                     ThreadList.Add(FilePath, objThread);
-                    PlayStatus.Add(FilePath, (AutoPlay)?1:0);
+                    PlayStatus.Add(FilePath, (AutoPlay) ? 1 : 0);
                     PlayNewPositions.Add(FilePath, -1);
-                    if(AutoPlay)CurrentFile = FilePath;
+                    if (AutoPlay) CurrentFile = FilePath;
                     return true;
                 }
                 catch { }
@@ -356,7 +365,10 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Resume media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Resume(string FilePath = null) { return Play(FilePath); }
+        public bool Resume(string FilePath = null)
+        {
+            if (IsSuspended) { IsSuspended = false; PlayStatus[CurrentFile] = 1; return true; } else { return Play(FilePath); }
+        }
 
         /// <summary> Pause media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Pause(string FilePath = null)
@@ -365,6 +377,18 @@ namespace AnotherMusicPlayer
             {
                 if (FilePath == null) { FilePath = CurrentFile; }
                 if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 0; return true; }
+            }
+            return false;
+        }
+
+        private bool IsSuspended = false;
+        /// <summary> Suspend media play for FilePath or CurrentFile if FilePath is null </summary>
+        public bool Suspend()
+        {
+            if (CurrentFile != null)
+            {
+                IsSuspended = true;
+                Stop();
             }
             return false;
         }
@@ -458,57 +482,92 @@ namespace AnotherMusicPlayer
             try
             {
                 string FilePath = (string)file;
-                object audioFile = null;
                 bool started = false;
+                AudioFileReader audioFile = null;
+                Equalizer equalizer = null;
+                WaveOutEvent outputDevice = null;
+
                 audioFile = new AudioFileReader(FilePath);
+                equalizer = new Equalizer((ISampleProvider)audioFile, bands);
+                outputDevice = new WaveOutEvent();
 
-                Equalizer equalizer = new Equalizer((ISampleProvider)audioFile, bands);
+                //outputDevice.Init((IWaveProvider)audioFile);
+                outputDevice.Init(equalizer);
+                if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
 
-                using (var outputDevice = new WaveOutEvent())
+                int ret = -1; long ret2 = -1;
+
+                //while (outputDevice.PlaybackState == PlaybackState.Playing)
+                while (true)
                 {
-                    //outputDevice.Init((IWaveProvider)audioFile);
-                    outputDevice.Init(equalizer);
-                    if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
+                    ret2 = ret = -1;
+                    PlayStatus.TryGetValue(FilePath, out ret);
+                    PlayNewPositions.TryGetValue(FilePath, out ret2);
 
-                    int ret = -1; long ret2 = -1;
-
-                    //while (outputDevice.PlaybackState == PlaybackState.Playing)
-                    while (true)
+                    if (outputDevice == null)
                     {
-                        equalizer.Update();
-                        ret2 = ret = -1;
-                        PlayStatus.TryGetValue(FilePath, out ret);
-                        PlayNewPositions.TryGetValue(FilePath, out ret2);
+                        if (IsSuspended == true) { Thread.Sleep(100); continue; }
+                        else
+                        {
+                            Debug.WriteLine("REPLAY !!!!");
+                            audioFile = new AudioFileReader(FilePath);
+                            equalizer = new Equalizer((ISampleProvider)audioFile, bands);
+                            outputDevice = new WaveOutEvent();
+                            outputDevice.Init(equalizer);
+                            if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
+                            outputDevice.Play();
+                        }
+                    }
+                    equalizer.Update();
 
-                        if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); }
-                        if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
+                    if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); }
+                    if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
+                    {
+                        outputDevice.Play(); CurrentFile = FilePath;
+                        PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
+                        evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
+                        LengthChanged(this, evtp);
+                        if (started == false) { parent.bdd.playCountUpdate(FilePath); }
+                        started = true;
+                    }
+                    if (ret == 2)
+                    {
+                        outputDevice.Stop();
+                        if (IsSuspended == true)
                         {
-                            outputDevice.Play(); CurrentFile = FilePath;
-                            PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
-                            evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
-                            LengthChanged(this, evtp);
-                            started = true;
+                            long msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
+                            PlayNewPositions[FilePath] = audioFile.Position / msval;
+                            try { outputDevice.Stop(); } catch { }
+                            outputDevice.Dispose();
+                            outputDevice = null;
+                            equalizer = null;
+                            audioFile.Close();
+                            audioFile.Dispose();
+                            audioFile = null;
+                            AudioList.Remove(FilePath);
                         }
-                        if (ret == 2) { outputDevice.Stop(); break; }
-                        if (ret2 != -1)
-                        {
-                            AudioFileReader af = ((AudioFileReader)audioFile);
-                            long msval = af.WaveFormat.AverageBytesPerSecond / 1000;
-                            ((AudioFileReader)audioFile).Position = ret2 * msval;
-                            PlayNewPositions[FilePath] = -1;
-                        }
+                        else { break; }
+                    }
+                    if (ret2 != -1)
+                    {
+                        long msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
+                        audioFile.Position = ret2 * msval;
+                        PlayNewPositions[FilePath] = -1;
+                    }
+                    if (IsSuspended == false)
+                    {
                         try
                         {
                             PlayerPositionChangedEventParams evt = new PlayerPositionChangedEventParams();
                             AudioFileReader a = (AudioFileReader)audioFile;
                             evt.Position = (long)(a.CurrentTime.TotalMilliseconds);
                             evt.duration = (long)(a.TotalTime.TotalMilliseconds);
-                            if(FilePath == CurrentFile) PositionChanged(this, evt);
+                            if (FilePath == CurrentFile) PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
                                 if (PlayRepeat)
                                 {
-                                    ((AudioFileReader)audioFile).Position = 0;
+                                    audioFile.Position = 0;
                                     PlayStatus[FilePath] = 1;
                                     outputDevice.Play();
                                 }
@@ -526,12 +585,13 @@ namespace AnotherMusicPlayer
                             if (evt.Position >= evt.duration - 5000) { PlaylistPreloadNext(); }
                         }
                         catch { break; }
-
-                        Thread.Sleep(100);
                     }
-                    try { outputDevice.Stop(); } catch { }
-                    outputDevice.Dispose();
+
+                    Thread.Sleep(100);
                 }
+                try { outputDevice.Stop(); } catch { }
+
+                outputDevice.Dispose();
                 ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose();
                 PlayStatus.Remove(FilePath);
                 PlayNewPositions.Remove(FilePath);
@@ -542,7 +602,7 @@ namespace AnotherMusicPlayer
                 }
                 ThreadList.Remove(FilePath);
             }
-            catch { }
+            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
             return;
         }
     }

@@ -228,7 +228,7 @@ namespace AnotherMusicPlayer
             FileInfo fi = new FileInfo(file);
             if (fi.Length > 200 * 1024 && false)
             {
-                MessageBox.Show("File too large, maximum size 200 Kio"); return;
+                MessageBox.Show("File too large, maximum size 200 Kio", "Error !", MessageBoxButton.OK, MessageBoxImage.Error); return;
             }
             else
             {

@@ -53,33 +53,33 @@
                     </ContextMenu>
                 </Border.ContextMenu>
             </Border>
-            <AccessText Grid.Row="1" x:Name="LyricsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelLyrics}" VerticalAlignment="Bottom" Margin="0,0,0,3" HorizontalAlignment="Left"/>
+            <TextBlock Grid.Row="1" x:Name="LyricsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelLyrics}" VerticalAlignment="Bottom" Margin="0,0,0,3" HorizontalAlignment="Left"/>
             <TextBox Grid.Row="2" x:Name="LyricsInput" Style="{DynamicResource InputStyle}" ScrollViewer.CanContentScroll="True"/>
         </Grid>
         <ScrollViewer Grid.Column="3" Margin="0,3,0,3" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto">
             <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                <AccessText x:Name="TitleLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTitle}"/>
+                <TextBlock x:Name="TitleLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTitle}"/>
                 <TextBox x:Name="TitleInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="PerformersLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelPerformers}"/>
+                <TextBlock x:Name="PerformersLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelPerformers}"/>
                 <TextBox x:Name="PerformersInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="ComposersLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelComposers}"/>
+                <TextBlock x:Name="ComposersLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelComposers}"/>
                 <TextBox x:Name="ComposersInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="AlbumLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbum}"/>
+                <TextBlock x:Name="AlbumLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbum}"/>
                 <TextBox x:Name="AlbumInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="GenresLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelGenres}"/>
+                <TextBlock x:Name="GenresLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelGenres}"/>
                 <TextBox x:Name="GenresInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="AlbumArtistsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbumArtists}"/>
+                <TextBlock x:Name="AlbumArtistsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbumArtists}"/>
                 <TextBox x:Name="AlbumArtistsInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="YearLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbumYear}"/>
+                <TextBlock x:Name="YearLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelAlbumYear}"/>
                 <TextBox x:Name="YearInput" Style="{DynamicResource InputStyle}"/>
 
-                <AccessText x:Name="DiscLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelDisc}"/>
+                <TextBlock x:Name="DiscLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelDisc}"/>
                 <Grid x:Name="DiscGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100*"/>
@@ -87,11 +87,11 @@
                         <ColumnDefinition Width="100*"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" x:Name="DiscInput" Style="{DynamicResource InputStyle}" Cursor="IBeam"/>
-                    <AccessText Grid.Column="1" Text=" / "/>
+                    <TextBlock Grid.Column="1" Text=" / "/>
                     <TextBox Grid.Column="2" x:Name="DiscCountInput" Style="{DynamicResource InputStyle}"/>
                 </Grid>
 
-                <AccessText x:Name="TrackLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTrack}"/>
+                <TextBlock x:Name="TrackLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTrack}"/>
                 <Grid x:Name="TrackGrid">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100*"/>
@@ -99,11 +99,11 @@
                         <ColumnDefinition Width="100*"/>
                     </Grid.ColumnDefinitions>
                     <TextBox Grid.Column="0" x:Name="TrackInput" Style="{DynamicResource InputStyle}"/>
-                    <AccessText Grid.Column="1" Text=" / "/>
+                    <TextBlock Grid.Column="1" Text=" / "/>
                     <TextBox Grid.Column="2" x:Name="TrackCountInput" Style="{DynamicResource InputStyle}"/>
                 </Grid>
 
-                <AccessText x:Name="CopyrightLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelCopyright}"/>
+                <TextBlock x:Name="CopyrightLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelCopyright}"/>
                 <TextBox x:Name="CopyrightInput" Style="{DynamicResource InputStyle}"/>
 
                 <Expander Height="20" />

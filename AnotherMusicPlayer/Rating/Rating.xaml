@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="AnotherMusicPlayer.Rating"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:AnotherMusicPlayer"
+             mc:Ignorable="d" Background="Transparent" IsHitTestVisible="True"
+             d:DesignHeight="30" d:DesignWidth="150">
+    <Grid x:Name="StarGrid">
+        <StackPanel Orientation="Horizontal" x:Name="Grid1" HorizontalAlignment="Left">
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Gray" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Gray" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Gray" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Gray" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Gray" FillRule="Nonzero"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" x:Name="Grid2" HorizontalAlignment="Left" Width="{Binding CalculatedDisplay}">
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Yellow" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Yellow" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Yellow" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Yellow" FillRule="Nonzero"/>
+            <Polygon Points="2,9 28,9 5,25 15,0 25,25" Stroke="Transparent" 
+            Width="30" StrokeThickness="0" Fill="Yellow" FillRule="Nonzero"/>
+        </StackPanel>
+    </Grid>
+</UserControl>

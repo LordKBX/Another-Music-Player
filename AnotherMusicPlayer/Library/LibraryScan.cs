@@ -33,7 +33,7 @@ namespace AnotherMusicPlayer
             Parent.setLoadingState(true, "Library Scan");
             if (preClean is true)
             {
-                Bdd.DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM folders", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
+                Bdd.DatabaseQuerys(new string[] { "DELETE FROM covers", "DELETE FROM files", "DELETE FROM playlists", "DELETE FROM playlistsItems" });
             }
             Dictionary<string, Dictionary<string, object>> DatabaseFiles = Bdd.DatabaseQuery("SELECT * FROM files ORDER BY Path ASC", "Path");
             string[] files = getDirectoryMediaFIles(RootPath, true);
@@ -76,9 +76,9 @@ namespace AnotherMusicPlayer
         {
             if (fi == null) { return; }
             string query = "INSERT INTO files(Path, Name, Album, Performers, Composers, Genres, Copyright, AlbumArtists, Lyrics, Duration, Size, Disc, " +
-                "DiscCount, Track, TrackCount, Year, LastUpdate) VALUES('";
+                "DiscCount, Track, TrackCount, Year, Rating, LastUpdate) VALUES('";
             query += Database.EscapeString(fi.FullName) + "',";
-            query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0',";
+            query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0','0.0',";
 
             query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
 

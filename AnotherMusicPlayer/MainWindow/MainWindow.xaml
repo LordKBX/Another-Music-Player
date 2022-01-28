@@ -163,7 +163,7 @@
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
-                                        <GridViewColumn x:Name="PlayListViewC5" Width="80" Header="{DynamicResource duration}" DisplayMemberBinding="{Binding DurationS}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
+                                        <GridViewColumn x:Name="PlayListViewC5" Width="80" Header="{DynamicResource Duration}" DisplayMemberBinding="{Binding DurationS}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
                                         <GridViewColumn x:Name="PlayListViewC4" Header="{DynamicResource Artist}" HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
                                             <GridViewColumn.CellTemplate>
                                                 <DataTemplate>
@@ -245,38 +245,103 @@
                     </Grid>
                 </TabItem>
                 <TabItem Header="{DynamicResource TabRecordedPlaylists}" Style="{DynamicResource TabItemStyle3}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-                    <Grid Background="#FFCFCFCF" Margin="-2,0,4,0">
+                    <Grid Margin="-2,0,4,0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="100" />
+                            <ColumnDefinition Width="150" />
                             <ColumnDefinition Width="100*" />
                         </Grid.ColumnDefinitions>
-                        <Grid Grid.Column="0" Background="#FFCFCFCF" Margin="1,0,1,2">
+                        <Grid Grid.Column="0" Margin="1,0,1,2">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30"/>
                                 <RowDefinition Height="100*"/>
                             </Grid.RowDefinitions>
+                            
                             <Border Grid.Row="0" Background="SlateGray" Margin="1,2,0,2" BorderThickness="0">
                                 <TextBlock Text="{DynamicResource PlayListsHeaderCol1}" Foreground="White" VerticalAlignment="Center" Height="15" TextAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
-                            <ListView Grid.Row="1" Margin="1,0,0,0" Background="#FF999999">
-
-                            </ListView>
+                            <TreeView x:Name="PlaylistsTree"  Grid.Row="1" Margin="1,0,0,0" 
+                                      Style="{DynamicResource PlaylistsTreeStyle}"
+                                      ScrollViewer.VerticalScrollBarVisibility="Disabled" 
+                                      ScrollViewer.CanContentScroll="False">
+                                <TreeViewItem x:Name="PlaylistsTreeAuto" Header="Automatique" Style="{DynamicResource PlaylistsTreeStyleItem}">
+                                    <TreeViewItem Header="BB" Style="{DynamicResource PlaylistsTreeStyleItem}"></TreeViewItem>
+                                </TreeViewItem>
+                                <TreeViewItem Header="CC" Style="{DynamicResource PlaylistsTreeStyleItem}">
+                                </TreeViewItem>
+                            </TreeView>
                         </Grid>
-                        <Grid Grid.Column="1" Background="#FFCFCFCF" Margin="1,0,2,2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="51*"/>
-                                <ColumnDefinition Width="80*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="30"/>
-                                <RowDefinition Height="100*"/>
-                            </Grid.RowDefinitions>
-
-                            <WrapPanel Grid.Row="0" Background="SlateGray" Margin="1,2,0,2" Grid.ColumnSpan="2">
-
-                            </WrapPanel>
-                            <ListView Grid.Row="1" Background="#FF999999" Grid.ColumnSpan="2">
-
+                        <Grid Grid.Column="1" Margin="1,0,2,2">
+                            <ListView x:Name="PlaylistsContents" Grid.Row="1" SelectionMode="Extended" 
+                                      Background="Gray" IsTextSearchEnabled="False" 
+                                      AutomationProperties.IsColumnHeader="True" 
+                                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+                                      ListView.ItemContainerStyle="{DynamicResource ResourceKey=MediaItem}" 
+                                      AlternationCount="2" HorizontalContentAlignment="Left" 
+                                      BorderBrush="LightGray" BorderThickness="1,0,1,1" Padding="-4,-1,0,0" 
+                                      VerticalContentAlignment="Center" FlowDirection="LeftToRight" 
+                                      Margin="0,0,1,0" Grid.ColumnSpan="3">
+                                <ListView.View>
+                                    <GridView AllowsColumnReorder="False">
+                                        <GridViewColumn x:Name="PlaylistsContentsC0" Header="{DynamicResource Count}" 
+                                                        HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <AccessText Text="{Binding PlayCount}" 
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn x:Name="PlaylistsContentsC1" Header="{DynamicResource Title}" 
+                                                        HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <AccessText Text="{Binding Name}" 
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn x:Name="PlaylistsContentsC2" 
+                                                        Header="{DynamicResource Artist}" 
+                                                        HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <AccessText Text="{Binding Performers}" 
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn x:Name="PlaylistsContentsC3" 
+                                                        Header="{DynamicResource Album}" 
+                                                        HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <AccessText Text="{Binding Album}" 
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}" 
+                                                                Margin="0,0,20,0"/>
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                        <GridViewColumn x:Name="PlaylistsContentsC4" Width="80" 
+                                                        Header="{DynamicResource Duration}" 
+                                                        DisplayMemberBinding="{Binding DurationS}" 
+                                                        HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}"/>
+                                        <GridViewColumn x:Name="PlaylistsContentsC5" 
+                                                        Header="{DynamicResource Rating}" Width="130"
+                                                        HeaderContainerStyle="{DynamicResource ListViewHeaderStyle}">
+                                            <GridViewColumn.CellTemplate>
+                                                <DataTemplate>
+                                                    <local:Rating Zoom="0.7" StarBackgroundColor="Gray" 
+                                                        StarForegroundColor="White" Rate="{Binding Rating}" 
+                                                        RateChanged="RatingRateChanged" Tag="{Binding Path}" 
+                                                                  IsReadOnly="True"/>
+                                                    <!--<materialDesign:RatingBar 
+                                                        Value="{Binding Rating}" 
+                                                        IsReadOnly="True" Foreground="White" Opacity="1"/>-->
+                                                </DataTemplate>
+                                            </GridViewColumn.CellTemplate>
+                                        </GridViewColumn>
+                                    </GridView>
+                                </ListView.View>
                             </ListView>
                         </Grid>
                     </Grid>
