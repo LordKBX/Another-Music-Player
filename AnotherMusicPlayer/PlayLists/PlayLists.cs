@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 
 namespace AnotherMusicPlayer
 {
-    class PlayLists
+    public partial class PlayLists
     {
         private MainWindow Parent;
         private bool isBuild = false;
@@ -77,9 +77,10 @@ namespace AnotherMusicPlayer
                 {
                     Header = Parent.FindResource("PlayListsAuto_" + archetype) as string,
                     Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
-                    Tag = archetype
+                    Tag = "auto_" + archetype
                 };
                 item.MouseLeftButtonUp += autolistClick;
+                item.ContextMenu = MakeContextMenu(item, "list");
                 ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Add(item);
                 cpt += 1;
             }
@@ -92,9 +93,10 @@ namespace AnotherMusicPlayer
                     Header = row.Value["Name"] as string,
                     ToolTip = row.Value["Description"] as string,
                     Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
-                    Tag = Convert.ToInt32(row.Value["FIndex"])
+                    Tag = row.Value["FIndex"] as string
                 };
                 item.MouseLeftButtonUp += userlistClick;
+                item.ContextMenu = MakeContextMenu(item, "list");
                 Parent.PlaylistsTree.Items.Add(item);
             }
         }
@@ -104,16 +106,15 @@ namespace AnotherMusicPlayer
             try
             {
                 Debug.WriteLine("--> autolistClick");
-                string archetype = (string)((TreeViewItem)sender).Tag;
+                string archetype = ((string)((TreeViewItem)sender).Tag).Replace("auto_", "");
                 Debug.WriteLine("--> autolistClick, Archetype: " + archetype);
-                int maxLimit = 50;
-                string query = "";
-                if (archetype == autoList[0]) { query = "SELECT * FROM files ORDER BY LastUpdate DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 0; }
-                else if (archetype == autoList[1]) { query = "SELECT * FROM playCounts ORDER BY Cpt DESC, LastPlay DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 50; }
-                else if (archetype == autoList[2]) { query = "SELECT * FROM playCounts ORDER BY LastPlay DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 50; }
-                if (archetype == autoList[3]) { query = "SELECT * FROM files ORDER BY Rating DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 0; }
 
-                Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery(query, "Path");
+                if (archetype == autoList[0]) { Parent.PlaylistsContentsC0.Width = 0; }
+                else if (archetype == autoList[1]) { Parent.PlaylistsContentsC0.Width = 50; }
+                else if (archetype == autoList[2]) { Parent.PlaylistsContentsC0.Width = 50; }
+                if (archetype == autoList[3]) { Parent.PlaylistsContentsC0.Width = 0; }
+
+                Dictionary<string, Dictionary<string, object>> rez = autolistData(archetype);
                 Debug.WriteLine("--> QUERY");
                 List<string> files = new List<string>();
                 Dictionary<string, int> countList = new Dictionary<string, int>();
@@ -129,19 +130,38 @@ namespace AnotherMusicPlayer
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
         }
 
+        private Dictionary<string, Dictionary<string, object>> autolistData(string name, int maxLimit = 50)
+        {
+            string query = "";
+            if (name == autoList[0]) { query = "SELECT * FROM files ORDER BY LastUpdate DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 0; }
+            else if (name == autoList[1]) { query = "SELECT * FROM playCounts ORDER BY Cpt DESC, LastPlay DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 50; }
+            else if (name == autoList[2]) { query = "SELECT * FROM playCounts ORDER BY LastPlay DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 50; }
+            if (name == autoList[3]) { query = "SELECT * FROM files ORDER BY Rating DESC LIMIT " + maxLimit; Parent.PlaylistsContentsC0.Width = 0; }
+
+            return Parent.bdd.DatabaseQuery(query, "Path");
+        }
+
         private void userlistClick(object sender, MouseButtonEventArgs e)
         {
-            int id = (int)((TreeViewItem)sender).Tag;
+            int id = Convert.ToInt32((string)((TreeViewItem)sender).Tag);
             Debug.WriteLine("--> Item_MouseLeftButtonUp, Id: " + id);
-            string query = "SELECT PIndex,LOrder,Path FROM playlistsItems WHERE LIndex = " + id + " ORDER BY LOrder ASC";
-            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery(query, "LOrder");
             Parent.PlaylistsContentsC0.Width = 0;
+            List<string> files = userlistData(id);
 
-            if (rez == null) { Parent.PlaylistsContents.ItemsSource = new ObservableCollection<MediaItem>(); return; }
-            List<string> files = new List<string>();
-            foreach (Dictionary<string, object> row in rez.Values) { files.Add(row["Path"] as string); }
+            if (files == null) { Parent.PlaylistsContents.ItemsSource = new ObservableCollection<MediaItem>(); return; }
             Debug.WriteLine("--> Display build");
             fillContentSpace(files.ToArray(), null);
+        }
+
+        private List<string> userlistData(int id)
+        {
+            string query = "SELECT PIndex,LOrder,Path FROM playlistsItems WHERE LIndex = " + id + " ORDER BY LOrder ASC";
+            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery(query, "LOrder");
+
+            if (rez == null) { return null; }
+            List<string> files = new List<string>();
+            foreach (Dictionary<string, object> row in rez.Values) { files.Add(row["Path"] as string); }
+            return files;
         }
 
         private void fillContentSpace(string[] files, Dictionary<string, int> countList = null)
@@ -157,7 +177,6 @@ namespace AnotherMusicPlayer
                     {
                         Dictionary<string, object> data = Parent.bdd.DatabaseFileInfo(file, true);
                         if (data == null) { continue; }
-                        Debug.WriteLine("--> Add in table");
                         tmp.Add(new MediaItem()
                         {
                             Path = data["Path"] as string,

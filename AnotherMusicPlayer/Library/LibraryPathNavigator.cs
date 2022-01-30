@@ -17,22 +17,26 @@ namespace AnotherMusicPlayer
         string CurrentPath = "";
         Library Parent;
 
-        public LibraryPathNavigator(Library parent, WrapPanel contener, string basePath = null) {
+        public LibraryPathNavigator(Library parent, WrapPanel contener, string basePath = null)
+        {
             Contener = contener;
             Parent = parent;
             if (Directory.Exists(basePath)) { RootPath = basePath; }
-            else { 
+            else
+            {
                 RootPath = Settings.LibFolder;
             }
         }
 
-        public bool UpdateRootPath(string basePath = null) {
+        public bool UpdateRootPath(string basePath = null)
+        {
             if (Directory.Exists(basePath)) { RootPath = basePath; return true; }
             return false;
         }
 
-        public void Display(string path = null) {
-            Debug.WriteLine("--> LibraryPathNavigator.Display("+ path + ") <--");
+        public void Display(string path = null)
+        {
+            Debug.WriteLine("--> LibraryPathNavigator.Display(" + path + ") <--");
             try
             {
                 if (path == null) { path = CurrentPath; }
@@ -46,7 +50,7 @@ namespace AnotherMusicPlayer
                 string newPath = RootPath;
 
                 TextBlock tb = new TextBlock();
-                
+
                 tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
                 tb.Text = Parent.Parent.FindResource("LibraryNavigatorItemHome") as string;
                 tb.Tag = RootPath;
@@ -76,20 +80,22 @@ namespace AnotherMusicPlayer
                     index += 1;
                 }
             }
-            catch (Exception err) { 
+            catch (Exception err)
+            {
                 Debug.WriteLine("--> LibraryPathNavigator.Display ERROR <--");
                 Debug.WriteLine(JsonConvert.SerializeObject(err));
             }
         }
 
-        public void DisplayAlt(string content = null) {
+        public void DisplayAlt(string content = null)
+        {
             Debug.WriteLine("--> LibraryPathNavigator.DisplayAlt(" + content + ") <--");
             if (content == null) { return; }
             try
             {
                 if (Contener.Children.Count > 0)
                     Contener.Children.Clear();
-                
+
                 TextBlock tb = new TextBlock();
                 tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
                 tb.Text = Parent.Parent.FindResource("LibraryNavigatorItemHome") as string;
@@ -108,7 +114,8 @@ namespace AnotherMusicPlayer
                 tb3.Text = content;
                 Contener.Children.Add(tb3);
             }
-            catch (Exception err) { 
+            catch (Exception err)
+            {
                 Debug.WriteLine("--> LibraryPathNavigator.DisplayAlt ERROR <--");
                 Debug.WriteLine(JsonConvert.SerializeObject(err));
             }
@@ -118,14 +125,15 @@ namespace AnotherMusicPlayer
         {
             string tag = (string)((TextBlock)sender).Tag;
             string name = (string)((TextBlock)sender).Text;
-            if(Parent != null)
+            if (Parent != null)
                 Parent.DisplayPath(tag);
             else
                 Display(tag);
         }
 
-        private ContextMenu MakeContextMenu() {
-            ContextMenu cm = new LibraryContextMenu() { Style = Contener.FindResource("LibraryCustomContextMenuStyle") as Style };
+        private ContextMenu MakeContextMenu()
+        {
+            ContextMenu cm = new LibraryContextMenu() { Style = Contener.FindResource("CustomContextMenuStyle") as Style };
             for (int i = 0; i < cm.Items.Count; i++)
             {
                 if (((MenuItem)cm.Items[i]).Name.ToLower() == "addfolder")

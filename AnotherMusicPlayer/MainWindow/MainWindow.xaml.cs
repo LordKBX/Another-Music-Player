@@ -72,7 +72,7 @@ namespace AnotherMusicPlayer
             //SettingsSetUp();//Initialize interface elements with stored parametters in settings
             //TabControl t = new TabControl();
             //t.cli
-            TabControler.SelectedIndex = 2;
+            TabControler.SelectedIndex = 1;
 
             PlayListIndex = Settings.LastPlaylistIndex;
 

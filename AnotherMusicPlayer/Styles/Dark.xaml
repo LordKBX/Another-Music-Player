@@ -20,17 +20,25 @@
         <SolidColorBrush x:Key="BackgroundColor" Color="#FF303030"/>
         <SolidColorBrush x:Key="ForegroundColor" Color="#FFFFFF"/>
 
-        <SolidColorBrush x:Key="TabBorderColor" Color="#FFACACAC"/>
-        <SolidColorBrush x:Key="TabBackgroundColor" Color="#FF333333"/>
-        <SolidColorBrush x:Key="TabForegroundColor" Color="#FFDDDDDD"/>
-        <SolidColorBrush x:Key="TabOverBackgroundColor" Color="#000000"/>
-        <SolidColorBrush x:Key="TabOverForegroundColor" Color="#FFEA8835"/>
-        <SolidColorBrush x:Key="TabActiveBackgroundColor" Color="#FFEA8835"/>
-        <SolidColorBrush x:Key="TabActiveForegroundColor" Color="#000000"/>
+        <SolidColorBrush x:Key="TabControl.BorderColor" Color="#FFACACAC"/>
+        <SolidColorBrush x:Key="TabControl.BackgroundColor" Color="#FF333333"/>
+        <SolidColorBrush x:Key="TabControl.ForegroundColor" Color="#FFDDDDDD"/>
+        <SolidColorBrush x:Key="TabControl.Item.Over.BackgroundColor" Color="#000000"/>
+        <SolidColorBrush x:Key="TabControl.Item.Over.ForegroundColor" Color="#FFEA8835"/>
+        <SolidColorBrush x:Key="TabControl.Item.Active.BackgroundColor" Color="#FFEA8835"/>
+        <SolidColorBrush x:Key="TabControl.Item.Active.ForegroundColor" Color="#000000"/>
 
-        <SolidColorBrush x:Key="InputBackgroundColor" Color="#FF505050"/>
-        <SolidColorBrush x:Key="InputForegroundColor" Color="#FFFF"/>
-        <SolidColorBrush x:Key="InputBorderColor" Color="#FFFF"/>
+        <SolidColorBrush x:Key="ButtonStyle.BackgroundColor" Color="#FF505050"/>
+        <SolidColorBrush x:Key="ButtonStyle.ForegroundColor" Color="#FFFFFFFF"/>
+        <SolidColorBrush x:Key="ButtonStyle.BorderColor" Color="#FFFFFFFF"/>
+    
+        <SolidColorBrush x:Key="Input.BackgroundColor" Color="#FF505050"/>
+        <SolidColorBrush x:Key="Input.ForegroundColor" Color="#FFFF"/>
+        <SolidColorBrush x:Key="Input.BorderColor" Color="#FFFF"/>
+
+        <SolidColorBrush x:Key="ContextMenu.BackgroundColor" Color="#FF505050"/>
+        <SolidColorBrush x:Key="ContextMenu.ForegroundColor" Color="#FFFF"/>
+        <SolidColorBrush x:Key="ContextMenu.BorderColor" Color="#FFFF"/>
 
         <SolidColorBrush x:Key="PlaybackBtn.Static.Background" Color="#FF303030"/>
         <SolidColorBrush x:Key="PlaybackBtn.Static.Border" Color="DarkGray"/>
@@ -41,22 +49,28 @@
         <SolidColorBrush x:Key="PlaybackBtn.Disabled.Background" Color="#FFF4F4F4"/>
         <SolidColorBrush x:Key="PlaybackBtn.Disabled.Border" Color="#FFADB2B5"/>
         <SolidColorBrush x:Key="PlaybackBtn.Disabled.Foreground" Color="#FF838383"/>
+    
+        <SolidColorBrush x:Key="Library.AddIntoPlaylist.Background" Color="#FF838383"/>
+        <SolidColorBrush x:Key="Library.AddIntoPlaylist.OverNew.Background" Color="#7F000000"/>
+        <SolidColorBrush x:Key="Library.AddIntoPlaylist.OverNew.Block.Background" Color="#FF838383"/>
+        <SolidColorBrush x:Key="Library.AddIntoPlaylist.OverNew.Block.Border" Color="#ffffff"/>
     <!--#endregion-->
 
     <!--#region Generic Window-->
         <Style x:Key="CustomWindowStyle" TargetType="{x:Type Window}">
-            <Setter Property="BorderBrush" Value="{StaticResource ForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ForegroundColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
-            <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource ForegroundColor}"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
         </Style>
 
         <Style x:Key="CustomWindowBackgroundStyle" TargetType="{x:Type Grid}">
-            <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
             <Setter Property="Margin" Value="0"/>
         </Style>
 
         <Style x:Key="CustomWindowBackgroundStyleAlt" TargetType="{x:Type StackPanel}">
-            <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+            <Setter Property="Background" Value="{DynamicResource BackgroundColor}"/>
             <Setter Property="Margin" Value="0"/>
         </Style>
 
@@ -71,11 +85,41 @@
         </Style>
 
         <Style x:Key="InputStyle" TargetType="{x:Type TextBox}" BasedOn="{StaticResource MaterialDesignTextBox}">
-            <Setter Property="Background" Value="{StaticResource InputBackgroundColor}"/>
-            <Setter Property="Foreground" Value="{StaticResource InputForegroundColor}"/>
-            <Setter Property="BorderBrush" Value="{StaticResource InputBorderColor}"/>
+            <Setter Property="Background" Value="{DynamicResource Input.BackgroundColor}"/>
+            <Setter Property="Foreground" Value="{DynamicResource Input.ForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource Input.BorderColor}"/>
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+
+        <Style x:Key="CustomContextMenuStyle" TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource MaterialDesignContextMenu}">
+            <Setter Property="Foreground" Value="{DynamicResource ContextMenu.ForegroundColor}"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ContextMenu}">
+                    <Border BorderBrush="{DynamicResource ContextMenu.BorderColor}" BorderThickness="1" 
+                                Background="{DynamicResource ContextMenu.BackgroundColor}" Padding="0, 5, 0, 5">
+                            <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Cycle" />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="DefaultBtnStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignPaperButton}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Margin" Value="3"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="VerticalAlignment" Value="Stretch"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="MinWidth" Value="80"/>
+            <Setter Property="MinHeight" Value="50"/>
+            <Setter Property="Foreground" Value="{DynamicResource ButtonStyle.ForegroundColor}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ButtonStyle.BorderColor}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="{DynamicResource ButtonStyle.BackgroundColor}"/>   
         </Style>
     <!--#endregion-->
 
@@ -91,20 +135,20 @@
                 <Setter Property="Height" Value="40" />
                 <Setter Property="MinWidth" Value="120" />
 
-                <Setter Property="BorderBrush" Value="{StaticResource TabBorderColor}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource TabControl.BorderColor}"/>
                 <Setter Property="BorderThickness" Value="0,1,0,1"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -115,15 +159,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabOverBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Over.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabOverForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabOverForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -134,15 +178,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -153,15 +197,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabActiveBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Active.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabActiveForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabActiveForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Music" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -178,20 +222,20 @@
                 <Setter Property="Height" Value="40" />
                 <Setter Property="MinWidth" Value="72" />
 
-                <Setter Property="BorderBrush" Value="{StaticResource TabBorderColor}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource TabControl.BorderColor}"/>
                 <Setter Property="BorderThickness" Value="0,1,0,1"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -202,15 +246,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabOverBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Over.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabOverForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabOverForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -221,15 +265,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -240,15 +284,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabActiveBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Active.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabActiveForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabActiveForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="FolderMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -265,20 +309,20 @@
                 <Setter Property="Height" Value="40" />
                 <Setter Property="MinWidth" Value="72" />
 
-                <Setter Property="BorderBrush" Value="{StaticResource TabBorderColor}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource TabControl.BorderColor}"/>
                 <Setter Property="BorderThickness" Value="0,1,0,1"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -289,15 +333,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabOverBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Over.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabOverForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabOverForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -308,15 +352,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -327,15 +371,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabActiveBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Active.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabActiveForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabActiveForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="PlaylistMusic" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -352,20 +396,20 @@
                 <Setter Property="Height" Value="40" />
                 <Setter Property="MinWidth" Value="72" />
 
-                <Setter Property="BorderBrush" Value="{StaticResource TabBorderColor}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource TabControl.BorderColor}"/>
                 <Setter Property="BorderThickness" Value="0,1,0,1"/>
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type TabItem}">
-                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                            <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="70*"/>
                                     <ColumnDefinition Width="25"/>
                                     <ColumnDefinition Width="90"/>
                                     <ColumnDefinition Width="70*"/>
                                 </Grid.ColumnDefinitions>
-                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                             </Grid>
                         </ControlTemplate>
                     </Setter.Value>
@@ -376,15 +420,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabOverBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Over.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabOverForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabOverForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Over.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -395,15 +439,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -414,15 +458,15 @@
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="{x:Type TabItem}">
-                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{StaticResource TabActiveBackgroundColor}">
+                                    <Grid VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="{DynamicResource TabControl.Item.Active.BackgroundColor}">
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="70*"/>
                                             <ColumnDefinition Width="25"/>
                                             <ColumnDefinition Width="90"/>
                                             <ColumnDefinition Width="70*"/>
                                         </Grid.ColumnDefinitions>
-                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{StaticResource TabActiveForegroundColor}" />
-                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{StaticResource TabActiveForegroundColor}"/>
+                                        <materialDesign:PackIcon Grid.Column="1" Width="24" Height="24" Kind="Cog" HorizontalAlignment="Left" VerticalAlignment="Center" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}" />
+                                        <AccessText Grid.Column="2" HorizontalAlignment="Left" VerticalAlignment="Center" Text="{TemplateBinding Header}" Foreground="{DynamicResource TabControl.Item.Active.ForegroundColor}"/>
                                     </Grid>
                                 </ControlTemplate>
                             </Setter.Value>
@@ -478,10 +522,10 @@
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-                <Setter Property="Background" Value="{StaticResource PlaybackBtn.Static.Background}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource PlaybackBtn.Static.Border}"/>
-                <Setter Property="Foreground" Value="{StaticResource PlaybackBtn.Static.Border}"/>
+                <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
+                <Setter Property="Background" Value="{DynamicResource PlaybackBtn.Static.Background}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PlaybackBtn.Static.Border}"/>
+                <Setter Property="Foreground" Value="{DynamicResource PlaybackBtn.Static.Border}"/>
                 <Setter Property="BorderThickness" Value="1"/>
 
                 <Setter Property="Template">
@@ -495,12 +539,12 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -518,14 +562,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -543,14 +587,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -568,14 +612,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -593,14 +637,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -618,14 +662,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -643,14 +687,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -668,14 +712,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -693,14 +737,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -718,14 +762,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -743,14 +787,14 @@
                             </Border>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsMouseOver" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.MouseOver.Border}"/>
                                 </Trigger>
                                 <Trigger Property="IsPressed" Value="true">
-                                    <Setter Property="Background" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Background}"/>
-                                    <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
-                                    <Setter Property="Foreground" TargetName="icon" Value="{StaticResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Background" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Background}"/>
+                                    <Setter Property="BorderBrush" TargetName="border" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
+                                    <Setter Property="Foreground" TargetName="icon" Value="{DynamicResource PlaybackBtn.Pressed.Border}"/>
                                 </Trigger>
                             </ControlTemplate.Triggers>
                         </ControlTemplate>
@@ -896,11 +940,7 @@
         <!--#endregion-->
 
         <!--#region LIBRARY -->
-            <!--#region PATH BAR -->
-                <Style x:Key="LibraryCustomContextMenuStyle" TargetType="{x:Type ContextMenu}" BasedOn="{StaticResource MaterialDesignContextMenu}">
-                    <Setter Property="Foreground" Value="#FFFFFF"/>
-                </Style>
-    
+            <!--#region PATH BAR -->    
                 <Style x:Key="LibibraryNavigationPathContener" TargetType="{x:Type WrapPanel}">
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
                     <Setter Property="VerticalAlignment" Value="Stretch"/>
@@ -950,7 +990,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                    <Border Name="border"  BorderThickness="0, 2, 0, 2" BorderBrush="{StaticResource TabActiveBackgroundColor}"  Background="#FFDDDDDD">
+                    <Border Name="border"  BorderThickness="0, 2, 0, 2" BorderBrush="{DynamicResource TabControl.Item.Active.BackgroundColor}"  Background="#FFDDDDDD">
                                 <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Top" />
                             </Border>
                         </ControlTemplate>
@@ -1036,10 +1076,10 @@
                 <Setter Property="VerticalAlignment" Value="Stretch"/>
                 <Setter Property="HorizontalContentAlignment" Value="Center"/>
                 <Setter Property="VerticalContentAlignment" Value="Center"/>
-                <Setter Property="FocusVisualStyle" Value="{StaticResource FocusVisual}"/>
-                <Setter Property="Background" Value="{StaticResource PlaybackBtn.Static.Background}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource PlaybackBtn.Static.Border}"/>
-                <Setter Property="Foreground" Value="{StaticResource PlaybackBtn.Static.Border}"/>
+                <Setter Property="FocusVisualStyle" Value="{DynamicResource FocusVisual}"/>
+                <Setter Property="Background" Value="{DynamicResource PlaybackBtn.Static.Background}"/>
+                <Setter Property="BorderBrush" Value="{DynamicResource PlaybackBtn.Static.Border}"/>
+                <Setter Property="Foreground" Value="{DynamicResource PlaybackBtn.Static.Border}"/>
                 <Setter Property="BorderThickness" Value="1"/>
             </Style>
         <!--#endregion-->

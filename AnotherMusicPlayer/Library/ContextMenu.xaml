@@ -12,7 +12,7 @@
         </MenuItem.Icon>
     </MenuItem>
 
-    <!-- PARTIE ADD IN PLAYLIST NORMALE -->
+    <!-- ADD IN PLAYLIST ORDONED -->
     <MenuItem  Name="AddFolder" Header="{DynamicResource LibraryContextMenuAddFolder}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="PlaylistPlus"/>
@@ -29,24 +29,19 @@
         </MenuItem.Icon>
     </MenuItem>
 
-    <!-- PARTIE ADD IN PLAYLIST RANDOMIZED -->
+    <!-- ADD IN PLAYLIST RANDOMIZED -->
     <MenuItem  Name="AddShuffleFolder" Header="{DynamicResource LibraryContextMenuAddShuffleFolder}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="ShuffleVariant"/>
         </MenuItem.Icon>
     </MenuItem>
-    <!--<MenuItem Name="AddShuffleTrack" Header="{DynamicResource LibraryContextMenuAddShuffleTrack}">
-                    <MenuItem.Icon>
-                        <materialDesign:PackIcon Kind="ShuffleVariant"/>
-                    </MenuItem.Icon>
-                </MenuItem>-->
     <MenuItem Name="AddShuffleAlbum" Header="{DynamicResource LibraryContextMenuAddShuffleAlbum}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="ShuffleVariant"/>
         </MenuItem.Icon>
     </MenuItem>
 
-    <!-- PARTIE REPLACE PLAYLIST NORMALE -->
+    <!-- REPLACE PLAYLIST ORDONED -->
     <MenuItem  Name="PlayFolder" Header="{DynamicResource LibraryContextMenuPlayFolder}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="FolderPlay"/>
@@ -63,7 +58,7 @@
         </MenuItem.Icon>
     </MenuItem>
 
-    <!-- PARTIE REPLACE PLAYLIST RANDOMIZED -->
+    <!-- REPLACE PLAYLIST RANDOMIZED -->
     <MenuItem  Name="PlayShuffleFolder" Header="{DynamicResource LibraryContextMenuPlayShuffleFolder}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="BowlMix"/>
@@ -94,6 +89,23 @@
     <MenuItem Name="EditAlbum" Header="{DynamicResource LibraryContextMenuEditAlbum}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="FolderEdit"/>
+        </MenuItem.Icon>
+    </MenuItem>
+
+    <!-- PARTIE ADD INTO A PLAYLIST -->
+    <MenuItem  Name="PlayListsAddFolder" Header="{DynamicResource LibraryContextMenuPlayListsAddFolder}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="TableColumnPlusAfter"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Name="PlayListsAddTrack" Header="{DynamicResource LibraryContextMenuPlayListsAddTrack}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="TableColumnPlusAfter"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Name="PlayListsAddAlbum" Header="{DynamicResource LibraryContextMenuPlayListsAddAlbum}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="TableColumnPlusAfter"/>
         </MenuItem.Icon>
     </MenuItem>
 </ContextMenu>

@@ -119,6 +119,7 @@
     <sys:String x:Key="LibraryContextMenuPlayAlbum">Lire l'album</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayFolder">Lire le dossier</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayTrack">Lire la piste</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayList">Lire la liste</sys:String>
 
     <sys:String x:Key="LibraryContextMenuPlayShuffleGeneric">Lire aléatoirement</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayShuffleAlbum">Lire aléatoirement l'album</sys:String>
@@ -130,6 +131,11 @@
     <sys:String x:Key="LibraryContextMenuEditFolder">Renomer le Dossier</sys:String>
     <sys:String x:Key="LibraryContextMenuEditTrack">Editer la Piste</sys:String>
     <sys:String x:Key="LibraryContextMenuEditFile">Editer le Fichier</sys:String>
+
+    <sys:String x:Key="LibraryContextMenuPlayListsAddGeneric">Ajouter une la liste</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayListsAddAlbum">Ajouter l'album à un liste</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayListsAddFolder">Ajouter le dossier à une liste</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayListsAddTrack">Ajouter la piste à une liste</sys:String>
     <!--#endregion-->
     
     <!--#region LIBRARY SCAN-->
@@ -138,9 +144,11 @@
     <sys:String x:Key="LibraryTotalSize">Taille Totale</sys:String>
     <sys:String x:Key="LibraryTotalDuration">Durée Totale</sys:String>
     <!--#endregion-->
-
-
-    <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
+    
+    <!--#region LIBRARY SCAN-->
+    <sys:String x:Key="LibraryWindowAddIntoPlaylistTitle">Ajout à une liste ...</sys:String>
+    <sys:String x:Key="LibraryWindowAddIntoPlaylistNewElement">Nouvelle liste</sys:String>
+    <!--#endregion-->
 
     <!--#region LIBRARY TAG EDITOR-->
     <sys:String x:Key="EditorTagSeparateEntrys">Séparer les membres avec le ;</sys:String>
@@ -171,6 +179,8 @@
     <!--#endregion-->
 
     <!--#region PlayLists-->
+    <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
+    
     <sys:String x:Key="PlayListsAuto_lastImports">Derniers arrivages</sys:String>
     <sys:String x:Key="PlayListsAuto_mostPlayed">Les plus joués</sys:String>
     <sys:String x:Key="PlayListsAuto_mostRecentlyPlayed">Reçament joué</sys:String>

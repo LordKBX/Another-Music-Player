@@ -262,7 +262,7 @@
                             <TreeView x:Name="PlaylistsTree"  Grid.Row="1" Margin="1,0,0,0" 
                                       Style="{DynamicResource PlaylistsTreeStyle}"
                                       ScrollViewer.VerticalScrollBarVisibility="Disabled" 
-                                      ScrollViewer.CanContentScroll="False">
+                                      ScrollViewer.CanContentScroll="False" ContextMenuService.IsEnabled="True">
                                 <TreeViewItem x:Name="PlaylistsTreeAuto" Header="Automatique" Style="{DynamicResource PlaylistsTreeStyleItem}">
                                     <TreeViewItem Header="BB" Style="{DynamicResource PlaylistsTreeStyleItem}"></TreeViewItem>
                                 </TreeViewItem>

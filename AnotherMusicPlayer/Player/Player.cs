@@ -351,6 +351,7 @@ namespace AnotherMusicPlayer
         public bool Play(string FilePath = null)
         {
             if (FilePath == null) { FilePath = CurrentFile; }
+            if (FilePath == null) { return false; }
             try
             {
                 if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
