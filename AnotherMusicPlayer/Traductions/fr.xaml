@@ -194,7 +194,8 @@
 
     <!--#region PlayLists-->
     <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
-    
+
+    <sys:String x:Key="PlayListsAuto">Automatique</sys:String>
     <sys:String x:Key="PlayListsAuto_lastImports">Derniers arrivages</sys:String>
     <sys:String x:Key="PlayListsAuto_mostPlayed">Les plus joués</sys:String>
     <sys:String x:Key="PlayListsAuto_mostRecentlyPlayed">Reçament joué</sys:String>

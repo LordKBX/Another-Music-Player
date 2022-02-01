@@ -195,7 +195,8 @@
 
     <!--#region PlayLists-->
     <sys:String x:Key="PlayListsHeaderCol1">Playlist</sys:String>
-    
+
+    <sys:String x:Key="PlayListsAuto">Automatic</sys:String>
     <sys:String x:Key="PlayListsAuto_lastImports">Lasts imports</sys:String>
     <sys:String x:Key="PlayListsAuto_mostPlayed">Most played</sys:String>
     <sys:String x:Key="PlayListsAuto_mostRecentlyPlayed">Last played</sys:String>

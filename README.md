@@ -4,17 +4,21 @@
 [ ![Capture 3](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/03.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/03.png?raw=true)
 [ ![Capture 4](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/04.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/04.png?raw=true)
 [ ![Capture 5](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/05.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/05.png?raw=true)
+[ ![Capture 6](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/06.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/06.png?raw=true)
+[ ![Capture 7](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/07.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/07.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/08.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/08.png?raw=true)
 ---
 ## English Documentation
 
 ### Abstract:
-This is a personal project to create a Music player written with C#.Net Core 3.1 for creating a possible multi-platforms application
+This is a personal project to create a Music player written with C# SDK .Net Core 3.1
 
 **Functions:**
-* Playlist
-* Library sorted by folder with auto scan for update(not in the playlist)
-* Conversion for audio files not in the supported formats(mp3;wma;flac) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s
+* Playing Queue
+* Library sorted by folder with auto scan for update
+* Conversion for audio files not in the supported formats(mp3;wma;flac) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s)
 * Interception of Multimedia shortcuts (Play/Pause, Previous Track, Next Track) on windows
+* Multiple automatic PlayList & Custom PlayLists
 
 **Supported Language:** *(If your system language is French auto select french à first starup)*
 * English
@@ -30,15 +34,16 @@ This is a personal project to create a Music player written with C#.Net Core 3.1
 ## Documentation Française
 
 ### Abstract:
-Ceci est un projet personnel de création d'un lecteur de musique écrit en C#.Net Core 3.1 pour possiblement écrice une application multi-platformes
+Ceci est un projet personnel de création d'un lecteur de musique écrit en C# SDK .Net Core 3.1
 
 **Fonctions:**
-* Liste de lecture
-* Médiatèque triée par dossier avec auto-scan dossier pour mise à jour instantanée (Ne met pas à jour les fichiers en liste de lecture)
+* Liste de lecture courrante
+* Médiatèque triée par dossier avec auto-scan dossier pour mise à jour
 * Conversion des fichiers audio des formats non supportés(mp3;wma;flac) vers mp3(via ffmpeg) avec choix de la qualité dans les paramèttres(par défaut 128Kbits/s)
 * Interception des raccourcis Multimédia (Play/Pause, Previous Track, Next Track) spécifiques à windows
+* Listes de lecture généré automatiquement & Liste de lecture personalisées
 
-**Langues Supportées:** *(Si votre système d'exploitation et configuré en français, au premier démarrage l'application vas se configurer en Français)*
+**Langues Supportées:** *(Si votre système d'exploitation et configuré en français, au premier démarrage l'application va se configurer en Français)*
 * Anglais
 * Français
 

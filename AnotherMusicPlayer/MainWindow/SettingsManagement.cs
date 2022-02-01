@@ -132,6 +132,7 @@ namespace AnotherMusicPlayer
             TranslationUpdate();
             if (PlayList.Count > 0 && PlayListIndex >= 0) { UpdateLeftPannelMediaInfo(); }
             if (!library.Scanning) { library.DisplayPath(library.CurrentPath); }
+            playLists.Init();
         }
 
         /// <summary> Callback parametter conversion mode combobox </summary>
@@ -160,7 +161,8 @@ namespace AnotherMusicPlayer
                 ParamsLibFolderTextBox.Text = path;
                 Settings.LibFolder = path;
                 Settings.SaveSettings();
-                _ = Dispatcher.InvokeAsync(new Action(() => {
+                _ = Dispatcher.InvokeAsync(new Action(() =>
+                {
                     library.Scan(true);
                 }));
             }
