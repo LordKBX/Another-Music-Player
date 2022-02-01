@@ -1,0 +1,61 @@
+﻿<Window x:Class="AnotherMusicPlayer.DialogBox"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:AnotherMusicPlayer"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        mc:Ignorable="d"
+        Title="{DynamicResource DialogBoxTitle}" Height="170" Width="350"
+        ResizeMode="NoResize" WindowStyle="None">
+    <!--<Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/AnotherMusicPlayer;component/Styles/Dark.xaml" />
+                <ResourceDictionary Source="/AnotherMusicPlayer;component/Traductions/en.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>-->
+    <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
+        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" Margin="3">
+            <TextBlock x:Name="TitleBlock" Text="Title" 
+                    Style="{DynamicResource DialogBoxTextBlock}"
+                    TextWrapping="WrapWithOverflow" Height="30" MaxHeight="30" 
+                    Margin="5, 0, 0, 5"
+                    FontSize="20" FontWeight="DemiBold"
+                    VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                <materialDesign:PackIcon Kind="Warning" Width="70" Height="70"
+                                         VerticalAlignment="Center"
+                    x:Name="MessageIcon"/>
+                <TextBlock x:Name="MessageBlock" Text="Message"  
+                    Style="{DynamicResource DialogBoxTextBlock}"
+                    TextWrapping="WrapWithOverflow" MaxHeight="70" 
+                    Width="270" MaxWidth="270" Margin="5, 0, 0, 0"
+                    VerticalAlignment="Center" HorizontalAlignment="Stretch" />
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+                <Button x:Name="BtnOk" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                    <Button.Content>
+                        <AccessText Text="{DynamicResource DialogBoxBtnOk}" />
+                    </Button.Content>
+                </Button>
+                <Button x:Name="BtnCancel" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                    <Button.Content>
+                        <AccessText Text="{DynamicResource DialogBoxBtnCancel}" />
+                    </Button.Content>
+                </Button>
+                <Button x:Name="BtnYes" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                    <Button.Content>
+                        <AccessText Text="{DynamicResource DialogBoxBtnYes}" />
+                    </Button.Content>
+                </Button>
+                <Button x:Name="BtnNo" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                    <Button.Content>
+                        <AccessText Text="{DynamicResource DialogBoxBtnNo}" />
+                    </Button.Content>
+                </Button>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>

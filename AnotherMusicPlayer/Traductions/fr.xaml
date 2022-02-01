@@ -13,6 +13,14 @@
     <sys:String x:Key="SizeBytesPeta">Pib</sys:String>
     <sys:String x:Key="SizeBytesExa">Eib</sys:String>
     <!--#endregion-->
+
+    <!--#region DialogBox -->
+    <sys:String x:Key="DialogBoxTitle">Dialog</sys:String>
+    <sys:String x:Key="DialogBoxBtnOk">Accepter</sys:String>
+    <sys:String x:Key="DialogBoxBtnCancel">Annuler</sys:String>
+    <sys:String x:Key="DialogBoxBtnYes">Oui</sys:String>
+    <sys:String x:Key="DialogBoxBtnNo">Non</sys:String>
+    <!--#endregion-->
     
     <sys:String x:Key="Title">Titre</sys:String>
     <sys:String x:Key="Album">Album</sys:String>
@@ -119,7 +127,6 @@
     <sys:String x:Key="LibraryContextMenuPlayAlbum">Lire l'album</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayFolder">Lire le dossier</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayTrack">Lire la piste</sys:String>
-    <sys:String x:Key="LibraryContextMenuPlayList">Lire la liste</sys:String>
 
     <sys:String x:Key="LibraryContextMenuPlayShuffleGeneric">Lire aléatoirement</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayShuffleAlbum">Lire aléatoirement l'album</sys:String>
@@ -144,10 +151,17 @@
     <sys:String x:Key="LibraryTotalSize">Taille Totale</sys:String>
     <sys:String x:Key="LibraryTotalDuration">Durée Totale</sys:String>
     <!--#endregion-->
-    
-    <!--#region LIBRARY SCAN-->
-    <sys:String x:Key="LibraryWindowAddIntoPlaylistTitle">Ajout à une liste ...</sys:String>
-    <sys:String x:Key="LibraryWindowAddIntoPlaylistNewElement">Nouvelle liste</sys:String>
+
+    <!--#region LIBRARY Window Add Into Playlist -->
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistTitle">Ajout à une liste ...</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistNewElement">Nouvelle liste</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistName">Nom</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistDescription">Description</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistOk">Accepter</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistCancel">Annuler</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistWarningTitle">Error !</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistWarningNameSize">Veuillez spécifier un Nom avec minimun 3 lettres</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddIntoPlaylistWarningDescriptionSize">Veuillez spécifier une Description vide ou avec minimun 3 lettres</sys:String>
     <!--#endregion-->
 
     <!--#region LIBRARY TAG EDITOR-->
@@ -185,6 +199,17 @@
     <sys:String x:Key="PlayListsAuto_mostPlayed">Les plus joués</sys:String>
     <sys:String x:Key="PlayListsAuto_mostRecentlyPlayed">Reçament joué</sys:String>
     <sys:String x:Key="PlayListsAuto_bestRating">Les mieux notées</sys:String>
+
+    <sys:String x:Key="PlayListsContextMenuPlayListPlay">Lire la liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListDelete">Supprimer la liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuTrackDelete">Supprimer selection de la liste</sys:String>
+    
+    <sys:String x:Key="PlayListsContextMenuPlayListDeleteConfirmTitle">Suppression de liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListDeleteConfirmMessage">Confirmez-vous la suppression de la liste '%X%' ?</sys:String>
+
+    <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmTitle">Suppression de piste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmMessage" xml:space="preserve">Confirmez-vous la suppression de la piste &#10; '%X%' ?</sys:String>
+    <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmMessage2">Confirmez-vous la suppression des pistes selectionnées ?</sys:String>
     <!--#endregion-->
     
 </ResourceDictionary>

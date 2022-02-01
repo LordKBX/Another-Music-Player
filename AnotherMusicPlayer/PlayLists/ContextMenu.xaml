@@ -7,16 +7,22 @@
              mc:Ignorable="d">
 
     <!-- Playlist Tree Item ContextMenu -->
-    <MenuItem Name="PlayList" Header="{DynamicResource LibraryContextMenuPlayList}">
+    <MenuItem Name="PlayListPlay" Header="{DynamicResource PlayListsContextMenuPlayListPlay}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="PlaylistPlay"/>
         </MenuItem.Icon>
     </MenuItem>
 
-    <!-- Playlist Item ContextMenu -->
-    <MenuItem Name="RemoveTrack" Header="{DynamicResource LibraryContextMenuPlayList}">
+    <MenuItem Name="PlayListDelete" Header="{DynamicResource PlayListsContextMenuPlayListDelete}">
         <MenuItem.Icon>
-            <materialDesign:PackIcon Kind="Album"/>
+            <materialDesign:PackIcon Kind="Delete"/>
+        </MenuItem.Icon>
+    </MenuItem>
+
+    <!-- Playlist Item ContextMenu -->
+    <MenuItem Name="RemoveTrack" Header="{DynamicResource PlayListsContextMenuTrackDelete}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Delete"/>
         </MenuItem.Icon>
     </MenuItem>
 </ContextMenu>

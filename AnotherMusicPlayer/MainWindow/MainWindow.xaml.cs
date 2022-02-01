@@ -48,6 +48,8 @@ namespace AnotherMusicPlayer
         public Database bdd = null;
         /// <summary>Library object </summary>
         public Library library = null;
+        /// <summary>PlayLists object </summary>
+        public PlayLists playLists = null;
 
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd)
@@ -72,7 +74,7 @@ namespace AnotherMusicPlayer
             //SettingsSetUp();//Initialize interface elements with stored parametters in settings
             //TabControl t = new TabControl();
             //t.cli
-            TabControler.SelectedIndex = 1;
+            TabControler.SelectedIndex = 2;
 
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -95,7 +97,7 @@ namespace AnotherMusicPlayer
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
 
-            PlayLists playLists = new PlayLists(this);
+            playLists = new PlayLists(this);
         }
 
         /// <summary> Function unlocking window interface </summary>
@@ -123,8 +125,6 @@ namespace AnotherMusicPlayer
             {
                 library.DisplayPath(Settings.LibFolder);
             }));
-
-
 
             MouseButtonEventArgs args2 = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
             args2.RoutedEvent = TextBlock.MouseLeftButtonUpEvent;

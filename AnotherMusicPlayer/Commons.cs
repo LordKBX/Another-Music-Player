@@ -47,6 +47,18 @@ namespace AnotherMusicPlayer
             catch (IOException) { return true; }
             return false; //file is not locked
         }
+
+        static public string EncodeTo64(string toEncode)
+        {
+            byte[] toEncodeAsBytes = System.Text.ASCIIEncoding.UTF8.GetBytes(toEncode);
+            return System.Convert.ToBase64String(toEncodeAsBytes);
+        }
+
+        static public string DecodeFrom64(string encodedData)
+        {
+            byte[] encodedDataAsBytes = System.Convert.FromBase64String(encodedData);
+            return System.Text.ASCIIEncoding.UTF8.GetString(encodedDataAsBytes);
+        }
     }
 
     public partial class MainWindow : Window

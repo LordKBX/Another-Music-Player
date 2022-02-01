@@ -8,13 +8,73 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Newtonsoft.Json;
+using System.Windows.Media;
+using GongSolutions.Wpf.DragDrop;
 
 namespace AnotherMusicPlayer
 {
-    public partial class PlayLists
+    public partial class PlayLists : IDropTarget
     {
         private MainWindow Parent;
         private bool isBuild = false;
+
+        public void DragOver(IDropInfo dropInfo)
+        {
+            dropInfo.Effects = DragDropEffects.Move;
+            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
+        }
+
+        public void Drop(IDropInfo dropInfo)
+        {
+            if (Parent.PlaylistsTree.SelectedItem == null) { return; }
+            TreeViewItem tvi = (TreeViewItem)Parent.PlaylistsTree.SelectedItem;
+            if (!tvi.Name.StartsWith("user_")) { return; }
+            string id = (string)tvi.Tag;
+
+            if (Parent.PlaylistsContents.SelectedItems.Count == 0) { return; }
+            ObservableCollection<MediaItem> list = (ObservableCollection<MediaItem>)Parent.PlaylistsContents.ItemsSource;
+            ObservableCollection<MediaItem> listTmp = new ObservableCollection<MediaItem>();
+            int newIndex = dropInfo.InsertIndex - 1;
+            if (newIndex < 0) { newIndex = 0; }
+            Debug.WriteLine("newIndex = " + newIndex);
+
+            if (Parent.PlaylistsContents.SelectedItems.Count == 1)
+            {
+                MediaItem target = (MediaItem)dropInfo.DragInfo.SourceItem;
+                Debug.WriteLine("target = " + JsonConvert.SerializeObject(target));
+
+                foreach (MediaItem row in list)
+                {
+                    if (listTmp.Count == newIndex) { listTmp.Add(target); }
+                    if (row.Path != target.Path) { listTmp.Add(row); }
+                }
+            }
+            else if (Parent.PlaylistsContents.SelectedItems.Count > 1)
+            {
+                MediaItem[] selection = new MediaItem[Parent.PlaylistsContents.SelectedItems.Count];
+                Parent.PlaylistsContents.SelectedItems.CopyTo(selection, 0);
+                Parent.PlaylistsContents.SelectedIndex = -1;
+                List<MediaItem> selectionList = new List<MediaItem>(selection);
+                Debug.WriteLine("targets = " + JsonConvert.SerializeObject(selection));
+                foreach (MediaItem row in list)
+                {
+                    if (listTmp.Count == newIndex)
+                    {
+                        foreach (MediaItem row2 in selection) listTmp.Add(row2);
+                    }
+
+                    if (!selectionList.Contains(row)) { listTmp.Add(row); }
+                }
+            }
+
+            Parent.PlaylistsContents.ItemsSource = listTmp;
+
+            List<string> querys = new List<string>();
+
+            string query = "UPDATE playlistsItems SET LOrder = '!' WHERE Path = ''"; int offset = 1;
+            foreach (MediaItem row in listTmp) { querys.Add("UPDATE playlistsItems SET LOrder = '" + offset + "' WHERE Path = '" + Database.EscapeString(row.Path) + "'"); offset += 1; }
+            Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
+        }
 
         public PlayLists(MainWindow parent)
         {
@@ -23,6 +83,31 @@ namespace AnotherMusicPlayer
             Init();
             isBuild = true;
             Parent.PlaylistsContents.MouseDoubleClick += PlaylistsContents_MouseDoubleClick;
+            Parent.PlaylistsContents.ContextMenu = null;
+            Parent.PlaylistsContents.SelectionChanged += PlaylistsContents_SelectionChanged;
+            Parent.PlaylistsContents.KeyUp += PlaylistsContents_KeyUp;
+        }
+
+        private void PlaylistsContents_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (Parent.PlaylistsTree.SelectedItem == null) { Debug.WriteLine("NOPE 1"); return; }
+            TreeViewItem tvi = (TreeViewItem)Parent.PlaylistsTree.SelectedItem;
+            if (!tvi.Name.StartsWith("user_")) { Debug.WriteLine("NOPE 1"); return; }
+
+            if (e.Key == Key.Delete) { CM_RemoveTrackSelection(null, null); }
+        }
+
+        private void PlaylistsContents_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Parent.PlaylistsContents.ContextMenu = null;
+            if (Parent.PlaylistsContents.SelectedItems.Count == 0) { return; }
+            else
+            {
+                TreeViewItem TItem = (Parent.PlaylistsTree.SelectedItem != null) ? (TreeViewItem)Parent.PlaylistsTree.SelectedItem : null;
+                if (TItem == null) { return; }
+                if (!TItem.Name.StartsWith("user_")) { return; }
+                Parent.PlaylistsContents.ContextMenu = MakeContextMenu(Parent.PlaylistsContents, "content");
+            }
         }
 
         private void PlaylistsContents_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -77,7 +162,8 @@ namespace AnotherMusicPlayer
                 {
                     Header = Parent.FindResource("PlayListsAuto_" + archetype) as string,
                     Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
-                    Tag = "auto_" + archetype
+                    Tag = "auto_" + archetype,
+                    Name = "auto_" + archetype
                 };
                 item.MouseLeftButtonUp += autolistClick;
                 item.ContextMenu = MakeContextMenu(item, "list");
@@ -85,18 +171,19 @@ namespace AnotherMusicPlayer
                 cpt += 1;
             }
 
-            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description FROM playlists ORDER BY Name", "FIndex");
+            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description FROM playlists ORDER BY LOWER(Name) ASC", "FIndex");
             foreach (KeyValuePair<string, Dictionary<string, object>> row in rez)
             {
                 TreeViewItem item = new TreeViewItem()
                 {
                     Header = row.Value["Name"] as string,
-                    ToolTip = row.Value["Description"] as string,
                     Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
-                    Tag = row.Value["FIndex"] as string
+                    Tag = row.Value["FIndex"] as string,
+                    Name = "user_" + row.Value["FIndex"] as string
                 };
+                if (row.Value["Description"] != null && row.Value["Description"] as string != "") { item.ToolTip = row.Value["Description"] as string; }
                 item.MouseLeftButtonUp += userlistClick;
-                item.ContextMenu = MakeContextMenu(item, "list");
+                item.ContextMenu = MakeContextMenu(item, "listCustom");
                 Parent.PlaylistsTree.Items.Add(item);
             }
         }
@@ -128,6 +215,11 @@ namespace AnotherMusicPlayer
             }
             catch (System.NullReferenceException err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+            Parent.PlaylistsContents.ContextMenu = null;
+
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDragSource(Parent.PlaylistsContents, false);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(Parent.PlaylistsContents, false);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(Parent.PlaylistsContents, null);
         }
 
         private Dictionary<string, Dictionary<string, object>> autolistData(string name, int maxLimit = 50)
@@ -141,7 +233,7 @@ namespace AnotherMusicPlayer
             return Parent.bdd.DatabaseQuery(query, "Path");
         }
 
-        private void userlistClick(object sender, MouseButtonEventArgs e)
+        public void userlistClick(object sender, MouseButtonEventArgs e)
         {
             int id = Convert.ToInt32((string)((TreeViewItem)sender).Tag);
             Debug.WriteLine("--> Item_MouseLeftButtonUp, Id: " + id);
@@ -151,6 +243,12 @@ namespace AnotherMusicPlayer
             if (files == null) { Parent.PlaylistsContents.ItemsSource = new ObservableCollection<MediaItem>(); return; }
             Debug.WriteLine("--> Display build");
             fillContentSpace(files.ToArray(), null);
+
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDragSource(Parent.PlaylistsContents, true);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(Parent.PlaylistsContents, true);
+            GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(Parent.PlaylistsContents, this);
+
+            Parent.PlaylistsContents.ContextMenu = null;
         }
 
         private List<string> userlistData(int id)
@@ -210,6 +308,57 @@ namespace AnotherMusicPlayer
             }
             catch (System.NullReferenceException err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+        }
+
+        public bool RecordTracksIntoPlaylist(string[] tracks)
+        {
+            if (tracks.Length < 1) { return false; }
+            List<string> clearTracks = new List<string>();
+            foreach (string track in tracks)
+            {
+                string trackTrimed = track.Trim();
+                if (trackTrimed != "") { if (System.IO.File.Exists(trackTrimed)) { clearTracks.Add(trackTrimed); } }
+            }
+            if (clearTracks.Count < 1) { return false; }
+            InsertIntoPlaylistWindow window = new InsertIntoPlaylistWindow(Parent)
+            {
+                Owner = Parent,
+                Title = Parent.FindResource("PlaylistsWindowAddIntoPlaylistTitle") as string,
+                Tag = null
+            };
+
+            window.ShowDialog();
+
+            int listId = 0;
+            if (window.Tag != null)
+            {
+                string id = (string)window.Tag;
+                if (id == "!")
+                {
+                    string name = window.input1.Text.Trim(); string desc = window.input2.Text.Trim();
+                    if (desc == "") { desc = null; }
+                    listId = window.maxIndexList + 1;
+                    Parent.bdd.DatabaseQuerys(new string[] {
+                        "INSERT INTO playlists(FIndex,Name,Description) VALUES('" + listId + "', '" + Database.EscapeString(name) + "', " + ((desc == null)?"NULL":"'"+desc+"'") + ")"
+                    }, true);
+                    Parent.playLists.Init();
+                }
+                else { listId = Convert.ToInt32(id); }
+            }
+            if (listId == 0) { return false; }
+
+            int startOrder = 0;
+            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT LOrder FROM playlistsItems WHERE LIndex = '" + listId + "' ORDER BY LOrder DESC LIMIT 1", "LOrder");
+            if (rez != null) { foreach (string key in rez.Keys) { startOrder = Convert.ToInt32(key); break; } }
+
+            string query = "INSERT INTO playlistsItems(LIndex, Path, LOrder) VALUES";
+            List<string> querys = new List<string>(); int offset = 1;
+            foreach (string track in clearTracks) { querys.Add(query + "('" + listId + "', '" + Database.EscapeString(track) + "', '" + (startOrder + offset) + "')"); offset += 1; }
+            Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
+
+            if (Parent.PlaylistsTree.SelectedItem != null)
+            { if ((string)((TreeViewItem)Parent.PlaylistsTree.SelectedItem).Tag == "" + listId) { Parent.playLists.userlistClick(Parent.PlaylistsTree.SelectedItem, null); } }
+            return true;
         }
     }
 }

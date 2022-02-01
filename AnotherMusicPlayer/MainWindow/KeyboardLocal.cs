@@ -10,13 +10,16 @@ namespace AnotherMusicPlayer
         string PreviousKeyboardKey = "";
         double PreviousKeyboardTime = 0;
 
-        private void KeyboardLocalListenerInit(){
-            this.PreviewKeyDown += (s, e) => {  // intercept keyboard event on UI to prevent selected button activation via keyboard
+        private void KeyboardLocalListenerInit()
+        {
+            this.PreviewKeyDown += (s, e) =>
+            {  // intercept keyboard event on UI to prevent selected button activation via keyboard
                 if (e.OriginalSource.ToString().StartsWith("System.Windows.Controls.TextBox")) { return; }
                 double ntime = UnixTimestamp();
 
-                string key = e.Key.ToString(); Debug.WriteLine(key);
-                Debug.WriteLine("((" + e.KeyStates.ToString() + "))");
+                string key = e.Key.ToString();
+                //Debug.WriteLine(key);
+                //Debug.WriteLine("((" + e.KeyStates.ToString() + "))");
                 //List<string> autorised = new List<string>() { "Left", "Right", "Up", "Down" };
                 List<string> autorised = new List<string>() { "Space", "Left", "Right", "Up", "Down" };
                 if (!autorised.Contains(key)) { e.Handled = true; }
