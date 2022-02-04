@@ -13,7 +13,7 @@ namespace AnotherMusicPlayer
 {
     public partial class Library
     {
-        private ContextMenu MakeContextMenu(object parent, string otype = null, bool back = false)
+        private ContextMenu MakeContextMenu(object parent, string otype = null, bool back = false, string backPath = "")
         {
             if (otype == null || otype == "") { otype = "track"; }
             string type = otype = otype.ToLower();
@@ -23,7 +23,8 @@ namespace AnotherMusicPlayer
             {
                 if (((MenuItem)cm.Items[i]).Name == "BackFolder" && back == true)
                 {
-                    //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Back;
+                    ((MenuItem)cm.Items[i]).Click += CM_FolderBack;
+                    ((MenuItem)cm.Items[i]).Tag = backPath;
                 }
                 else if (((MenuItem)cm.Items[i]).Name.ToLower() == "add" + type)
                 {
@@ -75,6 +76,13 @@ namespace AnotherMusicPlayer
             return cm;
         }
 
+        private void CM_FolderBack(object sender, RoutedEventArgs e)
+        {
+            string tag = (string)((MenuItem)sender).Tag;
+            DirectoryInfo di = new DirectoryInfo(tag);
+            DisplayPath(di.Parent.FullName);
+        }
+
         private void CM_AddPlaylistTrack(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
@@ -93,7 +101,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((LibraryFolderButton)item.Tag).Path; }
+            try { folder = ((Button)item.Tag).Tag as string; }
             catch { }
             if (folder == null) { return; }
             string[] tracks = getDirectoryMediaFIles(folder, true);
@@ -119,7 +127,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((LibraryFolderButton)item.Tag).Path; }
+            try { folder = ((Button)item.Tag).Tag as string; }
             catch { }
             if (folder == null) { return; }
             Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true));
@@ -138,7 +146,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((LibraryFolderButton)item.Tag).Path; }
+            try { folder = ((Button)item.Tag).Tag as string; }
             catch
             {
                 try { }
@@ -170,7 +178,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((LibraryFolderButton)item.Tag).Path; }
+            try { folder = ((Button)item.Tag).Tag as string; }
             catch
             {
                 try { }
@@ -195,7 +203,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((LibraryFolderButton)item.Tag).Path; }
+            try { folder = ((Button)item.Tag).Tag as string; }
             catch
             {
                 try { }
@@ -262,66 +270,12 @@ namespace AnotherMusicPlayer
             string[] pathTab = folderPath.Split(MainWindow.SeparatorChar);
             Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
 
-            Window win = new Window();
-            win.Owner = Parent;
-            win.Style = Parent.FindResource("CustomWindowStyle") as Style;
-            win.Resources.MergedDictionaries.Add(Parent.Resources.MergedDictionaries[0]);
-            win.Title = Parent.FindResource("RenemaWindowTitle") as string;
-            win.WindowStyle = WindowStyle.ToolWindow;
-            win.Width = win.MinWidth = win.MaxWidth = 300;
-            win.Height = win.MinHeight = win.MaxHeight = 200;
-            StackPanel st = new StackPanel()
-            {
-                Orientation = Orientation.Vertical,
-                Style = win.FindResource("CustomWindowBackgroundStyleAlt") as Style
-            };
-            st.Children.Add(new TextBlock()
-            {
-                Text = Parent.FindResource("RenemaWindowLabel") as string,
-                Style = win.FindResource("EditorInputLabel") as Style,
-                Margin = new Thickness(5, 5, 5, 3)
-            });
-
-            TextBox input = new TextBox()
-            {
-                Text = pathTab[pathTab.Length - 1],
-                Style = win.FindResource("InputStyle") as Style,
-                Margin = new Thickness(5, 0, 5, 3)
-            };
-            st.Children.Add(input);
-
-            Button saveBtn = new Button()
-            {
-                Content = Parent.FindResource("EditorTagSave") as string,
-                Style = win.FindResource("EditorButton1") as Style,
-                IsEnabled = false,
-                Margin = new Thickness(5, 0, 5, 3)
-            };
-            saveBtn.Click += (object sender, RoutedEventArgs e) =>
-            {
-                Regex rx = new Regex("(<|>|:|\"|/|\\|?|*)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-                if (input.Text.Trim() == "" || input.Text.Contains("|", StringComparison.Ordinal) || rx.IsMatch(input.Text))
-                {
-                    MessageBox.Show("Folder name invalid,\nplease remove the folowing characters:\n < > : \" / \\ | ? *", "Error !", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                List<string> list = new List<string>(pathTab);
-                list.Remove(pathTab[pathTab.Length - 1]);
-
-                Directory.Move(folderPath, string.Join(MainWindow.SeparatorChar, list.ToArray()) + MainWindow.SeparatorChar + input.Text.Trim());
-                win.Close();
-            };
-            input.TextChanged += (object sender, TextChangedEventArgs e) =>
-            {
-                saveBtn.IsEnabled = true;
-            };
-
-            st.Children.Add(saveBtn);
-
-            win.Content = st;
-            win.ShowInTaskbar = false;
+            RenameWindow win = new RenameWindow(Parent, folderPath, pathTab);
             win.ShowDialog();
-
+            if (win.renamed == true)
+            {
+                DisplayPath(CurrentPath);
+            }
             //throw new System.NotImplementedException();
         }
         #endregion

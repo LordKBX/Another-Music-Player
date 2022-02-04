@@ -5,17 +5,21 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:AnotherMusicPlayer"
-        mc:Ignorable="d" ShowInTaskbar="False" WindowStyle="ToolWindow"
-        Title="TagsEditor" MinHeight="570" MinWidth="320" MaxHeight="570" MaxWidth="500">
+        mc:Ignorable="d" ShowInTaskbar="False" AllowsTransparency="True" WindowStyle="None" ResizeMode="CanResizeWithGrip"
+        Title="TagsEditor" MinHeight="400" MaxHeight="590" MinWidth="320" MaxWidth="500">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Dark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Red.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Traductions/en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="27px"/>
+            <RowDefinition Height="100*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3"/>
             <ColumnDefinition Width="150"/>
@@ -23,8 +27,18 @@
             <ColumnDefinition Width="100*"/>
             <ColumnDefinition Width="3"/>
         </Grid.ColumnDefinitions>
+        <Border Grid.Row="0" Grid.ColumnSpan="5" Style="{DynamicResource TopBarBorder}">
+            <Grid x:Name="TopBar">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="100*"/>
+                    <ColumnDefinition Style="{DynamicResource TopBarBtnWidth}"/>
+                </Grid.ColumnDefinitions>
+                <AccessText Grid.Column="0" x:Name="TopBarTitle" Text="Another Media Player" Style="{DynamicResource TopBarTitle}"/>
+                <Button x:Name="BtnClose" Grid.Column="3" Cursor="Hand" Style="{DynamicResource TopBarBtnClose}" />
+            </Grid>
+        </Border>
 
-        <Grid Grid.Column="1" Margin="0,3,0,3">
+        <Grid Grid.Column="1" Grid.Row="1" Margin="0,3,0,3">
             <Grid.RowDefinitions>
                 <RowDefinition Height="150"/>
                 <RowDefinition Height="30"/>
@@ -56,7 +70,7 @@
             <TextBlock Grid.Row="1" x:Name="LyricsLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelLyrics}" VerticalAlignment="Bottom" Margin="0,0,0,3" HorizontalAlignment="Left"/>
             <TextBox Grid.Row="2" x:Name="LyricsInput" Style="{DynamicResource InputStyle}" ScrollViewer.CanContentScroll="True"/>
         </Grid>
-        <ScrollViewer Grid.Column="3" Margin="0,3,0,3" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Column="3" Grid.Row="1" Margin="0,3,0,3" VerticalAlignment="Stretch" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top" VerticalScrollBarVisibility="Auto">
             <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <TextBlock x:Name="TitleLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelTitle}"/>
                 <TextBox x:Name="TitleInput" Style="{DynamicResource InputStyle}"/>
@@ -106,7 +120,7 @@
                 <TextBlock x:Name="CopyrightLabel" Style="{DynamicResource EditorInputLabel}" Text="{DynamicResource EditorTagLabelCopyright}"/>
                 <TextBox x:Name="CopyrightInput" Style="{DynamicResource InputStyle}"/>
 
-                <Expander Height="20" />
+                <Expander Height="20" Background="Transparent"/>
                 <Button x:Name="SaveButton" Style="{DynamicResource EditorButton1}" Content="{DynamicResource EditorTagSave}" IsEnabled="False" />
             </StackPanel>
         </ScrollViewer>

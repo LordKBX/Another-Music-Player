@@ -183,30 +183,33 @@ namespace AnotherMusicPlayer
             SearchResultsContener.Children.Clear();
             NavigationContener.Children.Clear();
             NavigationContenerScoller.ContextMenu = null;
-            NavigationContenerScoller.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false);
+            NavigationContenerScoller.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);
 
             string[] dirs = Directory.GetDirectories(path);
             foreach (string dir in dirs)
             {
-                if (Settings.LibFolderShowHiden == false)
-                {
-                    DirectoryInfo dirInfo = new DirectoryInfo(dir);
-                    if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; }
-                }
+                //if (NavigationContener.Children.Count > 5) { continue; }
+                //if (Settings.LibFolderShowHiden == false)
+                //{
+                //    DirectoryInfo dirInfo = new DirectoryInfo(dir);
+                //    if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; }
+                //}
                 if (Settings.LibFolderShowUnixHiden == false)
                 {
                     string name = dir.Replace(path, "").TrimStart(MainWindow.SeparatorChar);
                     if (name[0] == '.') { continue; }
                 }
                 string[] tab = dir.Split(MainWindow.SeparatorChar);
-                LibraryFolderButton btn = new LibraryFolderButton(Parent, tab[tab.Length - 1], dir);
-                btn.Click += BtnFolder_Click;
-                btn.ContextMenu = MakeContextMenu(btn, "folder");
-                btn.Tag = dir;
-                NavigationContener.Children.Add(btn);
+
+                Button button = new Button() { Content = tab[tab.Length - 1], Tag = dir, Style = Parent.FindResource("LibibraryNavigationContentFolderButton") as Style };
+                button.ContextMenu = MakeContextMenu(button, "folder");
+                button.Click += BtnFolder_Click;
+
+                NavigationContener.Children.Add(button);
             }
 
-            Dictionary<string, Dictionary<string, object>> files = Bdd.DatabaseQuery("SELECT * FROM files WHERE Path LIKE '" + Database.EscapeString(path) + MainWindow.SeparatorChar + "%' ORDER BY LOWER(Album) ASC, Disc ASC, Track ASC, Name ASC, Path ASC", "Path");
+            //Dictionary<string, Dictionary<string, object>> files = Bdd.DatabaseQuery("SELECT * FROM files WHERE Path LIKE '" + Database.EscapeString(path + MainWindow.SeparatorChar) + "%' ORDER BY LOWER(Album) ASC, Disc ASC, Track ASC, Name ASC, Path ASC", "Path");
+            Dictionary<string, Dictionary<string, object>> files = Bdd.DatabaseQuery("SELECT * FROM files WHERE replace(Path, '" + Database.EscapeString(path + MainWindow.SeparatorChar) + "', '') NOT LIKE '%\\%' ORDER BY LOWER(Album) ASC, Disc ASC, Track ASC, Name ASC, Path ASC", "Path");
             List<string> endFiles = new List<string>();
             foreach (string file in files.Keys.ToArray())
             {
@@ -444,14 +447,14 @@ namespace AnotherMusicPlayer
         private void BtnFolder_Click(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine("--> BtnFolder_Click END <--");
-            LibraryFolderButton btn = (LibraryFolderButton)sender;
+            Button btn = (Button)sender;
             Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
             {
                 Parent.setLoadingState(true);
             }));
             Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
             {
-                DisplayPath(btn.Path);
+                DisplayPath(btn.Tag as string);
             }));
         }
 

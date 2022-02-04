@@ -14,7 +14,7 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Red.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Dark.xaml"/>
                 <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Traductions/en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>

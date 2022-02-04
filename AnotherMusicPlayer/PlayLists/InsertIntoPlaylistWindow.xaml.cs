@@ -22,9 +22,10 @@ namespace AnotherMusicPlayer
 
         public InsertIntoPlaylistWindow(MainWindow parent)
         {
-            Parent = parent;
+            Owner = Parent = parent;
             InitializeComponent();
             Resources = Parent.Resources;
+            Style = FindResource("CustomWindowStyle") as Style;
 
             // FILLING WINDOW
             Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description, MAX(LOrder) AS Lorder FROM playlists LEFT JOIN playlistsItems ON(LIndex = FIndex) GROUP BY Name ORDER BY Name ASC", "FIndex");
@@ -100,6 +101,20 @@ namespace AnotherMusicPlayer
                 }
                 Close();
             };
+
+            Left = Owner.Left + ((Owner.Width - Width) / 2);
+            Top = Owner.Top + ((Owner.Height - Height) / 2);
+
+            TopBar.MouseDown += TopBar_MouseDown;
+            BtnClose.Click += (object sender, RoutedEventArgs e) => { this.Close(); };
+        }
+
+        private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
         }
     }
 }

@@ -165,6 +165,7 @@
     <!--#endregion-->
 
     <!--#region LIBRARY TAG EDITOR-->
+    <sys:String x:Key="EditorTagWindowTitle">Tag Editor</sys:String>
     <sys:String x:Key="EditorTagSeparateEntrys">Séparer les membres avec le ;</sys:String>
 
     <sys:String x:Key="EditorTagLabelLyrics">Paroles</sys:String>

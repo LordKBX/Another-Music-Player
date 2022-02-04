@@ -58,30 +58,12 @@ namespace AnotherMusicPlayer
             }
             if (Files.Count == 0) { return; }
             Tags = TagLib.File.Create(Files[0]);
-            Parent = parent;
+            Owner = Parent = parent;
+            Resources = Owner.Resources;
             Mode = mode;
 
             InitializeComponent();
-            try
-            {
-                Resources.MergedDictionaries[0].Clear();
-                Resources.MergedDictionaries[0] = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Styles/" + Settings.StyleName + ".xaml", UriKind.Absolute)
-                };
-                Style = FindResource("CustomWindowStyle") as Style;
-            }
-            catch { }
-            try
-            {
-                Resources.MergedDictionaries[1].Clear();
-                Resources.MergedDictionaries[1] = new ResourceDictionary
-                {
-                    Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Traductions/" + Settings.Lang.Split('-')[0] + ".xaml", UriKind.Absolute)
-                };
-                Style = FindResource("CustomWindowStyle") as Style;
-            }
-            catch { }
+            Style = FindResource("CustomWindowStyle") as Style;
 
             DefaultCover = MainWindow.BaseDir + "icons" + MainWindow.SeparatorChar + "album_small.png";
 
@@ -105,9 +87,9 @@ namespace AnotherMusicPlayer
                 TrackLabel.Visibility = Visibility.Collapsed;
                 TrackGrid.Visibility = Visibility.Collapsed;
 
-                this.MinHeight = this.MaxHeight = 340;
+                this.MinHeight = this.MaxHeight = 345;
             }
-            else { this.MinHeight = this.MaxHeight = 570; }
+            else { this.Height = this.MaxHeight; }
 
             if (mode == "track")
             {
@@ -164,8 +146,28 @@ namespace AnotherMusicPlayer
             CoverCMClear.Click += CoverCMClear_Click;
             CoverCMAdd.Click += CoverCMAdd_Click;
 
+            TopBar.MouseDown += TopBar_MouseDown;
+            TopBarTitle.Text = Parent.FindResource("EditorTagWindowTitle") as string;
+            BtnClose.Click += (object sender, RoutedEventArgs e) => { this.Close(); };
+
             Tags.Dispose();
             IsInitialized = true;
+
+            this.Loaded += TagsEditor_Loaded;
+        }
+
+        private void TagsEditor_Loaded(object sender, RoutedEventArgs e)
+        {
+            Left = Parent.Left + ((Parent.Width - Width) / 2);
+            Top = Parent.Top + ((Parent.Height - Height) / 2);
+        }
+
+        private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragMove();
+            }
         }
 
         public bool? ShowDialog2(Window owner = null)

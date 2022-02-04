@@ -38,10 +38,18 @@
     <SolidColorBrush x:Key="TabControl.Item.Active.BackgroundColor" Color="#FFFF3232"/>
     <SolidColorBrush x:Key="TabControl.Item.Active.ForegroundColor" Color="#FF000000"/>
     <!--#endregion-->
+    <!--#region COLORS DEFAULT BUTTON-->
+    <SolidColorBrush x:Key="ButtonStyle.BackgroundColor" Color="#FF900000"/>
+    <SolidColorBrush x:Key="ButtonStyle.BackgroundColor.Over" Color="#FFCC0000"/>
+    <SolidColorBrush x:Key="ButtonStyle.BackgroundColor.Active" Color="#FFAA0000"/>
+    <SolidColorBrush x:Key="ButtonStyle.ForegroundColor" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="ButtonStyle.BackgroundColor.Disabled" Color="#FF600000"/>
+    <SolidColorBrush x:Key="ButtonStyle.ForegroundColor.Disabled" Color="#FFDDDDDD"/>
+    <!--#endregion-->
     <!--#region COLORS TOPBAR BUTTON-->
-    <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor" Color="#FF505050"/>
-    <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Over" Color="#FF666666"/>
-    <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Active" Color="#FF707070"/>
+    <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor" Color="#FF900000"/>
+    <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Over" Color="#FFCC0000"/>
+    <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Active" Color="#FFAA0000"/>
     <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Close" Color="#FFFF6666"/>
     <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Close.Active" Color="#FFFF0000"/>
     <SolidColorBrush x:Key="TopBarButtonStyle.BackgroundColor.Max" Color="#FF0094FF"/>
@@ -151,7 +159,7 @@
     <!--#endregion-->
 
     <!--#region COLORS WINDOW ADDINTOPLAYLIST -->
-    <SolidColorBrush x:Key="AddIntoPlaylistWindow.Background" Color="#FF838383"/>
+    <SolidColorBrush x:Key="AddIntoPlaylistWindow.Background" Color="#FF960000"/>
 
     <SolidColorBrush x:Key="AddIntoPlaylistWindow.List.Item1.Background" Color="#FF838383"/>
     <SolidColorBrush x:Key="AddIntoPlaylistWindow.List.Item1.Foreground" Color="#FFE6E6E6"/>
@@ -163,7 +171,7 @@
     <SolidColorBrush x:Key="AddIntoPlaylistWindow.List.ItemSelected.Foreground" Color="#FFE6E6E6"/>
 
     <SolidColorBrush x:Key="AddIntoPlaylistWindow.OverNew.Background" Color="#7F000000"/>
-    <SolidColorBrush x:Key="AddIntoPlaylistWindow.OverNew.Block.Background" Color="#FF838383"/>
+    <SolidColorBrush x:Key="AddIntoPlaylistWindow.OverNew.Block.Background" Color="#FFBB0000"/>
     <SolidColorBrush x:Key="AddIntoPlaylistWindow.OverNew.Block.Border" Color="#FFBFBFBF"/>
     <SolidColorBrush x:Key="AddIntoPlaylistWindow.OverNew.Block.ForeGround" Color="#ffffff"/>
     <!--#endregion-->
@@ -361,10 +369,23 @@
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="80"/>
         <Setter Property="MinHeight" Value="50"/>
-        <Setter Property="Foreground" Value="{StaticResource TopBarButtonStyle.ForegroundColor}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource TopBarButtonStyle.BorderColor}"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="{StaticResource TopBarButtonStyle.BackgroundColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource ButtonStyle.ForegroundColor}"/>
+        <Setter Property="Background" Value="{StaticResource ButtonStyle.BackgroundColor}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource ButtonStyle.BackgroundColor.Over}"/>
+                <Setter Property="Foreground" Value="{StaticResource ButtonStyle.ForegroundColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background" Value="{StaticResource ButtonStyle.BackgroundColor.Active}"/>
+                <Setter Property="Foreground" Value="{StaticResource ButtonStyle.ForegroundColor}"/>
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter Property="Background" Value="{StaticResource ButtonStyle.BackgroundColor.Disabled}"/>
+                <Setter Property="Foreground" Value="{StaticResource ButtonStyle.ForegroundColor.Disabled}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
 
     <Style x:Key="DialogBoxStyle" TargetType="{x:Type Window}"></Style>
@@ -1042,13 +1063,15 @@
     <Style x:Key="LibibraryNavigationFilterInput" TargetType="{x:Type TextBox}" BasedOn="{StaticResource InputStyle}">
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButton" TargetType="{x:Type Button}" BasedOn="{StaticResource MaterialDesignFlatButton}">
+    <Style x:Key="LibibraryNavigationContentFolderButton" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="90"/>
         <Setter Property="Width" Value="90"/>
+        <Setter Property="MaxWidth" Value="90"/>
         <Setter Property="MinHeight" Value="90"/>
         <Setter Property="Height" Value="90"/>
+        <Setter Property="MaxHeight" Value="90"/>
         <Setter Property="Padding" Value="5"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
@@ -1056,6 +1079,22 @@
         <Setter Property="Foreground" Value="{StaticResource FolderButton.Foreground}" />
         <Setter Property="BorderBrush" Value="{StaticResource FolderButton.Border}" />
         <Setter Property="BorderThickness" Value="1"/>
+
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="5" ToolTip="{TemplateBinding Content}">
+                        <StackPanel Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+                            <materialDesign:PackIcon Kind="FolderOpen" VerticalAlignment="Top" HorizontalAlignment="Center" 
+                                                     Width="35" Height="35" Foreground="{TemplateBinding Foreground}" Margin="5"/>
+                            <AccessText TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis"  MinHeight="20"  MaxHeight="45" Text="{TemplateBinding Content}" 
+                                        HorizontalAlignment="Stretch" TextAlignment="Center" Foreground="{TemplateBinding Foreground}" Margin="5,0,5,0"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver"  Value="False">
@@ -1431,42 +1470,10 @@
         <Setter Property="Margin" Value="0, 5, 0, 0"/>
     </Style>
 
-    <Style x:Key="EditorButton1" TargetType="{x:Type Button}">
+    <Style x:Key="EditorButton1" TargetType="{x:Type Button}" BasedOn="{StaticResource DefaultBtnStyle}">
         <Setter Property="BorderBrush" Value="Black"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
-
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="Button">
-                    <Border Name="border" 
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            BorderBrush="{TemplateBinding BorderBrush}" 
-                            Padding="0" 
-                            Background="{TemplateBinding Background}" Cursor="Hand">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="5" />
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Background" Value="#31E037" />
-                            <Setter Property="Foreground" Value="#333333" />
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Background" Value="#8CE28F" />
-                            <Setter Property="Foreground" Value="#666666" />
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter Property="Background" Value="#4CAF50" />
-                            <Setter Property="Foreground" Value="#FFFFFF" />
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter Property="Background" Value="#888888" />
-                            <Setter Property="Foreground" Value="#CCCCCC" />
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
     </Style>
     <!--#endregion-->
     <!--#region WINDOW ADD INTO PLAYLISTS -->
@@ -1476,7 +1483,6 @@
     </Style>
     <Style TargetType="{x:Type ListViewItem}" x:Key="PlaylistsWindowAddTracksListViewItem" BasedOn="{StaticResource MaterialDesignGridViewItem}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
-        <Setter Property="Foreground" Value="#000000" />
         <Setter Property="VerticalContentAlignment"  Value="Center" />
         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
         <Style.Triggers>

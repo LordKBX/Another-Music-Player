@@ -122,6 +122,7 @@ namespace AnotherMusicPlayer
             Settings.StyleName = (string)item.Tag;
             Settings.SaveSettings();
             StyleUpdate();
+            try { library.DisplayPath(library.CurrentPath); } catch { }
         }
 
         /// <summary> Callback parametter language combobox </summary>
