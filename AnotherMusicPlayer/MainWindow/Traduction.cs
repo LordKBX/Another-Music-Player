@@ -20,12 +20,20 @@ namespace AnotherMusicPlayer
             if (Settings.Lang == null) { end = "fr"; }
             else if (Settings.Lang.StartsWith("fr-")) { end = "fr"; }
             else { end = "en"; }
-            Resources.MergedDictionaries[1].Clear();
-            Resources.MergedDictionaries[1] = new ResourceDictionary { Source = new Uri(BaseDir + "Traductions" + Path.DirectorySeparatorChar + end + ".xaml", UriKind.Absolute) };
+            if (Resources.MergedDictionaries.Count < 2)
+            {
+                Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Traductions/" + end + ".xaml", UriKind.Absolute) });
+            }
+            else
+            {
+                Resources.MergedDictionaries[1].Clear();
+                Resources.MergedDictionaries[1] = new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Traductions/" + end + ".xaml", UriKind.Absolute) };
+            }
         }
 
         /// <summary> Get string stored in traduction file </summary>
-        private string GetTranslation(string reference) {
+        private string GetTranslation(string reference)
+        {
             try { return (string)Resources.MergedDictionaries[1][reference]; }
             catch { return ""; }
         }

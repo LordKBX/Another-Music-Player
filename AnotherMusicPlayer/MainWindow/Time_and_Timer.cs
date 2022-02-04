@@ -34,7 +34,8 @@ namespace AnotherMusicPlayer
         /// <summary> Generate current time Unix Timestamp </summary>
         public static double UnixTimestamp() { return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds; }
         /// <summary> Generate a Unix Timestamp </summary>
-        public static double UnixTimestamp(int year, int month, int day, int housr=0, int minutes=0, int seconds=0) {
+        public static double UnixTimestamp(int year, int month, int day, int housr = 0, int minutes = 0, int seconds = 0)
+        {
             DateTime date = new DateTime(year, month, day, housr, minutes, seconds, DateTimeKind.Utc);
             return (date.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds;
         }
@@ -68,11 +69,13 @@ namespace AnotherMusicPlayer
                 //Win1_SizeChanged(null, null);
 
                 // Section update display button Play/Pause
-                if (player.IsPlaying()) {
+                if (player.IsPlaying())
+                {
                     if (Timer_IsPlaying == false)
                     {
-                        Timer_IsPlaying = true; 
-                        BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPause"]; 
+                        Timer_IsPlaying = true;
+                        //BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPause"];
+                        BtnPlayPause.Tag = "Pause";
                         PreviewCtrlPause.ImageSource = null; PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Pause");
                     }
                 }
@@ -80,8 +83,9 @@ namespace AnotherMusicPlayer
                 {
                     if (Timer_IsPlaying == true)
                     {
-                        Timer_IsPlaying = false; 
-                        BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPlay"]; 
+                        Timer_IsPlaying = false;
+                        //BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPlay"];
+                        BtnPlayPause.Tag = "Play";
                         PreviewCtrlPause.ImageSource = null; PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Play");
                     }
                 }
@@ -89,22 +93,25 @@ namespace AnotherMusicPlayer
                 // Section PlayBack Repeat Status
                 if (PlayRepeatStatus == 0)
                 {
-                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { 
-                        BtnRepeat.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnRepeatNone"];
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus)
+                    {
+                        BtnRepeat.Tag = "Off";
                         player.Repeat(false);
                     }
                 }
                 else if (PlayRepeatStatus == 1)
                 {
-                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { 
-                        BtnRepeat.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnRepeatOne"];
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus)
+                    {
+                        BtnRepeat.Tag = "One";
                         player.Repeat(true);
                     }
                 }
                 else
                 {
-                    if (Timer_PlayRepeatStatus != PlayRepeatStatus) { 
-                        BtnRepeat.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnRepeatAll"];
+                    if (Timer_PlayRepeatStatus != PlayRepeatStatus)
+                    {
+                        BtnRepeat.Tag = "All";
                         player.Repeat(false);
                     }
                 }
@@ -132,7 +139,8 @@ namespace AnotherMusicPlayer
                                 if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
                                 if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
                                 tmp.Add(item);
-                                if (i == min) {
+                                if (i == min)
+                                {
                                     UpdateLeftPannelMediaInfo(file);
                                 }
                             }
@@ -146,7 +154,7 @@ namespace AnotherMusicPlayer
                     try
                     {
                         if (tmp.Count <= 0) { return; }
-                        ((ObservableCollection < PlayListViewItem>)PlayListView.ItemsSource).Clear();
+                        ((ObservableCollection<PlayListViewItem>)PlayListView.ItemsSource).Clear();
                         PlayListView.ItemsSource = tmp;
                         PlayListView.Items.Refresh();
                         PlayListView.ScrollIntoView(PlayListView.Items[0]);
@@ -155,19 +163,21 @@ namespace AnotherMusicPlayer
 
                     Label_PlayListDisplayedNBTracks.Text = "" + tmp.Count;
                     Label_PlayListNBTracks.Text = "" + PlayList.Count;
-                    Label_PlayListIndex.Text = "" + ( PlayListIndex + 1);
+                    Label_PlayListIndex.Text = "" + (PlayListIndex + 1);
 
                     previous_items.Clear();
                 }
 
                 // Garbage Collector périodic summon
                 if (Timer_Count >= 50)
-                { 
-                    Timer_Count = 0; 
-                    try { 
-                        GC.Collect(); GC.WaitForPendingFinalizers(); 
+                {
+                    Timer_Count = 0;
+                    try
+                    {
                         GC.Collect(); GC.WaitForPendingFinalizers();
-                    } catch { }
+                        GC.Collect(); GC.WaitForPendingFinalizers();
+                    }
+                    catch { }
                 }
 
                 Timer_Count += 1;

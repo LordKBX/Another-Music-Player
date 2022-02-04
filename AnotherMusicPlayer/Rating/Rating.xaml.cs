@@ -80,6 +80,12 @@ namespace AnotherMusicPlayer
             return true;
         }
 
+        private void ChangeGrid1StarsColor(SolidColorBrush color)
+        {
+            foreach (Polygon star in Grid1.Children) { star.Fill = color; }
+            reDraw();
+        }
+
         private void ChangeGrid2StarsColor(SolidColorBrush color)
         {
             foreach (Polygon star in Grid2.Children) { star.Fill = color; }
@@ -176,7 +182,7 @@ namespace AnotherMusicPlayer
         {
             Rating control = (Rating)d;
             control.StarBackground = (SolidColorBrush)e.NewValue;
-            control.ChangeGrid2StarsColor(control.StarBackground);
+            control.ChangeGrid1StarsColor(control.StarBackground);
         }
         #endregion
 

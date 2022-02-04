@@ -58,6 +58,7 @@ namespace AnotherMusicPlayer
                 });
                 if (file == Settings.StyleName) { pos = li.Count - 1; }
             }
+            ParamsStyleVals.ItemsSource = null;
             ParamsStyleVals.ItemsSource = li;
             ParamsStyleVals.SelectedIndex = pos;
         }

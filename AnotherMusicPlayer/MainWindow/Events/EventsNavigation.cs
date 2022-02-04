@@ -17,7 +17,8 @@ namespace AnotherMusicPlayer
         /// <summary> Update label displaying media play time position </summary>
         private void UpdatePosition(string position) { DisplayPlaybackPosition.Content = position; }
         /// <summary> Update the ProgressBar displaying the media playing progression </summary>
-        private void UpdatePositionBar(double position) {
+        private void UpdatePositionBar(double position)
+        {
             DisplayPlaybackPositionBar.BeginAnimation(System.Windows.Controls.ProgressBar.ValueProperty, new DoubleAnimation((double)position, AnimationProgressBarDuration));
             //DisplayPlaybackPositionBar.Value = (double)position;
         }
@@ -25,6 +26,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback click on media ProgressBar and change playing position </summary>
         private void DisplayPlaybackPositionBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (player.PlayList.Count == 0) { return; }
             double MousePosition = e.GetPosition(DisplayPlaybackPositionBar).X;
 
             //DisplayPlaybackPositionBar.Value = DisplayPlaybackPositionBar.Minimum;
@@ -41,6 +43,7 @@ namespace AnotherMusicPlayer
         /// <summary> Update ToolTip of media ProgressBar for displaying time position if click on the actual mouse placement </summary>
         private void DisplayPlaybackPositionBar_MouseMove(object sender, MouseEventArgs e)
         {
+            if (player.PlayList.Count == 0) { DisplayPlaybackPositionBar.ToolTip = null; return; }
             double MousePosition = e.GetPosition(DisplayPlaybackPositionBar).X;
 
             //DisplayPlaybackPositionBar.Value = DisplayPlaybackPositionBar.Minimum;

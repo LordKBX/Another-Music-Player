@@ -7,14 +7,14 @@
         mc:Ignorable="d"
         Title="{DynamicResource PlaylistsWindowAddIntoPlaylistTitle}" Height="300" Width="300"
         ResizeMode="NoResize" WindowStyle="ToolWindow">
-    <!--<Window.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/AnotherMusicPlayer;component/Styles/Dark.xaml" />
-                <ResourceDictionary Source="/AnotherMusicPlayer;component/Traductions/en.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Dark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Traductions/en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>-->
+    </Window.Resources>
     <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
         <StackPanel>
             <ListView x:Name="lw" Style="{DynamicResource PlaylistsWindowAddTracksListView}"
@@ -34,19 +34,19 @@
         </StackPanel>
 
         <Grid Visibility="Collapsed" x:Name="gr2">
-            <Grid Background="{DynamicResource PlayLs.AddIntoPlaylist.OverNew.Background}">
-                <Border Width="200" Background="{DynamicResource PlayLs.AddIntoPlaylist.OverNew.Block.Background}"
+            <Grid Background="{DynamicResource AddIntoPlaylistWindow.OverNew.Background}">
+                <Border Width="200" Background="{DynamicResource AddIntoPlaylistWindow.OverNew.Block.Background}"
                         BorderBrush="{DynamicResource PlayLs.AddIntoPlaylist.OverNew.Block.Border}"
                         BorderThickness="1" HorizontalAlignment="Center" VerticalAlignment="Center" Padding="3">
                     <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch">
                         <TextBlock HorizontalAlignment="Stretch" 
                                    Text="{DynamicResource PlaylistsWindowAddIntoPlaylistName}"
-                                   Foreground="{DynamicResource PlayLs.AddIntoPlaylist.OverNew.Block.ForeGround}"/>
+                                   Foreground="{DynamicResource AddIntoPlaylistWindow.OverNew.Block.ForeGround}"/>
                         <TextBox x:Name="input1" HorizontalAlignment="Stretch" Style="{DynamicResource InputStyle}" />
 
                         <TextBlock Margin="0,3,0,0" HorizontalAlignment="Stretch" 
                                    Text="{DynamicResource PlaylistsWindowAddIntoPlaylistDescription}"
-                                   Foreground="{DynamicResource PlayLs.AddIntoPlaylist.OverNew.Block.ForeGround}"/>
+                                   Foreground="{DynamicResource AddIntoPlaylistWindow.OverNew.Block.ForeGround}"/>
                         <TextBox x:Name="input2" HorizontalAlignment="Stretch" Style="{DynamicResource InputStyle}" />
 
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Width="200" Margin="0,10,0,0">

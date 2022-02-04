@@ -55,7 +55,7 @@
     <sys:String x:Key="TabParams">Parameters</sys:String>
 
     <!--#region SETTINGS-->
-    <sys:String x:Key="ParamsLanguageLabel">Language:</sys:String>
+    <sys:String x:Key="ParamsLanguageLabel">Language</sys:String>
     <sys:String x:Key="ParamsLanguageVals_EN">English</sys:String>
     <sys:String x:Key="ParamsLanguageVals_FR">Français</sys:String>
 
@@ -63,18 +63,18 @@
 
     <sys:String x:Key="ParamsConvDisclaimerLabel">Warning; Native audio support for the folowing formats only: aif,mp3(incomplete support),wav,wma</sys:String>
     
-    <sys:String x:Key="ParamsConvKeepLabel">Convertion:</sys:String>
+    <sys:String x:Key="ParamsConvKeepLabel">Convertion</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_TEMP">On the Fly</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_REPLACE">Replace</sys:String>
 
-    <sys:String x:Key="ParamsConvQualityLabel">Quality:</sys:String>
+    <sys:String x:Key="ParamsConvQualityLabel">Quality</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_96">Low (96Kbits/s)</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_128">Normal (128Kbits/s)</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_192">Hight (192Kbits/s)</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_256">Very-Hight (256Kbits/s)</sys:String>
     <sys:String x:Key="ParamsConvQualityVals_320">Extreme (320Kbits/s)</sys:String>
 
-    <sys:String x:Key="ParamsMemoryUsageLabel">Memory Usage:</sys:String>
+    <sys:String x:Key="ParamsMemoryUsageLabel">Memory Usage</sys:String>
     <sys:String x:Key="ParamsMemoryUsage0">Low</sys:String>
     <sys:String x:Key="ParamsMemoryUsage1">Full</sys:String>
 

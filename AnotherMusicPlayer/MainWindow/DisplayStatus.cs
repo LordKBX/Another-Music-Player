@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows;
 using System.Diagnostics;
+using System.Windows.Forms;
 
 namespace AnotherMusicPlayer
 {
@@ -54,6 +55,50 @@ namespace AnotherMusicPlayer
         {
             BtnDebug.Visibility = Visibility.Collapsed;
             SideBtnsGrid.RowDefinitions[7].Height = new GridLength(0);
+        }
+
+
+        private enum TaskBarLocation { TOP, BOTTOM, LEFT, RIGHT }
+        private struct WorkingAreaSize
+        {
+            public double Width { get; set; }
+            public double Height { get; set; }
+        }
+        private struct WorkingAreaPosition
+        {
+            public double X1 { get; set; }
+            public double Y1 { get; set; }
+            public double X2 { get; set; }
+            public double Y2 { get; set; }
+        }
+
+        private TaskBarLocation GetTaskBarLocation()
+        {
+            TaskBarLocation taskBarLocation = TaskBarLocation.BOTTOM;
+            bool taskBarOnTopOrBottom = (Screen.PrimaryScreen.WorkingArea.Width == Screen.PrimaryScreen.Bounds.Width);
+            if (taskBarOnTopOrBottom) { if (Screen.PrimaryScreen.WorkingArea.Top > 0) taskBarLocation = TaskBarLocation.TOP; }
+            else { if (Screen.PrimaryScreen.WorkingArea.Left > 0) { taskBarLocation = TaskBarLocation.LEFT; } else { taskBarLocation = TaskBarLocation.RIGHT; } }
+            return taskBarLocation;
+        }
+
+        private WorkingAreaSize GetWorkingAreaSize()
+        {
+            return new WorkingAreaSize()
+            {
+                Width = Screen.PrimaryScreen.WorkingArea.Width,
+                Height = Screen.PrimaryScreen.WorkingArea.Height
+            };
+        }
+
+        private WorkingAreaPosition GetWorkingAreaPosition()
+        {
+            return new WorkingAreaPosition()
+            {
+                X1 = Screen.PrimaryScreen.WorkingArea.Left,
+                X2 = Screen.PrimaryScreen.WorkingArea.Right,
+                Y1 = Screen.PrimaryScreen.WorkingArea.Top,
+                Y2 = Screen.PrimaryScreen.WorkingArea.Bottom
+            };
         }
     }
 }

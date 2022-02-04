@@ -71,12 +71,16 @@ namespace AnotherMusicPlayer
                 EqualizerBand7.Value = Settings.EqualizerBand7; EqualizerBand8.Value = Settings.EqualizerBand8;
                 EqualizerBand9.Value = Settings.EqualizerBand9; EqualizerBand10.Value = Settings.EqualizerBand10;
             }
-            else {
-                if (EqualizerPresetsTab.ContainsKey(Settings.EqualizerPreset)) {
+            else
+            {
+                if (EqualizerPresetsTab.ContainsKey(Settings.EqualizerPreset))
+                {
                     float[] preset = EqualizerPresetsTab[Settings.EqualizerPreset];
                     int i = 0;
-                    foreach (ComboBoxItem itm in ParamsEqualizerPresets.Items) {
-                        if ((string)itm.Tag == Settings.EqualizerPreset) { ParamsEqualizerPresets.SelectedIndex = i; }
+                    foreach (var itm in ParamsEqualizerPresets.Items)
+                    {
+                        if (itm.GetType().Name != "ComboBoxItem") { continue; }
+                        if ((string)((ComboBoxItem)itm).Tag == Settings.EqualizerPreset) { ParamsEqualizerPresets.SelectedIndex = i; }
                         i += 1;
                     }
 
@@ -88,7 +92,8 @@ namespace AnotherMusicPlayer
             }
 
             // set click event for reseting equalizer
-            EqualizerReset.Click += (sender, e) => {
+            EqualizerReset.Click += (sender, e) =>
+            {
                 EqualizerBand1.Value = 0; EqualizerBand2.Value = 0; EqualizerBand3.Value = 0;
                 EqualizerBand4.Value = 0; EqualizerBand5.Value = 0; EqualizerBand6.Value = 0;
                 EqualizerBand7.Value = 0; EqualizerBand8.Value = 0; EqualizerBand9.Value = 0;
@@ -125,7 +130,7 @@ namespace AnotherMusicPlayer
         private void EqualizerBand_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             int col = Convert.ToInt32(((Slider)sender).Tag);
-            NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalDigits = 2, NumberGroupSizes = new int[] { 2, 2, 3} };
+            NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalDigits = 2, NumberGroupSizes = new int[] { 2, 2, 3 } };
             float NewValue = (float)Math.Round(e.NewValue, 2);
             player.UpdateEqualizer(col, NewValue);
             if (EqualizerBandFocusNb > 0) { Settings.EqualizerPreset = "Perso"; }

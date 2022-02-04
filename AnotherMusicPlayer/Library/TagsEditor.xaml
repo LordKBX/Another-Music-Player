@@ -10,8 +10,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Styles\Dark.xaml" />
-                <ResourceDictionary Source="D:\CODES\VS\MediaPlayer\AnotherMusicPlayer\Traductions\en.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Dark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Traductions/en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

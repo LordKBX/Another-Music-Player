@@ -6,20 +6,27 @@
              xmlns:local="clr-namespace:AnotherMusicPlayer"
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="90" d:DesignWidth="90">
+             d:DesignHeight="90" d:DesignWidth="90"
+        Style="{DynamicResource LibibraryNavigationContentAlbum}">
+    <Button.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Traductions/en.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Button.Resources>
     <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
         <Grid.RowDefinitions>
             <RowDefinition Height="40px"/>
             <RowDefinition Height="50px"/>
         </Grid.RowDefinitions>
         <materialDesign:PackIcon Kind="FolderOpen" Grid.Row="0"
-                                 VerticalAlignment="Stretch" 
-                                 HorizontalAlignment="Center"
-                                 Width="40" Height="40"
-                                 x:Name="Icon"/>
+            VerticalAlignment="Stretch" HorizontalAlignment="Center"
+            Width="40" Height="40" x:Name="Icon"/>
         <AccessText Grid.Row="1" TextWrapping="WrapWithOverflow" 
-                    MaxHeight="45" Text="txname" VerticalAlignment="Center"
-                    HorizontalAlignment="Center" TextAlignment="Center"
-                    x:Name="displayTitle"/>
+            MaxHeight="45" Text="txname" VerticalAlignment="Center"
+            HorizontalAlignment="Center" TextAlignment="Center"
+            x:Name="displayTitle"/>
     </Grid>
 </Button>

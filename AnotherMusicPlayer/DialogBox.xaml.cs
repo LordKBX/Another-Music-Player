@@ -37,9 +37,9 @@ namespace AnotherMusicPlayer
         public DialogBox(MainWindow owner)
         {
             Owner = owner;
-            Resources.Clear();
-            Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
             InitializeComponent();
+            Resources = Owner.Resources;
+            Style = FindResource("CustomWindowStyle") as Style;
 
             BtnOk.Click += BtnOk_Click;
             BtnCancel.Click += BtnCancel_Click;
@@ -65,13 +65,6 @@ namespace AnotherMusicPlayer
         public static bool ShowDialog(MainWindow owner, string title, string message, DialogBoxButtons buttons = DialogBoxButtons.Ok, DialogBoxIcons icon = DialogBoxIcons.Warning)
         {
             DialogBox dialog = new DialogBox(owner);
-            string style = MainWindow.BaseDir + "Styles" + MainWindow.SeparatorChar + Settings.StyleName + ".xaml";
-            if (System.IO.File.Exists(style))
-                dialog.Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(style, UriKind.Absolute) });//Load style file
-            string lang = MainWindow.BaseDir + "Traductions" + MainWindow.SeparatorChar + Settings.Lang.Split('-')[0] + ".xaml";
-            if (System.IO.File.Exists(lang))
-                dialog.Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(lang, UriKind.Absolute) });//Load style file
-            dialog.Style = dialog.FindResource("CustomWindowStyle") as Style;
 
             dialog.returnState = false;
             dialog.TitleBlock.Text = title;

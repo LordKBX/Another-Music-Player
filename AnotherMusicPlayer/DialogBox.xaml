@@ -8,14 +8,14 @@
         mc:Ignorable="d"
         Title="{DynamicResource DialogBoxTitle}" Height="170" Width="350"
         ResizeMode="NoResize" WindowStyle="None">
-    <!--<Window.Resources>
+    <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/AnotherMusicPlayer;component/Styles/Dark.xaml" />
-                <ResourceDictionary Source="/AnotherMusicPlayer;component/Traductions/en.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Styles/Dark.xaml"/>
+                <ResourceDictionary Source="pack://application:,,,/AnotherMusicPlayer;component/Traductions/en.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
-    </Window.Resources>-->
+    </Window.Resources>
     <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
         <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" Margin="3">
             <TextBlock x:Name="TitleBlock" Text="Title" 

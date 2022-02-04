@@ -26,7 +26,7 @@ namespace AnotherMusicPlayer
         /// Path to sqlite file
         /// On windows => %SystemDrive%\Users\%USERNAME%\AppData\Local\ + AppName
         /// </summary>
-        private string DatabaseFolder = null;
+        public string DatabaseFolder = null;
         /// <summary> Object connection to sqlite file </summary>
         private SQLiteConnection DatabaseConnection = null;
 

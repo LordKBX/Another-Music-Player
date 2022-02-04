@@ -81,7 +81,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Debug Export Vars </summary>
         private void Debug_Button_Click(object sender, RoutedEventArgs e)
         {
-            //setLoadingState(true);
+            /*
             setMetadataScanningState(false);
             JsonSerializerSettings jss = new JsonSerializerSettings();
             jss.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
@@ -91,16 +91,17 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("----------------------// Debug_Button_Click //-----------------------");
             Debug.WriteLine("----------------------                        -----------------------");
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayList.txt", JsonConvert.SerializeObject(PlayList, jss), System.Text.Encoding.UTF8);
-            File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListIndex.txt", ""+PlayListIndex, System.Text.Encoding.UTF8);
-            string output = "[" ;
+            File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListIndex.txt", "" + PlayListIndex, System.Text.Encoding.UTF8);
+            string output = "[";
             foreach (PlayListViewItem item in PlayListView.ItemsSource)
             {
                 output += PrintPropreties(item);
             }
             output += "]";
             File.WriteAllText(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName + "\\PlayListView.txt", "" + output, System.Text.Encoding.UTF8);
-
-            //setLoadingState(false);
+            */
+            DebugBaseDir();
+            StyleUpdate();
         }
 
         private string PrintPropreties(object obj)

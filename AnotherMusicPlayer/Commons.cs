@@ -4,6 +4,7 @@ using System.Windows;
 using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 using System.Security.Cryptography;
+using System.Diagnostics;
 
 namespace AnotherMusicPlayer
 {
@@ -73,6 +74,13 @@ namespace AnotherMusicPlayer
         /// <summary> Base Diractory of the icon folder </summary>
         public static string BaseDirImg = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar + "icons" + SeparatorChar;
 
+        [Conditional("DEBUG")]
+        static public void DebugBaseDir()
+        {
+            Debug.WriteLine(">>> DebugBaseDir() <<<");
+            MainWindow.BaseDir = "D:\\CODES\\VS\\MediaPlayer\\AnotherMusicPlayer";
+        }
+
         //public static BitmapImage CoverImg = new BitmapImage(new Uri(BaseDirImg + "album_small.png"));
 
         //public static BitmapImage OpenButtonImg = new BitmapImage(new Uri(BaseDirImg + "file.png"));
@@ -92,24 +100,10 @@ namespace AnotherMusicPlayer
         //public static BitmapImage MiniPlayButtonImg_Pause = new BitmapImage(new Uri(BaseDirImg + "pause_24.png"));
         //public static BitmapImage MiniNextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next_24.png"));
 
-        /// <summary> Add(+) image for ContextMenuItem </summary>
-        public static System.Windows.Controls.Image ContextMenuItemImage_add = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "add_white.png")) };
-        public static System.Windows.Controls.Image ContextMenuItemImage_back = new System.Windows.Controls.Image() { Source = new BitmapImage(new Uri(BaseDirImg + "goback.png")) };
-
         /// <summary> Dictionary contening Image URI indexed by a string code name </summary>
         private static Dictionary<string, Uri> ImagesUriList = new Dictionary<string, Uri> {
             { "CoverImg", new Uri(BaseDirImg + "album_small.png") },
             { "OpenButtonImg", new Uri(BaseDirImg + "file.png") },
-            { "PreviousButtonImg", new Uri(BaseDirImg + "previous.png") },
-            { "PlayButtonImg_Play", new Uri(BaseDirImg + "play.png") },
-            { "PlayButtonImg_Pause", new Uri(BaseDirImg + "pause.png") },
-            { "NextButtonImg", new Uri(BaseDirImg + "next.png") },
-            { "ClearListButtonImg", new Uri(BaseDirImg + "clear_list.png") },
-            { "ShuffleButtonImg", new Uri(BaseDirImg + "shuffle.png") },
-
-            { "RepeatButtonImg_None", new Uri(BaseDirImg + "repeat_none.png") },
-            { "RepeatButtonImg_One", new Uri(BaseDirImg + "repeat_one.png") },
-            { "RepeatButtonImg_All", new Uri(BaseDirImg + "repeat_all.png") },
 
             { "MiniPreviousButtonImg", new Uri(BaseDirImg + "previous_24.png") },
             { "MiniPlayButtonImg_Play", new Uri(BaseDirImg + "play_24.png") },

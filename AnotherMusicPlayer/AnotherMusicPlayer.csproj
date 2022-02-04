@@ -40,28 +40,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Page Remove="styles.xaml" />
-    <Page Remove="Styles\Dark.xaml" />
-    <Page Remove="Styles\Red.xaml" />
-    <Page Remove="Traductions\en.xaml" />
-    <Page Remove="Traductions\fr.xaml" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Styles\Red.xaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <Generator>MSBuild:Compile</Generator>
-    </None>
-    <None Include="Styles\Dark.xaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Traductions\en.xaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-    <None Include="Traductions\fr.xaml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="NAudio" Version="2.0.1" />
@@ -114,6 +92,12 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="icons\clear_list.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icons\close_black.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="icons\close_white.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="icons\fast_backward.png">
@@ -191,5 +175,10 @@
     <None Update="Player\ffmpeg.exe">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Update="Styles\Dark.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
 </Project>

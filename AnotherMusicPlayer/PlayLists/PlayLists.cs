@@ -161,10 +161,10 @@ namespace AnotherMusicPlayer
                 TreeViewItem item = new TreeViewItem()
                 {
                     Header = Parent.FindResource("PlayListsAuto_" + archetype) as string,
-                    Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
                     Tag = "auto_" + archetype,
                     Name = "auto_" + archetype
                 };
+                try { item.Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style; } catch { }
                 item.MouseLeftButtonUp += autolistClick;
                 item.ContextMenu = MakeContextMenu(item, "list");
                 ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Add(item);
@@ -200,6 +200,16 @@ namespace AnotherMusicPlayer
                 else if (archetype == autoList[1]) { Parent.PlaylistsContentsC0.Width = 50; }
                 else if (archetype == autoList[2]) { Parent.PlaylistsContentsC0.Width = 50; }
                 if (archetype == autoList[3]) { Parent.PlaylistsContentsC0.Width = 0; }
+
+                try
+                {
+                    SizeChangedInfo sifo = new SizeChangedInfo(Parent.PlaylistsContents, new Size(0, 0), true, true);
+                    System.Reflection.ConstructorInfo[] gd = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                    SizeChangedEventArgs ea = gd[0].Invoke(new object[] { (Parent.PlaylistsContents as FrameworkElement), sifo }) as SizeChangedEventArgs;
+                    ea.RoutedEvent = ListView.SizeChangedEvent;
+                    Parent.PlaylistsContents.RaiseEvent(ea);
+                }
+                catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
 
                 Dictionary<string, Dictionary<string, object>> rez = autolistData(archetype);
                 Debug.WriteLine("--> QUERY");

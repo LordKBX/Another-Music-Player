@@ -60,18 +60,28 @@ namespace AnotherMusicPlayer
             Tags = TagLib.File.Create(Files[0]);
             Parent = parent;
             Mode = mode;
-            Resources.Clear();
-            Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
+
             InitializeComponent();
-
-            string style = MainWindow.BaseDir + "Styles" + MainWindow.SeparatorChar + Settings.StyleName + ".xaml";
-            if (System.IO.File.Exists(style))
-                Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(style, UriKind.Absolute) });//Load style file
-            string lang = MainWindow.BaseDir + "Traductions" + MainWindow.SeparatorChar + Settings.Lang.Split('-')[0] + ".xaml";
-            if(System.IO.File.Exists(lang))
-                Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(lang, UriKind.Absolute) });//Load style file
-
-            this.Style = FindResource("CustomWindowStyle") as Style;
+            try
+            {
+                Resources.MergedDictionaries[0].Clear();
+                Resources.MergedDictionaries[0] = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Styles/" + Settings.StyleName + ".xaml", UriKind.Absolute)
+                };
+                Style = FindResource("CustomWindowStyle") as Style;
+            }
+            catch { }
+            try
+            {
+                Resources.MergedDictionaries[1].Clear();
+                Resources.MergedDictionaries[1] = new ResourceDictionary
+                {
+                    Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Traductions/" + Settings.Lang.Split('-')[0] + ".xaml", UriKind.Absolute)
+                };
+                Style = FindResource("CustomWindowStyle") as Style;
+            }
+            catch { }
 
             DefaultCover = MainWindow.BaseDir + "icons" + MainWindow.SeparatorChar + "album_small.png";
 
@@ -99,7 +109,7 @@ namespace AnotherMusicPlayer
             }
             else { this.MinHeight = this.MaxHeight = 570; }
 
-            if(mode == "track")
+            if (mode == "track")
             {
                 TitleInput.Text = Tags.Tag.Title ?? System.IO.Path.GetFileName(files[0]);
                 TitleInput.TextChanged += TextInput_TextChanged;
@@ -126,19 +136,19 @@ namespace AnotherMusicPlayer
             AlbumArtistsInput.TextChanged += TextInput_TextChanged;
             AlbumArtistsInput.ToolTip = FindResource("EditorTagSeparateEntrys") as string;
 
-            YearInput.Text = ""+Tags.Tag.Year;
+            YearInput.Text = "" + Tags.Tag.Year;
             YearInput.TextChanged += TextInput_TextChanged;
 
-            DiscInput.Text = ""+Tags.Tag.Disc;
+            DiscInput.Text = "" + Tags.Tag.Disc;
             DiscInput.TextChanged += TextInput_TextChanged;
 
-            DiscCountInput.Text = ""+Tags.Tag.DiscCount;
+            DiscCountInput.Text = "" + Tags.Tag.DiscCount;
             DiscCountInput.TextChanged += TextInput_TextChanged;
 
-            TrackInput.Text = ""+Tags.Tag.Track;
+            TrackInput.Text = "" + Tags.Tag.Track;
             TrackInput.TextChanged += TextInput_TextChanged;
 
-            TrackCountInput.Text = ""+Tags.Tag.TrackCount;
+            TrackCountInput.Text = "" + Tags.Tag.TrackCount;
             TrackCountInput.TextChanged += TextInput_TextChanged;
 
             CopyrightInput.Text = Tags.Tag.Copyright;
@@ -183,7 +193,7 @@ namespace AnotherMusicPlayer
             imp.Source = BitmapCover;
             st.Children.Add(imp);
             ((ScrollViewer)win.Content).Content = st;
-            win.Owner = this; 
+            win.Owner = this;
             win.ShowInTaskbar = false;
             win.ShowDialog();
         }
@@ -200,11 +210,12 @@ namespace AnotherMusicPlayer
         {
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
             string tx = "";
-            AutorizedCoverFileExtention.ForEach(new Action<string>((ext) => {
-                if(tx != "")tx += ";";
+            AutorizedCoverFileExtention.ForEach(new Action<string>((ext) =>
+            {
+                if (tx != "") tx += ";";
                 tx += "*" + ext.ToUpper();
             }));
-            openFileDlg.Filter = "Picture ("+tx+")|"+tx;
+            openFileDlg.Filter = "Picture (" + tx + ")|" + tx;
             openFileDlg.Multiselect = false;
             openFileDlg.Title = "File Selection";
             Nullable<bool> result = openFileDlg.ShowDialog();
@@ -224,7 +235,8 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private void ReplaceCover(string file) {
+        private void ReplaceCover(string file)
+        {
             FileInfo fi = new FileInfo(file);
             if (fi.Length > 200 * 1024 && false)
             {
@@ -297,9 +309,10 @@ namespace AnotherMusicPlayer
                     Tags.Dispose();
                 }
             }
-            else if (Mode == "album") 
+            else if (Mode == "album")
             {
-                foreach (string file in Files) {
+                foreach (string file in Files)
+                {
                     using (Tags = TagLib.File.Create(file))
                     {
                         Tags.Tag.Album = AlbumInput.Text;
@@ -340,8 +353,10 @@ namespace AnotherMusicPlayer
             SaveButton.IsEnabled = true;
         }
 
-        private void changeCoverPreview(TagLib.IPicture pic = null, string path = null) {
-            if (pic != null) {
+        private void changeCoverPreview(TagLib.IPicture pic = null, string path = null)
+        {
+            if (pic != null)
+            {
                 MemoryStream ms = new MemoryStream(pic.Data.Data);
                 ms.Seek(0, SeekOrigin.Begin);
                 BitmapCover = new BitmapImage();
@@ -350,7 +365,8 @@ namespace AnotherMusicPlayer
                 BitmapCover.EndInit();
                 BitmapCover.Freeze();
             }
-            else if (path != null) {
+            else if (path != null)
+            {
                 if (!System.IO.File.Exists(path)) { return; }
                 string ext = System.IO.Path.GetExtension(path).ToLower();
                 if (!AutorizedCoverFileExtention.Contains(ext)) { return; }

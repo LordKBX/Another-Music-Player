@@ -97,6 +97,7 @@ namespace AnotherMusicPlayer
                 foreach (KeyValuePair<string, Dictionary<string, object>> file in files) { paths.Add(file.Key); }
 
                 pathNavigator.DisplayAlt("Search Genre: " + genre);
+                Debug.WriteLine(JsonConvert.SerializeObject(paths));
 
                 SearchResultsContener.Children.Clear();
                 NavigationContenerScollerBorder.Visibility = Visibility.Collapsed;
@@ -104,9 +105,10 @@ namespace AnotherMusicPlayer
 
                 Parent.setLoadingState(true);
 
+                ContentBlocks(paths.ToArray(), SearchResultsContener, false);
 
                 //ContentBlocks(paths.ToArray(), SearchResultsContener, false);
-                System.Threading.Tasks.Task.Run(() => ContentBlocks(paths.ToArray(), SearchResultsContener, false));
+                //System.Threading.Tasks.Task.Run(() => ContentBlocks(paths.ToArray(), SearchResultsContener, false));
 
 
                 SearchResultsContenerScoller.ScrollToHome();

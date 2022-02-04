@@ -23,17 +23,8 @@ namespace AnotherMusicPlayer
         public InsertIntoPlaylistWindow(MainWindow parent)
         {
             Parent = parent;
-            Resources.Clear();
-            Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
             InitializeComponent();
-
-            string style = MainWindow.BaseDir + "Styles" + MainWindow.SeparatorChar + Settings.StyleName + ".xaml";
-            if (System.IO.File.Exists(style))
-                Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(style, UriKind.Absolute) });//Load style file
-            string lang = MainWindow.BaseDir + "Traductions" + MainWindow.SeparatorChar + Settings.Lang.Split('-')[0] + ".xaml";
-            if (System.IO.File.Exists(lang))
-                Resources.MergedDictionaries.Add(new System.Windows.ResourceDictionary { Source = new Uri(lang, UriKind.Absolute) });//Load style file
-            Style = FindResource("CustomWindowStyle") as Style;
+            Resources = Parent.Resources;
 
             // FILLING WINDOW
             Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description, MAX(LOrder) AS Lorder FROM playlists LEFT JOIN playlistsItems ON(LIndex = FIndex) GROUP BY Name ORDER BY Name ASC", "FIndex");
@@ -77,6 +68,7 @@ namespace AnotherMusicPlayer
                 input1.Text = "";
                 input2.Text = "";
                 Tag = null;
+                lw.SelectedIndex = -1;
                 gr2.Visibility = Visibility.Collapsed;
             };
             btnxOk.Click += (object sender, RoutedEventArgs e) =>

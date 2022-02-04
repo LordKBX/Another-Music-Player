@@ -21,11 +21,13 @@ namespace AnotherMusicPlayer
     {
         public string Path;
         //public PackIcon Icon;
-        public LibraryFolderButton(string title, string path)
+        public LibraryFolderButton(MainWindow Parent, string title, string path)
         {
             InitializeComponent();
             displayTitle.Text = title;
             Path = path;
+            Resources = Parent.Resources;
+            Style = FindResource("LibibraryNavigationContentFolderButton") as Style;
         }
     }
 }

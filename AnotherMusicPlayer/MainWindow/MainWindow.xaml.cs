@@ -11,6 +11,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Reflection;
+using System.Text.RegularExpressions;
 
 using System.Diagnostics;
 using System.ComponentModel;
@@ -51,9 +53,22 @@ namespace AnotherMusicPlayer
         /// <summary>PlayLists object </summary>
         public PlayLists playLists = null;
 
+        private double lastTopBarClick = 0;
+        private double oldWidth = 0;
+        private double oldHeight = 0;
+        private double oldTop = 0;
+        private double oldLeft = 0;
+
+        private bool isDebug = false;
+        [Conditional("DEBUG")]
+        private void IsDebugCheck() { isDebug = true; }
+
+        private bool InApp = false;
+
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd)
         {
+            IsDebugCheck();
             bdd = obdd;
             // Set DataContext
             this.DataContext = this;
@@ -62,8 +77,7 @@ namespace AnotherMusicPlayer
             player = new Player(this);//Create Player object
 
             Settings.LoadSettings();
-
-            Resources.Clear();
+            InApp = true;
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             HideDebug();//in release mode hide debug elements
             SettingsInit();//Initialize and load settings panel
@@ -74,7 +88,7 @@ namespace AnotherMusicPlayer
             //SettingsSetUp();//Initialize interface elements with stored parametters in settings
             //TabControl t = new TabControl();
             //t.cli
-            TabControler.SelectedIndex = 2;
+            TabControler.SelectedIndex = 1;
 
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -97,7 +111,50 @@ namespace AnotherMusicPlayer
             this.Loaded += MainWindow_Loaded;
             this.Closing += MainWindow_Closing;
 
+            //WorkingAreaSize workingAreaSize = GetWorkingAreaSize();
+            //MaxWidth = workingAreaSize.Width;
+            //MaxHeight = workingAreaSize.Height;
+
+            BtnClose.Click += (object sender, RoutedEventArgs e) => { this.Close(); };
+            BtnMaximize.Click += (object sender, RoutedEventArgs e) =>
+            {
+                WorkingAreaSize workingAreaSize = GetWorkingAreaSize();
+                if (Width == workingAreaSize.Width && Height == workingAreaSize.Height)
+                {
+                    Top = oldTop;
+                    Left = oldLeft;
+                    Width = oldWidth; Height = oldHeight;
+                }
+                else
+                {
+                    oldWidth = Width;
+                    oldHeight = Height;
+                    oldTop = Top;
+                    oldLeft = Left;
+
+                    WorkingAreaPosition workingAreaPosition = GetWorkingAreaPosition();
+                    Top = workingAreaPosition.Y1;
+                    Left = workingAreaPosition.X1;
+
+                    Width = MaxWidth = workingAreaSize.Width;
+                    Height = MaxHeight = workingAreaSize.Height;
+                }
+            };
+            BtnMinimize.Click += (object sender, RoutedEventArgs e) => { WindowState = (WindowState == WindowState.Minimized) ? WindowState.Normal : WindowState.Minimized; };
+            TopBar.MouseDown += TopBar_MouseDown;
+
             playLists = new PlayLists(this);
+        }
+
+        private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                double newEnd = UnixTimestamp();
+                if (newEnd - lastTopBarClick < 1.0) { WindowState = (WindowState == WindowState.Maximized) ? WindowState.Normal : WindowState.Maximized; }
+                else { DragMove(); }
+                lastTopBarClick = newEnd;
+            }
         }
 
         /// <summary> Function unlocking window interface </summary>
@@ -359,7 +416,7 @@ namespace AnotherMusicPlayer
                 System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
                 System.Windows.Thickness tc1 = new System.Windows.Thickness(3, 3, 0, 0);
                 System.Windows.Thickness tc2 = new System.Windows.Thickness(10, 0, 0, 0);
-                System.Windows.Media.SolidColorBrush cl2 = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 149, 149));
+                System.Windows.Media.SolidColorBrush cl2 = FindResource("ForegroundAltColor") as SolidColorBrush;
 
                 System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
                 LeftPannelMediaInfo.Inlines.Add(new LineBreak());

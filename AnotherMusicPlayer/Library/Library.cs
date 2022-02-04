@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Linq;
 using System.Windows.Threading;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace AnotherMusicPlayer
 {
@@ -24,7 +25,7 @@ namespace AnotherMusicPlayer
         /// <summary> Zone to display current path(relative to library folder) </summary>
         WrapPanel NavigatorBar;
         /// <summary> Zone to display content of current path </summary>
-        WrapPanel NavigationContener;
+        AlignablePanel NavigationContener;
         /// <summary> Zone to display content of current search results </summary>
         StackPanel SearchResultsContener;
         /// <summary> Scrollview of current path content display zone </summary>
@@ -198,11 +199,7 @@ namespace AnotherMusicPlayer
                     if (name[0] == '.') { continue; }
                 }
                 string[] tab = dir.Split(MainWindow.SeparatorChar);
-                LibraryFolderButton btn = new LibraryFolderButton(tab[tab.Length - 1], dir)
-                {
-                    Style = Parent.FindResource("LibibraryNavigationContentFolderButton") as Style
-                };
-                btn.Icon.Style = Parent.FindResource("LibibraryNavigationContentFolderButtonPackIcon") as Style;
+                LibraryFolderButton btn = new LibraryFolderButton(Parent, tab[tab.Length - 1], dir);
                 btn.Click += BtnFolder_Click;
                 btn.ContextMenu = MakeContextMenu(btn, "folder");
                 btn.Tag = dir;
@@ -333,24 +330,17 @@ namespace AnotherMusicPlayer
                     };
                     st1.Children.Add(new AccessText()
                     {
-                        HorizontalAlignment = HorizontalAlignment.Left,
-                        TextAlignment = TextAlignment.Left,
+                        Style = Parent.FindResource("LibibraryNavigationContentAlbumTitle") as Style,
                         Text = al,
-                        ToolTip = al,
-                        FontWeight = FontWeights.Bold,
-                        //MaxWidth = 200,
-                        TextTrimming = TextTrimming.CharacterEllipsis
+                        ToolTip = al
                     });
                     foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> discT in albumT.Value)
                     {
                         if (albumT.Value.Count > 1)
                             st1.Children.Add(new AccessText()
                             {
-                                HorizontalAlignment = HorizontalAlignment.Stretch,
-                                TextAlignment = TextAlignment.Left,
-                                Text = "Disc " + discT.Key,
-                                FontStyle = FontStyles.Italic,
-                                Margin = new Thickness(0, 5, 0, 0)
+                                Style = Parent.FindResource("LibibraryNavigationContentAlbumDisk") as Style,
+                                Text = "Disc " + discT.Key
                             });
 
                         List<KeyValuePair<string, MediaItem>> myList = discT.Value.ToList();
@@ -369,7 +359,7 @@ namespace AnotherMusicPlayer
                         {
                             brList.Add(trackT.Value.Path);
                             string textName = ((trackT.Value.Track == 0) ? "" : MainWindow.NormalizeNumber((int)trackT.Value.Track, ("" + trackT.Value.TrackCount).Length) + ". ") + trackT.Value.Name;
-                            StackPanel pan = new StackPanel();
+                            StackPanel pan = new StackPanel() { VerticalAlignment = VerticalAlignment.Stretch };
                             pan.Children.Add(new AccessText()
                             {
                                 Text = textName,
@@ -378,13 +368,11 @@ namespace AnotherMusicPlayer
                             Rating rt = new Rating()
                             {
                                 Rate = trackT.Value.Rating,
-                                //ToolTip = trackT.Value.Rating,
-                                IsReadOnly = false,
-                                Zoom = 0.5,
-                                VerticalAlignment = VerticalAlignment.Bottom,
-                                HorizontalAlignment = HorizontalAlignment.Left,
-                                Margin = new Thickness(2),
-                                Tag = trackT.Value.Path
+                                Tag = trackT.Value.Path,
+                                Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButtonStars") as Style,
+                                StarBackgroundColor = Parent.FindResource("TrackButton.StarsBackground") as SolidColorBrush,
+                                StarSelectionForegroundColor = Parent.FindResource("TrackButton.StarsSelectionForeground") as SolidColorBrush,
+                                StarForegroundColor = Parent.FindResource("TrackButton.StarsForeground") as SolidColorBrush,
                             };
                             rt.setAltLeftClick();
                             rt.RateChanged += Library_RateChanged;
