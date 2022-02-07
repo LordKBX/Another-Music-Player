@@ -39,6 +39,8 @@ namespace AnotherMusicPlayer
         public double Rating { get; set; }
         public uint PlayCount { get; set; }
 
+        public string InnerUID { get; set; }
+
         public MediaItem()
         {
             Path = OriginPath
@@ -55,6 +57,8 @@ namespace AnotherMusicPlayer
             Duration = Size = 0;
             Disc = DiscCount = Track = TrackCount = Year = PlayCount = 0;
             Rating = 0.0;
+
+            InnerUID = Guid.NewGuid().ToString();
         }
     }
 

@@ -22,6 +22,8 @@ namespace AnotherMusicPlayer
         public string Composers { get; set; }
         public string AlbumArtists { get; set; }
 
+        public string InnerUID { get; set; }
+
         public PlayListViewItem()
         {
             Path = OriginPath
@@ -34,6 +36,8 @@ namespace AnotherMusicPlayer
                 = AlbumArtists
                 = "";
             Duration = 0;
+
+            InnerUID = Guid.NewGuid().ToString();
         }
     }
 

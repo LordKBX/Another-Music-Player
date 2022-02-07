@@ -26,16 +26,18 @@ namespace AnotherMusicPlayer
         WrapPanel NavigatorBar;
         /// <summary> Zone to display content of current path </summary>
         AlignablePanel NavigationContener;
-        /// <summary> Zone to display content of current search results </summary>
-        StackPanel SearchResultsContener;
         /// <summary> Scrollview of current path content display zone </summary>
         ScrollViewer NavigationContenerScoller;
-        /// <summary> Scrollview of search results display zone </summary>
-        ScrollViewer SearchResultsContenerScoller;
         /// <summary> Border Scrollview of current path content display zone </summary>
         Border NavigationContenerScollerBorder;
+
+        /// <summary> Zone to display content of current search results </summary>
+        ListView SearchResultsContener;
         /// <summary> Border Scrollview of search results display zone </summary>
-        Border SearchResultsContenerScollerBorder;
+        Border SearchResultsContenerBorder;
+        /// <summary> StackPanel of search results details display zone </summary>
+        StackPanel LibibrarySearchContentDetails;
+
         /// <summary> Combobox serving to select filtering/search mode </summary>
         ComboBox FilterSelector;
         /// <summary> Combobox serving to select genre for filtering/search mode </summary>
@@ -136,11 +138,13 @@ namespace AnotherMusicPlayer
             Bdd = Parent.bdd;
             NavigatorBar = Parent.LibibraryNavigationPathContener;
             NavigationContener = Parent.LibibraryNavigationContent;
-            SearchResultsContener = Parent.LibibraryNavigationContent2;
             NavigationContenerScoller = Parent.LibibraryNavigationContentScroll;
-            SearchResultsContenerScoller = Parent.LibibraryNavigationContentScroll2;
             NavigationContenerScollerBorder = Parent.LibibraryNavigationContentB;
-            SearchResultsContenerScollerBorder = Parent.LibibraryNavigationContent2B;
+
+            SearchResultsContener = Parent.LibibrarySearchContent;
+            SearchResultsContenerBorder = Parent.LibibraryNavigationContent2B;
+            LibibrarySearchContentDetails = Parent.LibibrarySearchContentDetails;
+
             FilterSelector = Parent.LibraryFiltersMode;
             FilterGenreSelector = Parent.LibraryFiltersGenreList;
             FiltersSearchInput = Parent.LibraryFiltersSearchBox;
@@ -155,10 +159,26 @@ namespace AnotherMusicPlayer
             FilterGenreSelector.SelectionChanged += FilterGenreSelector_SelectionChanged;
             FiltersSearchInput.KeyDown += FiltersSearchInput_KeyDown;
 
+            Parent.LibibrarySearchContentC1.Width = Parent.LibibrarySearchContentC2.Width = Parent.LibibrarySearchContentC3.Width = LibibrarySearchContent_CalcCollumnWidth();
+            SearchResultsContener.SizeChanged += (sender, e) =>
+            {
+                Debug.WriteLine("LibibrarySearchContent.SizeChanged");
+                Parent.LibibrarySearchContentC1.Width = Parent.LibibrarySearchContentC2.Width = Parent.LibibrarySearchContentC3.Width = LibibrarySearchContent_CalcCollumnWidth();
+            };
+            SearchResultsContener.SelectionChanged += (sender, e) =>
+            {
+                if (SearchResultsContener.SelectedItems.Count <= 0) { Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0); }
+                else
+                {
+                    Parent.LibibrarySearchContentGridRow2.Height = new GridLength(120);
+                }
+            };
+
             CreateWatcher();
-            //Scan();
             InvokeScan();
         }
+
+        private double LibibrarySearchContent_CalcCollumnWidth() { double calc = (Parent.LibibrarySearchContent.ActualWidth - Parent.PlaylistsContentsC3.Width - Parent.PlaylistsContentsC4.Width) / 3; return (calc > 0) ? calc : 0; }
 
         /// <summary> Update var RootPath and return if value is valid or not </summary>
         public bool UpdateRootPath(string root) { if (Directory.Exists(root)) { RootPath = root; return true; } else { return false; } }
@@ -170,7 +190,7 @@ namespace AnotherMusicPlayer
             _CurrentPath = path;
 
             NavigationContenerScollerBorder.Visibility = Visibility.Visible;
-            SearchResultsContenerScollerBorder.Visibility = Visibility.Collapsed;
+            SearchResultsContenerBorder.Visibility = Visibility.Collapsed;
 
             FiltersSearchInput.Visibility = Visibility.Collapsed;
             FiltersSearchInput.Text = "";
@@ -180,7 +200,7 @@ namespace AnotherMusicPlayer
             FilterGenreSelector.Visibility = Visibility.Collapsed;
 
             pathNavigator.Display(path);
-            SearchResultsContener.Children.Clear();
+            SearchResultsContener.ItemsSource = null;
             NavigationContener.Children.Clear();
             NavigationContenerScoller.ContextMenu = null;
             NavigationContenerScoller.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);
@@ -223,7 +243,8 @@ namespace AnotherMusicPlayer
             StackPanel panel = new StackPanel() { Orientation = Orientation.Vertical, Width = NavigationContener.ActualWidth, Visibility = Visibility.Visible };
             NavigationContener.Children.Add(panel);
 
-            ContentBlocks(endFiles.ToArray(), panel);
+            Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> tabInfo = GetTabInfoFromFiles(endFiles.ToArray());
+            ContentBlocks(tabInfo, panel);
             NavigationContenerScoller.ScrollToHome();
             Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() =>
             {
@@ -231,19 +252,51 @@ namespace AnotherMusicPlayer
             }));
         }
 
-        public async Task<bool> ContentBlocks(string[] files, StackPanel contener, bool uniqueDir = true)
+        public Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> GetTabInfoFromFiles(string[] files)
         {
-            Debug.WriteLine("--> ContentBlocks START <--");
-            if (files.Length == 0) { Debug.WriteLine("--> ContentBlocks NO FILE 1 <--"); return false; }
+            if (files == null) { Debug.WriteLine("--> GetTabInfoFromFiles NO FILE 0 <--"); return null; }
+            if (files.Length == 0) { Debug.WriteLine("--> GetTabInfoFromFiles NO FILE 1 <--"); return null; }
 
             while (files.Length > 0 && files[0].Length == 0) { files = files.Where(w => w != files[0]).ToArray(); }
-            if (files.Length == 0) { Debug.WriteLine("--> ContentBlocks NO FILE 2 <--"); return false; }
+            if (files.Length == 0) { Debug.WriteLine("--> GetTabInfoFromFiles NO FILE 2 <--"); return null; }
+
+            Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> tab = new Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>>();
+            Dictionary<string, Dictionary<string, object>> dataFiles = Bdd.DatabaseFilesInfo(files);
+            foreach (string fil in files)
+            {
+                if (dataFiles.ContainsKey(fil))
+                {
+                    MediaItem it = MainWindow.DatabaseItemToMediaItem(dataFiles[fil]);
+                    if (!tab.ContainsKey(it.Album)) { tab.Add(it.Album, new Dictionary<uint, Dictionary<string, MediaItem>>()); }
+                    if (!tab[it.Album].ContainsKey(it.Disc)) { tab[it.Album].Add(it.Disc, new Dictionary<string, MediaItem>()); }
+                    if (!tab[it.Album][it.Disc].ContainsKey(it.Path)) { tab[it.Album][it.Disc].Add(it.Path, it); }
+                }
+                else
+                {
+                    Debug.WriteLine("--> GetTabInfoFromFiles ERROR - FILE '" + fil + "' do not exist <--");
+                }
+            }
+            return tab;
+        }
+
+        public async Task<bool> ContentBlocks(Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> infoTab, StackPanel contener, bool uniqueDir = true, bool clear = true)
+        {
+            Debug.WriteLine("--> ContentBlocks START <--");
+            if (infoTab == null) { Debug.WriteLine("--> ContentBlocks NO FILE 0 <--"); return false; }
+            if (infoTab.Count == 0) { Debug.WriteLine("--> ContentBlocks NO FILE 1 <--"); return false; }
             try
             {
                 BitmapImage defaultCover = MainWindow.Bimage("CoverImg");
                 if (uniqueDir)
                 {
-                    string folder = files[0].Substring(0, files[0].LastIndexOf(MainWindow.SeparatorChar));
+                    MediaItem item1 = null;
+                    foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in infoTab)
+                    {
+                        foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
+                        { foreach (KeyValuePair<string, MediaItem> track in disk.Value) { item1 = track.Value; break; }; break; }
+                        break;
+                    }
+                    string folder = item1.Path.Substring(0, item1.Path.LastIndexOf(MainWindow.SeparatorChar));
                     string[] t = System.IO.Directory.GetFiles(folder);
                     foreach (string file in t)
                     {
@@ -251,24 +304,9 @@ namespace AnotherMusicPlayer
                     }
                 }
 
-                Dictionary<string, Dictionary<string, object>> dataFiles = Bdd.DatabaseFilesInfo(files);
-                Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> tab = new Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>>();
-                foreach (string fil in files)
-                {
-                    if (dataFiles.ContainsKey(fil))
-                    {
-                        MediaItem it = MainWindow.DatabaseItemToMediaItem(dataFiles[fil]);
-                        if (!tab.ContainsKey(it.Album)) { tab.Add(it.Album, new Dictionary<uint, Dictionary<string, MediaItem>>()); }
-                        if (!tab[it.Album].ContainsKey(it.Disc)) { tab[it.Album].Add(it.Disc, new Dictionary<string, MediaItem>()); }
-                        if (!tab[it.Album][it.Disc].ContainsKey(it.Path)) { tab[it.Album][it.Disc].Add(it.Path, it); }
-                    }
-                    else
-                    {
-                        Debug.WriteLine("--> LibraryBuildNavigationContentBlocks ERROR - FILE '" + fil + "' do not exist <--");
-                    }
-                }
+                if (clear == true) { contener.Children.Clear(); }
 
-                foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> albumT in tab)
+                foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> albumT in infoTab)
                 {
                     string coverPath = albumT.Value.Values.First().First().Value.Path;
                     string al = albumT.Key;
@@ -405,7 +443,6 @@ namespace AnotherMusicPlayer
                     contener.Children.Add(br);
 
                 }
-                dataFiles.Clear();
             }
             catch (Exception err)
             {

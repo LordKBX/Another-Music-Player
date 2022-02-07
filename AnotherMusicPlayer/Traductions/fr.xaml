@@ -43,11 +43,14 @@
     <sys:String x:Key="BtnNexToolTip">Piste Suivante</sys:String>
     <sys:String x:Key="BtnRepeatToolTip">Bouton d'état répétion: rien, unique, playlist</sys:String>
     <sys:String x:Key="BtnShuffleToolTip">Retier-Trier Playlist au hazard</sys:String>
-    <sys:String x:Key="BtnClearListToolTip">Vider Playlist</sys:String>
+    <sys:String x:Key="BtnClearListToolTip">Vider Liste de lecture</sys:String>
     
     <sys:String x:Key="BtnParamsToolTip">Paramettres de l'application</sys:String>
     <sys:String x:Key="BtnLibToolTip">Médiathèque</sys:String>
     <sys:String x:Key="BtnDebugToolTip">Debug Export Vars</sys:String>
+
+    <sys:String x:Key="PlayingQueueCMClrear">Vider Liste de lecture</sys:String>
+    <sys:String x:Key="PlayingQueueCMRemove">Retirer Selection de la Liste de lecture</sys:String>
 
     <sys:String x:Key="TabPlaylist">Lecture</sys:String>
     <sys:String x:Key="TabLibrary">Médiathèque</sys:String>

@@ -44,7 +44,7 @@ namespace AnotherMusicPlayer
         public int Index
         {
             get { return PlayListIndex; }
-            set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : value; }
+            set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : ((value < 0) ? value : value); }
         }
         /// <summary> PlayList access Semaphore </summary>
         private Semaphore PlayListSemaphore;
@@ -300,6 +300,55 @@ namespace AnotherMusicPlayer
             PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
             evt.Position = PlayListIndex;
             PlaylistPositionChanged(this, evt);
+        }
+
+        /// <summary> Remove item from playlist </summary>
+        public void PlaylistRemoveIndex(int index)
+        {
+            if (index >= PlayList.Count) { return; }
+            if (PlayList[index] == CurrentFile) { return; }
+            bool reindex = false;
+            if (PlayList.IndexOf(CurrentFile) > index) { reindex = true; }
+            Debug.WriteLine("--> PlaylistRemoveIndex <--");
+            PlayList.RemoveAt(index);
+
+            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
+            evt.playlist = PlayList.ToArray();
+            PlaylistChanged(this, evt);
+            if (reindex)
+            {
+                PlayListIndex -= 1;
+                PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
+                evt2.Position = PlayListIndex;
+                PlaylistPositionChanged(this, evt2);
+            }
+        }
+
+        /// <summary> Remove items from playlist </summary>
+        public void PlaylistRemoveIndexes(int[] indexes)
+        {
+            bool reindex = false;
+            Debug.WriteLine("--> PlaylistRemoveIndexes <--");
+            List<int> idxs = new List<int>(indexes);
+            idxs.Sort();
+            for (int i = idxs.Count - 1; i >= 0; i--)
+            {
+                int index = idxs[i];
+                if (index >= PlayList.Count) { continue; }
+                if (PlayList[index] == CurrentFile) { continue; }
+                if (PlayList.IndexOf(CurrentFile) > index) { reindex = true; PlayListIndex -= 1; }
+                PlayList.RemoveAt(index);
+            }
+
+            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
+            evt.playlist = PlayList.ToArray();
+            PlaylistChanged(this, evt);
+            if (reindex)
+            {
+                PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
+                evt2.Position = PlayListIndex;
+                PlaylistPositionChanged(this, evt2);
+            }
         }
 
         /// <summary> Read next index in playlist </summary>

@@ -124,6 +124,7 @@ namespace AnotherMusicPlayer
                     Top = oldTop;
                     Left = oldLeft;
                     Width = oldWidth; Height = oldHeight;
+                    BtnMaximize.Tag = "Off";
                 }
                 else
                 {
@@ -131,6 +132,7 @@ namespace AnotherMusicPlayer
                     oldHeight = Height;
                     oldTop = Top;
                     oldLeft = Left;
+                    BtnMaximize.Tag = "On";
 
                     WorkingAreaPosition workingAreaPosition = GetWorkingAreaPosition();
                     Top = workingAreaPosition.Y1;
@@ -144,6 +146,7 @@ namespace AnotherMusicPlayer
             TopBar.MouseDown += TopBar_MouseDown;
 
             playLists = new PlayLists(this);
+            PlayListView.ContextMenu = null;
         }
 
         private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -530,5 +533,17 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("New value=" + e.NewValue);
         }
 
+        private void PlayListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (PlayListView.Items.Count == 0) { PlayListView.ContextMenu = null; return; }
+            PlayListView.ContextMenu = PlayingQueueContextMenu.MakeContextMenu(this);
+            if (PlayListView.SelectedItems.Count == 0) { ((PlayingQueueContextMenu)PlayListView.ContextMenu).RemoveTracks.Visibility = Visibility.Collapsed; }
+            else { ((PlayingQueueContextMenu)PlayListView.ContextMenu).RemoveTracks.Visibility = Visibility.Visible; }
+        }
+
+        private void PlayListView_SourceUpdated(object sender, DataTransferEventArgs e)
+        {
+            PlayListView_SelectionChanged(null, null);
+        }
     }
 }

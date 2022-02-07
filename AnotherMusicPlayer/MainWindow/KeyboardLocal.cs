@@ -47,7 +47,6 @@ namespace AnotherMusicPlayer
                         else if (TabControler.SelectedIndex == 1)
                         {
                             LibibraryNavigationContentScroll.ScrollToVerticalOffset(LibibraryNavigationContentScroll.VerticalOffset - 15);
-                            LibibraryNavigationContentScroll2.ScrollToVerticalOffset(LibibraryNavigationContentScroll2.VerticalOffset - 15);
                         }
                     }
                     if (key == "Down")
@@ -63,7 +62,6 @@ namespace AnotherMusicPlayer
                         else if (TabControler.SelectedIndex == 1)
                         {
                             LibibraryNavigationContentScroll.ScrollToVerticalOffset(LibibraryNavigationContentScroll.VerticalOffset + 15);
-                            LibibraryNavigationContentScroll2.ScrollToVerticalOffset(LibibraryNavigationContentScroll2.VerticalOffset + 15);
                         }
                     }
                 }

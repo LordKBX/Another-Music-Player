@@ -490,26 +490,40 @@
         </Setter>
     </Style>
     <Style x:Key="TopBarBtnMaximize" TargetType="{x:Type Button}" BasedOn="{StaticResource TopBarBtn}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
-                        <materialDesign:PackIcon Kind="WindowMaximize" Width="20" Height="20" Foreground="{StaticResource ForegroundColor}"
+        <Style.Triggers>
+            <Trigger Property="Tag" Value="Off">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <materialDesign:PackIcon Kind="WindowMaximize" Width="20" Height="20" Foreground="{StaticResource ForegroundColor}"
                             HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource TopBarButtonStyle.BackgroundColor.Max}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource BorderColor}"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="true">
-                            <Setter Property="Background" TargetName="border" Value="{StaticResource TopBarButtonStyle.BackgroundColor.Max.Active}"/>
-                            <Setter Property="BorderBrush" TargetName="border" Value="{StaticResource BorderColor}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="Tag" Value="On">
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border x:Name="border" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" SnapsToDevicePixels="true">
+                                <materialDesign:PackIcon Kind="WindowRestore" Width="20" Height="20" Foreground="{StaticResource ForegroundColor}"
+                            HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Trigger>
+            <Trigger Property="IsMouseOver" Value="true">
+                <Setter Property="Background" Value="{StaticResource TopBarButtonStyle.BackgroundColor.Max}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="true">
+                <Setter Property="Background" Value="{StaticResource TopBarButtonStyle.BackgroundColor.Max.Active}"/>
+                <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            </Trigger>
+        </Style.Triggers>
     </Style>
     <!--#endregion-->
 

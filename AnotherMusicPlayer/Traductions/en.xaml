@@ -41,13 +41,16 @@
     <sys:String x:Key="BtnPreviousToolTip">Previous Track</sys:String>
     <sys:String x:Key="BtnPlayPauseToolTip">Play / Pause</sys:String>
     <sys:String x:Key="BtnNexToolTip">Next Track</sys:String>
-    <sys:String x:Key="BtnRepeatToolTip">Repeat Playlist</sys:String>
-    <sys:String x:Key="BtnShuffleToolTip">Shuffle Playlist</sys:String>
-    <sys:String x:Key="BtnClearListToolTip">Clear Playlist</sys:String>
+    <sys:String x:Key="BtnRepeatToolTip">Repeat Playing Queue</sys:String>
+    <sys:String x:Key="BtnShuffleToolTip">Shuffle Playing Queue</sys:String>
+    <sys:String x:Key="BtnClearListToolTip">Clear Playing Queue</sys:String>
     
     <sys:String x:Key="BtnParamsToolTip">App Parametters</sys:String>
     <sys:String x:Key="BtnLibToolTip">App Media Base</sys:String>
     <sys:String x:Key="BtnDebugToolTip">Debug Export Vars</sys:String>
+
+    <sys:String x:Key="PlayingQueueCMClrear">Clear Playing Queue</sys:String>
+    <sys:String x:Key="PlayingQueueCMRemove">Remove Selection from Playing Queue</sys:String>
 
     <sys:String x:Key="TabPlaylist">Playback</sys:String>
     <sys:String x:Key="TabLibrary">Library</sys:String>

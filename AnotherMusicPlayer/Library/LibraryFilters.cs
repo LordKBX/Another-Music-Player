@@ -16,11 +16,14 @@ using System.Linq;
 using System.Windows.Threading;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace AnotherMusicPlayer
 {
     public partial class Library
     {
+        private Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> searchResults = null;
+
         /// <summary> Load media list of genres in the correspondant ComboBox </summary>
         public void LoadGenreList()
         {
@@ -99,19 +102,28 @@ namespace AnotherMusicPlayer
                 pathNavigator.DisplayAlt("Search Genre: " + genre);
                 Debug.WriteLine(JsonConvert.SerializeObject(paths));
 
-                SearchResultsContener.Children.Clear();
+                SearchResultsContener.ItemsSource = null;
                 NavigationContenerScollerBorder.Visibility = Visibility.Collapsed;
-                SearchResultsContenerScollerBorder.Visibility = Visibility.Visible;
+                Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0);
+                SearchResultsContenerBorder.Visibility = Visibility.Visible;
 
                 Parent.setLoadingState(true);
+                Task.Delay(250);
 
-                ContentBlocks(paths.ToArray(), SearchResultsContener, false);
-
-                //ContentBlocks(paths.ToArray(), SearchResultsContener, false);
-                //System.Threading.Tasks.Task.Run(() => ContentBlocks(paths.ToArray(), SearchResultsContener, false));
-
-
-                SearchResultsContenerScoller.ScrollToHome();
+                searchResults = GetTabInfoFromFiles(paths.ToArray());
+                ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
+                foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
+                {
+                    foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
+                    {
+                        foreach (KeyValuePair<string, MediaItem> track in disk.Value)
+                        {
+                            list.Add(track.Value);
+                        }
+                    }
+                }
+                SearchResultsContener.ItemsSource = list;
+                SearchResultsContener.ScrollIntoView(list[0]);
                 Parent.setLoadingState(false);
             }
         }
@@ -122,9 +134,10 @@ namespace AnotherMusicPlayer
             //Debug.WriteLine(e.Key.ToString());
             if (e.Key.ToString() == "Return")
             {
-                SearchResultsContener.Children.Clear();
+                SearchResultsContener.ItemsSource = null;
                 NavigationContenerScollerBorder.Visibility = Visibility.Collapsed;
-                SearchResultsContenerScollerBorder.Visibility = Visibility.Visible;
+                Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0);
+                SearchResultsContenerBorder.Visibility = Visibility.Visible;
 
                 string tag = (string)((ComboBoxItem)FilterSelector.SelectedItem).Tag;
                 string var = FiltersSearchInput.Text.ToLower();
@@ -138,11 +151,39 @@ namespace AnotherMusicPlayer
                 foreach (KeyValuePair<string, Dictionary<string, object>> file in files) { paths.Add(file.Key); }
 
                 Parent.setLoadingState(true);
-                ContentBlocks(paths.ToArray(), SearchResultsContener, false);
-                SearchResultsContenerScoller.ScrollToHome();
+                Task.Delay(250);
+
+                searchResults = GetTabInfoFromFiles(paths.ToArray());
+                ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
+                foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
+                {
+                    foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
+                    {
+                        foreach (KeyValuePair<string, MediaItem> track in disk.Value)
+                        {
+                            list.Add(track.Value);
+                        }
+                    }
+                }
+                SearchResultsContener.ItemsSource = list;
+                SearchResultsContener.ScrollIntoView(list[0]);
                 Parent.setLoadingState(false);
             }
 
+        }
+
+        private Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> getSearchSlice(uint start, uint end)
+        {
+            if (searchResults == null) { return null; }
+            Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> slicetab = new Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>>();
+            int count = 0;
+            foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> pair in searchResults)
+            {
+                if (count >= start && count <= end) { slicetab.Add(pair.Key, pair.Value); }
+                count += 1;
+            }
+
+            return slicetab;
         }
 
     }

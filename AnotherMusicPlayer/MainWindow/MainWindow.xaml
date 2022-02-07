@@ -100,7 +100,7 @@
                     </Grid.ColumnDefinitions>
                     <AccessText Grid.Column="0" Text="Another Media Player" Style="{DynamicResource TopBarTitle}"/>
                     <Button x:Name="BtnMinimize" Grid.Column="1" Cursor="Hand" Style="{DynamicResource TopBarBtnMinimize}" />
-                    <Button x:Name="BtnMaximize" Grid.Column="2" Cursor="Hand" Style="{DynamicResource TopBarBtnMaximize}" />
+                    <Button x:Name="BtnMaximize" Grid.Column="2" Cursor="Hand" Style="{DynamicResource TopBarBtnMaximize}" Tag="Off" />
                     <Button x:Name="BtnClose" Grid.Column="3" Cursor="Hand" Style="{DynamicResource TopBarBtnClose}" />
                 </Grid>
             </Border>
@@ -203,7 +203,7 @@
                                       AutomationProperties.IsColumnHeader="True" ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
                                       ListView.ItemContainerStyle="{DynamicResource ResourceKey=MediaItem}" AlternationCount="2" HorizontalContentAlignment="Left" 
                                       Padding="-1,-1,0,0" VerticalContentAlignment="Center" Style="{DynamicResource PlayBackListViewStyle}"
-                                      FlowDirection="LeftToRight" Margin="0,0,-1,0" Grid.ColumnSpan="2" BorderThickness="0,0,1,1">
+                                      FlowDirection="LeftToRight" Margin="0,0,-1,0" Grid.ColumnSpan="2" BorderThickness="0,0,1,1" SelectionChanged="PlayListView_SelectionChanged" SourceUpdated="PlayListView_SourceUpdated">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
                                         <GridViewColumn x:Name="PlayListViewC1" Width="25" Header="" 
@@ -308,19 +308,84 @@
                                 </Grid>
                             </Grid>
                         </Border>
-                        <Border x:Name="LibibraryNavigationContentB" Grid.Row="2" BorderThickness="0,1,1,1" BorderBrush="{DynamicResource BorderColor}" Visibility="Visible" Grid.ColumnSpan="2">
+                        <Border x:Name="LibibraryNavigationContentB" Grid.Row="2" BorderThickness="0,1,1,1" 
+                                BorderBrush="{DynamicResource BorderColor}" Visibility="Collapsed" Grid.ColumnSpan="2">
                             <ScrollViewer x:Name="LibibraryNavigationContentScroll" VerticalScrollBarVisibility="Auto" 
                                           HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch">
                                 <local:AlignablePanel x:Name="LibibraryNavigationContent" HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" />
                             </ScrollViewer>
                         </Border>
-                        <Border x:Name="LibibraryNavigationContent2B" Grid.Row="2" BorderThickness="0,1,1,1" BorderBrush="{DynamicResource BorderColor}" Margin="0" Visibility="Collapsed" Grid.ColumnSpan="2">
-                            <ScrollViewer x:Name="LibibraryNavigationContentScroll2" VerticalScrollBarVisibility="Auto">
-                                <StackPanel x:Name="LibibraryNavigationContent2">
+                        <Border x:Name="LibibraryNavigationContent2B" Grid.Row="2" BorderThickness="0,1,1,1" 
+                                BorderBrush="{DynamicResource BorderColor}" Margin="0" Visibility="Visible" Grid.ColumnSpan="2">
+                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="100*"/>
+                                    <RowDefinition Height="120" x:Name="LibibrarySearchContentGridRow2"/>
+                                </Grid.RowDefinitions>
+                                <ListView x:Name="LibibrarySearchContent" SelectionMode="Extended" IsTextSearchEnabled="False" 
+                                      AutomationProperties.IsColumnHeader="True" ScrollViewer.CanContentScroll="True" ScrollViewer.IsDeferredScrollingEnabled="True"
+                                      ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible"
+                                      Style="{DynamicResource PlaylistsContentsStyle}"
+                                      ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlaylistsContentsMediaItem}" 
+                                      AlternationCount="2" HorizontalContentAlignment="Left" 
+                                      Padding="0,-1,0,0" BorderThickness="0" VerticalAlignment="Top"
+                                      VerticalContentAlignment="Center" FlowDirection="LeftToRight" 
+                                      Margin="0,0,0,0">
+                                    <ListView.View>
+                                        <GridView AllowsColumnReorder="True">
+                                            <GridViewColumn x:Name="LibibrarySearchContentC1" 
+                                                        Header="{DynamicResource Album}" 
+                                                        HeaderContainerStyle="{DynamicResource PlaylistsContentsHeaderStyle}">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <AccessText Text="{Binding Album}" HorizontalAlignment="Stretch"
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}" 
+                                                                Margin="0,0,20,0"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Name="LibibrarySearchContentC2" Header="{DynamicResource Title}" 
+                                                        HeaderContainerStyle="{DynamicResource PlaylistsContentsHeaderStyle}">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <AccessText Text="{Binding Name}"  HorizontalAlignment="Stretch"
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Name="LibibrarySearchContentC3" 
+                                                        Header="{DynamicResource Artist}" 
+                                                        HeaderContainerStyle="{DynamicResource PlaylistsContentsHeaderStyle}">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <AccessText Text="{Binding Performers}"  HorizontalAlignment="Stretch"
+                                                                Style="{DynamicResource ListViewColumnItemAccessText}"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                            <GridViewColumn x:Name="LibibrarySearchContentC4" Width="80" 
+                                                        Header="{DynamicResource Duration}" 
+                                                        DisplayMemberBinding="{Binding DurationS}" 
+                                                        HeaderContainerStyle="{DynamicResource PlaylistsContentsHeaderStyle}"/>
+                                            <GridViewColumn x:Name="LibibrarySearchContentC5" 
+                                                        Header="{DynamicResource Rating}" Width="130"
+                                                        HeaderContainerStyle="{DynamicResource PlaylistsContentsHeaderStyle}">
+                                                <GridViewColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <local:Rating Zoom="0.7" StarBackgroundColor="Gray" 
+                                                        StarForegroundColor="White" Rate="{Binding Rating}" 
+                                                        RateChanged="RatingRateChanged" Tag="{Binding Path}" 
+                                                                  IsReadOnly="True"/>
+                                                    </DataTemplate>
+                                                </GridViewColumn.CellTemplate>
+                                            </GridViewColumn>
+                                        </GridView>
+                                    </ListView.View>
+                                </ListView>
+                                <StackPanel x:Name="LibibrarySearchContentDetails" Orientation="Vertical" HorizontalAlignment="Stretch">
                                 </StackPanel>
-                            </ScrollViewer>
+                            </Grid>
                         </Border>
-                        <ListBox x:Name="listBox" HorizontalAlignment="Left" Height="2" Margin="36,13,0,0" VerticalAlignment="Top" Width="63"/>
                     </Grid>
                 </TabItem>
                 <TabItem Style="{DynamicResource TabItemStyle}" x:Name="Tab3">
@@ -434,9 +499,6 @@
                                                         StarForegroundColor="White" Rate="{Binding Rating}" 
                                                         RateChanged="RatingRateChanged" Tag="{Binding Path}" 
                                                                   IsReadOnly="True"/>
-                                                    <!--<materialDesign:RatingBar 
-                                                        Value="{Binding Rating}" 
-                                                        IsReadOnly="True" Foreground="White" Opacity="1"/>-->
                                                 </DataTemplate>
                                             </GridViewColumn.CellTemplate>
                                         </GridViewColumn>
@@ -644,7 +706,8 @@
                 <Button Grid.Row="8" x:Name="BtnRepeat" Margin="2,0,2,0" ToolTip="{DynamicResource BtnRepeatToolTip}" 
                         Click="BtnRepeat_Click" Style="{DynamicResource PlaybackBtnRepeat}" Tag="Off"/>
                 <Button Grid.Row="10" x:Name="BtnShuffle" Margin="2,0,2,0" ToolTip="{DynamicResource BtnShuffleToolTip}" Click="BtnShuffle_Click" Style="{DynamicResource PlaybackBtnShuffle}"/>
-                <Button Grid.Row="12" x:Name="BtnClearList" Margin="2,0,2,0" ToolTip="{DynamicResource BtnClearListToolTip}" Click="Clear_Button_Click" Style="{DynamicResource PlaybackBtnClearPlaylist}"/>
+                <Button Grid.Row="12" x:Name="BtnClearList" Margin="2,0,2,0" ToolTip="{DynamicResource BtnClearListToolTip}" 
+                        Click="Clear_Button_Click" Style="{DynamicResource PlaybackBtnClearPlaylist}"/>
 
                 <Button Grid.Row="14" x:Name="BtnDebug" Content="Dbg" Margin="2,0,2,0" ToolTip="{DynamicResource BtnDebugToolTip}" Click="Debug_Button_Click" Style="{DynamicResource PlaybackBtnStyle}"/>
 

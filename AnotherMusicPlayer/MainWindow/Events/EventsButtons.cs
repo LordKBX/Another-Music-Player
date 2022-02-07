@@ -44,7 +44,7 @@ namespace AnotherMusicPlayer
         //private void PositionPlus10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() + 10000); }
 
         /// <summary> Callback Event Click on Clear List button </summary>
-        private void Clear_Button_Click(object sender, RoutedEventArgs e)
+        public void Clear_Button_Click(object sender, RoutedEventArgs e)
         {
             player.PlaylistClear();
 

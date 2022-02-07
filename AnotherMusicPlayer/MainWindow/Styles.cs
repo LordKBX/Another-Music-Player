@@ -22,9 +22,9 @@ namespace AnotherMusicPlayer
                 Resources.MergedDictionaries[0].BeginInit();
                 Resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri(filePath, UriKind.Absolute) };
                 Resources.MergedDictionaries[0].EndInit();
-                win1.Style = FindResource("CustomWindowStyle") as Style;
             }
             catch { }
+            Style = FindResource("CustomWindowStyle") as Style;
         }
 
         public string[] StyleList()
