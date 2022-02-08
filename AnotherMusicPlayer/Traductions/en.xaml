@@ -29,6 +29,7 @@
     <sys:String x:Key="Genre">Genre</sys:String>
     <sys:String x:Key="Rating">Rating</sys:String>
     <sys:String x:Key="Count">Played</sys:String>
+    <sys:String x:Key="Lyrics">Lyrics</sys:String>
 
     <sys:String x:Key="Title2">Title:</sys:String>
     <sys:String x:Key="Album2">Album:</sys:String>
@@ -36,6 +37,7 @@
     <sys:String x:Key="Duration2">Duration:</sys:String>
     <sys:String x:Key="Genres2">Genre:</sys:String>
     <sys:String x:Key="Rating2">Rating:</sys:String>
+    <sys:String x:Key="Lyrics2">Lyrics:</sys:String>
 
     <sys:String x:Key="BtnOpenToolTip">Open Files</sys:String>
     <sys:String x:Key="BtnPreviousToolTip">Previous Track</sys:String>
@@ -80,6 +82,10 @@
     <sys:String x:Key="ParamsMemoryUsageLabel">Memory Usage</sys:String>
     <sys:String x:Key="ParamsMemoryUsage0">Low</sys:String>
     <sys:String x:Key="ParamsMemoryUsage1">Full</sys:String>
+
+    <sys:String x:Key="ParamsAutoPlayLabel">Automatic replay at startup</sys:String>
+    <sys:String x:Key="ParamsAutoPlay0">No</sys:String>
+    <sys:String x:Key="ParamsAutoPlay1">Yes</sys:String>
 
     <sys:String x:Key="ParamsLibFolderLabel">Music Library Folder</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorTitle">Select a Directory</sys:String>

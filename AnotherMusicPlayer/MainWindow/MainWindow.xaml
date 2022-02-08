@@ -327,7 +327,7 @@
                                       ScrollViewer.HorizontalScrollBarVisibility="Hidden" ScrollViewer.VerticalScrollBarVisibility="Visible"
                                       Style="{DynamicResource PlaylistsContentsStyle}"
                                       ListView.ItemContainerStyle="{DynamicResource ResourceKey=PlaylistsContentsMediaItem}" 
-                                      AlternationCount="2" HorizontalContentAlignment="Left" 
+                                      AlternationCount="2" HorizontalContentAlignment="Left"  HorizontalAlignment="Stretch"
                                       Padding="0,-1,0,0" BorderThickness="0" VerticalAlignment="Top"
                                       VerticalContentAlignment="Center" FlowDirection="LeftToRight" 
                                       Margin="0,0,0,0">
@@ -382,8 +382,55 @@
                                         </GridView>
                                     </ListView.View>
                                 </ListView>
-                                <StackPanel x:Name="LibibrarySearchContentDetails" Orientation="Vertical" HorizontalAlignment="Stretch">
-                                </StackPanel>
+                                <Border x:Name="LibibrarySearchContentDetails" Grid.Row="1" BorderBrush="{DynamicResource BorderColor}" BorderThickness="0,1,0,0">
+                                    <Grid HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="120"/>
+                                            <ColumnDefinition Width="100*"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{DynamicResource PlayBackPanelInfoImageBlock}" Grid.Column="0">
+                                        <Image x:Name="SearchFileCover" Width="120" Height="120" 
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                        </TextBlock>
+                                        <Grid Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                                              Margin="5,5,5,0">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="50*"/>
+                                                <ColumnDefinition Width="50*"/>
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="0">
+                                                <TextBlock Text="{DynamicResource Title2}" Foreground="{DynamicResource ForegroundColor}"/>
+                                                <AccessText x:Name="SearchMediaInfoTitle" Margin="10,0,0,0" 
+                                                        Foreground="{DynamicResource ForegroundColor}" 
+                                                        TextWrapping="WrapWithOverflow" Text="Test"/>
+                                                <TextBlock Text="{DynamicResource Artist2}" x:Name="SearchMediaInfoArtistsLabel" 
+                                                           Foreground="{DynamicResource ForegroundColor}"/>
+                                                <AccessText x:Name="SearchMediaInfoArtists" Text="" Margin="10,0,0,0" 
+                                                        Foreground="{DynamicResource ForegroundColor}" TextWrapping="WrapWithOverflow"/>
+                                                <TextBlock Text="{DynamicResource Album2}" x:Name="SearchMediaInfoAlbumLabel" 
+                                                           Foreground="{DynamicResource ForegroundColor}"/>
+                                                <AccessText x:Name="SearchMediaInfoAlbum" Text="" Margin="10,0,0,0" Grid.Row="1"
+                                                        Foreground="{DynamicResource ForegroundColor}" TextWrapping="WrapWithOverflow"/>
+                                            </StackPanel>
+                                            <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Column="1">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="15"/>
+                                                    <RowDefinition MinHeight="30"/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Text="{DynamicResource Lyrics2}" 
+                                                           x:Name="SearchMediaInfoLyricsLabel" Grid.Row="0"
+                                                           Foreground="{DynamicResource ForegroundColor}"/>
+                                                <ScrollViewer Grid.Row="1" VerticalAlignment="Stretch" 
+                                                HorizontalContentAlignment="Stretch" VerticalContentAlignment="Top"
+                                                VerticalScrollBarVisibility="Auto">
+                                                    <AccessText x:Name="SearchMediaInfoLyrics" Text="AAA\nAAAAAAAAAAAAAAAAAA AAAAAAA AAAAAAAAAAAAAAA AAAAAAAABBB" 
+                                                        Margin="10,0,0,0" HorizontalAlignment="Stretch"
+                                                        Foreground="{DynamicResource ForegroundColor}" TextWrapping="WrapWithOverflow"/>
+                                                </ScrollViewer>
+                                            </Grid>
+                                        </Grid>
+                                    </Grid>
+                                </Border>
                             </Grid>
                         </Border>
                     </Grid>
@@ -543,6 +590,14 @@
                                 <GroupBox Header="{DynamicResource ParamsStyleLabel}">
                                     <ComboBox x:Name="ParamsStyleVals" 
                                         MinWidth="200" Height="30">
+                                    </ComboBox>
+                                </GroupBox>
+
+                                <GroupBox Header="{DynamicResource ParamsAutoPlayLabel}">
+                                    <ComboBox x:Name="ParamsAutoPlay" 
+                                    MinWidth="200" Height="30">
+                                        <ComboBoxItem x:Name="AP0" Tag="0" Content="{DynamicResource ParamsAutoPlay0}" IsSelected="False"/>
+                                        <ComboBoxItem x:Name="AP1" Tag="1" Content="{DynamicResource ParamsAutoPlay1}" IsSelected="True"/>
                                     </ComboBox>
                                 </GroupBox>
 

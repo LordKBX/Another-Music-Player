@@ -29,6 +29,7 @@
     <sys:String x:Key="Genre">Genre</sys:String>
     <sys:String x:Key="Rating">Note</sys:String>
     <sys:String x:Key="Count">Joué</sys:String>
+    <sys:String x:Key="Lyrics">Paroles</sys:String>
 
     <sys:String x:Key="Title2">Titre:</sys:String>
     <sys:String x:Key="Album2">Album:</sys:String>
@@ -36,6 +37,7 @@
     <sys:String x:Key="Duration2">Durée:</sys:String>
     <sys:String x:Key="Genres2">Genre:</sys:String>
     <sys:String x:Key="Rating2">Note:</sys:String>
+    <sys:String x:Key="Lyrics2">Paroles:</sys:String>
 
     <sys:String x:Key="BtnOpenToolTip">Ouvrir un/des fichier(s)</sys:String>
     <sys:String x:Key="BtnPreviousToolTip">Piste Précédente</sys:String>
@@ -80,6 +82,10 @@
     <sys:String x:Key="ParamsMemoryUsageLabel">Utilisation RAM</sys:String>
     <sys:String x:Key="ParamsMemoryUsage0">Réduit</sys:String>
     <sys:String x:Key="ParamsMemoryUsage1">Complet</sys:String>
+
+    <sys:String x:Key="ParamsAutoPlayLabel">Lecture automatique au démarage</sys:String>
+    <sys:String x:Key="ParamsAutoPlay0">Non</sys:String>
+    <sys:String x:Key="ParamsAutoPlay1">Oui</sys:String>
 
     <sys:String x:Key="ParamsLibFolderLabel">Dossier Médiathèque</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorTitle">Selectionner un dossier</sys:String>

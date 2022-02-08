@@ -36,7 +36,7 @@ namespace AnotherMusicPlayer
         /// <summary> Border Scrollview of search results display zone </summary>
         Border SearchResultsContenerBorder;
         /// <summary> StackPanel of search results details display zone </summary>
-        StackPanel LibibrarySearchContentDetails;
+        Border LibibrarySearchContentDetails;
 
         /// <summary> Combobox serving to select filtering/search mode </summary>
         ComboBox FilterSelector;
@@ -167,10 +167,30 @@ namespace AnotherMusicPlayer
             };
             SearchResultsContener.SelectionChanged += (sender, e) =>
             {
-                if (SearchResultsContener.SelectedItems.Count <= 0) { Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0); }
+                if (SearchResultsContener.SelectedItems.Count <= 0 || SearchResultsContener.SelectedItems.Count > 1)
+                {
+                    Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0);
+                    if (SearchResultsContener.SelectedItems.Count > 1) { Parent.LibibrarySearchContent.ContextMenu = MakeContextMenu(Parent.LibibrarySearchContent, "selection", false); }
+                    else Parent.LibibrarySearchContent.ContextMenu = null;
+                }
                 else
                 {
                     Parent.LibibrarySearchContentGridRow2.Height = new GridLength(120);
+                    Parent.SearchFileCover.Source = FilesTags.MediaPicture(((MediaItem)SearchResultsContener.SelectedItem).Path, Parent.bdd, true, 150, 150);
+                    Parent.SearchMediaInfoTitle.Text = ((MediaItem)SearchResultsContener.SelectedItem).Name;
+                    string artists = ((MediaItem)SearchResultsContener.SelectedItem).Composers;
+                    artists += ((artists.Length > 0) ? ", " : "") + ((MediaItem)SearchResultsContener.SelectedItem).Performers;
+                    Parent.SearchMediaInfoArtists.Text = artists;
+                    Parent.SearchMediaInfoAlbum.Text = ((MediaItem)SearchResultsContener.SelectedItem).Album;
+                    Parent.SearchMediaInfoLyrics.Text = ((MediaItem)SearchResultsContener.SelectedItem).Lyrics;
+
+
+                    Parent.LibibrarySearchContent.ContextMenu = MakeContextMenu(Parent.LibibrarySearchContent, "selection", false);
+                    for (int i = 0; i < Parent.LibibrarySearchContent.ContextMenu.Items.Count; i++)
+                    {
+                        if (((MenuItem)Parent.LibibrarySearchContent.ContextMenu.Items[i]).Name == "PlayShuffleSelection")
+                        { ((MenuItem)Parent.LibibrarySearchContent.ContextMenu.Items[i]).Visibility = Visibility.Collapsed; break; }
+                    }
                 }
             };
 
@@ -178,7 +198,11 @@ namespace AnotherMusicPlayer
             InvokeScan();
         }
 
-        private double LibibrarySearchContent_CalcCollumnWidth() { double calc = (Parent.LibibrarySearchContent.ActualWidth - Parent.PlaylistsContentsC3.Width - Parent.PlaylistsContentsC4.Width) / 3; return (calc > 0) ? calc : 0; }
+        private double LibibrarySearchContent_CalcCollumnWidth()
+        {
+            double calc = (Parent.LibibrarySearchContent.ActualWidth - Parent.LibibrarySearchContentC4.Width - Parent.LibibrarySearchContentC5.Width - 20) / 3;
+            return (calc > 0) ? calc : 0;
+        }
 
         /// <summary> Update var RootPath and return if value is valid or not </summary>
         public bool UpdateRootPath(string root) { if (Directory.Exists(root)) { RootPath = root; return true; } else { return false; } }

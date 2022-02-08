@@ -30,6 +30,7 @@ namespace AnotherMusicPlayer
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
                     if (type == "track") { ((MenuItem)cm.Items[i]).Click += CM_AddTrack; }
+                    if (type == "selection") { ((MenuItem)cm.Items[i]).Click += CM_AddTrack; }
                     if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_AddAlbum; }
                     if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_AddFolder; }
                 }
@@ -37,12 +38,14 @@ namespace AnotherMusicPlayer
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
                     if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_AddShuffledAlbum; }
-                    if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_AddShuffledFolder; ; }
+                    if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_AddShuffledFolder; }
+                    if (type == "selection") { ((MenuItem)cm.Items[i]).Click += CM_AddShuffledFolder; }
                 }
                 else if (((MenuItem)cm.Items[i]).Name.ToLower() == "play" + type)
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
                     if (type == "track") { ((MenuItem)cm.Items[i]).Click += CM_PlayTrack; }
+                    if (type == "selection") { ((MenuItem)cm.Items[i]).Click += CM_PlayTrack; }
                     if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_PlayAlbum; }
                     if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_PlayFolder; }
 
@@ -52,21 +55,23 @@ namespace AnotherMusicPlayer
                     ((MenuItem)cm.Items[i]).Tag = parent;
                     if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_PlayShuffledAlbum; }
                     if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_PlayShuffledFolder; }
+                    if (type == "selection") { ((MenuItem)cm.Items[i]).Click += CM_PlayShuffledFolder; }
 
                 }
                 else if (((MenuItem)cm.Items[i]).Name.ToLower() == "edit" + otype)
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
-                    if (type == "file") { ((MenuItem)cm.Items[i]).Click += CM_EditTrack; ; }
+                    if (type == "file") { ((MenuItem)cm.Items[i]).Click += CM_EditTrack; }
                     if (type == "track") { ((MenuItem)cm.Items[i]).Click += CM_EditTrack; }
-                    if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_EditAlbum; ; }
-                    if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_EditFolder; ; }
+                    if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_EditAlbum; }
+                    if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_EditFolder; }
 
                 }
                 else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playlistsadd" + type)
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
                     if (type == "track") { ((MenuItem)cm.Items[i]).Click += CM_AddPlaylistTrack; }
+                    if (type == "selection") { ((MenuItem)cm.Items[i]).Click += CM_AddPlaylistTrack; }
                     if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_AddPlaylistAlbum; }
                     if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_AddPlaylistFolder; }
 
@@ -86,8 +91,21 @@ namespace AnotherMusicPlayer
         private void CM_AddPlaylistTrack(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            string track = (string)((Button)item.Tag).Tag;
-            Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
+            if (item.Tag.GetType().Name == "ListView")
+            {
+                ListView view = (ListView)item.Tag;
+                if (view.SelectedItems.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    Parent.playLists.RecordTracksIntoPlaylist(files.ToArray());
+                }
+            }
+            else
+            {
+                string track = (string)((Button)item.Tag).Tag;
+                Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
+            }
         }
 
         private void CM_AddPlaylistAlbum(object sender, RoutedEventArgs e)
@@ -112,8 +130,21 @@ namespace AnotherMusicPlayer
         private void CM_AddTrack(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            string track = (string)((Button)item.Tag).Tag;
-            Parent.player.PlaylistEnqueue(new string[] { track });
+            if (item.Tag.GetType().Name == "ListView")
+            {
+                ListView view = (ListView)item.Tag;
+                if (view.SelectedItems.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    Parent.player.PlaylistEnqueue(files.ToArray());
+                }
+            }
+            else
+            {
+                string track = (string)((Button)item.Tag).Tag;
+                Parent.player.PlaylistEnqueue(new string[] { track });
+            }
         }
 
         private void CM_AddAlbum(object sender, RoutedEventArgs e)
@@ -145,15 +176,28 @@ namespace AnotherMusicPlayer
         private void CM_AddShuffledFolder(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            string folder = null;
-            try { folder = ((Button)item.Tag).Tag as string; }
-            catch
+            if (item.Tag.GetType().Name == "ListView")
             {
-                try { }
-                catch { }
+                ListView view = (ListView)item.Tag;
+                if (view.SelectedItems.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    Parent.player.PlaylistEnqueue(files.ToArray(), true);
+                }
             }
-            if (folder == null) { return; }
-            Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true);
+            else
+            {
+                string folder = null;
+                try { folder = ((Button)item.Tag).Tag as string; }
+                catch
+                {
+                    try { }
+                    catch { }
+                }
+                if (folder == null) { return; }
+                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true);
+            }
         }
         #endregion
 
@@ -161,9 +205,23 @@ namespace AnotherMusicPlayer
         private void CM_PlayTrack(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            string track = (string)((Button)item.Tag).Tag;
-            Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(new string[] { track });
+            if (item.Tag.GetType().Name == "ListView")
+            {
+                ListView view = (ListView)item.Tag;
+                if (view.SelectedItems.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    Parent.player.PlaylistClear();
+                    Parent.player.PlaylistEnqueue(files.ToArray());
+                }
+            }
+            else
+            {
+                string track = (string)((Button)item.Tag).Tag;
+                Parent.player.PlaylistClear();
+                Parent.player.PlaylistEnqueue(new string[] { track });
+            }
         }
 
         private void CM_PlayAlbum(object sender, RoutedEventArgs e)
@@ -202,16 +260,30 @@ namespace AnotherMusicPlayer
         private void CM_PlayShuffledFolder(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            string folder = null;
-            try { folder = ((Button)item.Tag).Tag as string; }
-            catch
+            if (item.Tag.GetType().Name == "ListView")
             {
-                try { }
-                catch { }
+                ListView view = (ListView)item.Tag;
+                if (view.SelectedItems.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    Parent.player.PlaylistClear();
+                    Parent.player.PlaylistEnqueue(files.ToArray(), true);
+                }
             }
-            if (folder == null) { return; }
-            Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true);
+            else
+            {
+                string folder = null;
+                try { folder = ((Button)item.Tag).Tag as string; }
+                catch
+                {
+                    try { }
+                    catch { }
+                }
+                if (folder == null) { return; }
+                Parent.player.PlaylistClear();
+                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true);
+            }
         }
         #endregion
 

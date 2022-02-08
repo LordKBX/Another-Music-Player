@@ -123,6 +123,13 @@ namespace AnotherMusicPlayer
         /// <summary> clear current file value </summary>
         public void ClearCurrentFile() { CurrentFile = null; }
 
+        public long GetCurrentFilePosition()
+        {
+            if (CurrentFile == null) { return 0; }
+            if (!AudioList.ContainsKey(CurrentFile)) { return 0; }
+            return Convert.ToInt64(((AudioFileReader)AudioList[CurrentFile]).CurrentTime.TotalMilliseconds);
+        }
+
         /// <summary> update an equalizer band Gain value </summary>
         public void UpdateEqualizer(int Band, float Gain)
         {
@@ -185,7 +192,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Add media into playlist </summary>
-        public bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0)
+        public bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0, long playDuration = 0, bool autoplay = false)
         {
 
             int initialNbFiles = PlayList.Count;
@@ -217,8 +224,9 @@ namespace AnotherMusicPlayer
             {
                 if (PlayList.Count > playIndex && playIndex >= 0)
                 {
-                    Play(PlayList[playIndex]);
+                    Open(PlayList[playIndex], autoplay, playDuration);
                     PlayListIndex = playIndex;
+                    CurrentFile = PlayList[playIndex];
                 }
             }
 
@@ -374,13 +382,15 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Open a new media playing thread </summary>
-        public bool Open(string FilePath, bool AutoPlay = false)
+        public bool Open(string FilePath, bool AutoPlay = false, long playDuration = 0)
         {
             //if (IsPlaying(FilePath)) { return false; }
             if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath))
             {
                 try
                 {
+                    if (playDuration > 0) { PlayNewPositions.Add(FilePath, playDuration); }
+                    else { PlayNewPositions.Add(FilePath, -1); }
                     Thread objThread = new Thread(new ParameterizedThreadStart(PlaySoundAsync));
                     objThread.IsBackground = true;
                     objThread.Priority = ThreadPriority.AboveNormal;
@@ -388,8 +398,11 @@ namespace AnotherMusicPlayer
                     ThreadList.Add(FilePath, objThread);
                     PlayStatus.Add(FilePath, (AutoPlay) ? 1 : 0);
                     PlayNewPositions.Add(FilePath, -1);
-                    if (AutoPlay) CurrentFile = FilePath;
-                    return true;
+                    if (AutoPlay)
+                    {
+                        CurrentFile = FilePath;
+                        return true;
+                    }
                 }
                 catch { }
             }
@@ -397,7 +410,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Start media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Play(string FilePath = null)
+        public bool Play(string FilePath = null, long playDuration = 0)
         {
             if (FilePath == null) { FilePath = CurrentFile; }
             if (FilePath == null) { return false; }
@@ -407,7 +420,7 @@ namespace AnotherMusicPlayer
                 if (TestFile(FilePath))
                 {
                     if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
-                    else { return Open(FilePath, true); }
+                    else { return Open(FilePath, true, playDuration); }
                 }
             }
             catch { }
@@ -609,9 +622,8 @@ namespace AnotherMusicPlayer
                         try
                         {
                             PlayerPositionChangedEventParams evt = new PlayerPositionChangedEventParams();
-                            AudioFileReader a = (AudioFileReader)audioFile;
-                            evt.Position = (long)(a.CurrentTime.TotalMilliseconds);
-                            evt.duration = (long)(a.TotalTime.TotalMilliseconds);
+                            evt.Position = (long)(audioFile.CurrentTime.TotalMilliseconds);
+                            evt.duration = (long)(audioFile.TotalTime.TotalMilliseconds);
                             if (FilePath == CurrentFile) PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {

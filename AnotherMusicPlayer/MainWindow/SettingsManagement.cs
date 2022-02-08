@@ -81,6 +81,10 @@ namespace AnotherMusicPlayer
             else { ParamsMemoryUsage.SelectedIndex = 0; }
             ParamsMemoryUsage.SelectionChanged += ParamsMemoryUsage_SelectionChanged;
 
+            if (Settings.StartUpPlay == true) { ParamsAutoPlay.SelectedIndex = 1; }
+            else { ParamsAutoPlay.SelectedIndex = 0; }
+            ParamsAutoPlay.SelectionChanged += ParamsAutoPlay_SelectionChanged; ;
+
             Int32 i = 0;
             foreach (ComboBoxItem cb in ParamsConvQualityVals.Items)
             {
@@ -98,6 +102,12 @@ namespace AnotherMusicPlayer
 
             win1.Left = (Settings.LastWindowLeft < 0) ? 100 : Settings.LastWindowLeft;
             win1.Top = (Settings.LastWindowTop < 0) ? 100 : Settings.LastWindowTop;
+        }
+
+        private void ParamsAutoPlay_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.StartUpPlay = (((ComboBox)sender).SelectedIndex == 0) ? false : true;
+            Settings.SaveSettings();
         }
 
         private void ParamsMemoryUsage_SelectionChanged(object sender, SelectionChangedEventArgs e)

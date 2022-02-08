@@ -88,7 +88,7 @@ namespace AnotherMusicPlayer
             //SettingsSetUp();//Initialize interface elements with stored parametters in settings
             //TabControl t = new TabControl();
             //t.cli
-            TabControler.SelectedIndex = 1;
+            TabControler.SelectedIndex = 0;
 
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -186,19 +186,7 @@ namespace AnotherMusicPlayer
                 library.DisplayPath(Settings.LibFolder);
             }));
 
-            MouseButtonEventArgs args2 = new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left);
-            args2.RoutedEvent = TextBlock.MouseLeftButtonUpEvent;
-            args2.Source = (TreeViewItem)((TreeViewItem)PlaylistsTree.Items[0]).Items[3];
-            ((TreeViewItem)((TreeViewItem)PlaylistsTree.Items[0]).Items[3]).RaiseEvent(args2);
-
-            var tvi = FindTviFromObjectRecursive(PlaylistsTree, PlaylistsTree.Items[0]);
-            if (tvi != null)
-            {
-                tvi.IsSelected = true;
-                tvi.ExpandSubtree();
-            }
-            var tvi2 = FindTviFromObjectRecursive(PlaylistsTree, (TreeViewItem)((TreeViewItem)PlaylistsTree.Items[0]).Items[3]);
-            if (tvi2 != null) tvi2.IsSelected = true;
+            PlaylistsTreeAuto.IsExpanded = true;
         }
 
         public static TreeViewItem FindTviFromObjectRecursive(ItemsControl ic, object o)
@@ -221,6 +209,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window closing / exit </summary>
         private async void MainWindow_Closing(object sender, CancelEventArgs e)
         {
+            Settings.LastPlaylistDuration = player.GetCurrentFilePosition();
             player.Dispose();
             await Settings.SaveSettings();
             bdd.Finalize();
@@ -270,11 +259,11 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Load list of file in the playlist and play first element in list if music currently not played </summary>
-        private bool Open(string[] files, bool replace = false, bool random = false, int playIndex = 0)
+        private bool Open(string[] files, bool replace = false, bool random = false, int playIndex = 0, bool autoplay = false)
         {
             Debug.WriteLine("--> Open <--");
             if (replace == true) { player.PlaylistClear(); }
-            return player.PlaylistEnqueue(files, random, playIndex);
+            return player.PlaylistEnqueue(files, random, playIndex, Settings.LastPlaylistDuration, autoplay);
         }
 
         /// <summary> Change Playlist index and load music file if the new position is accepted </summary>

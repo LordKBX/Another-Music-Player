@@ -15,7 +15,8 @@ using System.Linq;
 
 namespace AnotherMusicPlayer
 {
-    public partial class MainWindow : Window {
+    public partial class MainWindow : Window
+    {
         /// <summary> Asynchronus call for loading old playlist in a new thread </summary>
         private async void LibraryLoadOldPlaylist()
         {
@@ -58,7 +59,7 @@ namespace AnotherMusicPlayer
                     if (fails > 0) { newIndex = 0; }
                     else { newIndex = Settings.LastPlaylistIndex; }
 
-                    Open(gl.ToArray(), false, false, newIndex);
+                    Open(gl.ToArray(), false, false, newIndex, Settings.StartUpPlay);
                     //player.Stop();
                 }
             }

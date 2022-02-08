@@ -27,10 +27,11 @@ namespace AnotherMusicPlayer
         /// <summary> Load media list of genres in the correspondant ComboBox </summary>
         public void LoadGenreList()
         {
-            Dictionary<string, Dictionary<string, object>> genres = Bdd.DatabaseQuery("SELECT Genres, COUNT(Path) AS nb FROM files GROUP BY Genres ORDER BY TRIM(Genres) ASC", "Genres");
+            Bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = REPLACE(REPLACE(REPLACE(REPLACE(Genres, ',', ';'), ' ,', ';'), ', ', ';'), '; ';')" }, true);
+            Dictionary<string, Dictionary<string, object>> genresD = Bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY TRIM(Genres) ASC", "Genres");
             if (FilterGenreSelector.Items.Count > 0)
                 FilterGenreSelector.Items.Clear();
-            Debug.WriteLine(JsonConvert.SerializeObject(genres.Keys));
+            Debug.WriteLine(JsonConvert.SerializeObject(genresD.Keys));
             FilterGenreSelector.Items.Add(new ComboBoxItem()
             {
                 Content = "------",
@@ -38,13 +39,31 @@ namespace AnotherMusicPlayer
                 HorizontalContentAlignment = HorizontalAlignment.Left,
                 VerticalContentAlignment = VerticalAlignment.Center
             });
+            List<string> genres = new List<string>();
+            foreach (string key in genresD.Keys)
+            {
+                string[] proc = key.Trim().ToLower().Replace(',', ';').Split(';');
+                foreach (string t in proc)
+                {
+                    string tt = t.Trim(' ');
+                    if (tt.Length > 0)
+                    {
+                        if (!genres.Contains(tt)) { genres.Add(tt); }
+                    }
+                }
+            }
+            genres.Sort();
 
-            foreach (string key in genres.Keys)
+            foreach (string key in genres)
             {
                 if (key == "0") { continue; }// Filter for Genre "" return to mutch results makinng app interface freeze
+                Dictionary<string, Dictionary<string, object>> Counts = Bdd.DatabaseQuery("SELECT COUNT(Path) AS nb FROM files WHERE LOWER(Genres) LIKE '%;" + Database.EscapeString(key) + "' OR LOWER(Genres) LIKE '" + Database.EscapeString(key) + ";%' OR LOWER(Genres) LIKE '%;" + Database.EscapeString(key) + ";%' OR LOWER(Genres) = '" + Database.EscapeString(key) + "'", "nb");
+                int cpt = 0;
+                foreach (string k in Counts.Keys) { cpt = Convert.ToInt32(Counts[k]["nb"]); break; }
+
                 FilterGenreSelector.Items.Add(new ComboBoxItem()
                 {
-                    Content = ((key == "0") ? "<N/A>" : key) + " (" + genres[key]["nb"] + ")",
+                    Content = ((key == "0") ? "<N/A>" : key.Substring(0, 1).ToUpper() + key.Substring(1)) + " (" + cpt + ")",
                     Tag = (key == "0") ? "" : key,
                     HorizontalContentAlignment = HorizontalAlignment.Left,
                     VerticalContentAlignment = VerticalAlignment.Center
@@ -95,7 +114,7 @@ namespace AnotherMusicPlayer
             else
             {
                 e.Handled = true;
-                Dictionary<string, Dictionary<string, object>> files = Bdd.DatabaseQuery("SELECT Path FROM files WHERE Genres LIKE '%" + genre + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
+                Dictionary<string, Dictionary<string, object>> files = Bdd.DatabaseQuery("SELECT Path FROM files WHERE LOWER(Genres) LIKE '%;" + genre + "' OR LOWER(Genres) LIKE '" + genre + ";%' OR LOWER(Genres) LIKE '%;" + genre + ";%' OR LOWER(Genres) LIKE '" + genre + "' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
                 List<string> paths = new List<string>();
                 foreach (KeyValuePair<string, Dictionary<string, object>> file in files) { paths.Add(file.Key); }
 
@@ -111,19 +130,22 @@ namespace AnotherMusicPlayer
                 Task.Delay(250);
 
                 searchResults = GetTabInfoFromFiles(paths.ToArray());
-                ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
-                foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
+                if (searchResults != null)
                 {
-                    foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
+                    ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
+                    foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
                     {
-                        foreach (KeyValuePair<string, MediaItem> track in disk.Value)
+                        foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
                         {
-                            list.Add(track.Value);
+                            foreach (KeyValuePair<string, MediaItem> track in disk.Value)
+                            {
+                                list.Add(track.Value);
+                            }
                         }
                     }
+                    SearchResultsContener.ItemsSource = list;
+                    SearchResultsContener.ScrollIntoView(list[0]);
                 }
-                SearchResultsContener.ItemsSource = list;
-                SearchResultsContener.ScrollIntoView(list[0]);
                 Parent.setLoadingState(false);
             }
         }
@@ -154,19 +176,22 @@ namespace AnotherMusicPlayer
                 Task.Delay(250);
 
                 searchResults = GetTabInfoFromFiles(paths.ToArray());
-                ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
-                foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
+                if (searchResults != null)
                 {
-                    foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
+                    ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
+                    foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
                     {
-                        foreach (KeyValuePair<string, MediaItem> track in disk.Value)
+                        foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in album.Value)
                         {
-                            list.Add(track.Value);
+                            foreach (KeyValuePair<string, MediaItem> track in disk.Value)
+                            {
+                                list.Add(track.Value);
+                            }
                         }
                     }
+                    SearchResultsContener.ItemsSource = list;
+                    SearchResultsContener.ScrollIntoView(list[0]);
                 }
-                SearchResultsContener.ItemsSource = list;
-                SearchResultsContener.ScrollIntoView(list[0]);
                 Parent.setLoadingState(false);
             }
 

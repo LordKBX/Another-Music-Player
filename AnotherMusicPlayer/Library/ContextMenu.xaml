@@ -28,6 +28,11 @@
             <materialDesign:PackIcon Kind="PlaylistPlus"/>
         </MenuItem.Icon>
     </MenuItem>
+    <MenuItem Name="AddSelection" Header="{DynamicResource LibraryContextMenuAddGeneric}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="PlaylistPlus"/>
+        </MenuItem.Icon>
+    </MenuItem>
 
     <!-- ADD IN PLAYLIST RANDOMIZED -->
     <MenuItem  Name="AddShuffleFolder" Header="{DynamicResource LibraryContextMenuAddShuffleFolder}">
@@ -57,6 +62,11 @@
             <materialDesign:PackIcon Kind="Album"/>
         </MenuItem.Icon>
     </MenuItem>
+    <MenuItem Name="PlaySelection" Header="{DynamicResource LibraryContextMenuPlayGeneric}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Album"/>
+        </MenuItem.Icon>
+    </MenuItem>
 
     <!-- REPLACE PLAYLIST RANDOMIZED -->
     <MenuItem  Name="PlayShuffleFolder" Header="{DynamicResource LibraryContextMenuPlayShuffleFolder}">
@@ -65,6 +75,11 @@
         </MenuItem.Icon>
     </MenuItem>
     <MenuItem Name="PlayShuffleAlbum" Header="{DynamicResource LibraryContextMenuPlayShuffleAlbum}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="BowlMix"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Name="PlayShuffleSelection" Header="{DynamicResource LibraryContextMenuPlayShuffleGeneric}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="BowlMix"/>
         </MenuItem.Icon>
@@ -99,6 +114,11 @@
         </MenuItem.Icon>
     </MenuItem>
     <MenuItem Name="PlayListsAddTrack" Header="{DynamicResource LibraryContextMenuPlayListsAddTrack}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="TableColumnPlusAfter"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Name="PlayListsAddSelection" Header="{DynamicResource LibraryContextMenuPlayListsAddGeneric}">
         <MenuItem.Icon>
             <materialDesign:PackIcon Kind="TableColumnPlusAfter"/>
         </MenuItem.Icon>

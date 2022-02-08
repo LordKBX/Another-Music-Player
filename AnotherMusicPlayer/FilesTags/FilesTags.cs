@@ -96,7 +96,7 @@ namespace AnotherMusicPlayer
                     item.Disc = tags.Tag.Disc;
                     item.DiscCount = tags.Tag.DiscCount;
                     item.AlbumArtists = tags.Tag.JoinedAlbumArtists;
-                    item.Genres = tags.Tag.FirstGenre;
+                    item.Genres = string.Join(';', tags.Tag.Genres).Trim();
                     item.Lyrics = tags.Tag.Lyrics;
                     item.Track = tags.Tag.Track;
                     item.TrackCount = tags.Tag.TrackCount;
