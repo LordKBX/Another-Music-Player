@@ -159,7 +159,7 @@ namespace AnotherMusicPlayer
                         PlayListView.Items.Refresh();
                         PlayListView.ScrollIntoView(PlayListView.Items[0]);
                     }
-                    catch (Exception err) { Debug.WriteLine("PlayListView.ItemsSource error"); }
+                    catch { Debug.WriteLine("PlayListView.ItemsSource error"); }
 
                     Label_PlayListDisplayedNBTracks.Text = "" + tmp.Count;
                     Label_PlayListNBTracks.Text = "" + PlayList.Count;

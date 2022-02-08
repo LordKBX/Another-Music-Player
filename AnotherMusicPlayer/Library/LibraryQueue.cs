@@ -18,7 +18,7 @@ namespace AnotherMusicPlayer
     public partial class MainWindow : Window
     {
         /// <summary> Asynchronus call for loading old playlist in a new thread </summary>
-        private async void LibraryLoadOldPlaylist()
+        private void LibraryLoadOldPlaylist()
         {
             try
             {

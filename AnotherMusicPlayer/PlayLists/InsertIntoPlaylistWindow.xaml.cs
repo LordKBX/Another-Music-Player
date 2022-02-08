@@ -17,7 +17,7 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class InsertIntoPlaylistWindow : Window
     {
-        private MainWindow Parent;
+        private new MainWindow Parent;
         public int maxIndexList = 0;
 
         public InsertIntoPlaylistWindow(MainWindow parent)

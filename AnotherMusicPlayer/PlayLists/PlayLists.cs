@@ -71,7 +71,7 @@ namespace AnotherMusicPlayer
 
             List<string> querys = new List<string>();
 
-            string query = "UPDATE playlistsItems SET LOrder = '!' WHERE Path = ''"; int offset = 1;
+            int offset = 1;
             foreach (MediaItem row in listTmp) { querys.Add("UPDATE playlistsItems SET LOrder = '" + offset + "' WHERE Path = '" + Database.EscapeString(row.Path) + "'"); offset += 1; }
             Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
         }

@@ -63,8 +63,6 @@ namespace AnotherMusicPlayer
         [Conditional("DEBUG")]
         private void IsDebugCheck() { isDebug = true; }
 
-        private bool InApp = false;
-
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd)
         {
@@ -77,7 +75,6 @@ namespace AnotherMusicPlayer
             player = new Player(this);//Create Player object
 
             Settings.LoadSettings();
-            InApp = true;
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             HideDebug();//in release mode hide debug elements
             SettingsInit();//Initialize and load settings panel
@@ -381,7 +378,7 @@ namespace AnotherMusicPlayer
             return ret;
         }
 
-        private async void UpdateLeftPannelMediaInfo(string path = null)
+        private void UpdateLeftPannelMediaInfo(string path = null)
         {
             //Debug.WriteLine("--> UpdateLeftPannelMediaInfo <--");
             //Debug.WriteLine("--> path = '"+path+"' <--");

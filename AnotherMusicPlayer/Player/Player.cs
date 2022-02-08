@@ -46,8 +46,6 @@ namespace AnotherMusicPlayer
             get { return PlayListIndex; }
             set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : ((value < 0) ? value : value); }
         }
-        /// <summary> PlayList access Semaphore </summary>
-        private Semaphore PlayListSemaphore;
 
         /// <summary> Last played file </summary>
         private string CurrentFile = null;

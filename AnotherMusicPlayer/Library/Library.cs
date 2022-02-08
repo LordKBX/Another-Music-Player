@@ -303,7 +303,7 @@ namespace AnotherMusicPlayer
             return tab;
         }
 
-        public async Task<bool> ContentBlocks(Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> infoTab, StackPanel contener, bool uniqueDir = true, bool clear = true)
+        public bool ContentBlocks(Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> infoTab, StackPanel contener, bool uniqueDir = true, bool clear = true)
         {
             Debug.WriteLine("--> ContentBlocks START <--");
             if (infoTab == null) { Debug.WriteLine("--> ContentBlocks NO FILE 0 <--"); return false; }

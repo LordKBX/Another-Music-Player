@@ -25,7 +25,7 @@ namespace AnotherMusicPlayer
         public async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
         {
             ConvCount += 1;
-            bool replace = false;
+            //bool replace = false;
             if (FileOutput == null) { FileOutput = Path.ChangeExtension(FileInput, ".mp3"); deleteOrigin = true; }
             //Debug.WriteLine("Task_Start");
             //Debug.WriteLine(FileInput);

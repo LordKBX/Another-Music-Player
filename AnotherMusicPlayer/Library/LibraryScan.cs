@@ -17,7 +17,7 @@ namespace AnotherMusicPlayer
     {
         private List<string> CacheQuerys;
 
-        public async void InvokeScan(bool preClean = false)
+        public void InvokeScan(bool preClean = false)
         {
             Thread objThread = new Thread(new ParameterizedThreadStart(Scan));
             objThread.IsBackground = true;
@@ -25,10 +25,12 @@ namespace AnotherMusicPlayer
             objThread.Start(false);
         }
 
-        public async void Scan(object param) {
+        public void Scan(object param)
+        {
             Scan((bool)param);
         }
-        private async void Scan(bool preClean = false) {
+        private void Scan(bool preClean = false)
+        {
             _Scanning = true;
             Parent.setLoadingState(true, "Library Scan");
             if (preClean is true)
@@ -41,9 +43,10 @@ namespace AnotherMusicPlayer
 
             CacheQuerys = new List<string>();
 
-            foreach (string file in files) {
+            foreach (string file in files)
+            {
                 FileInfo fi = new FileInfo(file);
-                if (DatabaseFiles.ContainsKey(file)) 
+                if (DatabaseFiles.ContainsKey(file))
                 {
                     Dictionary<string, object> dfi = DatabaseFiles[file];
                     if (Convert.ToInt64((string)dfi["LastUpdate"]) != Convert.ToInt64(fi.LastWriteTimeUtc.ToFileTime()) || Convert.ToInt32(dfi["Size"]) == 0)
@@ -51,7 +54,7 @@ namespace AnotherMusicPlayer
                         listToScan.Add(file);
                     }
                 }
-                else 
+                else
                 {
                     listToScan.Add(file);
                     InsertBddFile(fi);

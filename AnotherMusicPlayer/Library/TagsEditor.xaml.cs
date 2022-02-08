@@ -23,7 +23,7 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class TagsEditor : Window
     {
-        private MainWindow Parent;
+        private new MainWindow Parent;
         private string Mode;
         private TagLib.File Tags;
         private TagLib.IPicture[] pictures;
@@ -33,7 +33,7 @@ namespace AnotherMusicPlayer
         public bool CoverChanged = false;
         public bool Saved = false;
         private List<string> Files;
-        private bool IsInitialized = false;
+        private new bool IsInitialized = false;
 
         public TagsEditor(MainWindow parent, string mode = "track", string[] files = null)
         {
@@ -303,7 +303,7 @@ namespace AnotherMusicPlayer
                     Tags.Tag.TrackCount = Convert.ToUInt32(TrackCountInput.Text);
                     Tags.Tag.Copyright = CopyrightInput.Text;
 
-                    if (Cover.Tag != DefaultCover && CoverChanged == true)
+                    if ((string)Cover.Tag != DefaultCover && CoverChanged == true)
                     {
                         Tags.Tag.Pictures = pictures;
                     }
@@ -323,7 +323,7 @@ namespace AnotherMusicPlayer
                         Tags.Tag.Year = Convert.ToUInt32(YearInput.Text);
                         Tags.Tag.Copyright = CopyrightInput.Text;
 
-                        if (Cover.Tag != DefaultCover && CoverChanged == true)
+                        if ((string)Cover.Tag != DefaultCover && CoverChanged == true)
                         {
                             Tags.Tag.Pictures = pictures;
                         }

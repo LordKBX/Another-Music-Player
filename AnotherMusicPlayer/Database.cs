@@ -230,12 +230,9 @@ namespace AnotherMusicPlayer
                 }
                 else
                 {
-
-                    bool previousTransaction = false;
                     if (AutoCommit)
                     {
                         if (!IsInTransaction()) { DatabaseTansactionStart(); }
-                        else { previousTransaction = true; }
                     }
                     try { sqlite_cmd.ExecuteNonQuery(); } catch { }
                     if (AutoCommit)
@@ -255,7 +252,6 @@ namespace AnotherMusicPlayer
         /// <summary> execute SQL query </summary>
         public void DatabaseQuerys(string[] querys, bool autocommit = true)
         {
-            bool previousTransaction = false;
             if (autocommit)
             {
                 if (!IsInTransaction()) { DatabaseTansactionStart(); }

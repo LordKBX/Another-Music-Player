@@ -20,7 +20,7 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class PlayingQueueContextMenu : ContextMenu
     {
-        public MainWindow Parent;
+        public new MainWindow Parent;
         public PlayingQueueContextMenu(MainWindow parent)
         {
             Parent = parent;
