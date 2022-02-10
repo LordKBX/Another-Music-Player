@@ -137,13 +137,13 @@ namespace AnotherMusicPlayer
                 {
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
-                    Parent.player.PlaylistEnqueue(files.ToArray());
+                    Parent.player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
                 }
             }
             else
             {
                 string track = (string)((Button)item.Tag).Tag;
-                Parent.player.PlaylistEnqueue(new string[] { track });
+                Parent.player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
             }
         }
 
@@ -151,7 +151,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string[] tracks = (string[])((Button)item.Tag).Tag;
-            Parent.player.PlaylistEnqueue(tracks);
+            Parent.player.PlaylistEnqueue(tracks, false, 0, 0, true);
         }
 
         private void CM_AddFolder(object sender, RoutedEventArgs e)
@@ -161,7 +161,7 @@ namespace AnotherMusicPlayer
             try { folder = ((Button)item.Tag).Tag as string; }
             catch { }
             if (folder == null) { return; }
-            Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true));
+            Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
         }
         #endregion
 
@@ -170,7 +170,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string[] tracks = (string[])((Button)item.Tag).Tag;
-            Parent.player.PlaylistEnqueue(tracks, true);
+            Parent.player.PlaylistEnqueue(tracks, true, 0, 0, true);
         }
 
         private void CM_AddShuffledFolder(object sender, RoutedEventArgs e)
@@ -183,7 +183,7 @@ namespace AnotherMusicPlayer
                 {
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
-                    Parent.player.PlaylistEnqueue(files.ToArray(), true);
+                    Parent.player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
                 }
             }
             else
@@ -196,7 +196,7 @@ namespace AnotherMusicPlayer
                     catch { }
                 }
                 if (folder == null) { return; }
-                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true);
+                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
             }
         }
         #endregion
@@ -213,14 +213,14 @@ namespace AnotherMusicPlayer
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
                     Parent.player.PlaylistClear();
-                    Parent.player.PlaylistEnqueue(files.ToArray());
+                    Parent.player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
                 }
             }
             else
             {
                 string track = (string)((Button)item.Tag).Tag;
                 Parent.player.PlaylistClear();
-                Parent.player.PlaylistEnqueue(new string[] { track });
+                Parent.player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
             }
         }
 
@@ -229,7 +229,7 @@ namespace AnotherMusicPlayer
             MenuItem item = (MenuItem)sender;
             string[] tracks = (string[])((Button)item.Tag).Tag;
             Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(tracks);
+            Parent.player.PlaylistEnqueue(tracks, false, 0, 0, true);
         }
 
         private void CM_PlayFolder(object sender, RoutedEventArgs e)
@@ -244,7 +244,7 @@ namespace AnotherMusicPlayer
             }
             if (folder == null) { return; }
             Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true));
+            Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
         }
         #endregion
 
@@ -254,7 +254,7 @@ namespace AnotherMusicPlayer
             MenuItem item = (MenuItem)sender;
             string[] tracks = (string[])((Button)item.Tag).Tag;
             Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(tracks, true);
+            Parent.player.PlaylistEnqueue(tracks, true, 0, 0, true);
         }
 
         private void CM_PlayShuffledFolder(object sender, RoutedEventArgs e)
@@ -268,7 +268,7 @@ namespace AnotherMusicPlayer
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
                     Parent.player.PlaylistClear();
-                    Parent.player.PlaylistEnqueue(files.ToArray(), true);
+                    Parent.player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
                 }
             }
             else
@@ -282,7 +282,7 @@ namespace AnotherMusicPlayer
                 }
                 if (folder == null) { return; }
                 Parent.player.PlaylistClear();
-                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true);
+                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
             }
         }
         #endregion

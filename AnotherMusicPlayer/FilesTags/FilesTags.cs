@@ -141,6 +141,67 @@ namespace AnotherMusicPlayer
             return null;
         }
 
+        /// <summary> Save Media MetaData </summary>
+        public static bool SaveMediaInfo(string FilePath, MediaItem info, string OriginFile = null)
+        {
+            try
+            {
+                if (!System.IO.File.Exists(FilePath)) { return false; }
+                else
+                {
+                    //Debug.WriteLine("MetaData Source: " + (OriginPath ?? FilePath));
+                    TagLib.File tags;
+                    if (!System.IO.File.Exists(FilePath)) { return false; }
+                    tags = TagLib.File.Create(FilePath, ReadStyle.Average);
+                    tags.Tag.Title = info.Name;
+                    tags.Tag.Album = info.Album;
+                    tags.Tag.Performers = info.Performers.Split(';');
+                    tags.Tag.Composers = info.Composers.Split(';');
+                    tags.Tag.AlbumArtists = info.AlbumArtists.Split(';');
+                    tags.Tag.Genres = info.Genres.Split(';');
+                    tags.Tag.Copyright = info.Copyright;
+                    tags.Tag.Lyrics = info.Lyrics;
+                    tags.Tag.Disc = info.Disc;
+                    tags.Tag.DiscCount = info.DiscCount;
+                    tags.Tag.Track = info.Track;
+                    tags.Tag.TrackCount = info.TrackCount;
+                    tags.Tag.Year = info.Year;
+
+                    TagLib.Tag tag = tags.GetTag(TagLib.TagTypes.Id3v2);
+                    byte r2 = 0;
+                    if (ReverseTableRateWindows.ContainsKey(info.Rating)) { r2 = ReverseTableRatePlayer[info.Rating]; }
+                    else { r2 = (byte)(ReverseTableRatePlayer[Math.Truncate(info.Rating)] + 1); }
+                    TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true).Rating = r2;
+
+                    if (OriginFile != null)
+                    {
+                        TagLib.File tags2 = TagLib.File.Create(OriginFile);
+                        if (tags.Tag.Pictures.Length > 0)
+                        {
+                            TagLib.IPicture pic = tags2.Tag.Pictures[0];
+
+                            MemoryStream ms = new MemoryStream(pic.Data.Data);
+                            ms.Seek(0, SeekOrigin.Begin);
+
+                            TagLib.Picture pic2 = new TagLib.Picture();
+                            pic2.Type = TagLib.PictureType.FrontCover; pic2.MimeType = System.Net.Mime.MediaTypeNames.Image.Jpeg; pic2.Description = "Cover";
+                            pic2.Data = TagLib.ByteVector.FromStream(ms); tags.Tag.Pictures = new TagLib.IPicture[1] { pic2 };
+                            ms.Close();
+                        }
+
+                        tags.Save();
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("--> FilesTags.SaveMediaInfo ERROR <--");
+                Debug.WriteLine(err.Message);
+                Debug.WriteLine(err.ToString());
+            }
+            return true;
+        }
+
         /// <summary> Recuperate Media MetaData(cover excluded) </summary>
         public static PlayListViewItem MediaInfoShort(string FilePath, bool Selected, string OriginPath = null)
         {
@@ -182,27 +243,26 @@ namespace AnotherMusicPlayer
             return null;
         }
 
-        public static bool SaveRating(string FilePath, double Rating, Player player)
+        public static bool SaveRating(string FilePath, double RatingValue, Player player)
         {
             if (!System.IO.File.Exists(FilePath)) { return false; }
-            if (Rating < 0 || Rating > 5.0) { return false; }
+            if (RatingValue < 0 || RatingValue > 5.0) { return false; }
             if (Common.IsFileLocked(FilePath) && player.GetCurrentFile() != FilePath) { return false; }
             Debug.WriteLine("FilesTags.SaveRating");
-            Debug.WriteLine("Rating = " + Rating);
-            Debug.WriteLine("Math.Truncate(Rating) = " + Math.Truncate(Rating));
-            Debug.WriteLine("ReverseTableRateWindows[Math.Truncate(Rating)] = " + ReverseTableRateWindows[Math.Truncate(Rating)]);
-            Debug.WriteLine("ReverseTableRatePlayer[Math.Truncate(Rating)] = " + ReverseTableRatePlayer[Math.Truncate(Rating)]);
+            Debug.WriteLine("Rating = " + RatingValue);
+            Debug.WriteLine("Math.Truncate(Rating) = " + Math.Truncate(RatingValue));
+            Debug.WriteLine("ReverseTableRateWindows[Math.Truncate(Rating)] = " + ReverseTableRateWindows[Math.Truncate(RatingValue)]);
+            Debug.WriteLine("ReverseTableRatePlayer[Math.Truncate(Rating)] = " + ReverseTableRatePlayer[Math.Truncate(RatingValue)]);
 
             TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
 
             TagLib.File fi = TagLib.File.Create(FilePath, ReadStyle.Average);
             TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
             TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
-            if (ReverseTableRateWindows.ContainsKey(Rating)) { frame1.Rating = ReverseTableRatePlayer[Rating]; }
+            if (ReverseTableRateWindows.ContainsKey(RatingValue)) { frame1.Rating = ReverseTableRatePlayer[RatingValue]; }
             else
             {
-                double r = Rating - Math.Round(Rating);
-                frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(Rating)] + 1);
+                frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(RatingValue)] + 1);
             }
             if (player.GetCurrentFile() == FilePath)
             {

@@ -16,7 +16,7 @@ This is a personal project to create a Music player written with C# SDK .Net Cor
 **Functions:**
 * Playing Queue
 * Library sorted by folder with auto scan for update
-* Conversion for audio files not in the supported formats(mp3;wma;flac) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s)
+* Conversion for audio files not in the supported formats(mp3;wma;aiff) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s)
 * Interception of Multimedia shortcuts (Play/Pause, Previous Track, Next Track) on windows
 * Multiple automatic PlayList & Custom PlayLists
 
@@ -39,7 +39,7 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C# S
 **Fonctions:**
 * Liste de lecture courrante
 * Médiatèque triée par dossier avec auto-scan dossier pour mise à jour
-* Conversion des fichiers audio des formats non supportés(mp3;wma;flac) vers mp3(via ffmpeg) avec choix de la qualité dans les paramèttres(par défaut 128Kbits/s)
+* Conversion des fichiers audio des formats non supportés(mp3;wma;aiff) vers mp3(via ffmpeg) avec choix de la qualité dans les paramèttres(par défaut 128Kbits/s)
 * Interception des raccourcis Multimédia (Play/Pause, Previous Track, Next Track) spécifiques à windows
 * Listes de lecture généré automatiquement & Liste de lecture personalisées
 

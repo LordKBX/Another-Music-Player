@@ -6,7 +6,7 @@ using System.Text;
 using System.Windows;
 using System.Threading;
 using System.Threading.Tasks;
-using NAudio;
+using NAudio.MediaFoundation;
 using NAudio.Wave;
 using TagLib;
 using System.Diagnostics;
@@ -27,6 +27,7 @@ namespace AnotherMusicPlayer
     {
         /// <summary> Give the List of native accepted file extentions </summary>
         public static readonly string[] AcceptedExtentions = new string[] { ".aiff", ".mp3", ".wma" };
+        public static readonly string[] AcceptedExtentionsFotConversion = new string[] { ".aac", ".flac", ".ogg", ".m4a" };
 
         /// <summary> List of audio threads by file path </summary>
         private Dictionary<string, Thread> ThreadList = null;
@@ -402,7 +403,7 @@ namespace AnotherMusicPlayer
                         return true;
                     }
                 }
-                catch { }
+                catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
             }
             return false;
         }
@@ -538,7 +539,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Playing thread </summary>
-        private void PlaySoundAsync(object file)
+        private async void PlaySoundAsync(object file)
         {
             try
             {
@@ -548,7 +549,35 @@ namespace AnotherMusicPlayer
                 Equalizer equalizer = null;
                 WaveOutEvent outputDevice = null;
 
-                audioFile = new AudioFileReader(FilePath);
+                try { audioFile = new AudioFileReader(FilePath); }
+                catch (InvalidOperationException err)
+                {
+                    Debug.WriteLine("ERROR ==> VBR File detected, try file convertion");
+                    try
+                    {
+                        string path2 = Path.GetTempFileName();
+                        System.IO.File.Delete(path2);
+                        path2 += ".mp3";
+
+                        bool retC = await ConvExe(FilePath, path2);
+                        if (retC == false)
+                        {
+                            Debug.WriteLine("ERROR ==> VBR File convertion failure");
+                            PlaylistNext(); return;
+                        }
+                        FilesTags.SaveMediaInfo(path2, FilesTags.MediaInfo(FilePath, false), FilePath);
+                        System.IO.File.Move(FilePath, FilePath + ".old");
+                        System.IO.File.Move(path2, FilePath);
+                        audioFile = new AudioFileReader(FilePath);
+                        System.IO.File.Delete(FilePath + ".old");
+                    }
+                    catch (Exception err2)
+                    {
+                        Debug.WriteLine("ERROR ==> VBR File convertion failure");
+                        PlaylistNext(); return;
+                    }
+                }
+                catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); PlaylistNext(); return; }
                 equalizer = new Equalizer((ISampleProvider)audioFile, bands);
                 outputDevice = new WaveOutEvent();
 
@@ -625,7 +654,7 @@ namespace AnotherMusicPlayer
                             if (FilePath == CurrentFile) PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
-                                if (PlayRepeat)
+                                if (PlayRepeat || PlayListIndex + 1 == PlayList.Count)
                                 {
                                     audioFile.Position = 0;
                                     PlayStatus[FilePath] = 1;
@@ -634,10 +663,6 @@ namespace AnotherMusicPlayer
                                 else
                                 {
                                     PlaylistNext();
-                                    //Thread objThread = new Thread(new ParameterizedThreadStart(PlaylistNext));
-                                    //objThread.IsBackground = true;
-                                    //objThread.Priority = ThreadPriority.AboveNormal;
-                                    //objThread.Start();
                                     break;
                                 }
                             }

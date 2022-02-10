@@ -115,7 +115,7 @@ namespace AnotherMusicPlayer
             if (Parent.PlaylistsContents.SelectedIndex != -1)
             {
                 Parent.player.PlaylistClear();
-                Parent.player.PlaylistEnqueue(new string[] { ((MediaItem)Parent.PlaylistsContents.SelectedItem).Path });
+                Parent.player.PlaylistEnqueue(new string[] { ((MediaItem)Parent.PlaylistsContents.SelectedItem).Path }, false, 0, 0, true);
             }
         }
 

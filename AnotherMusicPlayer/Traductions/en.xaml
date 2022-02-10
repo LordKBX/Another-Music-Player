@@ -66,7 +66,7 @@
 
     <sys:String x:Key="ParamsStyleLabel">Style</sys:String>
 
-    <sys:String x:Key="ParamsConvDisclaimerLabel">Warning; Native audio support for the folowing formats only: aif,mp3(incomplete support),wav,wma</sys:String>
+    <sys:String x:Key="ParamsConvDisclaimerLabel">Native audio support for the folowing formats only: aif,mp3(CBR),wma; Other formats are converted into Mp3 CBR</sys:String>
     
     <sys:String x:Key="ParamsConvKeepLabel">Convertion</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_TEMP">On the Fly</sys:String>
@@ -86,6 +86,13 @@
     <sys:String x:Key="ParamsAutoPlayLabel">Automatic replay at startup</sys:String>
     <sys:String x:Key="ParamsAutoPlay0">No</sys:String>
     <sys:String x:Key="ParamsAutoPlay1">Yes</sys:String>
+
+    <sys:String x:Key="ParamsLibHiddenFilesUnixLabel">Show hidden files style Unix</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesUnix0">No</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesUnix1">Yes</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesWindowsLabel">Show hidden files style Windows</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesWindows0">No</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesWindows1">Yes</sys:String>
 
     <sys:String x:Key="ParamsLibFolderLabel">Music Library Folder</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorTitle">Select a Directory</sys:String>

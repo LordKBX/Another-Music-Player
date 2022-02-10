@@ -19,6 +19,7 @@ using System.ComponentModel;
 using System.Drawing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using System.Threading.Tasks;
 
 namespace AnotherMusicPlayer
 {
@@ -38,7 +39,7 @@ namespace AnotherMusicPlayer
         /// <summary> Store system language reference code </summary>
         string AppLang = System.Globalization.CultureInfo.CurrentCulture.Name;
         /// <summary> Store the application assembly name </summary>
-        public static string AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
+        public string AppName = "";
         /// <summary> Store PlayList Pannel left collumn width(150 or 250) </summary>
         double WindowWidthMode = 150;
 
@@ -66,6 +67,7 @@ namespace AnotherMusicPlayer
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd)
         {
+            AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
             IsDebugCheck();
             bdd = obdd;
             // Set DataContext
@@ -174,7 +176,7 @@ namespace AnotherMusicPlayer
             KeyboardLocalListenerInit();
             KeyboardGlobalListenerInit();
 
-            //LibrarySetupFilters();
+            ClearLeftPannelMediaInfo();
             LibraryLoadOldPlaylist();
 
             library = new Library(this, Settings.LibFolder);
@@ -400,25 +402,29 @@ namespace AnotherMusicPlayer
                     }
                 }
 
-                LeftPannelMediaInfo.Inlines.Clear();
-                LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;
+                LeftPannelMediaInfoR1.Height = new GridLength(50);
+
+                LeftPannelMediaInfo.Children.Clear();
                 System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
                 System.Windows.Thickness tc1 = new System.Windows.Thickness(3, 3, 0, 0);
                 System.Windows.Thickness tc2 = new System.Windows.Thickness(10, 0, 0, 0);
+                System.Windows.Media.SolidColorBrush cl1 = FindResource("ForegroundColor") as SolidColorBrush;
                 System.Windows.Media.SolidColorBrush cl2 = FindResource("ForegroundAltColor") as SolidColorBrush;
 
-                System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a1 = new AccessText() { Text = item.Name, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                LeftPannelMediaInfo.Inlines.Add(a1);
+                System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Title2"), Margin = tc1, FontWeight = fw, Foreground = cl1 };
+                LeftPannelMediaInfo.Children.Add(t1);
+                AccessText a1 = new AccessText() { Text = item.Name, ToolTip = item.Name, Margin = tc2, TextTrimming = System.Windows.TextTrimming.CharacterEllipsis, Foreground = cl2 };
+                LeftPannelMediaInfo.Children.Add(a1);
+
+                int nblines = 2;
 
                 if (item.Album != null && item.Album.Trim() != "")
                 {
-                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    System.Windows.Controls.TextBlock t2 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Album2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t2);
-                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a2 = new AccessText() { Text = item.Album, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                    LeftPannelMediaInfo.Inlines.Add(a2);
+                    System.Windows.Controls.TextBlock t2 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Album2"), Margin = tc1, FontWeight = fw, Foreground = cl1 };
+                    LeftPannelMediaInfo.Children.Add(t2);
+                    AccessText a2 = new AccessText() { Text = item.Album, ToolTip = item.Album, Margin = tc2, TextTrimming = System.Windows.TextTrimming.CharacterEllipsis, Foreground = cl2 };
+                    LeftPannelMediaInfo.Children.Add(a2);
+                    nblines += 2;
                 }
 
                 string Artists = "";
@@ -434,42 +440,46 @@ namespace AnotherMusicPlayer
 
                 if (Artists != "")
                 {
-                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    System.Windows.Controls.TextBlock t3 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
-                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a3 = new AccessText() { Text = Artists, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                    LeftPannelMediaInfo.Inlines.Add(a3);
+                    System.Windows.Controls.TextBlock t3 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Artist2"), Margin = tc1, FontWeight = fw, Foreground = cl1 };
+                    LeftPannelMediaInfo.Children.Add(t3);
+                    AccessText a3 = new AccessText() { Text = Artists, ToolTip = Artists, Margin = tc2, TextTrimming = System.Windows.TextTrimming.CharacterEllipsis, Foreground = cl2 };
+                    LeftPannelMediaInfo.Children.Add(a3);
+                    nblines += 2;
                 }
 
                 if (item.Genres != null && item.Genres.Trim() != "")
                 {
-                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    System.Windows.Controls.TextBlock t4 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Genres2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t4);
-                    LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                    AccessText a4 = new AccessText() { Text = item.Genres, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                    LeftPannelMediaInfo.Inlines.Add(a4);
+                    System.Windows.Controls.TextBlock t4 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Genres2"), Margin = tc1, FontWeight = fw, Foreground = cl1 };
+                    LeftPannelMediaInfo.Children.Add(t4);
+                    AccessText a4 = new AccessText() { Text = item.Genres, ToolTip = item.Genres, Margin = tc2, TextTrimming = System.Windows.TextTrimming.CharacterEllipsis, Foreground = cl2 };
+                    LeftPannelMediaInfo.Children.Add(a4);
+                    nblines += 2;
                 }
 
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                System.Windows.Controls.TextBlock t5 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Duration2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t5);
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a5 = new AccessText() { Text = item.DurationS, Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                LeftPannelMediaInfo.Inlines.Add(a5);
+                System.Windows.Controls.TextBlock t5 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Duration2"), Margin = tc1, FontWeight = fw, Foreground = cl1 };
+                LeftPannelMediaInfo.Children.Add(t5);
+                AccessText a5 = new AccessText() { Text = item.DurationS, ToolTip = item.DurationS, Margin = tc2, TextTrimming = System.Windows.TextTrimming.CharacterEllipsis, Foreground = cl2 };
+                LeftPannelMediaInfo.Children.Add(a5);
+                nblines += 2;
+
+                if (item.Lyrics != null && item.Lyrics.Trim() != "")
+                {
+                    LeftPannelMediaInfoLyricsValue.Text = item.Lyrics;
+                    LeftPannelMediaInfoLyricsLabel.Visibility = Visibility.Visible;
+                    LeftPannelMediaInfoLyrics.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    LeftPannelMediaInfoLyricsLabel.Visibility = Visibility.Collapsed;
+                    LeftPannelMediaInfoLyrics.Visibility = Visibility.Collapsed;
+                }
 
                 FileCover.Source = null;
                 FileCover.ToolTip = null;
-                System.Windows.Media.Imaging.BitmapImage bi = FilesTags.MediaPicture(item.Path, bdd, true, 150, 150);
+                System.Windows.Media.Imaging.BitmapImage bi = FilesTags.MediaPicture(item.Path, bdd, true, (Settings.MemoryUsage == 0) ? 150 : 250, (Settings.MemoryUsage == 0) ? 150 : 250);
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
 
-
-                //if (bi != null && Settings.MemoryUsage == 1)
-                //{
-                //    System.Windows.Controls.WrapPanel p = new System.Windows.Controls.WrapPanel() { };
-                //    System.Windows.Controls.Image im = new System.Windows.Controls.Image() { MaxHeight = 400, MaxWidth = 400, Style = (System.Windows.Style)Resources.MergedDictionaries[0]["HQImg"] };
-                //    im.Source = FilesTags.MediaPicture(item.Path, bdd, true, 400, 400);
-                //    p.Children.Add(im);
-                //    FileCover.ToolTip = p;
-                //}
+                LeftPannelMediaInfoR1.Height = new GridLength(nblines * 18);
             }
             catch { }
         }
@@ -478,33 +488,13 @@ namespace AnotherMusicPlayer
         {
             try
             {
-                LeftPannelMediaInfo.Inlines.Clear();
-                LeftPannelMediaInfo.LineStackingStrategy = System.Windows.LineStackingStrategy.BlockLineHeight;
-                System.Windows.FontWeight fw = System.Windows.FontWeight.FromOpenTypeWeight(800);
-                System.Windows.Thickness tc1 = new System.Windows.Thickness(3, 3, 0, 0);
-                System.Windows.Thickness tc2 = new System.Windows.Thickness(10, 0, 0, 0);
-                System.Windows.Media.SolidColorBrush cl2 = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromRgb(149, 149, 149));
-
-                System.Windows.Controls.TextBlock t1 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Title2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t1);
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a1 = new AccessText() { Text = "", Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                LeftPannelMediaInfo.Inlines.Add(a1);
-
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                System.Windows.Controls.TextBlock t3 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Artist2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t3);
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a3 = new AccessText() { Text = "", Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                LeftPannelMediaInfo.Inlines.Add(a3);
-
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                System.Windows.Controls.TextBlock t5 = new System.Windows.Controls.TextBlock() { Text = GetTranslation("Duration2"), Margin = tc1, FontWeight = fw }; LeftPannelMediaInfo.Inlines.Add(t5);
-                LeftPannelMediaInfo.Inlines.Add(new LineBreak());
-                AccessText a5 = new AccessText() { Text = "00:00:00", Margin = tc2, TextWrapping = System.Windows.TextWrapping.WrapWithOverflow, Foreground = cl2 };
-                LeftPannelMediaInfo.Inlines.Add(a5);
+                LeftPannelMediaInfo.Children.Clear();
 
                 FileCover.Source = null;
                 FileCover.ToolTip = null;
                 FileCover.Source = Bimage("CoverImg");
+                LeftPannelMediaInfoLyricsLabel.Visibility = Visibility.Collapsed;
+                LeftPannelMediaInfoLyrics.Visibility = Visibility.Collapsed;
             }
             catch { }
         }

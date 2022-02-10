@@ -83,7 +83,15 @@ namespace AnotherMusicPlayer
 
             if (Settings.StartUpPlay == true) { ParamsAutoPlay.SelectedIndex = 1; }
             else { ParamsAutoPlay.SelectedIndex = 0; }
-            ParamsAutoPlay.SelectionChanged += ParamsAutoPlay_SelectionChanged; ;
+            ParamsAutoPlay.SelectionChanged += ParamsAutoPlay_SelectionChanged;
+
+            if (Settings.LibFolderShowUnixHiden == true) { ParamsLibHiddenFilesUnixVals.SelectedIndex = 1; }
+            else { ParamsLibHiddenFilesUnixVals.SelectedIndex = 0; }
+            ParamsLibHiddenFilesUnixVals.SelectionChanged += ParamsLibHiddenFilesUnixVals_SelectionChanged;
+
+            if (Settings.LibFolderShowHiden == true) { ParamsLibHiddenFilesWindowsVals.SelectedIndex = 1; }
+            else { ParamsLibHiddenFilesWindowsVals.SelectedIndex = 0; }
+            ParamsLibHiddenFilesWindowsVals.SelectionChanged += ParamsLibHiddenFilesWindowsVals_SelectionChanged;
 
             Int32 i = 0;
             foreach (ComboBoxItem cb in ParamsConvQualityVals.Items)
@@ -178,6 +186,22 @@ namespace AnotherMusicPlayer
                     library.Scan(true);
                 }));
             }
+        }
+
+        private void ParamsLibHiddenFilesWindowsVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            Settings.LibFolderShowHiden = ((string)item.Tag == "0") ? false : true;
+            Settings.SaveSettings();
+            library.DisplayPath(library.CurrentPath);
+        }
+
+        private void ParamsLibHiddenFilesUnixVals_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
+            Settings.LibFolderShowUnixHiden = ((string)item.Tag == "0") ? false : true;
+            Settings.SaveSettings();
+            library.DisplayPath(library.CurrentPath);
         }
 
         /// <summary> Open a window for folder selection </summary>

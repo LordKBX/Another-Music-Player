@@ -21,7 +21,11 @@ namespace AnotherMusicPlayer
             win1.IsEnabled = false;
             bool DoConv = false;
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
-            openFileDlg.Filter = "Audio (*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA;*.M4A)|*.AIFF;*.AAC;*.FLAC;*.MP3;*.OGG;*.WMA;*.M4A";
+            List<string> exts = new List<string>(Player.AcceptedExtentions);
+            exts.AddRange(Player.AcceptedExtentionsFotConversion);
+            exts.Sort();
+            string extString = "*" + string.Join(";*", exts.ToArray()).ToUpper();
+            openFileDlg.Filter = "Audio (" + extString + ")|" + extString;
             openFileDlg.Multiselect = true;
             openFileDlg.Title = "File Selection";
             Nullable<bool> result = openFileDlg.ShowDialog();

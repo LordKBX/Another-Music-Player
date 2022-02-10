@@ -66,7 +66,7 @@
 
     <sys:String x:Key="ParamsStyleLabel">Aparence</sys:String>
 
-    <sys:String x:Key="ParamsConvDisclaimerLabel">Attention; Les formats audio supportés nativement sont: aif,mp3(support partiel),wav,wma</sys:String>
+    <sys:String x:Key="ParamsConvDisclaimerLabel">Les formats audio supportés nativement sont: aif,mp3(CBR),wma; Tous autres formats sont convertis en MP3 CBR</sys:String>
 
     <sys:String x:Key="ParamsConvKeepLabel">Conversion</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_TEMP">À la volée</sys:String>
@@ -86,6 +86,13 @@
     <sys:String x:Key="ParamsAutoPlayLabel">Lecture automatique au démarage</sys:String>
     <sys:String x:Key="ParamsAutoPlay0">Non</sys:String>
     <sys:String x:Key="ParamsAutoPlay1">Oui</sys:String>
+
+    <sys:String x:Key="ParamsLibHiddenFilesUnixLabel">Afficher fichier caché style Unix</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesUnix0">Non</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesUnix1">Oui</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesWindowsLabel">Afficher fichier caché style Windows</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesWindows0">Non</sys:String>
+    <sys:String x:Key="ParamsLibHiddenFilesWindows1">Oui</sys:String>
 
     <sys:String x:Key="ParamsLibFolderLabel">Dossier Médiathèque</sys:String>
     <sys:String x:Key="ParamsLibFolderSelectorTitle">Selectionner un dossier</sys:String>

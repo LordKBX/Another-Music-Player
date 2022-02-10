@@ -1293,18 +1293,16 @@
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="30" />
-        <Setter Property="Width" Value="170" />
         <Setter Property="Padding" Value="3,0,0,0" />
     </Style>
     <Style x:Key="TabItemStyleSettingsForLibraryFolderButton" TargetType="{x:Type Button}">
         <Setter Property="Background" Value="{StaticResource PlaybackBtn.Static.Background}"/>
         <Setter Property="Foreground" Value="{StaticResource PlaybackBtn.Static.Border}"/>
         <Setter Property="BorderBrush" Value="{StaticResource PlaybackBtn.Static.Border}"/>
-        <Setter Property="BorderThickness" Value="0,1,1,1"/>
+        <Setter Property="BorderThickness" Value="1,1,1,1"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Height" Value="30" />
-        <Setter Property="Width" Value="30" />
 
         <Setter Property="Template">
             <Setter.Value>

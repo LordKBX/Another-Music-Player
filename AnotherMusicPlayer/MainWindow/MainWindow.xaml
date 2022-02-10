@@ -158,27 +158,34 @@
                                 <Border BorderThickness="0,0,0,1" 
                                         Style="{DynamicResource PlayBackListViewBorderStyle}" Grid.Row="1" 
                                         Grid.ColumnSpan="2">
-                                    <ScrollViewer ScrollViewer.VerticalScrollBarVisibility="Auto" 
-                                                  ScrollViewer.CanContentScroll="True">
-                                        <TextBlock x:Name="LeftPannelMediaInfo" 
-                                                   Foreground="{DynamicResource ForegroundColor}">
-                                            <TextBlock Text="{DynamicResource Title2}" x:Name="PlayItemNameTitle" 
-                                                       Margin="3,3,0,0"/> 
-                                            <LineBreak></LineBreak>
-                                            <AccessText x:Name="PlayItemNameValue" Margin="10,0,0,0" 
-                                                        Foreground="{DynamicResource ForegroundAltColor}" 
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="180" x:Name="LeftPannelMediaInfoR1"/>
+                                            <RowDefinition Height="20" />
+                                            <RowDefinition Height="50*" />
+                                        </Grid.RowDefinitions>
+                                        <StackPanel x:Name="LeftPannelMediaInfo" Grid.Row="0">
+                                            <TextBlock Text="{DynamicResource Title2}" Margin="3,3,0,0"/>
+                                            <AccessText Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}" 
                                                         TextWrapping="WrapWithOverflow" Text="Test"/>
-                                            <LineBreak></LineBreak>
-                                            <TextBlock Text="{DynamicResource Album2}" x:Name="PlayItemAlbumTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
-                                            <AccessText   x:Name="PlayItemAlbumValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}" TextWrapping="WrapWithOverflow"/>
-                                            <LineBreak></LineBreak>
-                                            <TextBlock Text="{DynamicResource Artist2}" x:Name="PlayItemArtistsTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
-                                            <AccessText   x:Name="PlayItemArtistsValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}" TextWrapping="WrapWithOverflow"/>
-                                            <LineBreak></LineBreak>
-                                            <TextBlock Visibility="Collapsed" Text="{DynamicResource duration2}" x:Name="PlayItemdurationTitle" Margin="3,0,0,0"/> <LineBreak></LineBreak>
-                                            <TextBlock Visibility="Collapsed"  x:Name="PlayItemDurationValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}"/>
-                                        </TextBlock>
-                                    </ScrollViewer>
+                                            <TextBlock Text="{DynamicResource Album2}" Margin="3,0,0,0"/>
+                                            <AccessText Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}" TextWrapping="WrapWithOverflow"/>
+                                            <TextBlock Text="{DynamicResource Artist2}" Margin="3,0,0,0"/>
+                                            <AccessText Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}" TextWrapping="WrapWithOverflow"/>
+                                            <TextBlock Visibility="Collapsed" Text="{DynamicResource Duration2}" Margin="3,0,0,0"/>
+                                            <TextBlock Visibility="Collapsed" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundAltColor}"/>
+                                        </StackPanel>
+                                        <TextBlock Grid.Row="1" x:Name="LeftPannelMediaInfoLyricsLabel" 
+                                                   Text="{DynamicResource Lyrics2}" Margin="3,0,0,0" 
+                                                   Foreground="{DynamicResource ForegroundColor}" FontWeight="Bold"
+                                                   VerticalAlignment="Bottom"/>
+                                        <ScrollViewer x:Name="LeftPannelMediaInfoLyrics" ScrollViewer.VerticalScrollBarVisibility="Auto" 
+                                                      ScrollViewer.CanContentScroll="True" Grid.Row="2" 
+                                                      HorizontalAlignment="Stretch" HorizontalContentAlignment="Left" Margin="0,5,0,0">
+                                            <TextBlock x:Name="LeftPannelMediaInfoLyricsValue" Text="" Margin="10,0,10,10" 
+                                                       Foreground="{DynamicResource ForegroundAltColor}" HorizontalAlignment="Stretch" TextWrapping="WrapWithOverflow"/>
+                                        </ScrollViewer>
+                                    </Grid>
                                 </Border>
                             </Grid>
                         </Border>
@@ -578,7 +585,7 @@
                     </TabItem.Header>
                     <Border Grid.Row="0" Grid.Column="0" Style="{DynamicResource TabItemStyleSettings}">
                         <ScrollViewer VerticalScrollBarVisibility="Auto">
-                            <WrapPanel HorizontalAlignment="Center">
+                            <WrapPanel HorizontalAlignment="Center" Margin="0,0,10,0">
                                 <GroupBox Header="{DynamicResource ParamsLanguageLabel}">
                                     <ComboBox x:Name="ParamsLanguageVals" 
                                     MinWidth="200" Height="30">
@@ -593,7 +600,7 @@
                                     </ComboBox>
                                 </GroupBox>
 
-                                <GroupBox Header="{DynamicResource ParamsAutoPlayLabel}">
+                                <GroupBox Header="{DynamicResource ParamsAutoPlayLabel}" FontSize="13">
                                     <ComboBox x:Name="ParamsAutoPlay" 
                                     MinWidth="200" Height="30">
                                         <ComboBoxItem x:Name="AP0" Tag="0" Content="{DynamicResource ParamsAutoPlay0}" IsSelected="False"/>
@@ -610,12 +617,35 @@
                                 </GroupBox>
 
                                 <GroupBox Header="{DynamicResource ParamsLibFolderLabel}">
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBox x:Name="ParamsLibFolderTextBox" IsReadOnly="True"
-                                             Style="{DynamicResource TabItemStyleSettingsTextBox}"/>
-                                        <Button x:Name="ParamsLibFolderBtn" 
-                                            Style="{DynamicResource TabItemStyleSettingsForLibraryFolderButton}" 
-                                            Content=" ... " Click="ParamsLibFolderBtn_Click"/>
+                                    <StackPanel>
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100*" />
+                                                <ColumnDefinition Width="80" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="35" />
+                                                <RowDefinition Height="35" />
+                                                <RowDefinition Height="35" />
+                                            </Grid.RowDefinitions>
+                                            <TextBox x:Name="ParamsLibFolderTextBox" IsReadOnly="True" Grid.Column="0" Grid.Row="0"
+                                                         Style="{DynamicResource TabItemStyleSettingsTextBox}" HorizontalAlignment="Stretch"/>
+                                            <Button x:Name="ParamsLibFolderBtn" Grid.Column="1" Grid.Row="0"
+                                                    Style="{DynamicResource TabItemStyleSettingsForLibraryFolderButton}" HorizontalAlignment="Center" Width="60"
+                                                    Content=" ... " Click="ParamsLibFolderBtn_Click"/>
+                                            <Label MinWidth="90" Content="{DynamicResource ParamsLibHiddenFilesUnixLabel}" Style="{DynamicResource TabItemStyleSettingsText}" 
+                                                   Grid.Column="0" Grid.Row="1" VerticalAlignment="Center"/>
+                                            <ComboBox x:Name="ParamsLibHiddenFilesUnixVals" HorizontalAlignment="Stretch" Height="30" Grid.Column="1" Grid.Row="1">
+                                                <ComboBoxItem x:Name="PLHFU1" Tag="1" Content="{DynamicResource ParamsLibHiddenFilesUnix0}" IsSelected="True"/>
+                                                <ComboBoxItem x:Name="PLHFU2" Tag="2" Content="{DynamicResource ParamsLibHiddenFilesUnix1}" IsSelected="False"/>
+                                            </ComboBox>
+                                            <Label MinWidth="90" Content="{DynamicResource ParamsLibHiddenFilesWindowsLabel}" Style="{DynamicResource TabItemStyleSettingsText}" 
+                                                   Grid.Column="0" Grid.Row="2" VerticalAlignment="Center"/>
+                                            <ComboBox x:Name="ParamsLibHiddenFilesWindowsVals" HorizontalAlignment="Stretch" Height="30" Grid.Column="1" Grid.Row="2">
+                                                <ComboBoxItem x:Name="PLHFW1" Tag="1" Content="{DynamicResource ParamsLibHiddenFilesWindows0}" IsSelected="True"/>
+                                                <ComboBoxItem x:Name="PLHFW2" Tag="2" Content="{DynamicResource ParamsLibHiddenFilesWindows1}" IsSelected="False"/>
+                                            </ComboBox>
+                                        </Grid>
                                     </StackPanel>
                                 </GroupBox>
 
@@ -635,7 +665,7 @@
                                                 <ComboBoxItem x:Name="CT2" Tag="2" Content="{DynamicResource ParamsConvKeepVals_REPLACE}" IsSelected="False"/>
                                             </ComboBox>
                                         </StackPanel>
-                                        <StackPanel Orientation="Horizontal">
+                                        <StackPanel Orientation="Horizontal" Margin="0,5,0,0">
                                             <Label MinWidth="90" Content="{DynamicResource ParamsConvQualityLabel}" Style="{DynamicResource TabItemStyleSettingsText}" Grid.Column="0" Grid.Row="7" VerticalAlignment="Center"/>
                                             <ComboBox x:Name="ParamsConvQualityVals"
                                         MinWidth="150" MaxWidth="150" Height="30">

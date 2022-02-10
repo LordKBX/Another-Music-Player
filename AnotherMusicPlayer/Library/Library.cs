@@ -233,11 +233,11 @@ namespace AnotherMusicPlayer
             foreach (string dir in dirs)
             {
                 //if (NavigationContener.Children.Count > 5) { continue; }
-                //if (Settings.LibFolderShowHiden == false)
-                //{
-                //    DirectoryInfo dirInfo = new DirectoryInfo(dir);
-                //    if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; }
-                //}
+                if (Settings.LibFolderShowHiden == false)
+                {
+                    DirectoryInfo dirInfo = new DirectoryInfo(dir);
+                    if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; }
+                }
                 if (Settings.LibFolderShowUnixHiden == false)
                 {
                     string name = dir.Replace(path, "").TrimStart(MainWindow.SeparatorChar);

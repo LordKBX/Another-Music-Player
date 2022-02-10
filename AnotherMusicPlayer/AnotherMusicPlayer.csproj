@@ -172,7 +172,7 @@
     <None Update="icons\stop.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Player\ffmpeg.exe">
+    <None Update="ffmpeg.exe">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </None>
   </ItemGroup>
