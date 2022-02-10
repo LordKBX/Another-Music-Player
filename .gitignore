@@ -340,4 +340,4 @@ ASALocalRun/
 healthchecksdb
 /Installers/*
 /Release/*
-/AnotherMusicPlayer/ffmpeg.exe
+/AnotherMusicPlayer/ffmpeg.exe*
