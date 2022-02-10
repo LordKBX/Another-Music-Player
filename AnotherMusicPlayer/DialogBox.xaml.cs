@@ -46,6 +46,11 @@ namespace AnotherMusicPlayer
             BtnYes.Click += BtnOk_Click;
             BtnNo.Click += BtnCancel_Click;
 
+            this.Loaded += DialogBox_Loaded;
+        }
+
+        private void DialogBox_Loaded(object sender, RoutedEventArgs e)
+        {
             Left = Owner.Left + ((Owner.Width - Width) / 2);
             Top = Owner.Top + ((Owner.Height - Height) / 2);
         }
@@ -62,13 +67,14 @@ namespace AnotherMusicPlayer
             Close();
         }
 
-        public static bool ShowDialog(MainWindow owner, string title, string message, DialogBoxButtons buttons = DialogBoxButtons.Ok, DialogBoxIcons icon = DialogBoxIcons.Warning)
+        public static bool ShowDialog(MainWindow owner, string title, string message, DialogBoxButtons buttons = DialogBoxButtons.Ok, DialogBoxIcons icon = DialogBoxIcons.Warning, bool wide = false, string message2 = null)
         {
             DialogBox dialog = new DialogBox(owner);
 
             dialog.returnState = false;
             dialog.TitleBlock.Text = title;
             dialog.MessageBlock.Text = message;
+            dialog.MessageBlock2.Text = message2;
             dialog.MessageIcon.Kind = (PackIconKind)icon;
             if (icon == DialogBoxIcons.Error) { dialog.MessageIcon.Foreground = dialog.FindResource("DailogBoxS.IconColor.Error") as SolidColorBrush; }
             if (icon == DialogBoxIcons.Info) { dialog.MessageIcon.Foreground = dialog.FindResource("DailogBoxS.IconColor.Info") as SolidColorBrush; }
@@ -90,6 +96,7 @@ namespace AnotherMusicPlayer
                 dialog.BtnOk.Visibility = Visibility.Collapsed;
                 dialog.BtnCancel.Visibility = Visibility.Collapsed;
             }
+            if (wide == true) { dialog.Width = 600; dialog.MessageBlock2.FontSize = 10; }
 
             dialog.ShowDialog();
             return dialog.returnState;

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AnotherMusicPlayer"
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         mc:Ignorable="d"
-        Title="{DynamicResource DialogBoxTitle}" Height="170" Width="350"
+        Title="{DynamicResource DialogBoxTitle}" Height="200" Width="350"
         ResizeMode="NoResize" WindowStyle="None">
     <Window.Resources>
         <ResourceDictionary>
@@ -17,45 +17,58 @@
         </ResourceDictionary>
     </Window.Resources>
     <Grid Style="{DynamicResource CustomWindowBackgroundStyle}">
-        <StackPanel Orientation="Vertical" VerticalAlignment="Stretch" Margin="3">
-            <TextBlock x:Name="TitleBlock" Text="Title" 
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="100*"/>
+            <RowDefinition Height="50"/>
+        </Grid.RowDefinitions>
+        <TextBlock x:Name="TitleBlock" Text="Title" 
                     Style="{DynamicResource DialogBoxTextBlock}"
                     TextWrapping="WrapWithOverflow" Height="30" MaxHeight="30" 
-                    Margin="5, 0, 0, 5"
+                    Margin="5, 0, 0, 5" Grid.Row="0"
                     FontSize="20" FontWeight="DemiBold"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" />
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
-                <materialDesign:PackIcon Kind="Warning" Width="70" Height="70"
-                                         VerticalAlignment="Center"
-                    x:Name="MessageIcon"/>
-                <TextBlock x:Name="MessageBlock" Text="Message"  
+        <Grid Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="70" />
+                <ColumnDefinition Width="100*" />
+            </Grid.ColumnDefinitions>
+            <materialDesign:PackIcon Kind="Warning" Width="70" Height="70"
+                    VerticalAlignment="Center" x:Name="MessageIcon" Grid.Column="0"/>
+            <ScrollViewer Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <StackPanel VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                    <TextBlock x:Name="MessageBlock" Text="Message"
                     Style="{DynamicResource DialogBoxTextBlock}"
-                    TextWrapping="WrapWithOverflow" MaxHeight="70" 
-                    Width="270" MaxWidth="270" Margin="5, 0, 0, 0"
-                    VerticalAlignment="Center" HorizontalAlignment="Stretch" />
-            </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                <Button x:Name="BtnOk" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
-                    <Button.Content>
-                        <AccessText Text="{DynamicResource DialogBoxBtnOk}" />
-                    </Button.Content>
-                </Button>
-                <Button x:Name="BtnCancel" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
-                    <Button.Content>
-                        <AccessText Text="{DynamicResource DialogBoxBtnCancel}" />
-                    </Button.Content>
-                </Button>
-                <Button x:Name="BtnYes" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
-                    <Button.Content>
-                        <AccessText Text="{DynamicResource DialogBoxBtnYes}" />
-                    </Button.Content>
-                </Button>
-                <Button x:Name="BtnNo" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
-                    <Button.Content>
-                        <AccessText Text="{DynamicResource DialogBoxBtnNo}" />
-                    </Button.Content>
-                </Button>
-            </StackPanel>
+                    TextWrapping="WrapWithOverflow" Margin="5, 0, 0, 0"
+                    VerticalAlignment="Top" HorizontalAlignment="Stretch" />
+                    <TextBlock x:Name="MessageBlock2" Text=""
+                    Style="{DynamicResource DialogBoxTextBlock}"
+                    TextWrapping="WrapWithOverflow" Margin="5, 0, 0, 0"
+                    VerticalAlignment="Top" HorizontalAlignment="Stretch" />
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="BtnOk" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                <Button.Content>
+                    <AccessText Text="{DynamicResource DialogBoxBtnOk}" />
+                </Button.Content>
+            </Button>
+            <Button x:Name="BtnCancel" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                <Button.Content>
+                    <AccessText Text="{DynamicResource DialogBoxBtnCancel}" />
+                </Button.Content>
+            </Button>
+            <Button x:Name="BtnYes" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                <Button.Content>
+                    <AccessText Text="{DynamicResource DialogBoxBtnYes}" />
+                </Button.Content>
+            </Button>
+            <Button x:Name="BtnNo" Style="{DynamicResource DefaultBtnStyle}" MinWidth="50">
+                <Button.Content>
+                    <AccessText Text="{DynamicResource DialogBoxBtnNo}" />
+                </Button.Content>
+            </Button>
         </StackPanel>
     </Grid>
 </Window>

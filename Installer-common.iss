@@ -6,7 +6,7 @@
 #define RunTimeName "Install Runtime .NET CORE 3.1.3"
 
 #ifndef MyInstallerVersion
-#define MyInstallerVersion "1..0.0.0"
+#define MyInstallerVersion "1.0.0"
 #endif
 
 [Setup]
@@ -26,21 +26,21 @@ DefaultDirName={pf}\{#MyAppName}
 DisableProgramGroupPage=yes
 DisableWelcomePage=no
 ; The [Icons] "quicklaunchicon" entry uses {userappdata} but its [Tasks] entry has a proper IsAdminInstallMode Check.
-UsedUserAreasWarning=no
+;UsedUserAreasWarning=no
 LicenseFile=D:\CODES\VS\MediaPlayer\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=admin
 OutputDir=D:\CODES\VS\MediaPlayer\Installers
-OutputBaseFilename={#MyAppExeName}-{#MyAppVersion}-{#BuildVersion}
+OutputBaseFilename={#MyAppExeName}-{#MyAppVersion}-{#BuildVersion}-ib({#MyInstallerVersion})
 Compression=lzma                                              
 SolidCompression=yes
-;WizardStyle=modern
+;WizardStyle=modern                      
+
+#include "C:\Program Files (x86)\Inno Download Plugin\idp.iss"
 
 [Languages]
 Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "french"; MessagesFile: "compiler:Languages\French.isl"   
-
-#include ReadReg(HKEY_LOCAL_MACHINE,'Software\Sherlock Software\InnoTools\Downloader','ScriptPath','');
 
 [Tasks]
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
@@ -49,6 +49,7 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 [Files]
 Source: ".\Release\{#BuildVersion}\AnotherMusicPlayer.exe"; DestDir: "{app}"; Flags: ignoreversion
 Source: ".\Release\{#BuildVersion}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "unzip.exe"; DestDir: "{tmp}"; Flags: deleteafterinstall
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
@@ -58,70 +59,41 @@ Name: "{userappdata}\Microsoft\Internet Explorer\Quick Launch\{#MyAppName}"; Fil
 
 [Run]     
 Filename: "{tmp}\setup-runtime.exe"; Parameters: "/install /quiet"; Flags: skipifdoesntexist shellexec waituntilterminated
-;Filename: "{tmp}\setup-runtime-x64.exe"; Parameters: "/install /quiet"; Flags: skipifdoesntexist shellexec waituntilterminated
+Filename: "{tmp}\unzip.exe"; Parameters: "{tmp}\ffmpeg.zip -d {sd}\ProgramData\{#MyAppExeName}"
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
 
-[Code] 
-const
-  SHCONTCH_NOPROGRESSBOX = 4;
-  SHCONTCH_RESPONDYESTOALL = 16;
-
-procedure UnZip(ZipPath, TargetPath: string); 
-var
-  Shell: Variant;
-  ZipFile: Variant;
-  TargetFolder: Variant;
-begin
-  Shell := CreateOleObject('Shell.Application');
-
-  ZipFile := Shell.NameSpace(ZipPath);
-  if VarIsClear(ZipFile) then
-    RaiseException(Format('ZIP file "%s" does not exist or cannot be opened', [ZipPath]));
-
-  TargetFolder := Shell.NameSpace(TargetPath);
-  if VarIsClear(TargetFolder) then
-    RaiseException(Format('Target path "%s" does not exist', [TargetPath]));
-
-  TargetFolder.CopyHere(ZipFile.Items, SHCONTCH_NOPROGRESSBOX or SHCONTCH_RESPONDYESTOALL);
-end;
-
+[Code]    
 procedure InitializeWizard();
 begin
   WizardForm.WelcomeLabel1.Visible := True;   
   WizardForm.WelcomeLabel2.Visible := True;
-  
-  itd_init;
 
-  if not RegKeyExists(HKEY_LOCAL_MACHINE, 'SOFTWARE\\Classes\\Installer\\Dependencies\\{#MyRegKey}') then
-  begin
-    if ('{#BuildVersion}' = 'X86') then
-      itd_addfile('http://download.visualstudio.microsoft.com/download/pr/7cd5c874-5d11-4e72-81f0-4a005d956708/0eb310169770c893407169fc3abaac4f/windowsdesktop-runtime-3.1.3-win-x86.exe',expandconstant('{tmp}\setup-runtime.exe'))
-    else
-      itd_addfile('http://download.visualstudio.microsoft.com/download/pr/5954c748-86a1-4823-9e7d-d35f6039317a/169e82cbf6fdeb678c5558c5d0a83834/windowsdesktop-runtime-3.1.3-win-x64.exe',expandconstant('{tmp}\setup-runtime.exe'))
+  if ('{#BuildVersion}' = 'X86') then
+    if not DirExists(ExpandConstant('{commonpf32}\dotnet\shared\Microsoft.NETCore.App\3.1.3')) then 
+      idpAddFileSize('http://sd-36502.dedibox.fr/AnotherMusicPlayer/windowsdesktop-runtime-3.1.3-win-x86.exe',expandconstant('{tmp}\setup-runtime.exe'), 48625808)
     ;
-  end;
+  ;     
+
+  if ('{#BuildVersion}' = 'X64') then
+    if not DirExists(ExpandConstant('{commonpf64}\dotnet\shared\Microsoft.NETCore.App\3.1.3')) then 
+      idpAddFileSize('http://sd-36502.dedibox.fr/AnotherMusicPlayer/windowsdesktop-runtime-3.1.3-win-x64.exe',expandconstant('{tmp}\setup-runtime.exe'), 54449000)
+    ;
+  ;
   
   // find relasese at https://www.videohelp.com/software/ffmpeg/old-versions
-  if ('{#BuildVersion}' = 'X86') then
-    itd_addfile('http://sd-36502.dedibox.fr/AnotherMusicPlayer/ffmpeg-win32-static.zip',expandconstant('{tmp}\ffmpeg-win32-static.zip'))
-  else
-    itd_addfile('http://sd-36502.dedibox.fr/AnotherMusicPlayer/ffmpeg-win64-static.zip',expandconstant('{tmp}\ffmpeg-win64-static.zip'))
-  ;
-  //Start the download after the "Ready to install" screen is shown
-  itd_downloadafter(wpReady);
-
+  if not FileExists(ExpandConstant('{sd}\ProgramData\{#MyAppExeName}\ffmpeg.exe')) then 
+    if ('{#BuildVersion}' = 'X86') then
+      idpAddFileSize('http://sd-36502.dedibox.fr/AnotherMusicPlayer/ffmpeg-win32-static.zip',expandconstant('{tmp}\ffmpeg.zip'), 20997449)
+    else
+      idpAddFileSize('http://sd-36502.dedibox.fr/AnotherMusicPlayer/ffmpeg-win64-static.zip',expandconstant('{tmp}\ffmpeg.zip'), 39247024)
+      ;
+    ;
+  idpDownloadAfter(wpReady);
 end;   
      
 procedure CurStepChanged(CurStep: TSetupStep);
 begin
  if CurStep=ssInstall then begin //Lets install those files that were downloaded for us
-  CreateDir(expandconstant('{sd}\Users\{username}\AppData\Local\{#MyAppExeName}'))
-
-  if ('{#BuildVersion}' = 'X86') then 
-    UnZip(expandconstant('{tmp}\ffmpeg-win32-static.zip'), expandconstant('{sd}\Users\{username}\AppData\Local\{#MyAppExeName}\'))
-  else  
-    UnZip(expandconstant('{tmp}\ffmpeg-win64-static.zip'), expandconstant('{sd}\Users\{username}\AppData\Local\{#MyAppExeName}\'))
-  ;
-  //UnZip(expandconstant('{tmp}\ffmpeg-static.zip'), expandconstant('{sd}\Users\{username}\AppData\Local\{#MyAppExeName}\'));
+  CreateDir(expandconstant('{sd}\ProgramData\{#MyAppExeName}'))
  end;
 end;

@@ -43,35 +43,28 @@ namespace AnotherMusicPlayer
             return true;
         }
 
+        public string GetFfmpegPath()
+        {
+            string endPath = null;
+            foreach (string path in FfmpegPaths) { if (System.IO.File.Exists(path)) { endPath = path; break; } }
+            return endPath;
+        }
+
         /// <summary> Private interface for file convertion usign ffmpeg birary </summary>
         private async Task<bool> ConvExe(string FileInput, string FileOutput, Int32 quality = 0)
         {
             if (quality <= 0) { quality = ConvQualityBitrates; }
             string AppName = parent.AppName;
             char sep = System.IO.Path.DirectorySeparatorChar;
-            string convPath1 = "", convPath2 = "", convPath3 = "", convPath4 = "", convPath5 = "", convPath6 = "";
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                convPath1 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg-win64-static.exe";
-                convPath2 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg-win32-static.exe";
-                convPath3 = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + sep + AppName + sep + "ffmpeg.exe";
-                convPath4 = AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win64-static.exe";
-                convPath5 = AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win32-static.exe";
-                convPath6 = AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg.exe";
-            }
+            string exePath = GetFfmpegPath();
+            if (exePath == null) { return false; }
 
             // Use ProcessStartInfo class
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.RedirectStandardOutput = true;
             startInfo.UseShellExecute = false;
-            if (System.IO.File.Exists(convPath1)) { startInfo.FileName = convPath1; }
-            else if (System.IO.File.Exists(convPath2)) { startInfo.FileName = convPath2; }
-            else if (System.IO.File.Exists(convPath3)) { startInfo.FileName = convPath3; }
-            else if (System.IO.File.Exists(convPath4)) { startInfo.FileName = convPath4; }
-            else if (System.IO.File.Exists(convPath5)) { startInfo.FileName = convPath5; }
-            else if (System.IO.File.Exists(convPath6)) { startInfo.FileName = convPath6; }
-            else { return false; }
+            startInfo.FileName = exePath;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
             startInfo.Arguments = "-i \"" + FileInput + "\" -acodec mp3 -b:a " + quality + "k -map_metadata 0:s:0 \"" + FileOutput + "\"";
 

@@ -64,6 +64,12 @@ namespace AnotherMusicPlayer
         /// <summary> Maximum gain on an equalizer band </summary>
         public readonly int MaximumGain = 20;
 
+        private List<string> _FfmpegPaths = null;
+        public string[] FfmpegPaths
+        {
+            get { return (_FfmpegPaths != null) ? _FfmpegPaths.ToArray() : null; }
+        }
+
         /// <summary>
         /// Dispose all used resources.
         /// </summary>
@@ -94,6 +100,17 @@ namespace AnotherMusicPlayer
 
             PlayList = new List<string>();
             //PlayListSemaphore = new Semaphore(0, 1);
+
+            string AppName = parent.AppName;
+            char sep = System.IO.Path.DirectorySeparatorChar;
+            _FfmpegPaths = new List<string>() {
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg-win64-static.exe",
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg-win32-static.exe",
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg.exe",
+                AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win64-static.exe",
+                AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win32-static.exe",
+                AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg.exe"
+            };
 
 
             var name = "PATH";

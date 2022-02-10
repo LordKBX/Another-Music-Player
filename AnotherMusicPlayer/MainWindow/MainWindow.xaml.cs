@@ -186,6 +186,13 @@ namespace AnotherMusicPlayer
             }));
 
             PlaylistsTreeAuto.IsExpanded = true;
+
+            if (player.GetFfmpegPath() == null)
+            {
+                DialogBox.ShowDialog(this, "ERROR",
+                    "Ffmpeg not found !\nPlease copy the executable at one of the following address:",
+                    DialogBoxButtons.Ok, DialogBoxIcons.Error, true, string.Join("\n", player.FfmpegPaths));
+            }
         }
 
         public static TreeViewItem FindTviFromObjectRecursive(ItemsControl ic, object o)

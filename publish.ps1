@@ -5,7 +5,7 @@ $v = [version]$doc.Project.PropertyGroup.Version
 $v = [version]::New($v.Major,$v.Minor,$v.Build,$v.Revision+1)
 
 $AppVersion = ""
-$InstallerVersion = "1.0.0.0"
+$InstallerVersion = "1.0.0"
 $ret = Read-Host "Version number(default:" $v.ToString() ")"
 
 if($ret.ToString().Trim() -eq ""){
