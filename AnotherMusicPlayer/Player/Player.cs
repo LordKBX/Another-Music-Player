@@ -654,7 +654,7 @@ namespace AnotherMusicPlayer
                             if (FilePath == CurrentFile) PositionChanged(this, evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
-                                if (PlayRepeat || PlayListIndex + 1 == PlayList.Count)
+                                if (PlayRepeat || (PlayListIndex + 1 == PlayList.Count && PlayList.Count == 1))
                                 {
                                     audioFile.Position = 0;
                                     PlayStatus[FilePath] = 1;

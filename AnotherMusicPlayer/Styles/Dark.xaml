@@ -148,7 +148,7 @@
     <SolidColorBrush x:Key="TrackButton.StarsForeground" Color="#FFE6E6E6"/>
     <SolidColorBrush x:Key="TrackButton.StarsSelectionForeground" Color="#FFFF0000"/>
 
-    <SolidColorBrush x:Key="TrackButton.Over.Background" Color="#FF959595"/>
+    <SolidColorBrush x:Key="TrackButton.Over.Background" Color="#FF707070"/>
     <SolidColorBrush x:Key="TrackButton.Over.Foreground" Color="#FF000000"/>
     <SolidColorBrush x:Key="TrackButton.Over.Border" Color="#FF000000"/>
     <!--#endregion-->

@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:AnotherMusicPlayer"
         mc:Ignorable="d"
         Title="{DynamicResource PlaylistsWindowAddIntoPlaylistTitle}" Height="300" Width="300"
-        ResizeMode="NoResize" WindowStyle="None">
+        ResizeMode="NoResize" WindowStyle="None" ShowInTaskbar="False">
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>

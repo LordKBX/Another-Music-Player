@@ -7,6 +7,15 @@
 [ ![Capture 6](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/06.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/06.png?raw=true)
 [ ![Capture 7](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/07.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/07.png?raw=true)
 [ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/08.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/08.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/09.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/09.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/10.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/10.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/11.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/11.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/12.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/12.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/13.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/13.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/14.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/14.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/15.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/15.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/16.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/16.png?raw=true)
+[ ![Capture 8](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/small/17.png?raw=true)](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/17.png?raw=true)
 ---
 ## English Documentation
 
