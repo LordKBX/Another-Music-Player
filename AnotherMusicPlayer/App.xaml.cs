@@ -14,14 +14,17 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class App : Application
     {
-        public App() {
+        public MainWindow win1;
+        public App()
+        {
             Dispatcher.BeginInvoke(new Action(() =>
             {
                 Database bdd = new Database();
                 InitializeComponent();
-                MainWindow win1 = new MainWindow(bdd);
+                win1 = new MainWindow(bdd, this);
                 win1.ShowDialog();
             }));
         }
+
     }
 }

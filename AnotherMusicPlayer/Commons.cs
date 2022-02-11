@@ -85,34 +85,10 @@ namespace AnotherMusicPlayer
             MainWindow.BaseDir = "D:\\CODES\\VS\\MediaPlayer\\AnotherMusicPlayer";
         }
 
-        //public static BitmapImage CoverImg = new BitmapImage(new Uri(BaseDirImg + "album_small.png"));
-
-        //public static BitmapImage OpenButtonImg = new BitmapImage(new Uri(BaseDirImg + "file.png"));
-        //public static BitmapImage PreviousButtonImg = new BitmapImage(new Uri(BaseDirImg + "previous.png"));
-        //public static BitmapImage PlayButtonImg_Play = new BitmapImage(new Uri(BaseDirImg + "play.png"));
-        //public static BitmapImage PlayButtonImg_Pause = new BitmapImage(new Uri(BaseDirImg + "pause.png"));
-        //public static BitmapImage NextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next.png"));
-        //public static BitmapImage ClearListButtonImg = new BitmapImage(new Uri(BaseDirImg + "clear_list.png"));
-        //public static BitmapImage ShuffleButtonImg = new BitmapImage(new Uri(BaseDirImg + "shuffle.png"));
-
-        //public static BitmapImage RepeatButtonImg_None = new BitmapImage(new Uri(BaseDirImg + "repeat_none.png"));
-        //public static BitmapImage RepeatButtonImg_One = new BitmapImage(new Uri(BaseDirImg + "repeat_one.png"));
-        //public static BitmapImage RepeatButtonImg_All = new BitmapImage(new Uri(BaseDirImg + "repeat_all.png"));
-
-        //public static BitmapImage MiniPreviousButtonImg = new BitmapImage(new Uri(BaseDirImg + "previous_24.png"));
-        //public static BitmapImage MiniPlayButtonImg_Play = new BitmapImage(new Uri(BaseDirImg + "play_24.png"));
-        //public static BitmapImage MiniPlayButtonImg_Pause = new BitmapImage(new Uri(BaseDirImg + "pause_24.png"));
-        //public static BitmapImage MiniNextButtonImg = new BitmapImage(new Uri(BaseDirImg + "next_24.png"));
-
         /// <summary> Dictionary contening Image URI indexed by a string code name </summary>
         private static Dictionary<string, Uri> ImagesUriList = new Dictionary<string, Uri> {
             { "CoverImg", new Uri(BaseDirImg + "album_small.png") },
-            { "OpenButtonImg", new Uri(BaseDirImg + "file.png") },
-
-            { "MiniPreviousButtonImg", new Uri(BaseDirImg + "previous_24.png") },
-            { "MiniPlayButtonImg_Play", new Uri(BaseDirImg + "play_24.png") },
-            { "MiniPlayButtonImg_Pause", new Uri(BaseDirImg + "pause_24.png") },
-            { "MiniNextButtonImg", new Uri(BaseDirImg + "next_24.png") }
+            { "OpenButtonImg", new Uri(BaseDirImg + "file.png") }
         };
 
         /// <summary> Create BitmapImage from ImagesUriList </summary>

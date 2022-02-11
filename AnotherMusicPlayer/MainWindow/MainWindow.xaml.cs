@@ -3,6 +3,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Forms;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
@@ -20,6 +21,9 @@ using System.Drawing;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using System.Threading.Tasks;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Windows.Interop;
+using System.Threading;
 
 namespace AnotherMusicPlayer
 {
@@ -64,9 +68,12 @@ namespace AnotherMusicPlayer
         [Conditional("DEBUG")]
         private void IsDebugCheck() { isDebug = true; }
 
+        private App Parent = null;
+
         /// <summary> Constructor </summary>
-        public MainWindow(Database obdd)
+        public MainWindow(Database obdd, App parent)
         {
+            Parent = parent;
             AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
             IsDebugCheck();
             bdd = obdd;
@@ -87,6 +94,7 @@ namespace AnotherMusicPlayer
             //SettingsSetUp();//Initialize interface elements with stored parametters in settings
             //TabControl t = new TabControl();
             //t.cli
+            SetTitle("");
             TabControler.SelectedIndex = 0;
 
             PlayListIndex = Settings.LastPlaylistIndex;
@@ -96,7 +104,6 @@ namespace AnotherMusicPlayer
             //Resources.MergedDictionaries.Clear();//Ensure a clean MergedDictionaries
             StyleUpdate();
             TranslationUpdate();
-            PreviewSetUp();
 
             FileCover.Source = Bimage("CoverImg");
 
@@ -114,38 +121,48 @@ namespace AnotherMusicPlayer
             //MaxWidth = workingAreaSize.Width;
             //MaxHeight = workingAreaSize.Height;
 
-            BtnClose.Click += (object sender, RoutedEventArgs e) => { this.Close(); };
-            BtnMaximize.Click += (object sender, RoutedEventArgs e) =>
+            BtnClose.Click += (object sender, RoutedEventArgs e) =>
             {
-                WorkingAreaSize workingAreaSize = GetWorkingAreaSize();
-                if (Width == workingAreaSize.Width && Height == workingAreaSize.Height)
-                {
-                    Top = oldTop;
-                    Left = oldLeft;
-                    Width = oldWidth; Height = oldHeight;
-                    BtnMaximize.Tag = "Off";
-                }
-                else
-                {
-                    oldWidth = Width;
-                    oldHeight = Height;
-                    oldTop = Top;
-                    oldLeft = Left;
-                    BtnMaximize.Tag = "On";
-
-                    WorkingAreaPosition workingAreaPosition = GetWorkingAreaPosition();
-                    Top = workingAreaPosition.Y1;
-                    Left = workingAreaPosition.X1;
-
-                    Width = MaxWidth = workingAreaSize.Width;
-                    Height = MaxHeight = workingAreaSize.Height;
-                }
+                this.Close();
             };
+            BtnMaximize.Click += (object sender, RoutedEventArgs e) =>
+                    {
+                        WorkingAreaSize workingAreaSize = GetWorkingAreaSize();
+                        if (Width == workingAreaSize.Width && Height == workingAreaSize.Height)
+                        {
+                            Top = oldTop;
+                            Left = oldLeft;
+                            Width = oldWidth; Height = oldHeight;
+                            BtnMaximize.Tag = "Off";
+                        }
+                        else
+                        {
+                            oldWidth = Width;
+                            oldHeight = Height;
+                            oldTop = Top;
+                            oldLeft = Left;
+                            BtnMaximize.Tag = "On";
+
+                            WorkingAreaPosition workingAreaPosition = GetWorkingAreaPosition();
+                            Top = workingAreaPosition.Y1;
+                            Left = workingAreaPosition.X1;
+
+                            Width = MaxWidth = workingAreaSize.Width;
+                            Height = MaxHeight = workingAreaSize.Height;
+                        }
+                    };
             BtnMinimize.Click += (object sender, RoutedEventArgs e) => { WindowState = (WindowState == WindowState.Minimized) ? WindowState.Normal : WindowState.Minimized; };
             TopBar.MouseDown += TopBar_MouseDown;
 
             playLists = new PlayLists(this);
             PlayListView.ContextMenu = null;
+        }
+
+        public void SetTitle(string title)
+        {
+            this.Title = title;
+            try { customThumbnail.Title = title; } catch { }
+            this.TopBarTitle.Text = AppName + " - " + title;
         }
 
         private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -173,6 +190,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window loaded </summary>
         private void MainWindow_Loaded(object sender, System.Windows.RoutedEventArgs e)
         {
+            PreviewSetUp();
             KeyboardLocalListenerInit();
             KeyboardGlobalListenerInit();
 
@@ -485,6 +503,8 @@ namespace AnotherMusicPlayer
                 FileCover.ToolTip = null;
                 System.Windows.Media.Imaging.BitmapImage bi = FilesTags.MediaPicture(item.Path, bdd, true, (Settings.MemoryUsage == 0) ? 150 : 250, (Settings.MemoryUsage == 0) ? 150 : 250);
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
+
+
 
                 LeftPannelMediaInfoR1.Height = new GridLength(nblines * 18);
             }

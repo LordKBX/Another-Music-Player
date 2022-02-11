@@ -76,7 +76,8 @@ namespace AnotherMusicPlayer
                         Timer_IsPlaying = true;
                         //BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPause"];
                         BtnPlayPause.Tag = "Pause";
-                        PreviewCtrlPause.ImageSource = null; PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Pause");
+                        buttonPlay.Icon = IconPause;
+                        CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
                     }
                 }
                 else
@@ -86,7 +87,8 @@ namespace AnotherMusicPlayer
                         Timer_IsPlaying = false;
                         //BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPlay"];
                         BtnPlayPause.Tag = "Play";
-                        PreviewCtrlPause.ImageSource = null; PreviewCtrlPause.ImageSource = Bimage("MiniPlayButtonImg_Play");
+                        buttonPlay.Icon = IconPlay;
+                        CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
                     }
                 }
 

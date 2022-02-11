@@ -90,8 +90,8 @@ namespace AnotherMusicPlayer
                     item.DurationS = "00:00";
 
                     item.Size = new System.IO.FileInfo(OriginPath ?? FilePath).Length;
-                    item.Performers = tags.Tag.JoinedPerformers;
-                    item.Composers = tags.Tag.JoinedComposers;
+                    item.Performers = string.Join(';', tags.Tag.Performers);
+                    item.Composers = string.Join(';', tags.Tag.Composers);
                     item.Copyright = tags.Tag.Copyright;
                     item.Disc = tags.Tag.Disc;
                     item.DiscCount = tags.Tag.DiscCount;

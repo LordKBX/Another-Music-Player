@@ -36,6 +36,20 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("Player_PlaylistPositionChanged");
             Debug.WriteLine(JsonConvert.SerializeObject(e));
             PlayListIndex = e.Position;
+            MediaItem Fi = DatabaseItemToMediaItem(bdd.DatabaseFileInfo(player.PlayList[PlayListIndex]));
+            string ar = "";
+            if (Fi.Performers != null && Fi.Performers.Trim() != "") { ar += Fi.Performers.Replace(";", ", "); }
+            if (Fi.Composers != null && Fi.Composers.Trim() != "")
+            {
+                if (ar != "") { ar += ", "; }
+                ar += Fi.Composers.Replace(";", ", ");
+            }
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                SetTitle(Fi.Name + ((Fi.Album != null && Fi.Album.Trim() != "") ? " - " + Fi.Album : "") + ((ar != "") ? " - " + ar : ""));
+                CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+            }));
             Settings.LastPlaylistIndex = PlayListIndex;
             Settings.SaveSettings();
         }
@@ -51,21 +65,29 @@ namespace AnotherMusicPlayer
             }
             UpdateRecordedQueue();
             Timer_Elapsed(null, null);
+
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+            }));
         }
 
         /// <summary> Event Callback when the played media length change(generaly when a new media is played) </summary>
-        private void Player_LengthChanged(object sender, PlayerLengthChangedEventParams e) 
+        private void Player_LengthChanged(object sender, PlayerLengthChangedEventParams e)
         {
             Dispatcher.BeginInvoke(new Action(() => { UpdateSize(displayTime((long)(e.duration))); }));
         }
 
+        public long lastPlaybackPosition = 0;
         /// <summary> Event Callback when the media playing position chnaged </summary>
         private void Player_PositionChanged(object sender, PlayerPositionChangedEventParams e)
         {
+            lastPlaybackPosition = e.Position;
             Dispatcher.BeginInvoke(new Action(() => { UpdatePosition(displayTime((long)(e.Position))); }));
             if (PreventUpdateSlider) { return; }
             float BarCalc = (e.Position > e.duration) ? 1000 : ((1000 * e.Position) / e.duration);
-            Dispatcher.BeginInvoke(new Action(() => { 
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
                 UpdatePositionBar((double)BarCalc);
             }));
         }
@@ -85,10 +107,15 @@ namespace AnotherMusicPlayer
                 else { Dispatcher.BeginInvoke(new Action(() => { StopPlaylist(); })); }
             }
             else if (PlayRepeatStatus == 1) { UpdatePlaylist(PlayListIndex, true); }
-            else {
+            else
+            {
                 if (PlayListIndex + 1 < PlayList.Count) { Dispatcher.BeginInvoke(new Action(() => { UpdatePlaylist(PlayListIndex + 1, true); })); }
                 else { Dispatcher.BeginInvoke(new Action(() => { UpdatePlaylist(0, true); })); }
             }
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+            }));
         }
         #endregion
 
@@ -110,6 +137,10 @@ namespace AnotherMusicPlayer
             UpdateSize(displayTime(0));
             UpdatePositionBar(0);
             if (PlayList.Count > 0) { UpdatePlaylist(0, false); }
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+            }));
         }
         #endregion
     }

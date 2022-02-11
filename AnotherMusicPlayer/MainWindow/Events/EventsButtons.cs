@@ -40,9 +40,9 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Play/Pause button </summary>
         private void Play_Button_Click(object sender, RoutedEventArgs e) { Pause(); }
         /// <summary> Callback Event Click on Previous Track button </summary>
-        private void Previous_Button_Click(object sender, RoutedEventArgs e) { PreviousTrack(); }
+        private void Previous_Button_Click(object sender, RoutedEventArgs e) { PreviousTrack(); CustomThumbnail_TabbedThumbnailBitmapRequested(null, null); }
         /// <summary> Callback Event Click on Next Track button </summary>
-        private void Next_Button_Click(object sender, RoutedEventArgs e) { NextTrack(); }
+        private void Next_Button_Click(object sender, RoutedEventArgs e) { NextTrack(); CustomThumbnail_TabbedThumbnailBitmapRequested(null, null); }
 
         //private void PositionMoins10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() - 10000); }
         //private void PositionPlus10_Button_Click(object sender, RoutedEventArgs e) { player.Position(null, player.Position() + 10000); }

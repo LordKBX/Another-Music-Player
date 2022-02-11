@@ -188,6 +188,10 @@
     </Style>
 
     <!--#region GENERIC -->
+    <Style x:Key="CustomUserControl" TargetType="{x:Type local:Preview}">
+        <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
+        <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
+    </Style>
     <Style x:Key="CustomWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="BorderThickness" Value="1"/>

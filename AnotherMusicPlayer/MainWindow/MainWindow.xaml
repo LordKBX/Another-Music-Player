@@ -20,18 +20,6 @@
         </ResourceDictionary>
     </Window.Resources>
 
-    <Window.TaskbarItemInfo>
-        <TaskbarItemInfo x:Name="taskBarItemInfo1" Description="Another Media Player" >
-            <TaskbarItemInfo.ThumbButtonInfos>
-                <ThumbButtonInfoCollection>
-                    <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlPrev" Description="PreviousTrack" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlPause" Description="Play" RenderOptions.BitmapScalingMode="HighQuality" />
-                    <ThumbButtonInfo DismissWhenClicked="False" x:Name="PreviewCtrlNext" Description="NextTrack" RenderOptions.BitmapScalingMode="HighQuality" />
-                </ThumbButtonInfoCollection>
-            </TaskbarItemInfo.ThumbButtonInfos>
-        </TaskbarItemInfo>
-    </Window.TaskbarItemInfo>
-
     <materialDesign:DialogHost CloseOnClickAway="False" x:Name="dialog1" IsOpen="False">
         <materialDesign:DialogHost.DialogContent>
             <Grid Margin="20" MinWidth="200px" Height="50px" MaxHeight="50px">
@@ -98,7 +86,7 @@
                         <ColumnDefinition Style="{DynamicResource TopBarBtnWidth}"/>
                         <ColumnDefinition Style="{DynamicResource TopBarBtnWidth}"/>
                     </Grid.ColumnDefinitions>
-                    <AccessText Grid.Column="0" Text="Another Media Player" Style="{DynamicResource TopBarTitle}"/>
+                    <AccessText Grid.Column="0" x:Name="TopBarTitle" Text="Another Media Player" Style="{DynamicResource TopBarTitle}"/>
                     <Button x:Name="BtnMinimize" Grid.Column="1" Cursor="Hand" Style="{DynamicResource TopBarBtnMinimize}" />
                     <Button x:Name="BtnMaximize" Grid.Column="2" Cursor="Hand" Style="{DynamicResource TopBarBtnMaximize}" Tag="Off" />
                     <Button x:Name="BtnClose" Grid.Column="3" Cursor="Hand" Style="{DynamicResource TopBarBtnClose}" />
