@@ -84,7 +84,7 @@ namespace AnotherMusicPlayer
                 if (ar.Trim() != "") { ArtistsValue.Text = ar; ArtistsValue.Visibility = Visibility.Visible; }
                 else { ArtistsValue.Visibility = Visibility.Collapsed; }
 
-                DurationValue.Text = item.DurationS;
+                //DurationValue.Text = item.DurationS;
 
                 DisplayPlaybackPosition.Content = Parent.DisplayPlaybackPosition.Content;
                 DisplayPlaybackSize.Content = item.DurationS;

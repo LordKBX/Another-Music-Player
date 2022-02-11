@@ -74,10 +74,9 @@ namespace AnotherMusicPlayer
                     if (Timer_IsPlaying == false)
                     {
                         Timer_IsPlaying = true;
-                        //BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPause"];
                         BtnPlayPause.Tag = "Pause";
-                        buttonPlay.Icon = IconPause;
-                        CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+                        try { buttonPlay.Icon = IconPause; CustomThumbnail_TabbedThumbnailBitmapRequested(null, null); }
+                        catch { }
                     }
                 }
                 else
@@ -85,10 +84,9 @@ namespace AnotherMusicPlayer
                     if (Timer_IsPlaying == true)
                     {
                         Timer_IsPlaying = false;
-                        //BtnPlayPause.Style = (System.Windows.Style)Resources.MergedDictionaries[0]["PlaybackBtnPlay"];
                         BtnPlayPause.Tag = "Play";
-                        buttonPlay.Icon = IconPlay;
-                        CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+                        try { buttonPlay.Icon = IconPlay; CustomThumbnail_TabbedThumbnailBitmapRequested(null, null); }
+                        catch { }
                     }
                 }
 
@@ -181,7 +179,7 @@ namespace AnotherMusicPlayer
                     }
                     catch { }
                 }
-
+                CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
                 Timer_Count += 1;
             }));
         }

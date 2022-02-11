@@ -23,7 +23,7 @@
             <AccessText x:Name="TitleValue" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundColor}" TextTrimming="CharacterEllipsis" Text="Test"/>
             <AccessText x:Name="AlbumValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundColor}" TextTrimming="CharacterEllipsis"/>
             <AccessText x:Name="ArtistsValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundColor}" TextTrimming="CharacterEllipsis"/>
-            <AccessText x:Name="DurationValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundColor}"/>
+            <!--<AccessText x:Name="DurationValue" Text="" Margin="10,0,0,0" Foreground="{DynamicResource ForegroundColor}"/>-->
         </StackPanel>
         <Grid Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
