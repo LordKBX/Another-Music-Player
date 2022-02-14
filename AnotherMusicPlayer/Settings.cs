@@ -104,16 +104,21 @@ namespace AnotherMusicPlayer
             StyleName = window.bdd.DatabaseGetParam("StyleName", "Dark");
 
             EqualizerPreset = window.bdd.DatabaseGetParam("EqualizerPreset", null);
-            EqualizerBand1 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand1", "0")));
-            EqualizerBand2 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand2", "0")));
-            EqualizerBand3 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand3", "0")));
-            EqualizerBand4 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand4", "0")));
-            EqualizerBand5 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand5", "0")));
-            EqualizerBand6 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand6", "0")));
-            EqualizerBand7 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand7", "0")));
-            EqualizerBand8 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand8", "0")));
-            EqualizerBand9 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand9", "0")));
-            EqualizerBand10 = ((float)Convert.ToDecimal(window.bdd.DatabaseGetParam("EqualizerBand10", "0")));
+            EqualizerBand1 = EqualizerBand2 = EqualizerBand3 = EqualizerBand4 = EqualizerBand5 = EqualizerBand6 = EqualizerBand7 = EqualizerBand8 = EqualizerBand9 = EqualizerBand10 = 0;
+            try
+            {
+                EqualizerBand1 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand1", "0"));
+                EqualizerBand2 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand2", "0"));
+                EqualizerBand3 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand3", "0"));
+                EqualizerBand4 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand4", "0"));
+                EqualizerBand5 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand5", "0"));
+                EqualizerBand6 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand6", "0"));
+                EqualizerBand7 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand7", "0"));
+                EqualizerBand8 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand8", "0"));
+                EqualizerBand9 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand9", "0"));
+                EqualizerBand10 = float.Parse(window.bdd.DatabaseGetParam("EqualizerBand10", "0"));
+            }
+            catch { }
 
             LastWindowWidth = Convert.ToDouble(window.bdd.DatabaseGetParam("LastWindowWidth", "550"));
             LastWindowHeight = Convert.ToDouble(window.bdd.DatabaseGetParam("LastWindowHeight", "400"));

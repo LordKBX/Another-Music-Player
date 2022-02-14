@@ -27,7 +27,13 @@ namespace AnotherMusicPlayer
     {
         /// <summary> Give the List of native accepted file extentions </summary>
         public static readonly string[] AcceptedExtentions = new string[] { ".aiff", ".mp3", ".wma" };
+        /// <summary> Give the List of accepted file extentions for conversion </summary>
         public static readonly string[] AcceptedExtentionsFotConversion = new string[] { ".aac", ".flac", ".ogg", ".m4a" };
+
+        /// <summary> Enum the differents mode of the player object </summary>
+        public enum Modes { File = 0, Radio = 1 };
+        /// <summary> Current Mode of the player object </summary>
+        public Modes Mode = Modes.File;
 
         /// <summary> List of audio threads by file path </summary>
         private Dictionary<string, Thread> ThreadList = null;
@@ -40,53 +46,27 @@ namespace AnotherMusicPlayer
 
         /// <summary> List of file path for the audio playlist </summary>
         public readonly List<string> PlayList = null;
-        /// <summary> PlayList current position </summary>
-        private int PlayListIndex = 0;
-        public int Index
-        {
-            get { return PlayListIndex; }
-            set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : ((value < 0) ? value : value); }
-        }
 
-        /// <summary> Last played file </summary>
+        /// <summary> PlayList current Index </summary>
+        private int PlayListIndex = 0;
+        /// <summary> PlayList current Index </summary>
+        public int Index { get { return PlayListIndex; } set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : ((value < 0) ? value : value); } }
+
+        /// <summary> Current playing file </summary>
         private string CurrentFile = null;
+        /// <summary> Current playing file </summary>
         public string GetCurrentFile() { return CurrentFile; }
+
         /// <summary> Status if repeat file playback active </summary>
         private bool PlayRepeat = false;
 
         /// <summary> reference object of the application window </summary>
         private MainWindow parent;
 
-        /// <summary> list of equalizer bands </summary>
-        private readonly EqualizerBand[] bands;
-        /// <summary> Maximum negative gain on an equalizer band </summary>
-        public readonly int MinimumGain = -20;
-        /// <summary> Maximum gain on an equalizer band </summary>
-        public readonly int MaximumGain = 20;
-
+        /// <summary> List of potential path for the Ffmpeg Executable </summary>
         private List<string> _FfmpegPaths = null;
-        public string[] FfmpegPaths
-        {
-            get { return (_FfmpegPaths != null) ? _FfmpegPaths.ToArray() : null; }
-        }
-
-        /// <summary>
-        /// Dispose all used resources.
-        /// </summary>
-        public void Dispose()
-        {
-            StopAll();
-            ThreadList = null;
-            AudioList = null;
-            PlayStatus = null;
-            PlayNewPositions = null;
-
-            PlayList.Clear();
-
-            parent = null;
-
-            GC.SuppressFinalize(this);
-        }
+        /// <summary> List of potential path for the Ffmpeg Executable </summary>
+        public string[] FfmpegPaths { get { return (_FfmpegPaths != null) ? _FfmpegPaths.ToArray() : null; } }
 
 
         /// <summary> Constructor </summary>
@@ -97,6 +77,7 @@ namespace AnotherMusicPlayer
             AudioList = new Dictionary<string, object>();
             PlayStatus = new Dictionary<string, int>();
             PlayNewPositions = new Dictionary<string, long>();
+            Mode = Modes.File;
 
             PlayList = new List<string>();
             //PlayListSemaphore = new Semaphore(0, 1);
@@ -119,20 +100,9 @@ namespace AnotherMusicPlayer
             var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
             Environment.SetEnvironmentVariable(name, newValue, scope);
 
-            //--- NEW ---
-            bands = new EqualizerBand[]
-                {
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
-                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
-                };
+            RadioPlayer.SetParent(parent);
+
+            InitializeEqualizer();
         }
 
 
@@ -146,22 +116,6 @@ namespace AnotherMusicPlayer
             return Convert.ToInt64(((AudioFileReader)AudioList[CurrentFile]).CurrentTime.TotalMilliseconds);
         }
 
-        /// <summary> update an equalizer band Gain value </summary>
-        public void UpdateEqualizer(int Band, float Gain)
-        {
-            try { bands[Band].Gain = Gain; } catch { }
-            //Debug.WriteLine("Equalizer Band("+Band+") = Gain " + Gain);
-        }
-
-        /// <summary> update an equalizer with List<(int,float)>, int = band indicator, float = band gain </summary>
-        public void UpdateEqualizer(List<(int, float)> tab)
-        {
-            foreach ((int, float) band in tab)
-            {
-                try { bands[band.Item1].Gain = band.Item2; } catch { }
-            }
-        }
-
         /// <summary> Define status if repeat file playback active </summary>
         public void Repeat(bool rep) { PlayRepeat = rep; }
         /// <summary> Get status if repeat file playback active </summary>
@@ -170,333 +124,208 @@ namespace AnotherMusicPlayer
         /// <summary> Stop all currently playing threads </summary>
         public void StopAll()
         {
-            if (ThreadList.Count > 0)
+            if (Mode == Modes.File)
             {
-                foreach (KeyValuePair<string, Thread> entry in ThreadList)
+                if (ThreadList.Count > 0)
                 {
-                    PlayStatus[entry.Key] = 2;
-                }
-                foreach (KeyValuePair<string, object> entry in AudioList)
-                {
-                    try { ((AudioFileReader)entry.Value).Dispose(); }
+                    foreach (KeyValuePair<string, Thread> entry in ThreadList) { PlayStatus[entry.Key] = 2; }
+                    foreach (KeyValuePair<string, object> entry in AudioList) { try { ((AudioFileReader)entry.Value).Dispose(); } catch (Exception) { } }
+
+                    ThreadList.Clear(); PlayStatus.Clear(); PlayNewPositions.Clear(); AudioList.Clear();
+                    CurrentFile = null;
+
+                    try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); }
                     catch (Exception) { }
                 }
-
-                ThreadList.Clear();
-                PlayStatus.Clear();
-                PlayNewPositions.Clear();
-                AudioList.Clear();
-                CurrentFile = null;
-
-                try
-                {
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                    GC.Collect();
-                    GC.WaitForPendingFinalizers();
-                }
-                catch (Exception) { }
             }
+            else { RadioPlayer.Stop(); }
+        }
+
+        /// <summary> Stop media play for FilePath or CurrentFile if FilePath is null </summary>
+        public bool Stop(string FilePath = null)
+        {
+            if (Mode == Modes.File)
+            {
+                if (TestFile(FilePath))
+                {
+                    if (FilePath == null) { FilePath = CurrentFile; }
+                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 2; return true; }
+                }
+                return false;
+            }
+            else { RadioPlayer.Stop(); return true; }
         }
 
         /// <summary> Test if file exist, if input = null remplace it with value in CurrentFile </summary>
         public bool TestFile(string FilePath = null)
         {
-            if (FilePath == null) { if (CurrentFile == null) { return false; }; FilePath = CurrentFile; }
-            if (System.IO.File.Exists(FilePath)) { return true; }
+            if (Mode == Modes.File)
+            {
+                if (FilePath == null) { if (CurrentFile == null) { return false; }; FilePath = CurrentFile; }
+                if (System.IO.File.Exists(FilePath)) { return true; }
+                else { return false; }
+            }
             else { return false; }
         }
 
-        /// <summary> Add media into playlist </summary>
-        public bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0, long playDuration = 0, bool autoplay = false)
+        /// <summary> Open a new media playing thread </summary>
+        public bool Open(string FilePath, bool AutoPlay = false, long playDuration = 0, Modes mode = Modes.File)
         {
-
-            int initialNbFiles = PlayList.Count;
-            int goodFiles = 0;
-            string[] Tfiles = files;
-            if (random == true)
+            Mode = mode;
+            if (mode == Modes.File)
             {
-                List<string> tmp = new List<string>();
-                Random rnd = new Random();
-                int index = -1;
-                while (tmp.Count < files.Length)
+                //if (IsPlaying(FilePath)) { return false; }
+                if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath))
                 {
-                    index = rnd.Next(0, files.Length);
-                    if (tmp.Contains(files[index])) { continue; }
-                    tmp.Add(files[index]);
-                }
-                Tfiles = tmp.ToArray();
-            }
-            foreach (string file in Tfiles)
-            {
-                if (TestFile(file))
-                {
-                    PlayList.Add(file);
-                    goodFiles += 1;
-                }
-            }
-
-            if (initialNbFiles == 0)
-            {
-                if (PlayList.Count > playIndex && playIndex >= 0)
-                {
-                    Open(PlayList[playIndex], autoplay, playDuration);
-                    PlayListIndex = playIndex;
-                    CurrentFile = PlayList[playIndex];
+                    try
+                    {
+                        if (playDuration > 0) { PlayNewPositions.Add(FilePath, playDuration); }
+                        else { PlayNewPositions.Add(FilePath, -1); }
+                        Thread objThread = new Thread(new ParameterizedThreadStart(PlaySoundAsync));
+                        objThread.IsBackground = true;
+                        objThread.Priority = ThreadPriority.AboveNormal;
+                        objThread.Start(FilePath);
+                        ThreadList.Add(FilePath, objThread);
+                        PlayStatus.Add(FilePath, (AutoPlay) ? 1 : 0);
+                        PlayNewPositions.Add(FilePath, -1);
+                        if (AutoPlay)
+                        {
+                            CurrentFile = FilePath;
+                            return true;
+                        }
+                    }
+                    catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
                 }
             }
-
-            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
-            evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
-
-            PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
-            evt2.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt2);
-
-            return (goodFiles > 0) ? true : false;
+            else
+            {
+                PlaylistClear();
+                PlayList.Add("Radio:" + FilePath);
+                RadioPlayer.Init(FilePath, RadioPlayer.RadioType.M3u);
+                if (AutoPlay) { RadioPlayer.Start(); }
+            }
+            return false;
         }
 
-        /// <summary> Randomize playlist </summary>
-        public void PlaylistRandomize()
+        /// <summary> Open a new media playing thread </summary>
+        public async void OpenStream(string streamUrl, RadioPlayer.RadioType streamType, string streamID = "", string streamName = "", bool streamAutoPlay = false, string streamPrefix = "")
         {
-
-            List<string> tmp = new List<string>();
-            Random rnd = new Random();
-            int initialIndex = PlayListIndex;
-            string cFile = CurrentFile;
-            if (PlayList.Count < initialIndex)
-            {
-                if (PlayList[initialIndex] != cFile) { cFile = PlayList[initialIndex]; }
-            }
-            int size = PlayList.Count;
-
-            int index = -1;
-            while (tmp.Count < size)
-            {
-                index = rnd.Next(0, size);
-                if (tmp.Contains(PlayList[index])) { continue; }
-                tmp.Add(PlayList[index]);
-                if (PlayList[index] == cFile) { initialIndex = tmp.Count - 1; }
-            }
-
-            PlayList.Clear();
-            PlayList.AddRange(tmp);
-            PlayListIndex = initialIndex;
-
-            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
-            evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
-
-            PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
-            evt2.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt2);
-        }
-
-        /// <summary> Clear playlist </summary>
-        public void PlaylistClear()
-        {
+            Mode = Modes.Radio;
 
             StopAll();
             PlayList.Clear();
             PlayListIndex = 0;
-            CurrentFile = null;
+
+            RadioPlayer.Init(streamUrl, streamType, streamPrefix, streamName);
+            CurrentFile = "Radio|" + streamID + "|" + RadioPlayer.radioPrefix + RadioPlayer.PathStream;
+            PlayList.Add(CurrentFile);
+            if (streamAutoPlay) { _ = await RadioPlayer.Start(); }
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
             PlaylistChanged(this, evt);
 
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
-            evt2.Position = PlayListIndex;
+            evt2.Position = 0;
             PlaylistPositionChanged(this, evt2);
-        }
-
-        /// <summary> Read playlist </summary>
-        public void PlaylistReadIndex(int index)
-        {
-            if (index >= PlayList.Count) { return; }
-            Debug.WriteLine("--> PlaylistReadIndex <--");
-            Stop(PlayList[PlayListIndex]);
-            PlayListIndex = index;
-            Play(PlayList[PlayListIndex]);
-            CurrentFile = PlayList[PlayListIndex];
-
-            PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
-            evt.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt);
-        }
-
-        /// <summary> Remove item from playlist </summary>
-        public void PlaylistRemoveIndex(int index)
-        {
-            if (index >= PlayList.Count) { return; }
-            if (PlayList[index] == CurrentFile) { return; }
-            bool reindex = false;
-            if (PlayList.IndexOf(CurrentFile) > index) { reindex = true; }
-            Debug.WriteLine("--> PlaylistRemoveIndex <--");
-            PlayList.RemoveAt(index);
-
-            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
-            evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
-            if (reindex)
-            {
-                PlayListIndex -= 1;
-                PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
-                evt2.Position = PlayListIndex;
-                PlaylistPositionChanged(this, evt2);
-            }
-        }
-
-        /// <summary> Remove items from playlist </summary>
-        public void PlaylistRemoveIndexes(int[] indexes)
-        {
-            bool reindex = false;
-            Debug.WriteLine("--> PlaylistRemoveIndexes <--");
-            List<int> idxs = new List<int>(indexes);
-            idxs.Sort();
-            for (int i = idxs.Count - 1; i >= 0; i--)
-            {
-                int index = idxs[i];
-                if (index >= PlayList.Count) { continue; }
-                if (PlayList[index] == CurrentFile) { continue; }
-                if (PlayList.IndexOf(CurrentFile) > index) { reindex = true; PlayListIndex -= 1; }
-                PlayList.RemoveAt(index);
-            }
-
-            PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
-            evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
-            if (reindex)
-            {
-                PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
-                evt2.Position = PlayListIndex;
-                PlaylistPositionChanged(this, evt2);
-            }
-        }
-
-        /// <summary> Read next index in playlist </summary>
-        public void PlaylistNext()
-        {
-            Debug.WriteLine("--> PlaylistNext <--");
-            PlayListIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
-            Play(PlayList[PlayListIndex]);
-            CurrentFile = PlayList[PlayListIndex];
-
-            PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
-            evt.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt);
-        }
-
-        /// <summary> Preload next index in playlist </summary>
-        public void PlaylistPreloadNext()
-        {
-            //Debug.WriteLine("--> PlaylistPreloadNext <--");
-            int nextIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
-            if (ThreadList.ContainsKey(PlayList[nextIndex])) { return; }
-            Open(PlayList[nextIndex], false);
-        }
-
-        /// <summary> Open a new media playing thread </summary>
-        public bool Open(string FilePath, bool AutoPlay = false, long playDuration = 0)
-        {
-            //if (IsPlaying(FilePath)) { return false; }
-            if (TestFile(FilePath) && !ThreadList.ContainsKey(FilePath))
-            {
-                try
-                {
-                    if (playDuration > 0) { PlayNewPositions.Add(FilePath, playDuration); }
-                    else { PlayNewPositions.Add(FilePath, -1); }
-                    Thread objThread = new Thread(new ParameterizedThreadStart(PlaySoundAsync));
-                    objThread.IsBackground = true;
-                    objThread.Priority = ThreadPriority.AboveNormal;
-                    objThread.Start(FilePath);
-                    ThreadList.Add(FilePath, objThread);
-                    PlayStatus.Add(FilePath, (AutoPlay) ? 1 : 0);
-                    PlayNewPositions.Add(FilePath, -1);
-                    if (AutoPlay)
-                    {
-                        CurrentFile = FilePath;
-                        return true;
-                    }
-                }
-                catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-            }
-            return false;
         }
 
         /// <summary> Start media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Play(string FilePath = null, long playDuration = 0)
         {
-            if (FilePath == null) { FilePath = CurrentFile; }
-            if (FilePath == null) { return false; }
-            try
+            if (Mode == Modes.File)
             {
-                if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
-                if (TestFile(FilePath))
+                if (FilePath == null) { FilePath = CurrentFile; }
+                if (FilePath == null) { return false; }
+                try
                 {
-                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
-                    else { return Open(FilePath, true, playDuration); }
+                    if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
+                    if (TestFile(FilePath))
+                    {
+                        if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
+                        else { return Open(FilePath, true, playDuration); }
+                    }
                 }
+                catch { }
             }
-            catch { }
+            else
+            {
+                RadioPlayer.Start();
+            }
             return false;
         }
 
         /// <summary> Resume media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Resume(string FilePath = null)
+        public async Task<bool> Resume(string FilePath = null)
         {
-            if (IsSuspended) { IsSuspended = false; PlayStatus[CurrentFile] = 1; return true; } else { return Play(FilePath); }
+            if (Mode == Modes.File)
+            {
+                if (IsSuspended) { IsSuspended = false; PlayStatus[CurrentFile] = 1; return true; } else { return Play(FilePath); }
+            }
+            else
+            {
+                if (IsSuspended) { IsSuspended = false; }
+                return await RadioPlayer.Start();
+            }
         }
 
         /// <summary> Pause media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Pause(string FilePath = null)
         {
-            if (TestFile(FilePath))
+            if (Mode == Modes.File)
             {
-                if (FilePath == null) { FilePath = CurrentFile; }
-                if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 0; return true; }
+                if (TestFile(FilePath))
+                {
+                    if (FilePath == null) { FilePath = CurrentFile; }
+                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 0; return true; }
+                }
+                return false;
             }
-            return false;
+            else
+            {
+                RadioPlayer.Stop();
+                return true;
+            }
         }
 
         private bool IsSuspended = false;
         /// <summary> Suspend media play for FilePath or CurrentFile if FilePath is null </summary>
         public bool Suspend()
         {
-            if (CurrentFile != null)
+            if (Mode == Modes.File)
             {
-                IsSuspended = true;
-                Stop();
+                if (CurrentFile != null)
+                {
+                    IsSuspended = true;
+                    Stop();
+                }
+                return false;
             }
-            return false;
-        }
-
-        /// <summary> Stop media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Stop(string FilePath = null)
-        {
-            if (TestFile(FilePath))
+            else
             {
-                if (FilePath == null) { FilePath = CurrentFile; }
-                if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 2; return true; }
+                RadioPlayer.Stop();
+                return true;
             }
-            return false;
         }
 
         /// <summary> Test if FilePath played for FilePath or CurrentFile if FilePath is null </summary>
         public bool IsPlaying(string FilePath = null)
         {
-            try
+            if (Mode == Modes.File)
             {
-                if (TestFile(FilePath))
+                try
                 {
-                    if (FilePath == null) { FilePath = CurrentFile; }
-                    if (!PlayStatus.ContainsKey(FilePath)) { return false; }
-                    if (PlayStatus[FilePath] == 1) { return true; }
+                    if (TestFile(FilePath))
+                    {
+                        if (FilePath == null) { FilePath = CurrentFile; }
+                        if (!PlayStatus.ContainsKey(FilePath)) { return false; }
+                        if (PlayStatus[FilePath] == 1) { return true; }
+                    }
                 }
+                catch { }
+                return false;
             }
-            catch { }
-            return false;
+            else { return RadioPlayer.IsPlaying; }
         }
 
         /// <summary> Get/Set position for FilePath or CurrentFile if FilePath is null </summary>
@@ -555,157 +384,5 @@ namespace AnotherMusicPlayer
             return -1;
         }
 
-        /// <summary> Playing thread </summary>
-        private async void PlaySoundAsync(object file)
-        {
-            try
-            {
-                string FilePath = (string)file;
-                bool started = false;
-                AudioFileReader audioFile = null;
-                Equalizer equalizer = null;
-                WaveOutEvent outputDevice = null;
-
-                try { audioFile = new AudioFileReader(FilePath); }
-                catch (InvalidOperationException err)
-                {
-                    Debug.WriteLine("ERROR ==> VBR File detected, try file convertion");
-                    try
-                    {
-                        string path2 = Path.GetTempFileName();
-                        System.IO.File.Delete(path2);
-                        path2 += ".mp3";
-
-                        bool retC = await ConvExe(FilePath, path2);
-                        if (retC == false)
-                        {
-                            Debug.WriteLine("ERROR ==> VBR File convertion failure");
-                            PlaylistNext(); return;
-                        }
-                        FilesTags.SaveMediaInfo(path2, FilesTags.MediaInfo(FilePath, false), FilePath);
-                        System.IO.File.Move(FilePath, FilePath + ".old");
-                        System.IO.File.Move(path2, FilePath);
-                        audioFile = new AudioFileReader(FilePath);
-                        System.IO.File.Delete(FilePath + ".old");
-                    }
-                    catch (Exception err2)
-                    {
-                        Debug.WriteLine("ERROR ==> VBR File convertion failure");
-                        PlaylistNext(); return;
-                    }
-                }
-                catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); PlaylistNext(); return; }
-                equalizer = new Equalizer((ISampleProvider)audioFile, bands);
-                outputDevice = new WaveOutEvent();
-
-                //outputDevice.Init((IWaveProvider)audioFile);
-                outputDevice.Init(equalizer);
-                if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
-
-                int ret = -1; long ret2 = -1;
-
-                //while (outputDevice.PlaybackState == PlaybackState.Playing)
-                while (true)
-                {
-                    ret2 = ret = -1;
-                    PlayStatus.TryGetValue(FilePath, out ret);
-                    PlayNewPositions.TryGetValue(FilePath, out ret2);
-
-                    if (outputDevice == null)
-                    {
-                        if (IsSuspended == true) { Thread.Sleep(100); continue; }
-                        else
-                        {
-                            Debug.WriteLine("REPLAY !!!!");
-                            audioFile = new AudioFileReader(FilePath);
-                            equalizer = new Equalizer((ISampleProvider)audioFile, bands);
-                            outputDevice = new WaveOutEvent();
-                            outputDevice.Init(equalizer);
-                            if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
-                            outputDevice.Play();
-                        }
-                    }
-                    equalizer.Update();
-
-                    if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); }
-                    if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
-                    {
-                        outputDevice.Play(); CurrentFile = FilePath;
-                        PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
-                        evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
-                        LengthChanged(this, evtp);
-                        if (started == false) { parent.bdd.playCountUpdate(FilePath); }
-                        started = true;
-                    }
-                    if (ret == 2)
-                    {
-                        outputDevice.Stop();
-                        if (IsSuspended == true)
-                        {
-                            long msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
-                            PlayNewPositions[FilePath] = audioFile.Position / msval;
-                            try { outputDevice.Stop(); } catch { }
-                            outputDevice.Dispose();
-                            outputDevice = null;
-                            equalizer = null;
-                            audioFile.Close();
-                            audioFile.Dispose();
-                            audioFile = null;
-                            AudioList.Remove(FilePath);
-                        }
-                        else { break; }
-                    }
-                    if (ret2 != -1)
-                    {
-                        long msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
-                        audioFile.Position = ret2 * msval;
-                        PlayNewPositions[FilePath] = -1;
-                    }
-                    if (IsSuspended == false)
-                    {
-                        try
-                        {
-                            PlayerPositionChangedEventParams evt = new PlayerPositionChangedEventParams();
-                            evt.Position = (long)(audioFile.CurrentTime.TotalMilliseconds);
-                            evt.duration = (long)(audioFile.TotalTime.TotalMilliseconds);
-                            if (FilePath == CurrentFile) PositionChanged(this, evt);
-                            if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
-                            {
-                                if (PlayRepeat || (PlayListIndex + 1 == PlayList.Count && PlayList.Count == 1))
-                                {
-                                    audioFile.Position = 0;
-                                    PlayStatus[FilePath] = 1;
-                                    outputDevice.Play();
-                                }
-                                else
-                                {
-                                    PlaylistNext();
-                                    break;
-                                }
-                            }
-
-                            if (evt.Position >= evt.duration - 5000) { PlaylistPreloadNext(); }
-                        }
-                        catch { break; }
-                    }
-
-                    Thread.Sleep(100);
-                }
-                try { outputDevice.Stop(); } catch { }
-
-                outputDevice.Dispose();
-                ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose();
-                PlayStatus.Remove(FilePath);
-                PlayNewPositions.Remove(FilePath);
-                if (AudioList.ContainsKey(FilePath))
-                {
-                    ((AudioFileReader)AudioList[FilePath]).Dispose();
-                    AudioList.Remove(FilePath);
-                }
-                ThreadList.Remove(FilePath);
-            }
-            catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }
-            return;
-        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using Microsoft.Win32;
@@ -17,25 +18,25 @@ namespace AnotherMusicPlayer
     /// <summary>
     /// Basic example of a multi-band eq
     /// uses the same settings for both channels in stereo audio
-    /// Call Update after you've updated the bands
+    /// Call Update after you've updated the EqualizerBands
     /// Potentially to be added to NAudio in a future version
     /// </summary>
     class Equalizer : ISampleProvider
     {
         private readonly ISampleProvider sourceProvider;
-        private readonly EqualizerBand[] bands;
+        private readonly EqualizerBand[] EqualizerBands;
         private readonly BiQuadFilter[,] filters;
         private readonly int channels;
         private readonly int bandCount;
         private bool updated;
 
-        public Equalizer(ISampleProvider sourceProvider, EqualizerBand[] bands)
+        public Equalizer(ISampleProvider sourceProvider, EqualizerBand[] EqualizerBands)
         {
             this.sourceProvider = sourceProvider;
-            this.bands = bands;
+            this.EqualizerBands = EqualizerBands;
             channels = sourceProvider.WaveFormat.Channels;
-            bandCount = bands.Length;
-            filters = new BiQuadFilter[channels, bands.Length];
+            bandCount = EqualizerBands.Length;
+            filters = new BiQuadFilter[channels, EqualizerBands.Length];
             CreateFilters();
         }
 
@@ -43,7 +44,7 @@ namespace AnotherMusicPlayer
         {
             for (int bandIndex = 0; bandIndex < bandCount; bandIndex++)
             {
-                var band = bands[bandIndex];
+                var band = EqualizerBands[bandIndex];
                 for (int n = 0; n < channels; n++)
                 {
                     if (filters[n, bandIndex] == null)
@@ -62,7 +63,7 @@ namespace AnotherMusicPlayer
 
         public WaveFormat WaveFormat => sourceProvider.WaveFormat;
 
-        public int Read(float[] buffer, int offset=0, int count=0)
+        public int Read(float[] buffer, int offset = 0, int count = 0)
         {
             int samplesRead = 0;
             if (buffer == null) { return 0; }
@@ -87,6 +88,49 @@ namespace AnotherMusicPlayer
             }
             catch { }
             return samplesRead;
+        }
+    }
+
+    public partial class Player
+    {
+        /// <summary> list of equalizer EqualizerBands </summary>
+        private EqualizerBand[] EqualizerBands;
+        /// <summary> Maximum negative gain on an equalizer band </summary>
+        public readonly int MinimumGain = -20;
+        /// <summary> Maximum gain on an equalizer band </summary>
+        public readonly int MaximumGain = 20;
+
+        /// <summary> Initialize equalizer </summary>
+        public void InitializeEqualizer()
+        {
+            EqualizerBands = new EqualizerBand[]
+                {
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 60, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 170, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 310, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 600, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 1000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 3000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 6000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 12000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
+                    new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
+                };
+        }
+
+        /// <summary> update an equalizer band Gain value </summary>
+        public void UpdateEqualizer(int Band, float Gain)
+        {
+            try { EqualizerBands[Band].Gain = Gain; } catch { }
+        }
+
+        /// <summary> update an equalizer with List<(int,float)>, int = band indicator, float = band gain </summary>
+        public void UpdateEqualizer(List<(int, float)> tab)
+        {
+            foreach ((int, float) band in tab)
+            {
+                try { EqualizerBands[band.Item1].Gain = band.Item2; } catch { }
+            }
         }
     }
 

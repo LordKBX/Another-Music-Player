@@ -133,15 +133,31 @@ namespace AnotherMusicPlayer
                         else
                         {
                             file = PlayList[i][0];
-                            item = GetMediaInfoShort(file, previous_items);
-                            if (item != null)
+                            if (file.StartsWith("Radio|"))
                             {
-                                if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
-                                if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
-                                tmp.Add(item);
-                                if (i == min)
+                                string[] rtab = file.Split('|');
+                                item = new PlayListViewItem() { Name = file, Album = rtab[2], DurationS = "∞", OriginPath = file };
+                                if (rtab[1].Trim() != "")
                                 {
-                                    UpdateLeftPannelMediaInfo(file);
+                                    Dictionary<string, Dictionary<string, object>> data = bdd.DatabaseQuery("SELECT * FROM radios WHERE RID = " + rtab[1], "RID");
+                                    item.Name = data["" + rtab[1].Trim()]["Name"] as string;
+                                }
+                                tmp.Add(item);
+                                UpdateLeftPannelMediaInfo(file);
+                                break;
+                            }
+                            else
+                            {
+                                item = GetMediaInfoShort(file, previous_items);
+                                if (item != null)
+                                {
+                                    if (item.Name == null || item.Name == "") { item.Name = Path.GetFileName(item.Path); }
+                                    if (PlayListIndex == i) { item.Selected = PlayListSelectionChar; } else { item.Selected = ""; }
+                                    tmp.Add(item);
+                                    if (i == min)
+                                    {
+                                        UpdateLeftPannelMediaInfo(file);
+                                    }
                                 }
                             }
                         }

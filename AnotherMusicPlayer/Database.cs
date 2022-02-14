@@ -161,6 +161,16 @@ namespace AnotherMusicPlayer
                 DatabaseDetectOrCreateTable("playlists", "CREATE TABLE playlists(FIndex INTEGER, Name TEXT, Description TEXT, PRIMARY KEY(\"FIndex\" AUTOINCREMENT))");
                 DatabaseDetectOrCreateTable("playlistsItems", "CREATE TABLE playlistsItems (PIndex INTEGER, LIndex INTEGER NOT NULL DEFAULT 0, Path TEXT, LOrder INTEGER NOT NULL DEFAULT 0, PRIMARY KEY(\"PIndex\" AUTOINCREMENT))");
                 DatabaseDetectOrCreateTable("playCounts", "CREATE TABLE playCounts(Path TEXT, Cpt INTEGER NOT NULL DEFAULT 1, LastPlay NUMERIC NOT NULL DEFAULT 0, PRIMARY KEY(\"Path\"))");
+                DatabaseDetectOrCreateTable("radios", "CREATE TABLE radios("
+                    + "RID INTEGER,"
+                    + "Name TEXT NOT NULL,"
+                    + "Url TEXT NOT NULL,"
+                    + "UrlPrefix TEXT,"
+                    + "FType TEXT NOT NULL DEFAULT 'Stream',"
+                    + "Fragmented INTEGER NOT NULL DEFAULT 0,"
+                    + "Logo TEXT,"
+                    + "Description TEXT,"
+                    + "PRIMARY KEY(\"RID\" AUTOINCREMENT))");
                 DatabaseTansactionEnd();
             }
             catch { Debug.WriteLine("--> Database() : Catch ERROR <--"); }

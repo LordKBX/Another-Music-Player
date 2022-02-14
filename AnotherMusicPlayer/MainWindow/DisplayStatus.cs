@@ -49,15 +49,6 @@ namespace AnotherMusicPlayer
             }
         }
 
-        // SECTION HIDE IN RELEASE MODE
-        [Conditional("RELEASE")]
-        private void HideDebug()
-        {
-            BtnDebug.Visibility = Visibility.Collapsed;
-            SideBtnsGrid.RowDefinitions[7].Height = new GridLength(0);
-        }
-
-
         private enum TaskBarLocation { TOP, BOTTOM, LEFT, RIGHT }
         private struct WorkingAreaSize
         {

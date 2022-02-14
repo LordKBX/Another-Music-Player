@@ -75,7 +75,6 @@ namespace AnotherMusicPlayer
         {
             Parent = parent;
             AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            IsDebugCheck();
             bdd = obdd;
             // Set DataContext
             this.DataContext = this;
@@ -85,7 +84,12 @@ namespace AnotherMusicPlayer
 
             Settings.LoadSettings();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
-            HideDebug();//in release mode hide debug elements
+            IsDebugCheck();
+            if (isDebug == false)
+            {
+                SideBtnsGrid.RowDefinitions[7].Height = new GridLength(0);
+                BtnDebug.Visibility = Visibility.Collapsed;
+            }
             SettingsInit();//Initialize and load settings panel
             dialog1Image.Source = new BitmapImage(new Uri(BaseDirImg + "loadingx50.png"));
             BtnScanMetadataImage.Source = new BitmapImage(new Uri(BaseDirImg + "loadingx50.png"));
@@ -95,7 +99,7 @@ namespace AnotherMusicPlayer
             //TabControl t = new TabControl();
             //t.cli
             SetTitle("");
-            TabControler.SelectedIndex = 0;
+            TabControler.SelectedIndex = 2;
 
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -160,9 +164,17 @@ namespace AnotherMusicPlayer
 
         public void SetTitle(string title)
         {
-            this.Title = title;
-            try { customThumbnail.Title = title; } catch { }
-            this.TopBarTitle.Text = AppName + " - " + title;
+            if (title != null && title.Trim() != "")
+            {
+                this.Title = title;
+                try { customThumbnail.Title = title; } catch { }
+                this.TopBarTitle.Text = AppName + " - " + title;
+            }
+            else
+            {
+                try { customThumbnail.Title = AppName; } catch { }
+                this.TopBarTitle.Text = AppName;
+            }
         }
 
         private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -407,9 +419,9 @@ namespace AnotherMusicPlayer
 
         private void UpdateLeftPannelMediaInfo(string path = null)
         {
-            //Debug.WriteLine("--> UpdateLeftPannelMediaInfo <--");
-            //Debug.WriteLine("--> path = '"+path+"' <--");
             MediaItem item = new MediaItem();
+            Dictionary<string, Dictionary<string, object>> data = null;
+            string[] rtab = null;
             try
             {
                 if (path == null)
@@ -417,13 +429,27 @@ namespace AnotherMusicPlayer
                     if (PlayList.Count > 0) { path = PlayList[PlayListIndex][0]; }
                     Debug.WriteLine("--> path = '" + path + "' <--");
                 }
-                if (path != null)
+
+                if (path.StartsWith("Radio|"))
                 {
-                    Dictionary<string, object> ret = bdd.DatabaseFileInfo(path);
-                    if (ret != null)
+                    rtab = path.Split('|');
+                    item = new MediaItem() { Name = path, Album = rtab[2], DurationS = "∞", OriginPath = path };
+                    if (rtab[1].Trim() != "")
                     {
-                        item = null;
-                        item = DatabaseItemToMediaItem(ret);
+                        data = bdd.DatabaseQuery("SELECT * FROM radios WHERE RID = " + rtab[1], "RID");
+                        item.Name = data["" + rtab[1].Trim()]["Name"] as string;
+                    }
+                }
+                else
+                {
+                    if (path != null)
+                    {
+                        Dictionary<string, object> ret = bdd.DatabaseFileInfo(path);
+                        if (ret != null)
+                        {
+                            item = null;
+                            item = DatabaseItemToMediaItem(ret);
+                        }
                     }
                 }
 
@@ -501,10 +527,22 @@ namespace AnotherMusicPlayer
 
                 FileCover.Source = null;
                 FileCover.ToolTip = null;
-                System.Windows.Media.Imaging.BitmapImage bi = FilesTags.MediaPicture(item.Path, bdd, true, (Settings.MemoryUsage == 0) ? 150 : 250, (Settings.MemoryUsage == 0) ? 150 : 250);
+                System.Windows.Media.Imaging.BitmapImage bi = null;
+                if (path.StartsWith("Radio|"))
+                {
+                    string logo = data["" + rtab[1].Trim()]["Logo"] as string;
+                    string[] logoTab = logo.Split(',');
+                    if (logoTab.Length > 1) { logo = logoTab[1]; }
+                    try { bi = BitmapMagic.Base64StringToBitmap(logo); }
+                    catch (Exception err)
+                    {
+                        Debug.WriteLine("data[rtab[1].Trim()][\"Logo\"] = " + logo);
+                        Debug.WriteLine(JsonConvert.SerializeObject(err));
+                    }
+                }
+                else { bi = FilesTags.MediaPicture(item.Path, bdd, true, (Settings.MemoryUsage == 0) ? 150 : 250, (Settings.MemoryUsage == 0) ? 150 : 250); }
+
                 FileCover.Source = (bi ?? Bimage("CoverImg"));
-
-
 
                 LeftPannelMediaInfoR1.Height = new GridLength(nblines * 18);
             }

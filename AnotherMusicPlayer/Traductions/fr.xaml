@@ -217,6 +217,8 @@
     <sys:String x:Key="PlayListsAuto_mostPlayed">Les plus joués</sys:String>
     <sys:String x:Key="PlayListsAuto_mostRecentlyPlayed">Reçament joué</sys:String>
     <sys:String x:Key="PlayListsAuto_bestRating">Les mieux notées</sys:String>
+    <sys:String x:Key="PlayListsUser">Enregistré</sys:String>
+    <sys:String x:Key="PlayListsRadio">Web Radio</sys:String>
 
     <sys:String x:Key="PlayListsContextMenuPlayListPlay">Lire la liste</sys:String>
     <sys:String x:Key="PlayListsContextMenuPlayListDelete">Supprimer la liste</sys:String>

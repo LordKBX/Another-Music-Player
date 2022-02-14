@@ -466,13 +466,23 @@
                                 <TextBlock Text="{DynamicResource PlayListsHeaderCol1}" Foreground="White" VerticalAlignment="Center" Height="15" TextAlignment="Center" HorizontalAlignment="Center"/>
                             </Border>
                             <TreeView x:Name="PlaylistsTree"  Grid.Row="1" Margin="1,0,0,2" 
-                                      Style="{DynamicResource PlaylistsTreeStyle}" BorderThickness="0,0,0,1"
-                                      ScrollViewer.VerticalScrollBarVisibility="Disabled" BorderBrush="{DynamicResource BorderColor}"
+                                      Style="{DynamicResource PlaylistsTreeStyle}"
+                                      ScrollViewer.VerticalScrollBarVisibility="Disabled" 
                                       ScrollViewer.CanContentScroll="False" ContextMenuService.IsEnabled="True">
-                                <TreeViewItem x:Name="PlaylistsTreeAuto" Header="{DynamicResource PlayListsAuto}" Style="{DynamicResource PlaylistsTreeStyleItem}">
-                                    <TreeViewItem Header="BB" Style="{DynamicResource PlaylistsTreeStyleItem}"></TreeViewItem>
+                                <TreeViewItem x:Name="PlaylistsTreeAuto" Header="{DynamicResource PlayListsAuto}" 
+                                     IsExpanded="True" BorderBrush="{DynamicResource BorderColor}">
+                                    <TreeViewItem Header="BB"></TreeViewItem>
+                                    <TreeViewItem Header="DD"></TreeViewItem>
                                 </TreeViewItem>
-                                <TreeViewItem Header="CC" Style="{DynamicResource PlaylistsTreeStyleItem}">
+                                <TreeViewItem x:Name="PlaylistsTreeUser" Header="{DynamicResource PlayListsUser}" 
+                                     IsExpanded="True" BorderBrush="{DynamicResource BorderColor}">
+                                    <TreeViewItem Header="BB"></TreeViewItem>
+                                    <TreeViewItem Header="DD"></TreeViewItem>
+                                </TreeViewItem>
+                                <TreeViewItem x:Name="PlaylistsTreeRadio" Header="{DynamicResource PlayListsRadio}" 
+                                     IsExpanded="True" BorderBrush="{DynamicResource BorderColor}">
+                                    <TreeViewItem Header="BB"></TreeViewItem>
+                                    <TreeViewItem Header="DD"></TreeViewItem>
                                 </TreeViewItem>
                             </TreeView>
                         </Grid>
@@ -485,7 +495,7 @@
                                       AlternationCount="2" HorizontalContentAlignment="Left" 
                                       Padding="0,-1,0,0" 
                                       VerticalContentAlignment="Center" FlowDirection="LeftToRight" 
-                                      Margin="0,0,0,0" Grid.ColumnSpan="3"
+                                      Margin="0,0,0,0" Grid.ColumnSpan="3" Visibility="Collapsed"
                                       dd:DragDrop.IsDragSource="True" dd:DragDrop.IsDropTarget="True">
                                 <ListView.View>
                                     <GridView AllowsColumnReorder="False">
@@ -547,6 +557,31 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
+                            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsContents2Border" Style="{DynamicResource PlaylistsContentsStyle2}">
+                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsContents2" Margin="5">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="150" />
+                                        <ColumnDefinition Width="100*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="30" />
+                                        <RowDefinition Height="100*" />
+                                    </Grid.RowDefinitions>
+                                    <StackPanel Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
+                                        <Border BorderThickness="1" Style="{DynamicResource PlayBackListViewBorderStyle}" Grid.ColumnSpan="2">
+                                            <TextBlock Style="{DynamicResource PlayBackPanelInfoImageBlock}" VerticalAlignment="Top">
+                                        <Image x:Name="RadioCover" Grid.Row="0" Width="150" Height="150" 
+                                               RenderOptions.BitmapScalingMode="HighQuality"/>
+                                            </TextBlock>
+                                        </Border>
+                                        <Button x:Name="PlaylistsContents2BtnPlay" Content="Play" />
+                                    </StackPanel>
+
+                                    <TextBlock x:Name="PlaylistsContents2Label" Grid.Row="0" Grid.Column="1" Text="Label" Margin="5,-10,5,0" Padding="0" FontSize="30" 
+                                               TextTrimming="CharacterEllipsis" VerticalAlignment="Top"/>
+                                    <TextBlock x:Name="PlaylistsContents2Description" Grid.Row="1" Grid.Column="1" Text="Label" TextWrapping="WrapWithOverflow" Margin="5" FontSize="20"/>
+                                </Grid>
+                            </Border>
                         </Grid>
                     </Grid>
                 </TabItem>
@@ -858,7 +893,7 @@
                 <ProgressBar Grid.Column="1" x:Name="DisplayPlaybackPositionBar"
                              Value="00" SmallChange="0.0001" Maximum="1000" 
                              MouseDown="DisplayPlaybackPositionBar_MouseDown" 
-                             MouseMove="DisplayPlaybackPositionBar_MouseMove" 
+                             MouseMove="DisplayPlaybackPositionBar_MouseMove"
                              Style="{DynamicResource PlaybackPositionBarStyle}" Cursor="Hand" />
                 <Label Grid.Column="2" x:Name="DisplayPlaybackSize" Content="00:00" 
                        Style="{DynamicResource PlaybackSizeStyle}"/>

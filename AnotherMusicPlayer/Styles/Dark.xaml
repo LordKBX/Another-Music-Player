@@ -126,6 +126,11 @@
     <SolidColorBrush x:Key="PlayLsts.ListView.Active.Background" Color="#FFE6E6E6"/>
     <SolidColorBrush x:Key="PlayLsts.ListView.Active.Foreground" Color="#FF505050"/>
     <SolidColorBrush x:Key="PlayLsts.ListView.Active.Border" Color="#FF303030"/>
+
+    <SolidColorBrush x:Key="PlayLsts.TreeView.Background" Color="#FF404040"/>
+    <SolidColorBrush x:Key="PlayLsts.TreeView.Item.ForeGround" Color="#FFFFFFFF"/>
+    <SolidColorBrush x:Key="PlayLsts.TreeView.Item.Background.Selected" Color="#FF595959"/>
+    <SolidColorBrush x:Key="PlayLsts.TreeView.Item.Background.Over" Color="#FF777777"/>
     <!--#endregion-->
     <!--#region COLORS LIBRARY -->
     <SolidColorBrush x:Key="FolderButton.Background" Color="#FF959595"/>
@@ -1394,17 +1399,145 @@
     <!--#endregion-->
 
     <!--#region PLAYLISTS -->
-    <Style x:Key="PlaylistsTreeStyle" TargetType="{x:Type TreeView}" BasedOn="{StaticResource MaterialDesignTreeView}">
-        <Setter Property="Padding" Value="3"/>
+    <!--<Style x:Key="PlaylistsTreeStyle" TargetType="{x:Type TreeView}" BasedOn="{StaticResource MaterialDesignTreeView}">-->
+    <Style x:Key="PlaylistsTreeStyle" TargetType="{x:Type TreeView}">
+        <Setter Property="Padding" Value="0"/>
+        <Setter Property="Background" Value="{StaticResource PlayLsts.TreeView.Background}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+        <Setter Property="BorderThickness" Value="1,0,0,1"/>
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="ScrollViewer.HorizontalAlignment" Value="Left"/>
+        <Setter Property="HorizontalContentAlignment" Value="Left"/>
     </Style>
-    <Style x:Key="PlaylistsTreeStyleItem" TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource MaterialDesignTreeViewItem}">
-        <Setter Property="materialDesign:TreeViewAssist.ExpanderSize" Value="15"/>
-        <Setter Property="materialDesign:TreeViewAssist.ShowSelection" Value="True"/>
-        <Setter Property="Padding" Value="3"/>
-        <Setter Property="FontSize" Value="13"/>
+    <!--===== TreeViewItem ==========-->
+    <Style x:Key="TreeViewItemExpandCollapseToggleStyle" TargetType="ToggleButton">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ToggleButton">
+                    <Grid Width="15" Height="13" Background="Transparent">
+                        <Path x:Name="ExpandPath" HorizontalAlignment="Left"  VerticalAlignment="Center"
+                              Margin="1,1,1,1" Fill="{StaticResource PlayLsts.TreeView.Item.ForeGround}" 
+                              Data="M 4 0 L 8 4 L 4 8 Z"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="True">
+                            <Setter Property="Data" TargetName="ExpandPath" Value="M 0 4 L 8 4 L 4 8 Z"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="TreeViewItemFocusVisual">
+        <Setter Property="Control.Template">
+            <Setter.Value>
+                <ControlTemplate>
+                    <Border>
+                        <Rectangle Margin="0,0,0,0" StrokeThickness="5" Stroke="Black" StrokeDashArray="1 2" Opacity="0"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="{x:Type TreeViewItem}" TargetType="{x:Type TreeViewItem}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="{Binding Path=HorizontalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="VerticalContentAlignment" Value="{Binding Path=VerticalContentAlignment, RelativeSource={RelativeSource AncestorType={x:Type ItemsControl}}}"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Foreground" Value="{StaticResource PlayLsts.TreeView.Item.ForeGround}"/>
+        <Setter Property="FocusVisualStyle" Value="{StaticResource TreeViewItemFocusVisual}"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Setter Property="IsExpanded" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TreeViewItem}">
+                    <Border Name="Bd0" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="0,0,0,3" Margin="0,3,0,0">
+                        <Grid HorizontalAlignment="Stretch">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="100*"/>
+                                <ColumnDefinition Width="5"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="25px"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <ToggleButton x:Name="Expander" Style="{StaticResource TreeViewItemExpandCollapseToggleStyle}" 
+                                IsChecked="{Binding Path=IsExpanded, RelativeSource={RelativeSource TemplatedParent}}" 
+                                ClickMode="Press" Margin="3,0,0,0"/>
+                            <Border Name="Bd" Grid.Column="1" Background="{TemplateBinding Background}" 
+                                    Padding="{TemplateBinding Padding}" HorizontalAlignment="Stretch">
+                                <ContentPresenter x:Name="PART_Header" ContentSource="Header" 
+                                    HorizontalAlignment="Left"/>
+                            </Border>
+                            <ItemsPresenter x:Name="ItemsHost" Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2"/>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <EventTrigger RoutedEvent="Collapsed">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <BooleanAnimationUsingKeyFrames 
+                                            Duration="0" Storyboard.TargetProperty="(TreeViewItem.IsExpanded)">
+                                            <DiscreteBooleanKeyFrame KeyTime="0" Value="True" />
+                                        </BooleanAnimationUsingKeyFrames>
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <Trigger Property="IsExpanded" Value="false">
+                            <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="false">
+                            <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                        </Trigger>
+                        <Trigger Property="HasItems" Value="true">
+                            <Setter Property="Focusable" Value="false" />
+                            <Setter Property="IsSelected" Value="false" />
+                        </Trigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="HasHeader" Value="false"/>
+                                <Condition Property="Width" Value="Auto"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_Header" Property="MinWidth" Value="75"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="HasHeader" Value="false"/>
+                                <Condition Property="Height" Value="Auto"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="PART_Header" Property="MinHeight" Value="19"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsSelected" Value="true"/>
+                                <Condition Property="HasItems"  Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PlayLsts.TreeView.Item.Background.Selected}"/>
+                        </MultiTrigger>
+                        <MultiTrigger>
+                            <MultiTrigger.Conditions>
+                                <Condition Property="IsMouseOver" Value="true"/>
+                                <Condition Property="HasItems"  Value="false"/>
+                            </MultiTrigger.Conditions>
+                            <Setter TargetName="Bd" Property="Background" Value="{StaticResource PlayLsts.TreeView.Item.Background.Selected}"/>
+                        </MultiTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
     </Style>
 
     <Style TargetType="{x:Type ListView}" x:Key="PlaylistsContentsStyle">
+        <Setter Property="Background" Value="{StaticResource PlayLsts.Background}" />
+        <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
+        <Setter Property="BorderThickness" Value="1,1,1,1" />
+    </Style>
+    <Style TargetType="{x:Type Border}" x:Key="PlaylistsContentsStyle2">
         <Setter Property="Background" Value="{StaticResource PlayLsts.Background}" />
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}" />
         <Setter Property="BorderThickness" Value="1,1,1,1" />

@@ -27,7 +27,7 @@ namespace AnotherMusicPlayer
         /// <summary> Load media list of genres in the correspondant ComboBox </summary>
         public void LoadGenreList()
         {
-            Bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = REPLACE(REPLACE(REPLACE(REPLACE(Genres, ',', ';'), ' ,', ';'), ', ', ';'), '; ';')" }, true);
+            //Bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = REPLACE(REPLACE(REPLACE(REPLACE(Genres, ',', ';'), ' ,', ';'), ', ', ';'), '; ';')" }, true);
             Dictionary<string, Dictionary<string, object>> genresD = Bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY TRIM(Genres) ASC", "Genres");
             if (FilterGenreSelector.Items.Count > 0)
                 FilterGenreSelector.Items.Clear();

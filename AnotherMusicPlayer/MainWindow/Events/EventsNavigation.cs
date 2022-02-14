@@ -26,7 +26,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback click on media ProgressBar and change playing position </summary>
         private void DisplayPlaybackPositionBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (player.PlayList.Count == 0) { return; }
+            if (player.PlayList.Count == 0 || DisplayPlaybackPositionBar.IsIndeterminate == true) { return; }
             double MousePosition = e.GetPosition(DisplayPlaybackPositionBar).X;
 
             //DisplayPlaybackPositionBar.Value = DisplayPlaybackPositionBar.Minimum;

@@ -41,12 +41,15 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="ByteDev.M3u" Version="1.0.0" />
     <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
+    <PackageReference Include="m3uParser.NET" Version="1.0.17" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Core" Version="1.1.4" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
     <PackageReference Include="NAudio" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Serilog" Version="2.10.0" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />

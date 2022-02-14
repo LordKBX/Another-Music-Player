@@ -11,7 +11,19 @@ namespace AnotherMusicPlayer
     {
         #region Media Navigation Functions
         /// <summary> Play/Pause current media </summary>
-        public void Pause() { if (player.IsPlaying()) { player.Pause(); } else { player.Resume(); } }
+        public void Pause()
+        {
+            if (player.IsPlaying())
+            {
+                player.Pause();
+                if (player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = false; }
+            }
+            else
+            {
+                player.Resume();
+                if (player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = true; }
+            }
+        }
 
         /// <summary> Go to the previous media in PlayList </summary>
         public void PreviousTrack() { UpdatePlaylist(PlayListIndex - 1, true); }
@@ -36,20 +48,43 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("Player_PlaylistPositionChanged");
             Debug.WriteLine(JsonConvert.SerializeObject(e));
             PlayListIndex = e.Position;
-            MediaItem Fi = DatabaseItemToMediaItem(bdd.DatabaseFileInfo(player.PlayList[PlayListIndex]));
-            string ar = "";
-            if (Fi.Performers != null && Fi.Performers.Trim() != "") { ar += Fi.Performers.Replace(";", ", "); }
-            if (Fi.Composers != null && Fi.Composers.Trim() != "")
+            if (PlayListIndex < player.PlayList.Count)
             {
-                if (ar != "") { ar += ", "; }
-                ar += Fi.Composers.Replace(";", ", ");
-            }
+                string item = player.PlayList[PlayListIndex];
+                if (item.StartsWith("Radio|"))
+                {
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+                        string[] rtab = item.Trim().Split('|');
+                        if (rtab[1].Trim() != "")
+                        {
+                            Dictionary<string, Dictionary<string, object>> data = bdd.DatabaseQuery("SELECT * FROM radios WHERE RID = " + rtab[1], "RID");
+                        }
+                        else { }
+                        DisplayPlaybackPositionBar.Value = 0;
+                        if (RadioPlayer.IsPlaying) { DisplayPlaybackPositionBar.IsIndeterminate = true; }
+                    }));
+                }
+                else
+                {
+                    DisplayPlaybackPositionBar.IsIndeterminate = false;
+                    MediaItem Fi = DatabaseItemToMediaItem(bdd.DatabaseFileInfo(item));
+                    string ar = "";
+                    if (Fi.Performers != null && Fi.Performers.Trim() != "") { ar += Fi.Performers.Replace(";", ", "); }
+                    if (Fi.Composers != null && Fi.Composers.Trim() != "")
+                    {
+                        if (ar != "") { ar += ", "; }
+                        ar += Fi.Composers.Replace(";", ", ");
+                    }
 
-            Dispatcher.BeginInvoke(new Action(() =>
-            {
-                SetTitle(Fi.Name + ((Fi.Album != null && Fi.Album.Trim() != "") ? " - " + Fi.Album : "") + ((ar != "") ? " - " + ar : ""));
-                CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
-            }));
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        SetTitle(Fi.Name + ((Fi.Album != null && Fi.Album.Trim() != "") ? " - " + Fi.Album : "") + ((ar != "") ? " - " + ar : ""));
+                        CustomThumbnail_TabbedThumbnailBitmapRequested(null, null);
+                    }));
+                }
+            }
             Settings.LastPlaylistIndex = PlayListIndex;
             Settings.SaveSettings();
         }
@@ -59,9 +94,9 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("Player_PlaylistChanged");
             Debug.WriteLine(JsonConvert.SerializeObject(e));
             PlayList.Clear();
-            foreach (string file in e.playlist)
+            foreach (string item in e.playlist)
             {
-                PlayList.Add(new string[] { file, "" });
+                PlayList.Add(new string[] { item, "" });
             }
             UpdateRecordedQueue();
             Timer_Elapsed(null, null);

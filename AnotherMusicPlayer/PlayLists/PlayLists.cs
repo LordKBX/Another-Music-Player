@@ -10,6 +10,12 @@ using System.Windows.Input;
 using Newtonsoft.Json;
 using System.Windows.Media;
 using GongSolutions.Wpf.DragDrop;
+using NAudio.Wave;
+using m3uParser;
+using m3uParser.Model;
+using System.Threading.Tasks;
+using System.Timers;
+using System.Windows.Threading;
 
 namespace AnotherMusicPlayer
 {
@@ -86,6 +92,11 @@ namespace AnotherMusicPlayer
             Parent.PlaylistsContents.ContextMenu = null;
             Parent.PlaylistsContents.SelectionChanged += PlaylistsContents_SelectionChanged;
             Parent.PlaylistsContents.KeyUp += PlaylistsContents_KeyUp;
+
+            Parent.PlaylistsContents.Visibility = Visibility.Visible;
+            Parent.PlaylistsContents2Border.Visibility = Visibility.Collapsed;
+
+            Parent.PlaylistsContents2BtnPlay.Click += PlaylistsContents2BtnPlay_Click;
         }
 
         private void PlaylistsContents_KeyUp(object sender, KeyEventArgs e)
@@ -122,53 +133,23 @@ namespace AnotherMusicPlayer
         private List<string> autoList = new List<string>() { "lastImports", "mostPlayed", "mostRecentlyPlayed", "bestRating" };
         public void Init()
         {
-            int capacity = 150;
-            List<TreeViewItem> ListItems = new List<TreeViewItem>(capacity);
-            for (int i = 0; i < capacity; i++) { ListItems.Add(null); }
-
-            //TreeViewItem[] col = new TreeViewItem[150] {
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
-            //    null, null, null, null, null, null, null, null, null, null, null, null, null, null, null
-            //};
-            TreeViewItem[] col = ListItems.ToArray();
-            Parent.PlaylistsTree.Items.CopyTo(col, 0);
-            int cpt = 0;
-            foreach (TreeViewItem item in col)
-            {
-                if (item == null) { break; }
-                if (cpt > 0) { Parent.PlaylistsTree.Items.Remove(item); }
-                cpt += 1;
-            }
-
-            col = ListItems.ToArray();
-            ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.CopyTo(col, 0);
-            foreach (TreeViewItem item in col)
-            {
-                if (item == null) { break; }
-                ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Remove(item);
-            }
+            ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Clear();
+            ((TreeViewItem)Parent.PlaylistsTree.Items[1]).Items.Clear();
+            ((TreeViewItem)Parent.PlaylistsTree.Items[2]).Items.Clear();
+            double itemMaxWidth = 148;
 
             foreach (string archetype in autoList)
             {
                 TreeViewItem item = new TreeViewItem()
                 {
-                    Header = Parent.FindResource("PlayListsAuto_" + archetype) as string,
+                    Header = new TextBlock() { Text = Parent.FindResource("PlayListsAuto_" + archetype) as string, TextTrimming = TextTrimming.CharacterEllipsis },
                     Tag = "auto_" + archetype,
-                    Name = "auto_" + archetype
+                    Name = "auto_" + archetype,
+                    MaxWidth = itemMaxWidth
                 };
-                try { item.Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style; } catch { }
                 item.MouseLeftButtonUp += autolistClick;
                 item.ContextMenu = MakeContextMenu(item, "list");
                 ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Add(item);
-                cpt += 1;
             }
 
             Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description FROM playlists ORDER BY LOWER(Name) ASC", "FIndex");
@@ -176,22 +157,85 @@ namespace AnotherMusicPlayer
             {
                 TreeViewItem item = new TreeViewItem()
                 {
-                    Header = row.Value["Name"] as string,
-                    Style = Parent.FindResource("PlaylistsTreeStyleItem") as Style,
+                    Header = new TextBlock() { Text = row.Value["Name"] as string, TextTrimming = TextTrimming.CharacterEllipsis },
                     Tag = row.Value["FIndex"] as string,
-                    Name = "user_" + row.Value["FIndex"] as string
+                    Name = "user_" + row.Value["FIndex"] as string,
+                    MaxWidth = itemMaxWidth
                 };
                 if (row.Value["Description"] != null && row.Value["Description"] as string != "") { item.ToolTip = row.Value["Description"] as string; }
                 item.MouseLeftButtonUp += userlistClick;
                 item.ContextMenu = MakeContextMenu(item, "listCustom");
-                Parent.PlaylistsTree.Items.Add(item);
+                ((TreeViewItem)Parent.PlaylistsTree.Items[1]).Items.Add(item);
             }
+
+            Dictionary<string, Dictionary<string, object>> rez2 = Parent.bdd.DatabaseQuery("SELECT * FROM radios ORDER BY LOWER(Name) ASC", "RID");
+            foreach (KeyValuePair<string, Dictionary<string, object>> row in rez2)
+            {
+                TreeViewItem item = new TreeViewItem()
+                {
+                    Header = new TextBlock() { Text = row.Value["Name"] as string, TextTrimming = TextTrimming.CharacterEllipsis },
+                    Tag = row.Value,
+                    Name = "radio_" + row.Value["RID"] as string,
+                    MaxWidth = itemMaxWidth
+                };
+                item.MouseLeftButtonUp += radioClick;
+                item.MouseDoubleClick += radioDoubleClick;
+                item.ContextMenu = MakeContextMenu(item, "radio");
+                ((TreeViewItem)Parent.PlaylistsTree.Items[2]).Items.Add(item);
+            }
+        }
+
+        private void radioDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            RadioPlayer.Stop();
+            PlaylistsContents2BtnPlay_Click(null, null);
+        }
+
+        private Dictionary<string, object> CurentRadio = null;
+        private async void radioClick(object sender, MouseButtonEventArgs e)
+        {
+            if (CurentRadio == (Dictionary<string, object>)((TreeViewItem)sender).Tag)
+            {
+                Parent.PlaylistsContents2Border.Visibility = Visibility.Visible;
+                Parent.PlaylistsContents.Visibility = Visibility.Collapsed;
+                return;
+            }
+            CurentRadio = (Dictionary<string, object>)((TreeViewItem)sender).Tag;
+            //Debug.WriteLine(JsonConvert.SerializeObject(CurentRadio));
+
+            Parent.PlaylistsContents2Border.Visibility = Visibility.Visible;
+            Parent.PlaylistsContents.Visibility = Visibility.Collapsed;
+
+            Debug.WriteLine("CurentRadio[\"FType\"] = " + CurentRadio["FType"]);
+            Parent.PlaylistsContents2Label.Text = CurentRadio["Name"] as string;
+            Parent.PlaylistsContents2Description.Text = CurentRadio["Description"] as string;
+            System.Windows.Media.Imaging.BitmapImage bi = null;
+            string logo = CurentRadio["Logo"] as string;
+            string[] logoTab = logo.Split(',');
+            if (logoTab.Length > 1) { logo = logoTab[1]; }
+            try { bi = BitmapMagic.Base64StringToBitmap(logo); }
+            catch (Exception err)
+            {
+                Debug.WriteLine("CurentRadio[\"Logo\"] = " + logo);
+                Debug.WriteLine(JsonConvert.SerializeObject(err));
+            }
+            Parent.RadioCover.Source = (bi ?? MainWindow.Bimage("CoverImg"));
+        }
+
+        private async void PlaylistsContents2BtnPlay_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurentRadio["FType"] as string == "Stream")
+            { Parent.player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.Stream, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
+            else if (CurentRadio["FType"] as string == "M3u")
+            { Parent.player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.M3u, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
         }
 
         private void autolistClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             try
             {
+                Parent.PlaylistsContents.Visibility = Visibility.Visible;
+                Parent.PlaylistsContents2Border.Visibility = Visibility.Collapsed;
                 Debug.WriteLine("--> autolistClick");
                 string archetype = ((string)((TreeViewItem)sender).Tag).Replace("auto_", "");
                 Debug.WriteLine("--> autolistClick, Archetype: " + archetype);
@@ -245,6 +289,8 @@ namespace AnotherMusicPlayer
 
         public void userlistClick(object sender, MouseButtonEventArgs e)
         {
+            Parent.PlaylistsContents.Visibility = Visibility.Visible;
+            Parent.PlaylistsContents2Border.Visibility = Visibility.Collapsed;
             int id = Convert.ToInt32((string)((TreeViewItem)sender).Tag);
             Debug.WriteLine("--> Item_MouseLeftButtonUp, Id: " + id);
             Parent.PlaylistsContentsC0.Width = 0;

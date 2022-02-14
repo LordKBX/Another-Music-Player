@@ -103,7 +103,7 @@ namespace AnotherMusicPlayer
             if (player.GetCurrentFile() == PreviewControl.path) { PreviewControl.Update(); }
             else { PreviewControl.UpdateFile(player.GetCurrentFile()); }
             //customThumbnail.InvalidatePreview();
-            if (CustomThumbnailDisplayed == false || CustomThumbnailCouter >= 5)
+            if (CustomThumbnailDisplayed == false || CustomThumbnailCouter >= 10)
             {
                 Bitmap bt = GeneratePreview();
                 customThumbnail.SetImage(bt);
