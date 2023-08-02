@@ -61,6 +61,16 @@ namespace AnotherMusicPlayer.Properties {
         }
         
         /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap album_large {
+            get {
+                object obj = ResourceManager.GetObject("album_large", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Icon semblable à (Icône).
         /// </summary>
         public static System.Drawing.Icon icon_large {

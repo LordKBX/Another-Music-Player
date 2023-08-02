@@ -479,8 +479,19 @@
                                     <TreeViewItem Header="BB"></TreeViewItem>
                                     <TreeViewItem Header="DD"></TreeViewItem>
                                 </TreeViewItem>
-                                <TreeViewItem x:Name="PlaylistsTreeRadio" Header="{DynamicResource PlayListsRadio}" 
+                                <TreeViewItem x:Name="PlaylistsTreeRadio"
                                      IsExpanded="True" BorderBrush="{DynamicResource BorderColor}">
+                                    <TreeViewItem.Header>
+                                        <Grid HorizontalAlignment="Stretch">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="100*" />
+                                                <ColumnDefinition Width="20" />
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock Text="{DynamicResource PlayListsRadio}" />
+                                            <materialDesign:PackIcon Kind="PlusBold" HorizontalAlignment="Right" Margin="0" Width="15" Height="15" Grid.Column="1" 
+                                            x:Name="PlaylistsTreeWWebRadioAddButton" BorderBrush="White" BorderThickness="1" Cursor="Hand" Style="{DynamicResource TreeViewItemAddButton}" />
+                                        </Grid>
+                                    </TreeViewItem.Header>
                                     <TreeViewItem Header="BB"></TreeViewItem>
                                     <TreeViewItem Header="DD"></TreeViewItem>
                                 </TreeViewItem>
@@ -557,8 +568,20 @@
                                     </GridView>
                                 </ListView.View>
                             </ListView>
-                            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsContents2Border" Style="{DynamicResource PlaylistsContentsStyle2}">
-                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsContents2" Margin="5">
+                            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsRadioContentsBorder" 
+                                    Style="{DynamicResource PlaylistsContentsStyle2}">
+                                <ListBox HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                                    x:Name="PlaylistsRadioContents" HorizontalContentAlignment="Left"
+                                    Margin="5" ScrollViewer.CanContentScroll="True">
+                                    <ListBoxItem>
+                                        <Button Style="{DynamicResource PlayListsRadioButtonStyle}" 
+                                              Name="Radio" Tag="/AnotherMusicPlayer;component/icons/album_large.png" />
+                                    </ListBoxItem>
+                                </ListBox>
+                            </Border>
+                            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsRadioContents2Border" 
+                                    Style="{DynamicResource PlaylistsContentsStyle2}" Visibility="Collapsed">
+                                <Grid HorizontalAlignment="Stretch" VerticalAlignment="Stretch" x:Name="PlaylistsRadioContents2" Margin="5">
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="150" />
                                         <ColumnDefinition Width="100*" />
@@ -574,12 +597,14 @@
                                                RenderOptions.BitmapScalingMode="HighQuality"/>
                                             </TextBlock>
                                         </Border>
-                                        <Button x:Name="PlaylistsContents2BtnPlay" Content="Play" />
+                                        <Button x:Name="PlaylistsRadioContents2BtnPlay" Content="Play" />
                                     </StackPanel>
 
-                                    <TextBlock x:Name="PlaylistsContents2Label" Grid.Row="0" Grid.Column="1" Text="Label" Margin="5,-10,5,0" Padding="0" FontSize="30" 
+                                    <TextBlock x:Name="PlaylistsRadioContents2Label" Grid.Row="0" Grid.Column="1" Text="Label" Margin="5,-10,5,0" Padding="0" FontSize="30" 
                                                TextTrimming="CharacterEllipsis" VerticalAlignment="Top"/>
-                                    <TextBlock x:Name="PlaylistsContents2Description" Grid.Row="1" Grid.Column="1" Text="Label" TextWrapping="WrapWithOverflow" Margin="5" FontSize="20"/>
+                                    <ScrollViewer Grid.Row="1" Grid.Column="1">
+                                        <TextBlock x:Name="PlaylistsRadioContents2Description" Text="Label" TextWrapping="WrapWithOverflow" Margin="5" FontSize="20"/>
+                                    </ScrollViewer>
                                 </Grid>
                             </Border>
                         </Grid>

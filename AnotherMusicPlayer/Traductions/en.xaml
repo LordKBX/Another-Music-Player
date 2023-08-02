@@ -220,6 +220,7 @@
     <sys:String x:Key="PlayListsAuto_bestRating">Best rating</sys:String>
     <sys:String x:Key="PlayListsUser">Recorded</sys:String>
     <sys:String x:Key="PlayListsRadio">Web Radio</sys:String>
+    <sys:String x:Key="PlayListsRadioDefault">Miscellaneous</sys:String>
 
     <sys:String x:Key="PlayListsContextMenuPlayListPlay">Play list</sys:String>
     <sys:String x:Key="PlayListsContextMenuPlayListDelete">Delete Playlist</sys:String>
@@ -231,6 +232,23 @@
     <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmTitle">Deleting Selection</sys:String>
     <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmMessage" xml:space="preserve">Do you confirm the suppression of Track &#10; '%X%' ?</sys:String>
     <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmMessage2">Do you confirm the suppression of the selected Tracks ?</sys:String>
+
+    <sys:String x:Key="PlayListsContextMenuRadioAddCategory">Add category</sys:String>
+    <sys:String x:Key="PlayListsContextMenuRadioAddRadio">Add radio</sys:String>
+    <!--#endregion-->
+
+    <!--#region LIBRARY Window Add Radio an Radio Category -->
+    <sys:String x:Key="PlaylistsWindowAddRadioTitle">Add a web radio ...</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioCategoryTitle">Add a web radio category ...</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelCategory">Category</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelName">Name</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelUrl">Url</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelUrlType">Url Type</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelTypeStream">Stream</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelTypeM3u">M3u</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelPrefixUrl">Url Prefix</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelDescription">Description</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelSave">Save</sys:String>
     <!--#endregion-->
     
 </ResourceDictionary>

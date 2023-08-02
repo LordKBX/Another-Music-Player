@@ -219,6 +219,7 @@
     <sys:String x:Key="PlayListsAuto_bestRating">Les mieux notées</sys:String>
     <sys:String x:Key="PlayListsUser">Enregistré</sys:String>
     <sys:String x:Key="PlayListsRadio">Web Radio</sys:String>
+    <sys:String x:Key="PlayListsRadioDefault">Divers</sys:String>
 
     <sys:String x:Key="PlayListsContextMenuPlayListPlay">Lire la liste</sys:String>
     <sys:String x:Key="PlayListsContextMenuPlayListDelete">Supprimer la liste</sys:String>
@@ -230,6 +231,23 @@
     <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmTitle">Suppression de piste</sys:String>
     <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmMessage" xml:space="preserve">Confirmez-vous la suppression de la piste &#10; '%X%' ?</sys:String>
     <sys:String x:Key="PlayListsContextMenuTrackDeleteConfirmMessage2">Confirmez-vous la suppression des pistes selectionnées ?</sys:String>
+
+    <sys:String x:Key="PlayListsContextMenuRadioAddCategory">Ajouter une catégorie</sys:String>
+    <sys:String x:Key="PlayListsContextMenuRadioAddRadio">Ajouter radio</sys:String>
+    <!--#endregion-->
+
+    <!--#region LIBRARY Window Add Radio an Radio Category -->
+    <sys:String x:Key="PlaylistsWindowAddRadioTitle">Ajouter une web radio ...</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioCategoryTitle">Ajouter une catégorie de web radio ...</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelCategory">Catégorie</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelName">Nom</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelUrl">Url</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelUrlType">Url Type</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelTypeStream">Stream</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelTypeM3u">M3u</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelPrefixUrl">Url Prefix</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelDescription">Description</sys:String>
+    <sys:String x:Key="PlaylistsWindowAddRadioLabelSave">Sauvegarder</sys:String>
     <!--#endregion-->
     
 </ResourceDictionary>

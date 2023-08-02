@@ -11,16 +11,16 @@ namespace AnotherMusicPlayer
     {
         #region Media Navigation Functions
         /// <summary> Play/Pause current media </summary>
-        public void Pause()
+        public void Pause(bool UpdateOnly = false)
         {
             if (player.IsPlaying())
             {
-                player.Pause();
+                if (UpdateOnly == false) { player.Pause(); }
                 if (player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = false; }
             }
             else
             {
-                player.Resume();
+                if (UpdateOnly == false) { player.Resume(); }
                 if (player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = true; }
             }
         }
@@ -68,7 +68,10 @@ namespace AnotherMusicPlayer
                 }
                 else
                 {
-                    DisplayPlaybackPositionBar.IsIndeterminate = false;
+                    Dispatcher.BeginInvoke(new Action(() =>
+                    {
+                        DisplayPlaybackPositionBar.IsIndeterminate = false;
+                    }));
                     MediaItem Fi = DatabaseItemToMediaItem(bdd.DatabaseFileInfo(item));
                     string ar = "";
                     if (Fi.Performers != null && Fi.Performers.Trim() != "") { ar += Fi.Performers.Replace(";", ", "); }

@@ -69,7 +69,10 @@ namespace AnotherMusicPlayer
                 //Win1_SizeChanged(null, null);
 
                 // Section update display button Play/Pause
-                if (player.IsPlaying())
+                bool playing = false;
+                if (player.Mode == Player.Modes.File) { playing = player.IsPlaying(); }
+                else { playing = RadioPlayer.IsPlaying; }
+                if (playing)
                 {
                     if (Timer_IsPlaying == false)
                     {

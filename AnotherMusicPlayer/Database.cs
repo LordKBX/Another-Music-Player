@@ -163,6 +163,7 @@ namespace AnotherMusicPlayer
                 DatabaseDetectOrCreateTable("playCounts", "CREATE TABLE playCounts(Path TEXT, Cpt INTEGER NOT NULL DEFAULT 1, LastPlay NUMERIC NOT NULL DEFAULT 0, PRIMARY KEY(\"Path\"))");
                 DatabaseDetectOrCreateTable("radios", "CREATE TABLE radios("
                     + "RID INTEGER,"
+                    + "Category INTEGER NOT NULL DEFAULT 0,"
                     + "Name TEXT NOT NULL,"
                     + "Url TEXT NOT NULL,"
                     + "UrlPrefix TEXT,"
@@ -171,6 +172,12 @@ namespace AnotherMusicPlayer
                     + "Logo TEXT,"
                     + "Description TEXT,"
                     + "PRIMARY KEY(\"RID\" AUTOINCREMENT))");
+                DatabaseDetectOrCreateTable("radiosCategories", "CREATE TABLE radiosCategories ("
+                    + "CRID INTEGER,"
+                    + "Name TEXT NOT NULL,"
+                    + "Description TEXT,"
+                    + "Logo TEXT,"
+                    + "PRIMARY KEY(\"CRID\" AUTOINCREMENT))");
                 DatabaseTansactionEnd();
             }
             catch { Debug.WriteLine("--> Database() : Catch ERROR <--"); }

@@ -122,6 +122,7 @@ namespace AnotherMusicPlayer
                         {
                             if (FilePath.ToLower().EndsWith(ext))
                             {
+                                //Debug.WriteLine("File ext ok");
                                 item.Duration = (long)((new AudioFileReader(FilePath)).TotalTime.TotalMilliseconds);
                                 item.DurationS = MainWindow.displayTime(item.Duration); break;
                             }

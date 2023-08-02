@@ -211,12 +211,20 @@ namespace AnotherMusicPlayer
                         wavePlayer = null;
                     }
                     wavePlayer = new WaveOutEvent();
+                    wavePlayer.DesiredLatency = 5000;
                     wavePlayer.Init(new MediaFoundationReader(PathStream));
+                    wavePlayer.PlaybackStopped += WavePlayer_PlaybackStopped1_Stream;
                     wavePlayer.Play(); _IsPlaying = true;
                 }
                 return true;
             }
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); return false; }
+        }
+
+        private static void WavePlayer_PlaybackStopped1_Stream(object sender, StoppedEventArgs e)
+        {
+            Debug.WriteLine(" >>> WavePlayer_PlaybackStopped1_Stream");
+            Parent.Pause();
         }
 
         public static async void Stop()
@@ -226,6 +234,7 @@ namespace AnotherMusicPlayer
             {
                 if (aTimer != null) { aTimer.Stop(); }
                 radioManualStop = true;
+                wavePlayer.PlaybackStopped -= WavePlayer_PlaybackStopped1_Stream;
                 wavePlayer.Stop();
                 wavePlayer.Dispose();
                 wavePlayer = null;

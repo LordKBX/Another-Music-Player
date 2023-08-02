@@ -100,7 +100,7 @@ namespace AnotherMusicPlayer
         /// </summary>
         /// <param name="src">A bitmap image</param>
         /// <returns>The image as a BitmapImage for WPF</returns>
-        private static BitmapImage ConvertBitmapToBitmapImage(Bitmap src)
+        public static BitmapImage ConvertBitmapToBitmapImage(Bitmap src)
         {
             MemoryStream ms = new MemoryStream();
             ((System.Drawing.Bitmap)src).Save(ms, System.Drawing.Imaging.ImageFormat.Bmp);
@@ -112,10 +112,18 @@ namespace AnotherMusicPlayer
             return image;
         }
 
-        public static Bitmap ResizeImage(System.Drawing.Image image, int width, int height)
+        public static Bitmap ResizeImage(System.Drawing.Image image, int MaxWidth, int MaxHeight)
         {
-            System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, width, height);
-            Bitmap destImage = new Bitmap(width, height);
+            int OriginWidth = image.Width;
+            int OriginHeight = image.Height;
+
+            int Width = OriginWidth;
+            int Height = OriginHeight;
+            if (MaxHeight < OriginHeight) { Height = MaxHeight; Width = OriginWidth * Height / OriginHeight; }
+            if (MaxWidth < Width) { Height = Height * Width / MaxWidth; Width = MaxWidth; }
+
+            System.Drawing.Rectangle destRect = new System.Drawing.Rectangle(0, 0, Width, Height);
+            Bitmap destImage = new Bitmap(Width, Height);
 
             destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 

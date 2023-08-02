@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -88,7 +89,9 @@ namespace AnotherMusicPlayer
 
                 DisplayPlaybackPosition.Content = Parent.DisplayPlaybackPosition.Content;
                 DisplayPlaybackSize.Content = item.DurationS;
-                DisplayPlaybackPositionBar.Value = Parent.lastPlaybackPosition * 1000 / item.Duration;
+                if (item.Duration > 0) { try { DisplayPlaybackPositionBar.Value = Parent.lastPlaybackPosition * 1000 / item.Duration; } catch (Exception ex) { DisplayPlaybackPositionBar.Value = 0; } }
+                else { DisplayPlaybackPositionBar.Value = 0; }
+                
             }
         }
     }

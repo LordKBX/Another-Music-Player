@@ -25,4 +25,17 @@
             <materialDesign:PackIcon Kind="Delete"/>
         </MenuItem.Icon>
     </MenuItem>
+    
+    <!--#region Add radio button-->
+    <MenuItem Name="AddCategoryRadio" Header="{DynamicResource PlayListsContextMenuPlayListRadioAddCategory}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="FolderPlus"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Name="AddRadio" Header="{DynamicResource PlayListsContextMenuPlayListRadioAddRadio}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="Radio"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <!--#endregion-->
 </ContextMenu>
