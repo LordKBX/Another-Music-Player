@@ -230,7 +230,7 @@ namespace AnotherMusicPlayer
 
         private void RadioCategory_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private void radioDoubleClick(object sender, MouseButtonEventArgs e)

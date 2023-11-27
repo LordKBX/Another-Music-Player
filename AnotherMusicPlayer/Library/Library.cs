@@ -225,6 +225,7 @@ namespace AnotherMusicPlayer
 
             pathNavigator.Display(path);
             SearchResultsContener.ItemsSource = null;
+            NavigationContener.Tag = path;
             NavigationContener.Children.Clear();
             NavigationContenerScoller.ContextMenu = null;
             NavigationContenerScoller.ContextMenu = MakeContextMenu(NavigationContener, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);

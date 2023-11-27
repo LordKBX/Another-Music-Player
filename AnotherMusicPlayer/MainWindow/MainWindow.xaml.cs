@@ -69,10 +69,12 @@ namespace AnotherMusicPlayer
         private void IsDebugCheck() { isDebug = true; }
 
         private App Parent = null;
+        public static MainWindow? Instance;
 
         /// <summary> Constructor </summary>
         public MainWindow(Database obdd, App parent)
         {
+            Instance = this;
             Parent = parent;
             AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
             bdd = obdd;
@@ -99,8 +101,13 @@ namespace AnotherMusicPlayer
             //TabControl t = new TabControl();
             //t.cli
             SetTitle("");
-            TabControler.SelectedIndex = 2;
-
+            DebugBaseDir();
+            if (isDebug) { TabControler.SelectedIndex = 1; }
+            else { 
+                TabControler.SelectedIndex = 0;
+                this.BtnDebug.Visibility = Visibility.Collapsed;
+            }
+            
             PlayListIndex = Settings.LastPlaylistIndex;
 
             Debug.WriteLine("LastPlaylistIndex: " + Settings.LastPlaylistIndex);

@@ -77,10 +77,12 @@ namespace AnotherMusicPlayer
         public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar;
         /// <summary> Base Diractory of the icon folder </summary>
         public static string BaseDirImg = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar + "icons" + SeparatorChar;
+        public static bool IsDebug = false;
 
         [Conditional("DEBUG")]
         static public void DebugBaseDir()
         {
+            IsDebug = true;
             Debug.WriteLine(">>> DebugBaseDir() <<<");
             MainWindow.BaseDir = "D:\\CODES\\VS\\MediaPlayer\\AnotherMusicPlayer";
         }

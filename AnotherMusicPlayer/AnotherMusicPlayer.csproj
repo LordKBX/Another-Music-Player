@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net6.0-windows7.0</TargetFramework>
     <UseWPF>true</UseWPF>
     <Authors>LordKBX</Authors>
     <Company>LordKBX Workshop</Company>
@@ -9,7 +9,7 @@
     <PackageId>AnotherMusicPlayer</PackageId>
     <AssemblyName>AnotherMusicPlayer</AssemblyName>
     <RootNamespace>AnotherMusicPlayer</RootNamespace>
-    <Version>0.1.7.3</Version>
+    <Version>0.1.7.4</Version>
     <Copyright>LordKBX Workshop 2022</Copyright>
     <PackageLicenseFile>LICENSE</PackageLicenseFile>
     <RepositoryUrl>https://github.com/LordKBX/Another-Music-Player</RepositoryUrl>
@@ -20,10 +20,10 @@
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <ApplicationIcon>icons\icon_large.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
-    <AssemblyVersion>0.1.7.3</AssemblyVersion>
-    <FileVersion>0.1.7.3</FileVersion>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <NeutralLanguage>en</NeutralLanguage>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="icons\icon_large.ico" />
@@ -69,6 +69,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -185,6 +190,10 @@
     </None>
     <None Update="ffmpeg.exe">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </None>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

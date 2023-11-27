@@ -13,7 +13,7 @@ namespace AnotherMusicPlayer
 {
     public partial class Library
     {
-        private ContextMenu MakeContextMenu(object parent, string otype = null, bool back = false, string backPath = "")
+        public ContextMenu MakeContextMenu(object parent, string otype = null, bool back = false, string backPath = "")
         {
             if (otype == null || otype == "") { otype = "track"; }
             string type = otype = otype.ToLower();
@@ -64,8 +64,11 @@ namespace AnotherMusicPlayer
                     if (type == "file") { ((MenuItem)cm.Items[i]).Click += CM_EditTrack; }
                     if (type == "track") { ((MenuItem)cm.Items[i]).Click += CM_EditTrack; }
                     if (type == "album") { ((MenuItem)cm.Items[i]).Click += CM_EditAlbum; }
-                    if (type == "folder") { ((MenuItem)cm.Items[i]).Click += CM_EditFolder; }
-
+                    if (type == "folder") {
+                        if (MainWindow.Instance.library.CurrentPath == Settings.LibFolder && parent.GetType().Name == "AlignablePanel") 
+                        { ((MenuItem)cm.Items[i]).Visibility = Visibility.Collapsed; }
+                        else { ((MenuItem)cm.Items[i]).Click += CM_EditFolder; }
+                    }
                 }
                 else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playlistsadd" + type)
                 {
@@ -117,13 +120,21 @@ namespace AnotherMusicPlayer
 
         private void CM_AddPlaylistFolder(object sender, RoutedEventArgs e)
         {
-            MenuItem item = (MenuItem)sender;
-            string folder = null;
-            try { folder = ((Button)item.Tag).Tag as string; }
-            catch { }
-            if (folder == null) { return; }
-            string[] tracks = getDirectoryMediaFIles(folder, true);
-            Parent.playLists.RecordTracksIntoPlaylist(tracks);
+            try
+            {
+                MenuItem item = (MenuItem)sender;
+                string folder = null;
+
+                if (item.Tag == null) { return; }
+                else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
+                else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
+                else if (item.Tag.GetType().Name == "TextBlock") { folder = ((TextBlock)item.Tag).Tag as string; }
+
+                if (folder == null) { return; }
+                string[] tracks = getDirectoryMediaFIles(folder, true);
+                Parent.playLists.RecordTracksIntoPlaylist(tracks);
+            }
+            catch(Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
         }
 
         #region ContextMenu Add Playlist functions
@@ -158,8 +169,10 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((Button)item.Tag).Tag as string; }
-            catch { }
+            if (item.Tag == null) { return; }
+            else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
+            else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
+            else if (item.Tag.GetType().Name == "TextBlock") { folder = ((TextBlock)item.Tag).Tag as string; }
             if (folder == null) { return; }
             Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
         }
@@ -189,12 +202,10 @@ namespace AnotherMusicPlayer
             else
             {
                 string folder = null;
-                try { folder = ((Button)item.Tag).Tag as string; }
-                catch
-                {
-                    try { }
-                    catch { }
-                }
+                if (item.Tag == null) { return; }
+                else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
+                else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
+                else if (item.Tag.GetType().Name == "TextBlock") { folder = ((TextBlock)item.Tag).Tag as string; }
                 if (folder == null) { return; }
                 Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
             }
@@ -236,12 +247,10 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string folder = null;
-            try { folder = ((Button)item.Tag).Tag as string; }
-            catch
-            {
-                try { }
-                catch { }
-            }
+            if (item.Tag == null) { return; }
+            else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
+            else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
+            else if (item.Tag.GetType().Name == "TextBlock") { folder = ((TextBlock)item.Tag).Tag as string; }
             if (folder == null) { return; }
             Parent.player.PlaylistClear();
             Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
@@ -259,31 +268,36 @@ namespace AnotherMusicPlayer
 
         private void CM_PlayShuffledFolder(object sender, RoutedEventArgs e)
         {
-            MenuItem item = (MenuItem)sender;
-            if (item.Tag.GetType().Name == "ListView")
+            try
             {
-                ListView view = (ListView)item.Tag;
-                if (view.SelectedItems.Count > 0)
+                MenuItem item = (MenuItem)sender; 
+                Debug.WriteLine(item.Tag.GetType().Name);
+                if (item.Tag.GetType().Name == "ListView")
                 {
-                    List<string> files = new List<string>();
-                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    ListView view = (ListView)item.Tag;
+                    if (view.SelectedItems.Count > 0)
+                    {
+                        List<string> files = new List<string>();
+                        foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                        Parent.player.PlaylistClear();
+                        Parent.player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
+                    }
+                }
+                else
+                {
+                    string folder = null;
+                    if (item.Tag == null) { return; }
+                    else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
+                    else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
+                    else if (item.Tag.GetType().Name == "TextBlock") { folder = ((TextBlock)item.Tag).Tag as string; }
+                    else { Debug.WriteLine(item.Tag.GetType().Name); }
+
+                    if (folder == null) { return; }
                     Parent.player.PlaylistClear();
-                    Parent.player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
+                    Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
                 }
             }
-            else
-            {
-                string folder = null;
-                try { folder = ((Button)item.Tag).Tag as string; }
-                catch
-                {
-                    try { }
-                    catch { }
-                }
-                if (folder == null) { return; }
-                Parent.player.PlaylistClear();
-                Parent.player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
-            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
         }
         #endregion
 
@@ -336,21 +350,26 @@ namespace AnotherMusicPlayer
         private void CM_EditFolder(object sender, RoutedEventArgs e)
         {
             MenuItem item = (MenuItem)sender;
-            Button btn = (Button)item.Tag;
-            string folderPath = ((string)btn.Tag).Trim().TrimEnd(MainWindow.SeparatorChar);
-            Debug.WriteLine("--> CM_EditFolder, folderPath='" + folderPath + "'");
-            string[] pathTab = folderPath.Split(MainWindow.SeparatorChar);
-            Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
-
-            RenameWindow win = new RenameWindow(Parent, folderPath, pathTab);
-            win.ShowDialog();
-            if (win.renamed == true)
+            if (item.Tag == null) { return; }
+            else if (item.Tag.GetType().Name == "Button")
             {
-                DisplayPath(CurrentPath);
+                Button btn = (Button)item.Tag;
+                string folderPath = ((string)btn.Tag).Trim().TrimEnd(MainWindow.SeparatorChar);
+                Debug.WriteLine("--> CM_EditFolder, folderPath='" + folderPath + "'");
+                string[] pathTab = folderPath.Split(MainWindow.SeparatorChar);
+                Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
+
+                RenameWindow win = new RenameWindow(Parent, folderPath, pathTab);
+                win.ShowDialog();
+                if (win.renamed == true)
+                {
+                    DisplayPath(CurrentPath);
+                }
+                //throw new System.NotImplementedException(); }
             }
-            //throw new System.NotImplementedException();
+            else if (item.Tag.GetType().Name == "AlignablePanel") { return; }
         }
-        #endregion
+            #endregion
     }
 
     /// <summary>

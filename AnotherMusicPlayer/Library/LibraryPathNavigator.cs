@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace AnotherMusicPlayer
 {
@@ -55,7 +56,7 @@ namespace AnotherMusicPlayer
                 tb.Text = Parent.Parent.FindResource("LibraryNavigatorItemHome") as string;
                 tb.Tag = RootPath;
                 tb.MouseLeftButtonDown += PathClicked;
-                tb.ContextMenu = MakeContextMenu();
+                tb.ContextMenu = MakeContextMenu(tb, RootPath);
                 Contener.Children.Add(tb);
 
                 foreach (string name in workTab)
@@ -73,7 +74,7 @@ namespace AnotherMusicPlayer
                     tb3.Text = name;
                     tb3.Tag = newPath;
                     tb3.MouseLeftButtonDown += PathClicked;
-                    tb3.ContextMenu = MakeContextMenu();
+                    tb3.ContextMenu = MakeContextMenu(tb3, newPath);
 
                     Contener.Children.Add(tb3);
 
@@ -101,7 +102,7 @@ namespace AnotherMusicPlayer
                 tb.Text = Parent.Parent.FindResource("LibraryNavigatorItemHome") as string;
                 tb.Tag = RootPath;
                 tb.MouseLeftButtonDown += PathClicked;
-                tb.ContextMenu = MakeContextMenu();
+                tb.ContextMenu = MakeContextMenu(tb, RootPath);
                 Contener.Children.Add(tb);
 
                 TextBlock tb2 = new TextBlock();
@@ -131,29 +132,36 @@ namespace AnotherMusicPlayer
                 Display(tag);
         }
 
-        private ContextMenu MakeContextMenu()
+        private ContextMenu MakeContextMenu(TextBlock parent, string path)
         {
-            ContextMenu cm = new LibraryContextMenu() { Style = Contener.FindResource("CustomContextMenuStyle") as Style };
-            for (int i = 0; i < cm.Items.Count; i++)
-            {
-                if (((MenuItem)cm.Items[i]).Name.ToLower() == "addfolder")
-                {
-                    //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Add;
-                }
-                else if (((MenuItem)cm.Items[i]).Name.ToLower() == "addshufflefolder")
-                {
-                    //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_AddShuffle;
-                }
-                else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playfolder")
-                {
-                    //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Play;
-                }
-                else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playshufflefolder")
-                {
-                    //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_PlayShuffle;
-                }
-                else { ((MenuItem)cm.Items[i]).Visibility = Visibility.Collapsed; }
-            }
+            //ContextMenu cm = new LibraryContextMenu() { Style = Contener.FindResource("CustomContextMenuStyle") as Style };
+            bool back = (RootPath != path) ? true : false;
+            string backPath = "";
+            if (path != RootPath) { path = Directory.GetParent(path).FullName; }
+
+            ContextMenu cm = MainWindow.Instance.library.MakeContextMenu(parent, "folder", back, backPath);
+            ((LibraryContextMenu)cm).EditFolder.Visibility = Visibility.Collapsed;
+            ((LibraryContextMenu)cm).PlayListsAddFolder.Visibility = Visibility.Collapsed;
+            //for (int i = 0; i < cm.Items.Count; i++)
+            //{
+            //    if (((MenuItem)cm.Items[i]).Name.ToLower() == "addfolder")
+            //    {
+            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Add;
+            //    }
+            //    else if (((MenuItem)cm.Items[i]).Name.ToLower() == "addshufflefolder")
+            //    {
+            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_AddShuffle;
+            //    }
+            //    else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playfolder")
+            //    {
+            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Play;
+            //    }
+            //    else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playshufflefolder")
+            //    {
+            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_PlayShuffle;
+            //    }
+            //    else { ((MenuItem)cm.Items[i]).Visibility = Visibility.Collapsed; }
+            //}
             return cm;
         }
 
