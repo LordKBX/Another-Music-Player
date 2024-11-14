@@ -9,7 +9,7 @@ namespace AnotherMusicPlayer
         /// <summary>
         /// Dispose all used resources.
         /// </summary>
-        public void Dispose()
+        public static void Dispose()
         {
             StopAll();
             ThreadList = null;
@@ -18,10 +18,6 @@ namespace AnotherMusicPlayer
             PlayNewPositions = null;
 
             PlayList.Clear();
-
-            parent = null;
-
-            GC.SuppressFinalize(this);
         }
     }
 }

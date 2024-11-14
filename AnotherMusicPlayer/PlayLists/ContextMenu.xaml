@@ -38,4 +38,16 @@
         </MenuItem.Icon>
     </MenuItem>
     <!--#endregion-->
+
+    <!-- PARTIE Radio -->
+    <MenuItem  Name="RadioEdit" Header="{DynamicResource LibraryContextMenuRadioEdit}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="FileEdit"/>
+        </MenuItem.Icon>
+    </MenuItem>
+    <MenuItem Name="RadioDelete" Header="{DynamicResource LibraryContextMenuRadioDelete}">
+        <MenuItem.Icon>
+            <materialDesign:PackIcon Kind="DeleteEmpty"/>
+        </MenuItem.Icon>
+    </MenuItem>
 </ContextMenu>

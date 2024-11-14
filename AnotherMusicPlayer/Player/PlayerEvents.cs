@@ -19,28 +19,28 @@ namespace AnotherMusicPlayer
     public partial class Player
     {
         /// <summary> Delegate OnPositionChanged </summary>
-        public delegate void OnPositionChanged(object sender, PlayerPositionChangedEventParams e);
+        public delegate void OnPositionChanged(PlayerPositionChangedEventParams e);
         /// <summary> Define Event OnPositionChanged </summary>
-        public event OnPositionChanged PositionChanged;
+        public static event OnPositionChanged PositionChanged;
 
         /// <summary> Delegate OnLengthChanged </summary>
-        public delegate void OnLengthChanged(object sender, PlayerLengthChangedEventParams e);
+        public delegate void OnLengthChanged(PlayerLengthChangedEventParams e);
         /// <summary> Define Event OnLengthChanged </summary>
-        public event OnLengthChanged LengthChanged;
+        public static event OnLengthChanged LengthChanged;
 
         /// <summary> Delegate OnPlayStoped </summary>
-        public delegate void OnPlayStoped(object sender, PlayerPositionChangedEventParams e);
+        public delegate void OnPlayStoped(PlayerPositionChangedEventParams e);
         /// <summary> Define Event OnPlayStoped </summary>
-        public event OnPlayStoped PlayStoped;
+        public static event OnPlayStoped PlayStoped;
 
         /// <summary> Delegate OnPlaylistChanged </summary>
-        public delegate void OnPlaylistChanged(object sender, PlayerPlaylistChangeParams e);
+        public delegate void OnPlaylistChanged(PlayerPlaylistChangeParams e);
         /// <summary> Define Event OnPlaylistChanged </summary>
-        public event OnPlaylistChanged PlaylistChanged;
+        public static event OnPlaylistChanged PlaylistChanged;
 
         /// <summary> Delegate OnPlaylistPositionChanged </summary>
-        public delegate void OnPlaylistPositionChanged(object sender, PlayerPlaylistPositionChangeParams e);
+        public delegate void OnPlaylistPositionChanged(PlayerPlaylistPositionChangeParams e);
         /// <summary> Define Event OnPlaylistPositionChanged </summary>
-        public event OnPlaylistPositionChanged PlaylistPositionChanged;
+        public static event OnPlaylistPositionChanged PlaylistPositionChanged;
     }
 }

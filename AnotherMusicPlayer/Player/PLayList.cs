@@ -9,7 +9,7 @@ namespace AnotherMusicPlayer
     {
 
         /// <summary> Add media into playlist </summary>
-        public bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0, long playDuration = 0, bool autoplay = false)
+        public static bool PlaylistEnqueue(string[] files, bool random = false, int playIndex = 0, long playDuration = 0, bool autoplay = false)
         {
             int initialNbFiles = PlayList.Count;
             int goodFiles = 0;
@@ -48,17 +48,17 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
+            PlaylistChanged(evt);
 
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt2);
+            PlaylistPositionChanged(evt2);
 
             return (goodFiles > 0) ? true : false;
         }
 
         /// <summary> Randomize playlist </summary>
-        public void PlaylistRandomize()
+        public static void PlaylistRandomize()
         {
             List<string> tmp = new List<string>();
             Random rnd = new Random();
@@ -85,15 +85,15 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
+            PlaylistChanged(evt);
 
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt2);
+            PlaylistPositionChanged(evt2);
         }
 
         /// <summary> Clear playlist </summary>
-        public void PlaylistClear()
+        public static void PlaylistClear()
         {
             StopAll();
             PlayList.Clear();
@@ -102,15 +102,15 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
+            PlaylistChanged(evt);
 
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt2);
+            PlaylistPositionChanged(evt2);
         }
 
         /// <summary> Read playlist </summary>
-        public void PlaylistReadIndex(int index)
+        public static void PlaylistReadIndex(int index)
         {
             if (index >= PlayList.Count) { return; }
             Debug.WriteLine("--> PlaylistReadIndex <--");
@@ -121,11 +121,11 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
             evt.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt);
+            PlaylistPositionChanged(evt);
         }
 
         /// <summary> Remove item from playlist </summary>
-        public void PlaylistRemoveIndex(int index)
+        public static void PlaylistRemoveIndex(int index)
         {
             if (index >= PlayList.Count) { return; }
             if (PlayList[index] == CurrentFile) { return; }
@@ -136,18 +136,18 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
+            PlaylistChanged(evt);
             if (reindex)
             {
                 PlayListIndex -= 1;
                 PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
                 evt2.Position = PlayListIndex;
-                PlaylistPositionChanged(this, evt2);
+                PlaylistPositionChanged(evt2);
             }
         }
 
         /// <summary> Remove items from playlist </summary>
-        public void PlaylistRemoveIndexes(int[] indexes)
+        public static void PlaylistRemoveIndexes(int[] indexes)
         {
             bool reindex = false;
             Debug.WriteLine("--> PlaylistRemoveIndexes <--");
@@ -164,17 +164,17 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
+            PlaylistChanged(evt);
             if (reindex)
             {
                 PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
                 evt2.Position = PlayListIndex;
-                PlaylistPositionChanged(this, evt2);
+                PlaylistPositionChanged(evt2);
             }
         }
 
         /// <summary> Read next index in playlist </summary>
-        public void PlaylistNext()
+        public static void PlaylistNext()
         {
             Debug.WriteLine("--> PlaylistNext <--");
             PlayListIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
@@ -183,11 +183,11 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
             evt.Position = PlayListIndex;
-            PlaylistPositionChanged(this, evt);
+            PlaylistPositionChanged(evt);
         }
 
         /// <summary> Preload next index in playlist </summary>
-        public void PlaylistPreloadNext()
+        public static void PlaylistPreloadNext()
         {
             //Debug.WriteLine("--> PlaylistPreloadNext <--");
             int nextIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;

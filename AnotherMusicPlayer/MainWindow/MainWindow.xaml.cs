@@ -29,8 +29,6 @@ namespace AnotherMusicPlayer
 {
     public partial class MainWindow : System.Windows.Window
     {
-        /// <summary> Object music player </summary>
-        public Player player;
         /// <summary> Store the last time(unix) playback was stoped, used for preventing media skip since default playback status is stoped before starting </summary>
         double PlaybackStopLastTime = 0;
         /// <summary> Store the playlist current play index </summary>
@@ -82,7 +80,6 @@ namespace AnotherMusicPlayer
             this.DataContext = this;
 
             PlayList = new List<string[]>();//Initialize PlayList
-            player = new Player(this);//Create Player object
 
             Settings.LoadSettings();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
@@ -102,11 +99,9 @@ namespace AnotherMusicPlayer
             //t.cli
             SetTitle("");
             DebugBaseDir();
-            if (isDebug) { TabControler.SelectedIndex = 1; }
-            else { 
-                TabControler.SelectedIndex = 0;
-                this.BtnDebug.Visibility = Visibility.Collapsed;
-            }
+            if (isDebug) { TabControler.SelectedIndex = 0; }
+            else { TabControler.SelectedIndex = 0; }
+            if (!isDebug) { this.BtnDebug.Visibility = Visibility.Collapsed; }
             
             PlayListIndex = Settings.LastPlaylistIndex;
 
@@ -196,13 +191,13 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Function unlocking window interface </summary>
-        public void UnsetLockScreen() { Mouse.OverrideCursor = null; win1.IsEnabled = true; }
+        public void UnsetLockScreen() { Mouse.OverrideCursor = null; IsEnabled = true; }
 
         /// <summary> Callback for event window position changed </summary>
         private void MainWindow_LocationChanged(object sender, EventArgs e)
         {
-            Settings.LastWindowLeft = win1.Left;
-            Settings.LastWindowTop = win1.Top;
+            Settings.LastWindowLeft = Left;
+            Settings.LastWindowTop = Top;
             Settings.SaveSettings();
         }
 
@@ -224,11 +219,11 @@ namespace AnotherMusicPlayer
 
             PlaylistsTreeAuto.IsExpanded = true;
 
-            if (player.GetFfmpegPath() == null)
+            if (Player.GetFfmpegPath() == null)
             {
                 DialogBox.ShowDialog(this, "ERROR",
                     "Ffmpeg not found !\nPlease copy the executable at one of the following address:",
-                    DialogBoxButtons.Ok, DialogBoxIcons.Error, true, string.Join("\n", player.FfmpegPaths));
+                    DialogBoxButtons.Ok, DialogBoxIcons.Error, true, string.Join("\n", Player.FfmpegPaths));
             }
         }
 
@@ -252,8 +247,8 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Main window closing / exit </summary>
         private async void MainWindow_Closing(object sender, CancelEventArgs e)
         {
-            Settings.LastPlaylistDuration = player.GetCurrentFilePosition();
-            player.Dispose();
+            Settings.LastPlaylistDuration = Player.GetCurrentFilePosition();
+            Player.Dispose();
             await Settings.SaveSettings();
             bdd.Finalize();
             KeyboardGlobalListenerKill();
@@ -264,7 +259,7 @@ namespace AnotherMusicPlayer
         {
             if (Settings.MemoryUsage == 1)
             {
-                if (win1.ActualWidth > 800 && win1.ActualHeight > 460)
+                if (ActualWidth > 800 && ActualHeight > 460)
                 {
                     if (WindowWidthMode != 250)
                     {
@@ -296,8 +291,8 @@ namespace AnotherMusicPlayer
 
             //if (LibraryBuildNavigationContentBlockssPanel != null) { LibraryBuildNavigationContentBlockssPanel.Width = TabControler.ActualWidth - 22; }
 
-            Settings.LastWindowWidth = win1.ActualWidth;
-            Settings.LastWindowHeight = win1.ActualHeight;
+            Settings.LastWindowWidth = ActualWidth;
+            Settings.LastWindowHeight = ActualHeight;
             Settings.SaveSettings();
         }
 
@@ -305,8 +300,8 @@ namespace AnotherMusicPlayer
         private bool Open(string[] files, bool replace = false, bool random = false, int playIndex = 0, bool autoplay = false)
         {
             Debug.WriteLine("--> Open <--");
-            if (replace == true) { player.PlaylistClear(); }
-            return player.PlaylistEnqueue(files, random, playIndex, Settings.LastPlaylistDuration, autoplay);
+            if (replace == true) { Player.PlaylistClear(); }
+            return Player.PlaylistEnqueue(files, random, playIndex, Settings.LastPlaylistDuration, autoplay);
         }
 
         /// <summary> Change Playlist index and load music file if the new position is accepted </summary>
@@ -315,7 +310,7 @@ namespace AnotherMusicPlayer
             if (PlayList.Count == 0) { return; }
             if (NewPosition < 0) { NewPosition = 0; }
             if (NewPosition >= PlayList.Count) { NewPosition = 0; }
-            if (NewPosition != PlayListIndex) { player.PlaylistReadIndex(NewPosition); }
+            if (NewPosition != PlayListIndex) { Player.PlaylistReadIndex(NewPosition); }
         }
 
         private MediaItem GetMediaInfo(string path, ObservableCollection<MediaItem> previous_items = null)

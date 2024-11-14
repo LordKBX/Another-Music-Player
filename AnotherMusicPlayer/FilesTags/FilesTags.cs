@@ -244,11 +244,11 @@ namespace AnotherMusicPlayer
             return null;
         }
 
-        public static bool SaveRating(string FilePath, double RatingValue, Player player)
+        public static bool SaveRating(string FilePath, double RatingValue)
         {
             if (!System.IO.File.Exists(FilePath)) { return false; }
             if (RatingValue < 0 || RatingValue > 5.0) { return false; }
-            if (Common.IsFileLocked(FilePath) && player.GetCurrentFile() != FilePath) { return false; }
+            if (Common.IsFileLocked(FilePath) && Player.GetCurrentFile() != FilePath) { return false; }
             Debug.WriteLine("FilesTags.SaveRating");
             Debug.WriteLine("Rating = " + RatingValue);
             Debug.WriteLine("Math.Truncate(Rating) = " + Math.Truncate(RatingValue));
@@ -265,12 +265,12 @@ namespace AnotherMusicPlayer
             {
                 frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(RatingValue)] + 1);
             }
-            if (player.GetCurrentFile() == FilePath)
+            if (Player.GetCurrentFile() == FilePath)
             {
-                player.Suspend();
+                Player.Suspend();
                 Thread.Sleep(200);
                 fi.Save();
-                player.Resume();
+                Player.Resume();
             }
             else { fi.Save(); }
             return true;

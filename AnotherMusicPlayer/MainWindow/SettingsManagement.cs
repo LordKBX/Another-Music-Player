@@ -85,6 +85,10 @@ namespace AnotherMusicPlayer
             else { ParamsAutoPlay.SelectedIndex = 0; }
             ParamsAutoPlay.SelectionChanged += ParamsAutoPlay_SelectionChanged;
 
+            if (Settings.AlwaysOnTop == true) { ParamsAlwaysOnTop.SelectedIndex = 1; }
+            else { ParamsAlwaysOnTop.SelectedIndex = 0; }
+            ParamsAlwaysOnTop.SelectionChanged += ParamsAlwaysOnTop_SelectionChanged;
+
             if (Settings.LibFolderShowUnixHiden == true) { ParamsLibHiddenFilesUnixVals.SelectedIndex = 1; }
             else { ParamsLibHiddenFilesUnixVals.SelectedIndex = 0; }
             ParamsLibHiddenFilesUnixVals.SelectionChanged += ParamsLibHiddenFilesUnixVals_SelectionChanged;
@@ -100,16 +104,23 @@ namespace AnotherMusicPlayer
                 i += 1;
             }
             ParamsConvQualityVals.SelectionChanged += ParamsConvQualityVals_SelectionChanged;
-            player.ConvQuality(Settings.ConversionBitRate);
+            Player.ConvQuality(Settings.ConversionBitRate);
 
             if (System.IO.Directory.Exists(Settings.LibFolder)) { ParamsLibFolderTextBox.Text = Settings.LibFolder; }
             else { Settings.LibFolder = null; }
 
-            win1.Width = (Settings.LastWindowWidth > 500) ? Settings.LastWindowWidth : 500;
-            win1.Height = (Settings.LastWindowHeight > 350) ? Settings.LastWindowHeight : 350;
+            Width = (Settings.LastWindowWidth > 500) ? Settings.LastWindowWidth : 500;
+            Height = (Settings.LastWindowHeight > 350) ? Settings.LastWindowHeight : 350;
 
-            win1.Left = (Settings.LastWindowLeft < 0) ? 100 : Settings.LastWindowLeft;
-            win1.Top = (Settings.LastWindowTop < 0) ? 100 : Settings.LastWindowTop;
+            Left = (Settings.LastWindowLeft < 0) ? 100 : Settings.LastWindowLeft;
+            Top = (Settings.LastWindowTop < 0) ? 100 : Settings.LastWindowTop;
+        }
+
+        private void ParamsAlwaysOnTop_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            Settings.AlwaysOnTop = (((ComboBox)sender).SelectedIndex == 0) ? false : true;
+            MainWindow.Instance.Topmost = Settings.AlwaysOnTop;
+            Settings.SaveSettings();
         }
 
         private void ParamsAutoPlay_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -168,7 +179,7 @@ namespace AnotherMusicPlayer
             ComboBoxItem item = (ComboBoxItem)((ComboBox)sender).SelectedItem;
             Settings.ConversionBitRate = Convert.ToInt32((string)item.Tag);
             Settings.SaveSettings();
-            player.ConvQuality(Settings.ConversionBitRate);
+            Player.ConvQuality(Settings.ConversionBitRate);
         }
 
         /// <summary> Callback click bouton de selection dossier </summary>

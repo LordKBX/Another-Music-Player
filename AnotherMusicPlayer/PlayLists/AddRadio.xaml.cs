@@ -20,7 +20,6 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class AddRadio : Window
     {
-        private new MainWindow Parent = null;
         private bool CategoryMode = false;
         BitmapImage DefaultCover;
         BitmapImage BitmapCover;
@@ -30,10 +29,10 @@ namespace AnotherMusicPlayer
 
         public AddRadio(MainWindow parent, bool categoryMode = false, int categoryId = 0)
         {
-            Owner = Parent = parent;
+            Owner = parent;
             CategoryMode = categoryMode;
             InitializeComponent();
-            Resources = Parent.Resources;
+            Resources = App.win1.Resources;
             Style = FindResource("CustomWindowStyle") as Style;
 
             if (categoryMode) { CategoryRadioGrid.Visibility = Visibility.Visible; RadioGrid.Visibility = Visibility.Hidden; }
@@ -41,9 +40,9 @@ namespace AnotherMusicPlayer
             {
                 CategoryRadioGrid.Visibility = Visibility.Hidden; RadioGrid.Visibility = Visibility.Visible;
 
-                CategoryInput.Items.Add(new ComboBoxItem() { Content = Parent.FindResource("PlayListsRadioDefault") as string, Tag = "" + 0 });
+                CategoryInput.Items.Add(new ComboBoxItem() { Content = App.win1.FindResource("PlayListsRadioDefault") as string, Tag = "" + 0 });
 
-                Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT CRID, Name FROM radiosCategories ORDER BY Name ASC", "Name");
+                Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT CRID, Name FROM radiosCategories ORDER BY Name ASC", "Name");
 
                 foreach (KeyValuePair<string, Dictionary<string, object>> row in rez)
                 {
@@ -110,7 +109,7 @@ namespace AnotherMusicPlayer
                 string Description = CategoryDescriptionInput.Text.Trim();
                 if (Name == "") { return; }
 
-                Parent.bdd.DatabaseQuerys(new string[] { "INSERT INTO radiosCategories(Name, Description, Logo) VALUES('" + Database.EscapeString(Name) + "','" + Database.EscapeString(Description) + "','" + Database.EscapeString(Base64Cover) + "')" }, true);
+                App.bdd.DatabaseQuerys(new string[] { "INSERT INTO radiosCategories(Name, Description, Logo) VALUES('" + Database.EscapeString(Name) + "','" + Database.EscapeString(Description) + "','" + Database.EscapeString(Base64Cover) + "')" }, true);
             }
             else
             {
@@ -122,7 +121,7 @@ namespace AnotherMusicPlayer
                 string UrlType = (TypeToogle.IsChecked == true) ? "M3u" : "Stream";
 
 
-                Parent.bdd.DatabaseQuerys(new string[] {
+                App.bdd.DatabaseQuerys(new string[] {
                     "INSERT INTO radios(Name, Description, Logo, Url, UrlPrefix, FType, Fragmented, Category) " +
                     "VALUES(" +
                     "'" + Database.EscapeString(Name) + "'," +

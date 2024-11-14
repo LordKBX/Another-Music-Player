@@ -77,6 +77,9 @@ namespace AnotherMusicPlayer
         // auto play at statrt-up
         public static bool StartUpPlay { get; set; } = true;
 
+        // auto play at statrt-up
+        public static bool AlwaysOnTop { get; set; } = false;
+
         // RepeatButton Section
         public static Int32 LastRepeatStatus { get; set; } = 0;
 
@@ -97,9 +100,11 @@ namespace AnotherMusicPlayer
             string v1 = window.bdd.DatabaseGetParam("LibFolderShowHiden", "0");
             string v2 = window.bdd.DatabaseGetParam("LibFolderShowUnixHiden", "0");
             string v3 = window.bdd.DatabaseGetParam("StartUpPlay", "1");
+            string v4 = window.bdd.DatabaseGetParam("AlwaysOnTop", "0");
             LibFolderShowHiden = (Convert.ToInt32(v1) == 0) ? false : true;
             LibFolderShowUnixHiden = (Convert.ToInt32(v2) == 0) ? false : true;
             StartUpPlay = (Convert.ToInt32(v3) == 0) ? false : true;
+            AlwaysOnTop = (Convert.ToInt32(v4) == 0) ? false : true;
 
             StyleName = window.bdd.DatabaseGetParam("StyleName", "Dark");
 
@@ -148,6 +153,7 @@ namespace AnotherMusicPlayer
                 window.bdd.DatabaseSaveParam("LibFolderShowHiden", "" + ((LibFolderShowHiden) ? 1 : 0), "INT");
                 window.bdd.DatabaseSaveParam("LibFolderShowUnixHiden", "" + ((LibFolderShowUnixHiden) ? 1 : 0), "INT");
                 window.bdd.DatabaseSaveParam("StartUpPlay", "" + ((StartUpPlay) ? 1 : 0), "INT");
+                window.bdd.DatabaseSaveParam("AlwaysOnTop", "" + ((AlwaysOnTop) ? 1 : 0), "INT");
 
                 window.bdd.DatabaseSaveParam("StyleName", StyleName, "TEXT");
 

@@ -57,7 +57,7 @@
     <sys:String x:Key="TabPlaylist">Playback</sys:String>
     <sys:String x:Key="TabLibrary">Library</sys:String>
     <sys:String x:Key="TabRecordedPlaylists">Playlists</sys:String>
-    <sys:String x:Key="TabParams">Parameters</sys:String>
+    <sys:String x:Key="TabParams">Settings</sys:String>
 
     <!--#region SETTINGS-->
     <sys:String x:Key="ParamsLanguageLabel">Language</sys:String>
@@ -86,6 +86,10 @@
     <sys:String x:Key="ParamsAutoPlayLabel">Automatic replay at startup</sys:String>
     <sys:String x:Key="ParamsAutoPlay0">No</sys:String>
     <sys:String x:Key="ParamsAutoPlay1">Yes</sys:String>
+
+    <sys:String x:Key="ParamsAlwaysOnTopLabel">Always On Top</sys:String>
+    <sys:String x:Key="ParamsAlwaysOnTop0">No</sys:String>
+    <sys:String x:Key="ParamsAlwaysOnTop1">Yes</sys:String>
 
     <sys:String x:Key="ParamsLibHiddenFilesUnixLabel">Show hidden files style Unix</sys:String>
     <sys:String x:Key="ParamsLibHiddenFilesUnix0">No</sys:String>
@@ -159,6 +163,9 @@
     <sys:String x:Key="LibraryContextMenuPlayListsAddAlbum">Add Album into a Playlist</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddFolder">Add Folder into a Playlist</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddTrack">Add Track into a Playlist</sys:String>
+
+    <sys:String x:Key="LibraryContextMenuRadioEdit">Edit Radio</sys:String>
+    <sys:String x:Key="LibraryContextMenuRadioDelete">Delete Radio</sys:String>
     <!--#endregion-->
 
     <!--#region LIBRARY SCAN-->

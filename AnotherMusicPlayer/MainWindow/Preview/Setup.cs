@@ -70,26 +70,24 @@ namespace AnotherMusicPlayer
             buttonNext = new ThumbnailToolBarButton(IconNext, "IconNext");
             buttonNext.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { NextTrack(); };
 
-            TaskbarManager.Instance.TabbedThumbnail.AddThumbnailPreview(customThumbnail);
+            //TaskbarManager.Instance.TabbedThumbnail.AddThumbnailPreview(customThumbnail);
             TaskbarManager.Instance.ThumbnailToolBars.AddButtons(windowHandle, new ThumbnailToolBarButton[] { buttonPrev, buttonPlay, buttonNext });
-            customThumbnail.TabbedThumbnailBitmapRequested += CustomThumbnail_TabbedThumbnailBitmapRequested;
-            customThumbnail.TabbedThumbnailActivated += CustomThumbnail_TabbedThumbnailActivated;
-            customThumbnail.TabbedThumbnailMaximized += CustomThumbnail_TabbedThumbnailMaximized;
-            customThumbnail.TabbedThumbnailClosed += CustomThumbnail_TabbedThumbnailClosed;
-            this.StateChanged += MainWindow_StateChanged;
+            //customThumbnail.TabbedThumbnailBitmapRequested += CustomThumbnail_TabbedThumbnailBitmapRequested;
+            //customThumbnail.TabbedThumbnailActivated += CustomThumbnail_TabbedThumbnailActivated;
+            //customThumbnail.TabbedThumbnailMaximized += CustomThumbnail_TabbedThumbnailMaximized;
+            //customThumbnail.TabbedThumbnailClosed += CustomThumbnail_TabbedThumbnailClosed;
+            //this.StateChanged += MainWindow_StateChanged;
 
             customThumbnail.SetWindowIcon(Properties.Resources.icon_large);
         }
 
         private void CustomThumbnail_TabbedThumbnailMaximized(object sender, TabbedThumbnailEventArgs e)
-        { CustomThumbnail_TabbedThumbnailActivated(sender, e); }
+        { Opacity = 1; CustomThumbnailDisplayed = false; Show(); }
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
             if (this.WindowState == WindowState.Minimized) { Opacity = 0; CustomThumbnailDisplayed = true; }
-            if (this.WindowState == WindowState.Normal) { Opacity = 1; CustomThumbnailDisplayed = false; }
-            if (this.WindowState == WindowState.Maximized) { Opacity = 1; CustomThumbnailDisplayed = false; }
-            
+            else { Opacity = 1; CustomThumbnailDisplayed = false; }
         }
 
         private void CustomThumbnail_TabbedThumbnailClosed(object sender, TabbedThumbnailClosedEventArgs e) { Close(); }
@@ -107,8 +105,8 @@ namespace AnotherMusicPlayer
         private void CustomThumbnail_TabbedThumbnailBitmapRequested(object sender, TabbedThumbnailBitmapRequestedEventArgs e)
         {
             if (sender != null) { Opacity = 0; }
-            if (player.GetCurrentFile() == PreviewControl.path) { PreviewControl.Update(); }
-            else { PreviewControl.UpdateFile(player.GetCurrentFile()); }
+            if (Player.GetCurrentFile() == PreviewControl.path) { PreviewControl.Update(); }
+            else { PreviewControl.UpdateFile(Player.GetCurrentFile()); }
             //customThumbnail.InvalidatePreview();
             if (CustomThumbnailDisplayed == false || CustomThumbnailCouter >= 10)
             {

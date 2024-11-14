@@ -656,6 +656,14 @@
                                     </ComboBox>
                                 </GroupBox>
 
+                                <GroupBox Header="{DynamicResource ParamsAlwaysOnTopLabel}" FontSize="13">
+                                    <ComboBox x:Name="ParamsAlwaysOnTop" 
+                                    MinWidth="200" Height="30">
+                                        <ComboBoxItem x:Name="AWOT0" Tag="0" Content="{DynamicResource ParamsAlwaysOnTop0}" IsSelected="False"/>
+                                        <ComboBoxItem x:Name="AWOT1" Tag="1" Content="{DynamicResource ParamsAlwaysOnTop1}" IsSelected="True"/>
+                                    </ComboBox>
+                                </GroupBox>
+
                                 <GroupBox Header="{DynamicResource ParamsMemoryUsageLabel}">
                                     <ComboBox x:Name="ParamsMemoryUsage" 
                                     MinWidth="200" Height="30">

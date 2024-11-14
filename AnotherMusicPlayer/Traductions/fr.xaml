@@ -87,6 +87,10 @@
     <sys:String x:Key="ParamsAutoPlay0">Non</sys:String>
     <sys:String x:Key="ParamsAutoPlay1">Oui</sys:String>
 
+    <sys:String x:Key="ParamsAlwaysOnTopLabel">Toujours au dessus</sys:String>
+    <sys:String x:Key="ParamsAlwaysOnTop0">Non</sys:String>
+    <sys:String x:Key="ParamsAlwaysOnTop1">Oui</sys:String>
+
     <sys:String x:Key="ParamsLibHiddenFilesUnixLabel">Afficher fichier caché style Unix</sys:String>
     <sys:String x:Key="ParamsLibHiddenFilesUnix0">Non</sys:String>
     <sys:String x:Key="ParamsLibHiddenFilesUnix1">Oui</sys:String>
@@ -159,6 +163,9 @@
     <sys:String x:Key="LibraryContextMenuPlayListsAddAlbum">Ajouter l'album à un liste</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddFolder">Ajouter le dossier à une liste</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddTrack">Ajouter la piste à une liste</sys:String>
+
+    <sys:String x:Key="LibraryContextMenuRadioEdit">Modifier Radio</sys:String>
+    <sys:String x:Key="LibraryContextMenuRadioDelete">Supprimer Radio</sys:String>
     <!--#endregion-->
     
     <!--#region LIBRARY SCAN-->

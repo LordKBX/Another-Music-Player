@@ -36,7 +36,7 @@ namespace AnotherMusicPlayer
                 if (elem.GetType().Name == "AccessText") { ((AccessText)elem).FontSize = 27; ((AccessText)elem).FontWeight = FontWeights.Bold; }
             }
 
-            UpdateFile(Parent.player.GetCurrentFile());
+            UpdateFile(Player.GetCurrentFile());
         }
 
         public void UpdateFile(string filePath)

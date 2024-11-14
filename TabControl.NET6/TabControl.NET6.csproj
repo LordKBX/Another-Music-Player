@@ -1,0 +1,83 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <UseWindowsForms>True</UseWindowsForms>
+    <RootNamespace>Manina.Windows.Forms</RootNamespace>
+    <AssemblyName>TabControl</AssemblyName>
+    <Authors>LordKBX</Authors>
+    <Company>LordKBX</Company>
+    <Description>Tab control for winforms.</Description>
+    <Copyright>2024</Copyright>
+    <Version>2.0.2</Version>
+    <PackageId>$(AssemblyName).NET6</PackageId>
+    <PackageIcon>logo.png</PackageIcon>
+    <PackageReadmeFile>index.md</PackageReadmeFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="TabControl.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="TabControl.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PagedControl.NET6\PagedControl.NET6.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Designer\SelectedTabEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\TabControlActionList.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\TabControlDesigner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\TabLocationEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\TabLocationSelector.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\TextDirectionEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\TextDirectionSelector.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="HitResult.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Renderer\TabControlRenderer.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Update="Tab.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TabCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="TabControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

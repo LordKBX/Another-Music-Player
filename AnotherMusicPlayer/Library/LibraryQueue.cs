@@ -84,9 +84,9 @@ namespace AnotherMusicPlayer
                         {
                             Dictionary<string, object> CurentRadio = bdd.DatabaseQuery("SELECT * FROM radios WHERE RID = " + rtab[1], "RID")[rtab[1]];
                             Debug.WriteLine(JsonConvert.SerializeObject(CurentRadio));
-                            player.OpenStream(CurentRadio["Url"] as string, (CurentRadio["FType"] as string == "M3u") ? RadioPlayer.RadioType.M3u : RadioPlayer.RadioType.Stream, CurentRadio["RID"] as string, CurentRadio["Name"] as string, Settings.StartUpPlay, CurentRadio["UrlPrefix"] as string);
+                            Player.OpenStream(CurentRadio["Url"] as string, (CurentRadio["FType"] as string == "M3u") ? RadioPlayer.RadioType.M3u : RadioPlayer.RadioType.Stream, CurentRadio["RID"] as string, CurentRadio["Name"] as string, Settings.StartUpPlay, CurentRadio["UrlPrefix"] as string);
                         }
-                        else { player.OpenStream(gl[0], RadioPlayer.RadioType.Stream, "", "", Settings.StartUpPlay, ""); }
+                        else { Player.OpenStream(gl[0], RadioPlayer.RadioType.Stream, "", "", Settings.StartUpPlay, ""); }
                     }
                     else { Open(gl.ToArray(), false, false, newIndex, Settings.StartUpPlay); }
                     //player.Stop();

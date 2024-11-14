@@ -18,7 +18,7 @@ namespace AnotherMusicPlayer
         private async void Open_Button_Click(object sender, RoutedEventArgs e)
         {
             Mouse.OverrideCursor = Cursors.Wait;
-            win1.IsEnabled = false;
+            IsEnabled = false;
             bool DoConv = false;
             Microsoft.Win32.OpenFileDialog openFileDlg = new Microsoft.Win32.OpenFileDialog();
             List<string> exts = new List<string>(Player.AcceptedExtentions);
@@ -45,7 +45,7 @@ namespace AnotherMusicPlayer
                 }
                 else { DoConv = Open(openFileDlg.FileNames); }
             }
-            if (DoConv == false) { Mouse.OverrideCursor = null; win1.IsEnabled = true; }
+            if (DoConv == false) { Mouse.OverrideCursor = null; IsEnabled = true; }
         }
 
         /// <summary> Callback Event Click on Play/Pause button </summary>
@@ -61,7 +61,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Clear List button </summary>
         public void Clear_Button_Click(object sender, RoutedEventArgs e)
         {
-            player.PlaylistClear();
+            Player.PlaylistClear();
 
             //PlayItemNameValue.ToolTip = PlayItemNameValue.Text = "";
             //PlayItemAlbumValue.ToolTip = PlayItemAlbumValue.Text = "";
@@ -82,15 +82,15 @@ namespace AnotherMusicPlayer
         /// <summary> Callback Event Click on Shuffle button </summary>
         private void BtnShuffle_Click(object sender, RoutedEventArgs e)
         {
-            player.PlaylistRandomize();
+            Player.PlaylistRandomize();
         }
 
         /// <summary> Callback Event Click on Repeat button </summary>
         private void BtnRepeat_Click(object sender, RoutedEventArgs e)
         {
-            if (PlayRepeatStatus <= 0) { PlayRepeatStatus = 1; player.Repeat(true); }
-            else if (PlayRepeatStatus == 1) { PlayRepeatStatus = 2; player.Repeat(false); }
-            else { PlayRepeatStatus = 0; player.Repeat(false); }
+            if (PlayRepeatStatus <= 0) { PlayRepeatStatus = 1; Player.Repeat(true); }
+            else if (PlayRepeatStatus == 1) { PlayRepeatStatus = 2; Player.Repeat(false); }
+            else { PlayRepeatStatus = 0; Player.Repeat(false); }
             Settings.LastRepeatStatus = PlayRepeatStatus;
             Settings.SaveSettingsAsync();
         }

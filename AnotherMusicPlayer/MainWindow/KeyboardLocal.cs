@@ -32,8 +32,8 @@ namespace AnotherMusicPlayer
                 {
                     if (key == "Space") { Pause(); }
 
-                    if (key == "Left") { player.PlayTimeRewind(5); }
-                    if (key == "Right") { player.PlayTimeAdvance(5); }
+                    if (key == "Left") { Player.PlayTimeRewind(5); }
+                    if (key == "Right") { Player.PlayTimeAdvance(5); }
                     if (key == "Up")
                     {
                         if (TabControler.SelectedIndex == 0)

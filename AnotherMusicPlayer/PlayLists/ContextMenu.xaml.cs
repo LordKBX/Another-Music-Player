@@ -150,8 +150,8 @@ namespace AnotherMusicPlayer
                 Dictionary<string, Dictionary<string, object>> rez = autolistData(list_id.Replace("auto_", ""));
                 List<string> files = new List<string>();
                 foreach (string key in rez.Keys) { files.Add(key); }
-                Parent.player.PlaylistClear();
-                Parent.player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
             }
             else
             {
@@ -159,8 +159,8 @@ namespace AnotherMusicPlayer
                 List<string> files = userlistData(id);
                 if (files != null)
                 {
-                    Parent.player.PlaylistClear();
-                    Parent.player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+                    Player.PlaylistClear();
+                    Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
                 }
             }
         }
@@ -170,7 +170,7 @@ namespace AnotherMusicPlayer
         {
             MenuItem item = (MenuItem)sender;
             string track = (string)((Button)item.Tag).Tag;
-            Parent.player.PlaylistEnqueue(new string[] { track });
+            Player.PlaylistEnqueue(new string[] { track });
         }
         #endregion
     }

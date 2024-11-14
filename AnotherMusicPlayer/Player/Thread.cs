@@ -12,7 +12,7 @@ namespace AnotherMusicPlayer
     public partial class Player
     {
         /// <summary> Playing thread </summary>
-        private async void PlaySoundAsync(object file)
+        private static async void PlaySoundAsync(object file)
         {
             try
             {
@@ -83,15 +83,16 @@ namespace AnotherMusicPlayer
                     }
                     equalizer.Update();
 
-                    if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); }
+                    if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); _LatestPlayerStatus = PlayerStatus.Pause; }
                     if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
                     {
                         outputDevice.Play(); CurrentFile = FilePath;
                         PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
                         evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
-                        LengthChanged(this, evtp);
-                        if (started == false) { parent.bdd.playCountUpdate(FilePath); }
-                        started = true;
+                        LengthChanged(evtp);
+                        if (started == false) { App.bdd.playCountUpdate(FilePath); }
+                        started = true; 
+                        _LatestPlayerStatus = PlayerStatus.Play;
                     }
                     if (ret == 2)
                     {
@@ -110,6 +111,7 @@ namespace AnotherMusicPlayer
                             AudioList.Remove(FilePath);
                         }
                         else { break; }
+                        _LatestPlayerStatus = PlayerStatus.Stop;
                     }
                     if (ret2 != -1)
                     {
@@ -124,7 +126,7 @@ namespace AnotherMusicPlayer
                             PlayerPositionChangedEventParams evt = new PlayerPositionChangedEventParams();
                             evt.Position = (long)(audioFile.CurrentTime.TotalMilliseconds);
                             evt.duration = (long)(audioFile.TotalTime.TotalMilliseconds);
-                            if (FilePath == CurrentFile) PositionChanged(this, evt);
+                            if (FilePath == CurrentFile) PositionChanged(evt);
                             if (outputDevice.PlaybackState == PlaybackState.Stopped && started == true && evt.Position > 0)
                             {
                                 if (PlayRepeat || (PlayListIndex + 1 == PlayList.Count && PlayList.Count == 1))

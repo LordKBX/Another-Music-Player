@@ -26,7 +26,7 @@ namespace AnotherMusicPlayer
         /// <summary> Callback click on media ProgressBar and change playing position </summary>
         private void DisplayPlaybackPositionBar_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if (player.PlayList.Count == 0 || DisplayPlaybackPositionBar.IsIndeterminate == true) { return; }
+            if (Player.PlayList.Count == 0 || DisplayPlaybackPositionBar.IsIndeterminate == true) { return; }
             double MousePosition = e.GetPosition(DisplayPlaybackPositionBar).X;
 
             //DisplayPlaybackPositionBar.Value = DisplayPlaybackPositionBar.Minimum;
@@ -35,20 +35,20 @@ namespace AnotherMusicPlayer
 
             // Set the calculated relative value to the progressbar //
             DisplayPlaybackPositionBar.Value = ProgressBarValue;
-            long calc = (long)(ratio * player.Length());
-            player.Position(null, calc);
-            if (!player.IsPlaying()) { player.Play(); }
+            long calc = (long)(ratio * Player.Length());
+            Player.Position(null, calc);
+            if (!Player.IsPlaying()) { Player.Play(); }
         }
 
         /// <summary> Update ToolTip of media ProgressBar for displaying time position if click on the actual mouse placement </summary>
         private void DisplayPlaybackPositionBar_MouseMove(object sender, MouseEventArgs e)
         {
-            if (player.PlayList.Count == 0) { DisplayPlaybackPositionBar.ToolTip = null; return; }
+            if (Player.PlayList.Count == 0) { DisplayPlaybackPositionBar.ToolTip = null; return; }
             double MousePosition = e.GetPosition(DisplayPlaybackPositionBar).X;
 
             //DisplayPlaybackPositionBar.Value = DisplayPlaybackPositionBar.Minimum;
             double ratio = MousePosition / DisplayPlaybackPositionBar.ActualWidth;
-            long calc = (long)(ratio * player.Length());
+            long calc = (long)(ratio * Player.Length());
 
             DisplayPlaybackPositionBar.ToolTip = displayTime(calc);
         }

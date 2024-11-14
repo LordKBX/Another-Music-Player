@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Library</OutputType>
+    <UseWindowsForms>True</UseWindowsForms>
+    <RootNamespace>Manina.Windows.Forms</RootNamespace>
+    <AssemblyName>PagedControl</AssemblyName>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="PagedControl.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="PagedControl.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Designer\BaseGlyph.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\ButtonGlyph.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\LabelGlyph.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\PageContainerDesigner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\PagedControlDesigner.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\SelectedPageEditor.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Designer\SeparatorGlyph.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="Page.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="PageCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="PagedControl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Update="PagedControlControlCollection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+
+</Project>

@@ -487,7 +487,7 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("filePath=" + filePath);
             Debug.WriteLine("Old value=" + e.OldValue);
             Debug.WriteLine("New value=" + e.NewValue);
-            FilesTags.SaveRating(filePath, e.NewValue, Parent.player);
+            FilesTags.SaveRating(filePath, e.NewValue);
             //rater.ToolTip = e.NewValue;
             //throw new NotImplementedException();
         }
@@ -496,8 +496,8 @@ namespace AnotherMusicPlayer
         {
             Debug.WriteLine("--> BtnTrack_MouseDoubleClick END <--");
             string track = (string)((Button)sender).Tag;
-            Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(new string[] { track });
+            Player.PlaylistClear();
+            Player.PlaylistEnqueue(new string[] { track });
         }
 
         private void BtnTrack_Click(object sender, RoutedEventArgs e)

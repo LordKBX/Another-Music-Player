@@ -14,16 +14,16 @@ namespace AnotherMusicPlayer
     public partial class Player
     {
         /// <summary> List of availlable conversion quality for output MP3 file </summary>
-        public readonly Int32[] ConvQualityList = new Int32[] { 96, 128, 192, 256, 320 };
+        public static readonly Int32[] ConvQualityList = new Int32[] { 96, 128, 192, 256, 320 };
         /// <summary> Conversion quality for output MP3 file </summary>
-        private Int32 ConvQualityBitrates = 128;
+        private static Int32 ConvQualityBitrates = 128;
 
         /// <summary> Define conversion quality for output MP3 file </summary>
-        public Int32 ConvQuality(Int32 newQuality = -1) { List<Int32> lc = new List<Int32>(ConvQualityList); if (lc.Contains(newQuality)) { return ConvQualityBitrates = newQuality; } else { return ConvQualityBitrates; } }
+        public static Int32 ConvQuality(Int32 newQuality = -1) { List<Int32> lc = new List<Int32>(ConvQualityList); if (lc.Contains(newQuality)) { return ConvQualityBitrates = newQuality; } else { return ConvQualityBitrates; } }
 
-        private int ConvCount = 0;
+        private static int ConvCount = 0;
         /// <summary> Public interface for file convertion </summary>
-        public async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
+        public static async Task<bool> Conv(string FileInput, string FileOutput = null, bool deleteOrigin = false)
         {
             ConvCount += 1;
             //bool replace = false;
@@ -38,12 +38,12 @@ namespace AnotherMusicPlayer
             bool ret = await ConvExe(FileInput, FileOutput);
             if (ret == true && deleteOrigin == true) { System.IO.File.Delete(FileInput); }
             ConvCount -= 1;
-            if (ConvCount == 0) { parent.UnsetLockScreen(); }
+            if (ConvCount == 0) { App.UnsetLockScreen(); }
             //Debug.WriteLine("ret conv : " + ((ret) ? "True" : "False"));
             return true;
         }
 
-        public string GetFfmpegPath()
+        public static string GetFfmpegPath()
         {
             string endPath = null;
             foreach (string path in FfmpegPaths) { if (System.IO.File.Exists(path)) { endPath = path; break; } }
@@ -51,10 +51,9 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Private interface for file convertion usign ffmpeg birary </summary>
-        private async Task<bool> ConvExe(string FileInput, string FileOutput, Int32 quality = 0)
+        private static async Task<bool> ConvExe(string FileInput, string FileOutput, Int32 quality = 0)
         {
             if (quality <= 0) { quality = ConvQualityBitrates; }
-            string AppName = parent.AppName;
             char sep = System.IO.Path.DirectorySeparatorChar;
             string exePath = GetFfmpegPath();
             if (exePath == null) { return false; }

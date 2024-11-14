@@ -70,7 +70,7 @@ namespace AnotherMusicPlayer
 
                 // Section update display button Play/Pause
                 bool playing = false;
-                if (player.Mode == Player.Modes.File) { playing = player.IsPlaying(); }
+                if (Player.Mode == Player.Modes.File) { playing = Player.IsPlaying(); }
                 else { playing = RadioPlayer.IsPlaying; }
                 if (playing)
                 {
@@ -99,7 +99,7 @@ namespace AnotherMusicPlayer
                     if (Timer_PlayRepeatStatus != PlayRepeatStatus)
                     {
                         BtnRepeat.Tag = "Off";
-                        player.Repeat(false);
+                        Player.Repeat(false);
                     }
                 }
                 else if (PlayRepeatStatus == 1)
@@ -107,7 +107,7 @@ namespace AnotherMusicPlayer
                     if (Timer_PlayRepeatStatus != PlayRepeatStatus)
                     {
                         BtnRepeat.Tag = "One";
-                        player.Repeat(true);
+                        Player.Repeat(true);
                     }
                 }
                 else
@@ -115,7 +115,7 @@ namespace AnotherMusicPlayer
                     if (Timer_PlayRepeatStatus != PlayRepeatStatus)
                     {
                         BtnRepeat.Tag = "All";
-                        player.Repeat(false);
+                        Player.Repeat(false);
                     }
                 }
                 Timer_PlayRepeatStatus = PlayRepeatStatus;

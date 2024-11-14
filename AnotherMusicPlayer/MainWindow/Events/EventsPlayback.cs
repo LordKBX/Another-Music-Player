@@ -13,15 +13,15 @@ namespace AnotherMusicPlayer
         /// <summary> Play/Pause current media </summary>
         public void Pause(bool UpdateOnly = false)
         {
-            if (player.IsPlaying())
+            if (Player.IsPlaying())
             {
-                if (UpdateOnly == false) { player.Pause(); }
-                if (player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = false; }
+                if (UpdateOnly == false) { Player.Pause(); }
+                if (Player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = false; }
             }
             else
             {
-                if (UpdateOnly == false) { player.Resume(); }
-                if (player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = true; }
+                if (UpdateOnly == false) { Player.Resume(); }
+                if (Player.Mode == Player.Modes.Radio) { DisplayPlaybackPositionBar.IsIndeterminate = true; }
             }
         }
 
@@ -36,21 +36,21 @@ namespace AnotherMusicPlayer
         /// <summary> Initialize Playback Events </summary>
         private void EventsPlaybackInit()
         {
-            player.LengthChanged += Player_LengthChanged;
-            player.PositionChanged += Player_PositionChanged;
-            player.PlayStoped += Player_PlayStoped;
-            player.PlaylistChanged += Player_PlaylistChanged;
-            player.PlaylistPositionChanged += Player_PlaylistPositionChanged;
+            Player.LengthChanged += Player_LengthChanged;
+            Player.PositionChanged += Player_PositionChanged;
+            Player.PlayStoped += Player_PlayStoped;
+            Player.PlaylistChanged += Player_PlaylistChanged;
+            Player.PlaylistPositionChanged += Player_PlaylistPositionChanged;
         }
 
-        private void Player_PlaylistPositionChanged(object sender, PlayerPlaylistPositionChangeParams e)
+        private void Player_PlaylistPositionChanged(PlayerPlaylistPositionChangeParams e)
         {
             Debug.WriteLine("Player_PlaylistPositionChanged");
             Debug.WriteLine(JsonConvert.SerializeObject(e));
             PlayListIndex = e.Position;
-            if (PlayListIndex < player.PlayList.Count)
+            if (PlayListIndex < Player.PlayList.Count)
             {
-                string item = player.PlayList[PlayListIndex];
+                string item = Player.PlayList[PlayListIndex];
                 if (item.StartsWith("Radio|"))
                 {
                     Dispatcher.BeginInvoke(new Action(() =>
@@ -92,7 +92,7 @@ namespace AnotherMusicPlayer
             Settings.SaveSettings();
         }
 
-        private void Player_PlaylistChanged(object sender, PlayerPlaylistChangeParams e)
+        private void Player_PlaylistChanged(PlayerPlaylistChangeParams e)
         {
             Debug.WriteLine("Player_PlaylistChanged");
             Debug.WriteLine(JsonConvert.SerializeObject(e));
@@ -111,14 +111,14 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Event Callback when the played media length change(generaly when a new media is played) </summary>
-        private void Player_LengthChanged(object sender, PlayerLengthChangedEventParams e)
+        private void Player_LengthChanged(PlayerLengthChangedEventParams e)
         {
             Dispatcher.BeginInvoke(new Action(() => { UpdateSize(displayTime((long)(e.duration))); }));
         }
 
         public long lastPlaybackPosition = 0;
         /// <summary> Event Callback when the media playing position chnaged </summary>
-        private void Player_PositionChanged(object sender, PlayerPositionChangedEventParams e)
+        private void Player_PositionChanged(PlayerPositionChangedEventParams e)
         {
             lastPlaybackPosition = e.Position;
             Dispatcher.BeginInvoke(new Action(() => { UpdatePosition(displayTime((long)(e.Position))); }));
@@ -131,7 +131,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Event Callback when the played media is stoped(not paused) </summary>
-        private void Player_PlayStoped(object sender, PlayerPositionChangedEventParams e)
+        private void Player_PlayStoped(PlayerPositionChangedEventParams e)
         {
             //Debug.WriteLine("Player_PlayStoped");
             //Wait a second befor allowing to proceed with the nex event, by default loading a new media in the player generate a stoped event
@@ -170,7 +170,7 @@ namespace AnotherMusicPlayer
         private void StopPlaylist()
         {
             Debug.WriteLine("StopPlaylist");
-            player.StopAll();
+            Player.StopAll();
             UpdatePosition(displayTime(0));
             UpdateSize(displayTime(0));
             UpdatePositionBar(0);

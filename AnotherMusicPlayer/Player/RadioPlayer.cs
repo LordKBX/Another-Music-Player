@@ -17,7 +17,6 @@ namespace AnotherMusicPlayer
 {
     public class RadioPlayer
     {
-        private static MainWindow Parent = null;
         private static Queue<WaveOutEvent> wavePlayerQueue = null;
         private static Queue<string> indexesPlayerQueue = null;
         private static WaveOutEvent wavePlayer = null;
@@ -43,16 +42,10 @@ namespace AnotherMusicPlayer
         };
 
         private static void SetTitle(string title)
-        {
-            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
-            {
-                Parent.SetTitle(title);
-            }));
-        }
+        { Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => { App.win1.SetTitle(title); })); }
 
-        public static void SetParent(MainWindow parent)
+        public static void SetParent()
         {
-            if (parent != null) { Parent = parent; }
         }
 
         public static async void Init(string path, RadioType type, string prefix = "", string name = null)
@@ -77,12 +70,9 @@ namespace AnotherMusicPlayer
                 aTimer = null;
             }
 
-            if (Parent != null)
-            {
-                Parent.player.Mode = Player.Modes.Radio;
-                Parent.player.PlaylistClear();
-                SetTitle("Web Radio" + ((name != null && name.Trim() != "") ? " - " + name : ""));
-            }
+            Player.Mode = Player.Modes.Radio;
+            Player.PlaylistClear();
+            SetTitle("Web Radio" + ((name != null && name.Trim() != "") ? " - " + name : ""));
 
             if (type == RadioType.Stream)
             {
@@ -117,10 +107,10 @@ namespace AnotherMusicPlayer
                 try
                 {
                     pl = new M3uPlaylist(data);
-                    if (Parent != null && Name == null)
+                    if (Name == null)
                     {
-                        if (pl.PlaylistTitle != null && pl.PlaylistTitle != "") { Parent.SetTitle("Web Radio - " + pl.PlaylistTitle); }
-                        else if (pl.Resources[0].TrackInfo != null && pl.Resources[0].TrackInfo != "") { Parent.SetTitle("Web Radio - " + pl.Resources[0].TrackInfo); }
+                        if (pl.PlaylistTitle != null && pl.PlaylistTitle != "") { App.win1.SetTitle("Web Radio - " + pl.PlaylistTitle); }
+                        else if (pl.Resources[0].TrackInfo != null && pl.Resources[0].TrackInfo != "") { App.win1.SetTitle("Web Radio - " + pl.Resources[0].TrackInfo); }
                         else
                         {
                             string[] tab = (radioPrefix + pl.Resources[0].Location).Split(':', StringSplitOptions.RemoveEmptyEntries);
@@ -224,7 +214,7 @@ namespace AnotherMusicPlayer
         private static void WavePlayer_PlaybackStopped1_Stream(object sender, StoppedEventArgs e)
         {
             Debug.WriteLine(" >>> WavePlayer_PlaybackStopped1_Stream");
-            Parent.Pause();
+            App.win1.Pause();
         }
 
         public static async void Stop()

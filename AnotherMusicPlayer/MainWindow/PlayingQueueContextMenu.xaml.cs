@@ -51,10 +51,10 @@ namespace AnotherMusicPlayer
             ObservableCollection<PlayListViewItem> previous_items = (ObservableCollection<PlayListViewItem>)Parent.PlayListView.ItemsSource;
             if (previous_items.IndexOf((PlayListViewItem)Parent.PlayListView.SelectedItems[0]) <= 0) { return; }
             Debug.WriteLine("--> CM_Remove L3");
-            int playlistOffset = Parent.player.Index;
+            int playlistOffset = Player.Index;
             List<int> indexes = new List<int>();
             foreach (PlayListViewItem row in Parent.PlayListView.SelectedItems) { indexes.Add(playlistOffset + previous_items.IndexOf(row)); }
-            Parent.player.PlaylistRemoveIndexes(indexes.ToArray());
+            Player.PlaylistRemoveIndexes(indexes.ToArray());
         }
 
         private static void CM_Clear(object sender, RoutedEventArgs e)

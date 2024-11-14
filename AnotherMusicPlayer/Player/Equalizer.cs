@@ -94,14 +94,14 @@ namespace AnotherMusicPlayer
     public partial class Player
     {
         /// <summary> list of equalizer EqualizerBands </summary>
-        private EqualizerBand[] EqualizerBands;
+        private static EqualizerBand[] EqualizerBands;
         /// <summary> Maximum negative gain on an equalizer band </summary>
-        public readonly int MinimumGain = -20;
+        public static readonly int MinimumGain = -20;
         /// <summary> Maximum gain on an equalizer band </summary>
-        public readonly int MaximumGain = 20;
+        public static readonly int MaximumGain = 20;
 
         /// <summary> Initialize equalizer </summary>
-        public void InitializeEqualizer()
+        public static void InitializeEqualizer()
         {
             EqualizerBands = new EqualizerBand[]
                 {
@@ -119,13 +119,13 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> update an equalizer band Gain value </summary>
-        public void UpdateEqualizer(int Band, float Gain)
+        public static void UpdateEqualizer(int Band, float Gain)
         {
             try { EqualizerBands[Band].Gain = Gain; } catch { }
         }
 
         /// <summary> update an equalizer with List<(int,float)>, int = band indicator, float = band gain </summary>
-        public void UpdateEqualizer(List<(int, float)> tab)
+        public static void UpdateEqualizer(List<(int, float)> tab)
         {
             foreach ((int, float) band in tab)
             {

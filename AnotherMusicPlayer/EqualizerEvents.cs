@@ -39,11 +39,11 @@ namespace AnotherMusicPlayer
             //set minimum gain
             EqualizerBand1.Minimum = EqualizerBand2.Minimum = EqualizerBand3.Minimum = EqualizerBand4.Minimum
                 = EqualizerBand5.Minimum = EqualizerBand6.Minimum = EqualizerBand7.Minimum = EqualizerBand8.Minimum
-                = EqualizerBand9.Minimum = EqualizerBand10.Minimum = player.MinimumGain;
+                = EqualizerBand9.Minimum = EqualizerBand10.Minimum = Player.MinimumGain;
             //set maximum gain
             EqualizerBand1.Maximum = EqualizerBand2.Maximum = EqualizerBand3.Maximum = EqualizerBand4.Maximum
                 = EqualizerBand5.Maximum = EqualizerBand6.Maximum = EqualizerBand7.Maximum = EqualizerBand8.Maximum
-                = EqualizerBand9.Maximum = EqualizerBand10.Maximum = player.MaximumGain;
+                = EqualizerBand9.Maximum = EqualizerBand10.Maximum = Player.MaximumGain;
 
             //set event for changed value
             EqualizerBand1.ValueChanged += EqualizerBand_ValueChanged; EqualizerBand2.ValueChanged += EqualizerBand_ValueChanged;
@@ -132,7 +132,7 @@ namespace AnotherMusicPlayer
             int col = Convert.ToInt32(((Slider)sender).Tag);
             NumberFormatInfo format = new NumberFormatInfo() { NumberDecimalDigits = 2, NumberGroupSizes = new int[] { 2, 2, 3 } };
             float NewValue = (float)Math.Round(e.NewValue, 2);
-            player.UpdateEqualizer(col, NewValue);
+            Player.UpdateEqualizer(col, NewValue);
             if (EqualizerBandFocusNb > 0) { Settings.EqualizerPreset = "Perso"; }
 
             if (col == 0) { EqualizerLabel1.Text = Convert.ToString(NewValue); Settings.EqualizerBand1 = NewValue; }

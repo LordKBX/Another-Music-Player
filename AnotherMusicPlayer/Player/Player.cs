@@ -33,56 +33,54 @@ namespace AnotherMusicPlayer
         /// <summary> Enum the differents mode of the player object </summary>
         public enum Modes { File = 0, Radio = 1 };
         /// <summary> Current Mode of the player object </summary>
-        public Modes Mode = Modes.File;
+        public static Modes Mode = Modes.File;
 
         /// <summary> List of audio threads by file path </summary>
-        private Dictionary<string, Thread> ThreadList = null;
+        private static Dictionary<string, Thread> ThreadList = null;
         /// <summary> List of audio objects by file path </summary>
-        private Dictionary<string, object> AudioList = null;
+        private static Dictionary<string, object> AudioList = null;
         /// <summary> List of playing status by file path </summary>
-        private Dictionary<string, int> PlayStatus = null;
+        private static Dictionary<string, int> PlayStatus = null;
         /// <summary> List of playing new position by file path </summary>
-        private Dictionary<string, long> PlayNewPositions = null;
+        private static Dictionary<string, long> PlayNewPositions = null;
 
         /// <summary> List of file path for the audio playlist </summary>
-        public readonly List<string> PlayList = null;
+        public static readonly List<string> PlayList = new List<string>();
 
         /// <summary> PlayList current Index </summary>
-        private int PlayListIndex = 0;
+        private static int PlayListIndex = 0;
         /// <summary> PlayList current Index </summary>
-        public int Index { get { return PlayListIndex; } set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : ((value < 0) ? value : value); } }
+        public static int Index { get { return PlayListIndex; } set { PlayListIndex = (value >= PlayList.Count) ? PlayList.Count - 1 : ((value < 0) ? value : value); } }
 
         /// <summary> Current playing file </summary>
-        private string CurrentFile = null;
+        private static string CurrentFile = null;
         /// <summary> Current playing file </summary>
-        public string GetCurrentFile() { return CurrentFile; }
+        public static string GetCurrentFile() { return CurrentFile; }
 
         /// <summary> Status if repeat file playback active </summary>
-        private bool PlayRepeat = false;
-
-        /// <summary> reference object of the application window </summary>
-        private MainWindow parent;
+        private static bool PlayRepeat = false;
 
         /// <summary> List of potential path for the Ffmpeg Executable </summary>
-        private List<string> _FfmpegPaths = null;
+        private static List<string> _FfmpegPaths = null;
         /// <summary> List of potential path for the Ffmpeg Executable </summary>
-        public string[] FfmpegPaths { get { return (_FfmpegPaths != null) ? _FfmpegPaths.ToArray() : null; } }
+        public static string[] FfmpegPaths { get { return (_FfmpegPaths != null) ? _FfmpegPaths.ToArray() : null; } }
+
+        private static PlayerStatus _LatestPlayerStatus = PlayerStatus.Stop;
+        public static PlayerStatus LatestPlayerStatus { get{ return _LatestPlayerStatus; } }
 
 
         /// <summary> Constructor </summary>
-        public Player(MainWindow parent = null)
+        public static void INIT()
         {
-            this.parent = parent;
             ThreadList = new Dictionary<string, Thread>();
             AudioList = new Dictionary<string, object>();
             PlayStatus = new Dictionary<string, int>();
             PlayNewPositions = new Dictionary<string, long>();
             Mode = Modes.File;
 
-            PlayList = new List<string>();
             //PlayListSemaphore = new Semaphore(0, 1);
 
-            string AppName = parent.AppName;
+            string AppName = App.AppName;
             char sep = System.IO.Path.DirectorySeparatorChar;
             _FfmpegPaths = new List<string>() {
                 Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg-win64-static.exe",
@@ -100,16 +98,16 @@ namespace AnotherMusicPlayer
             var newValue = oldValue + @";" + AppDomain.CurrentDomain.BaseDirectory + System.IO.Path.DirectorySeparatorChar;
             Environment.SetEnvironmentVariable(name, newValue, scope);
 
-            RadioPlayer.SetParent(parent);
+            RadioPlayer.SetParent();
 
             InitializeEqualizer();
         }
 
 
         /// <summary> clear current file value </summary>
-        public void ClearCurrentFile() { CurrentFile = null; }
+        public static void ClearCurrentFile() { CurrentFile = null; }
 
-        public long GetCurrentFilePosition()
+        public static long GetCurrentFilePosition()
         {
             if (CurrentFile == null) { return 0; }
             if (!AudioList.ContainsKey(CurrentFile)) { return 0; }
@@ -117,12 +115,12 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Define status if repeat file playback active </summary>
-        public void Repeat(bool rep) { PlayRepeat = rep; }
+        public static void Repeat(bool rep) { PlayRepeat = rep; }
         /// <summary> Get status if repeat file playback active </summary>
-        public bool IsRepeat() { return PlayRepeat; }
+        public static bool IsRepeat() { return PlayRepeat; }
 
         /// <summary> Stop all currently playing threads </summary>
-        public void StopAll()
+        public static void StopAll()
         {
             if (Mode == Modes.File)
             {
@@ -139,25 +137,26 @@ namespace AnotherMusicPlayer
                 }
             }
             else { RadioPlayer.Stop(); }
+            _LatestPlayerStatus = PlayerStatus.Stop;
         }
 
         /// <summary> Stop media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Stop(string FilePath = null)
+        public static bool Stop(string FilePath = null)
         {
             if (Mode == Modes.File)
             {
                 if (TestFile(FilePath))
                 {
                     if (FilePath == null) { FilePath = CurrentFile; }
-                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 2; return true; }
+                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 2; _LatestPlayerStatus = PlayerStatus.Stop; return true; }
                 }
                 return false;
             }
-            else { RadioPlayer.Stop(); return true; }
+            else { RadioPlayer.Stop(); _LatestPlayerStatus = PlayerStatus.Stop; return true; }
         }
 
         /// <summary> Test if file exist, if input = null remplace it with value in CurrentFile </summary>
-        public bool TestFile(string FilePath = null)
+        public static bool TestFile(string FilePath = null)
         {
             if (Mode == Modes.File)
             {
@@ -169,7 +168,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Open a new media playing thread </summary>
-        public bool Open(string FilePath, bool AutoPlay = false, long playDuration = 0, Modes mode = Modes.File)
+        public static bool Open(string FilePath, bool AutoPlay = false, long playDuration = 0, Modes mode = Modes.File)
         {
             Mode = mode;
             if (mode == Modes.File)
@@ -208,7 +207,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Open a new media playing thread </summary>
-        public async void OpenStream(string streamUrl, RadioPlayer.RadioType streamType, string streamID = "", string streamName = "", bool streamAutoPlay = false, string streamPrefix = "")
+        public static async void OpenStream(string streamUrl, RadioPlayer.RadioType streamType, string streamID = "", string streamName = "", bool streamAutoPlay = false, string streamPrefix = "")
         {
             Mode = Modes.Radio;
 
@@ -223,15 +222,15 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(this, evt);
+            PlaylistChanged(evt);
 
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = 0;
-            PlaylistPositionChanged(this, evt2);
+            PlaylistPositionChanged(evt2);
         }
 
         /// <summary> Start media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Play(string FilePath = null, long playDuration = 0)
+        public static bool Play(string FilePath = null, long playDuration = 0)
         {
             if (Mode == Modes.File)
             {
@@ -256,7 +255,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Resume media play for FilePath or CurrentFile if FilePath is null </summary>
-        public async Task<bool> Resume(string FilePath = null)
+        public static async Task<bool> Resume(string FilePath = null)
         {
             if (Mode == Modes.File)
             {
@@ -270,7 +269,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Pause media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Pause(string FilePath = null)
+        public static bool Pause(string FilePath = null)
         {
             if (Mode == Modes.File)
             {
@@ -288,9 +287,9 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private bool IsSuspended = false;
+        private static bool IsSuspended = false;
         /// <summary> Suspend media play for FilePath or CurrentFile if FilePath is null </summary>
-        public bool Suspend()
+        public static bool Suspend()
         {
             if (Mode == Modes.File)
             {
@@ -309,7 +308,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Test if FilePath played for FilePath or CurrentFile if FilePath is null </summary>
-        public bool IsPlaying(string FilePath = null)
+        public static bool IsPlaying(string FilePath = null)
         {
             if (Mode == Modes.File)
             {
@@ -329,7 +328,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get/Set position for FilePath or CurrentFile if FilePath is null </summary>
-        public long Position(string FilePath = null, long position = -1)
+        public static long Position(string FilePath = null, long position = -1)
         {
             if (TestFile(FilePath))
             {
@@ -342,7 +341,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> advance playing time of current file by 5 seconds </summary>
-        public void PlayTimeAdvance(long seconds)
+        public static void PlayTimeAdvance(long seconds)
         {
             if (CurrentFile == null) { return; }
             if (TestFile(CurrentFile))
@@ -358,7 +357,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> rewing playing time of current file by 5 seconds </summary>
-        public void PlayTimeRewind(long seconds)
+        public static void PlayTimeRewind(long seconds)
         {
             if (CurrentFile == null) { return; }
             if (TestFile(CurrentFile))
@@ -373,7 +372,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get media length of FilePath or CurrentFile if FilePath is null </summary>
-        public long Length(string FilePath = null)
+        public static long Length(string FilePath = null)
         {
             if (TestFile(FilePath))
             {
@@ -385,4 +384,6 @@ namespace AnotherMusicPlayer
         }
 
     }
+
+    public enum PlayerStatus { Play, Pause, Stop }
 }

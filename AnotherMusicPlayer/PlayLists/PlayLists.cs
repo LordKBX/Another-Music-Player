@@ -133,8 +133,8 @@ namespace AnotherMusicPlayer
         {
             if (Parent.PlaylistsContents.SelectedIndex != -1)
             {
-                Parent.player.PlaylistClear();
-                Parent.player.PlaylistEnqueue(new string[] { ((MediaItem)Parent.PlaylistsContents.SelectedItem).Path }, false, 0, 0, true);
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(new string[] { ((MediaItem)Parent.PlaylistsContents.SelectedItem).Path }, false, 0, 0, true);
             }
         }
 
@@ -275,9 +275,9 @@ namespace AnotherMusicPlayer
         {
             RadioPlayer.Stop();
             if (CurentRadio["FType"] as string == "Stream")
-            { Parent.player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.Stream, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
+            { Player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.Stream, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
             else if (CurentRadio["FType"] as string == "M3u")
-            { Parent.player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.M3u, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
+            { Player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.M3u, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
         }
 
         private void autolistDoubleClick(object sender, MouseButtonEventArgs e)
@@ -291,8 +291,8 @@ namespace AnotherMusicPlayer
             {
                 files.Add(key);
             }
-            Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+            Player.PlaylistClear();
+            Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
         }
 
         private void autolistClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -357,8 +357,8 @@ namespace AnotherMusicPlayer
         {
             int id = Convert.ToInt32((string)((TreeViewItem)sender).Tag);
             List<string> files = userlistData(id);
-            Parent.player.PlaylistClear();
-            Parent.player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+            Player.PlaylistClear();
+            Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
         }
 
         public void userlistClick(object sender, MouseButtonEventArgs e)
