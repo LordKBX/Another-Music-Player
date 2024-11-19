@@ -11,6 +11,7 @@ using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Threading;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace AnotherMusicPlayer
 {
@@ -28,6 +29,16 @@ namespace AnotherMusicPlayer
         public string Genres { get; set; }
         public string Performers { get; set; }
         public string Composers { get; set; }
+        public string Artists { 
+            get {
+                List<string> cpl = Composers.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                List<string> pel = Performers.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                List<string> aal = AlbumArtists.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                foreach (string perf in pel) { if (!cpl.Contains(perf)) { cpl.Add(perf); } }
+                foreach (string perf in aal) { if (!cpl.Contains(perf)) { cpl.Add(perf); } }
+                return string.Join("; ", cpl);
+            }
+        }
         public string Copyright { get; set; }
         public uint Disc { get; set; }
         public uint DiscCount { get; set; }
@@ -124,7 +135,7 @@ namespace AnotherMusicPlayer
                             {
                                 //Debug.WriteLine("File ext ok");
                                 item.Duration = (long)((new AudioFileReader(FilePath)).TotalTime.TotalMilliseconds);
-                                item.DurationS = MainWindow.displayTime(item.Duration); break;
+                                item.DurationS = App.displayTime(item.Duration); break;
                             }
                         }
                     }
@@ -234,7 +245,7 @@ namespace AnotherMusicPlayer
                         if (FilePath.ToLower().EndsWith(ext))
                         {
                             item.Duration = (long)((new AudioFileReader(FilePath)).TotalTime.TotalMilliseconds);
-                            item.DurationS = MainWindow.displayTime(item.Duration); break;
+                            item.DurationS = App.displayTime(item.Duration); break;
                         }
                     }
                 }

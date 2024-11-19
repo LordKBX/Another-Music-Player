@@ -50,7 +50,7 @@ namespace AnotherMusicPlayer
             double ratio = MousePosition / DisplayPlaybackPositionBar.ActualWidth;
             long calc = (long)(ratio * Player.Length());
 
-            DisplayPlaybackPositionBar.ToolTip = displayTime(calc);
+            DisplayPlaybackPositionBar.ToolTip = App.displayTime(calc);
         }
 
     }

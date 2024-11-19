@@ -32,7 +32,7 @@ namespace AnotherMusicPlayer
             Owner = parent;
             CategoryMode = categoryMode;
             InitializeComponent();
-            Resources = App.win1.Resources;
+            /*Resources = App0.win1.Resources;*/
             Style = FindResource("CustomWindowStyle") as Style;
 
             if (categoryMode) { CategoryRadioGrid.Visibility = Visibility.Visible; RadioGrid.Visibility = Visibility.Hidden; }
@@ -40,7 +40,7 @@ namespace AnotherMusicPlayer
             {
                 CategoryRadioGrid.Visibility = Visibility.Hidden; RadioGrid.Visibility = Visibility.Visible;
 
-                CategoryInput.Items.Add(new ComboBoxItem() { Content = App.win1.FindResource("PlayListsRadioDefault") as string, Tag = "" + 0 });
+                /*CategoryInput.Items.Add(new ComboBoxItem() { Content = App0.win1.FindResource("PlayListsRadioDefault") as string, Tag = "" + 0 });*/
 
                 Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT CRID, Name FROM radiosCategories ORDER BY Name ASC", "Name");
 

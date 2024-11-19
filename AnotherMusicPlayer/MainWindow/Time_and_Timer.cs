@@ -17,19 +17,6 @@ namespace AnotherMusicPlayer
 
     public partial class MainWindow : Window
     {
-        /// <summary> Convert milliseconds times in human readable string </summary>
-        public static string displayTime(long time)
-        {
-            string ret = ""; int Days = 0, Hours = 0, Minutes = 0;
-            int ms = (int)(time % 1000); long TotalSeconds = (time - ms) / 1000, reste;
-            if (TotalSeconds >= 86400) { reste = (TotalSeconds % 86400); Days = (int)((TotalSeconds - reste) / 86400); TotalSeconds = reste; }
-            if (TotalSeconds >= 3600) { reste = (TotalSeconds % 3600); Hours = (int)((TotalSeconds - reste) / 3600); TotalSeconds = reste; }
-            if (TotalSeconds >= 60) { reste = (TotalSeconds % 60); Minutes = (int)((TotalSeconds - reste) / 60); TotalSeconds = reste; }
-
-            if (Days > 0) { ret += ((Days < 10) ? "0" : "") + Days + "d "; }
-            if (Hours > 0) { ret += ((Hours < 10) ? "0" : "") + Hours + ":"; } //ret += ((Minutes < 10) ? "0" : "") + Minutes + ":" + ((TotalSeconds < 10) ? "0" : "") + TotalSeconds;
-            return ret + ((Minutes < 10) ? "0" : "") + Minutes + ":" + ((TotalSeconds < 10) ? "0" : "") + TotalSeconds;
-        }
 
         /// <summary> Generate current time Unix Timestamp </summary>
         public static double UnixTimestamp() { return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds; }

@@ -29,6 +29,7 @@ namespace AnotherMusicPlayer
         {
             Scan((bool)param);
         }
+
         private void Scan(bool preClean = false)
         {
             _Scanning = true;

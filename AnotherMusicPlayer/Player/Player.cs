@@ -19,6 +19,8 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Security.Cryptography;
 using System.Windows.Threading;
+using Microsoft.Win32;
+using TagLib.Mpeg;
 
 namespace AnotherMusicPlayer
 {
@@ -29,6 +31,28 @@ namespace AnotherMusicPlayer
         public static readonly string[] AcceptedExtentions = new string[] { ".aiff", ".mp3", ".wma" };
         /// <summary> Give the List of accepted file extentions for conversion </summary>
         public static readonly string[] AcceptedExtentionsFotConversion = new string[] { ".aac", ".flac", ".ogg", ".m4a" };
+
+        /// <summary> Give the List of Equalizer presets </summary>
+        public static readonly Dictionary<string, float[]> EqualizerPresetsTab = new Dictionary<string, float[]>() {
+            { "Flat", new float[10]{ 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f, 0.0f } },
+            { "Classic", new float[10]{ -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -7.2f, -7.2f, -7.2f, -9.6f } },
+            { "Club", new float[10]{ -1.11022e-15f, -1.11022e-15f, 8.0f, 5.6f, 5.6f, 5.6f, 3.2f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f } },
+            { "Dance", new float[10]{ 9.6f, 7.2f, 2.4f, -1.11022e-15f, -1.11022e-15f, -5.6f, -7.2f, -7.2f, -1.11022e-15f, -1.11022e-15f } },
+            { "FullBass", new float[10]{ -8.0f, 9.6f, 9.6f, 5.6f, 1.6f, -4.0f, -8.0f, -10.4f, -11.2f, -11.2f } },
+            { "FullBassTreble", new float[10]{ 7.2f, 5.6f, -1.11022e-15f, -7.2f, -4.8f, 1.6f, 8.0f, 11.2f, 12.0f, 12.0f } },
+            { "FullTreble", new float[10]{ -9.6f, -9.6f, -9.6f, -4.0f, 2.4f, 11.2f, 16.0f, 16.0f, 16.0f, 16.8f } },
+            { "Headphones", new float[10]{ 4.8f, 11.2f, 5.6f, -3.2f, -2.4f, 1.6f, 4.8f, 9.6f, 12.8f, 14.4f } },
+            { "LargeHall", new float[10]{ 10.4f, 10.4f, 5.6f, 5.6f, -1.11022e-15f, -4.8f, -4.8f, -4.8f, -1.11022e-15f, -1.11022e-15f } },
+            { "Live", new float[10]{ -4.8f, -1.11022e-15f, 4.0f, 5.6f, 5.6f, 5.6f, 4.0f, 2.4f, 2.4f, 2.4f } },
+            { "Party", new float[10]{ 7.2f, 7.2f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, 7.2f, 7.2f } },
+            { "Pop", new float[10]{ -1.6f, 4.8f, 7.2f, 8.0f, 5.6f, -1.11022e-15f, -2.4f, -2.4f, -1.6f, -1.6f } },
+            { "Reggae", new float[10]{ -1.11022e-15f, -1.11022e-15f, -1.11022e-15f, -5.6f, -1.11022e-15f, 6.4f, 6.4f, -1.11022e-15f, -1.11022e-15f, -1.11022e-15f } },
+            { "Rock", new float[10]{ 8.0f, 4.8f, -5.6f, -8.0f, -3.2f, 4.0f, 8.8f, 11.2f, 11.2f, 11.2f } },
+            { "Ska", new float[10]{ -2.4f, -4.8f, -4.0f, -1.11022e-15f, 4.0f, 5.6f, 8.8f, 9.6f, 11.2f, 9.6f } },
+            { "Soft", new float[10]{ 4.8f, 1.6f, -1.11022e-15f, -2.4f, -1.11022e-15f, 4.0f, 8.0f, 9.6f, 11.2f, 12.0f } },
+            { "SoftRock", new float[10]{ 4.0f, 4.0f, 2.4f, -1.11022e-15f, -4.0f, -5.6f, -3.2f, -1.11022e-15f, 2.4f, 8.8f } },
+            { "Techno", new float[10]{ 8.0f, 5.6f, -1.11022e-15f, -5.6f, -4.8f, -1.11022e-15f, 8.0f, 9.6f, 9.6f, 8.8f } },
+        };
 
         /// <summary> Enum the differents mode of the player object </summary>
         public enum Modes { File = 0, Radio = 1 };
@@ -60,6 +84,9 @@ namespace AnotherMusicPlayer
         /// <summary> Status if repeat file playback active </summary>
         private static bool PlayRepeat = false;
 
+        /// <summary> Status if repeat queue </summary>
+        private static bool PlayLoop = false;
+
         /// <summary> List of potential path for the Ffmpeg Executable </summary>
         private static List<string> _FfmpegPaths = null;
         /// <summary> List of potential path for the Ffmpeg Executable </summary>
@@ -77,15 +104,18 @@ namespace AnotherMusicPlayer
             PlayStatus = new Dictionary<string, int>();
             PlayNewPositions = new Dictionary<string, long>();
             Mode = Modes.File;
+            SystemEvents.PowerModeChanged += (object sender, PowerModeChangedEventArgs e) => { 
+                if(LatestPowerMode == PowerModes.Suspend && e.Mode == PowerModes.Resume) { DoResume = true; }
+                LatestPowerMode = e.Mode;
+            };
 
             //PlayListSemaphore = new Semaphore(0, 1);
 
-            string AppName = App.AppName;
             char sep = System.IO.Path.DirectorySeparatorChar;
             _FfmpegPaths = new List<string>() {
-                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg-win64-static.exe",
-                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg-win32-static.exe",
-                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + AppName + sep + "ffmpeg.exe",
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + App.AppName + sep + "ffmpeg-win64-static.exe",
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + App.AppName + sep + "ffmpeg-win32-static.exe",
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + App.AppName + sep + "ffmpeg.exe",
                 AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win64-static.exe",
                 AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win32-static.exe",
                 AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg.exe"
@@ -118,6 +148,11 @@ namespace AnotherMusicPlayer
         public static void Repeat(bool rep) { PlayRepeat = rep; }
         /// <summary> Get status if repeat file playback active </summary>
         public static bool IsRepeat() { return PlayRepeat; }
+
+        /// <summary> Define status if repeat queue </summary>
+        public static void Loop(bool rep) { PlayLoop = rep; }
+        /// <summary> Get status if repeat queue </summary>
+        public static bool IsLoop() { return PlayLoop; }
 
         /// <summary> Stop all currently playing threads </summary>
         public static void StopAll()

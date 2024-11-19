@@ -24,6 +24,7 @@ using System.Threading.Tasks;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using System.Windows.Interop;
 using System.Threading;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 
 namespace AnotherMusicPlayer
 {
@@ -66,22 +67,19 @@ namespace AnotherMusicPlayer
         [Conditional("DEBUG")]
         private void IsDebugCheck() { isDebug = true; }
 
-        private App Parent = null;
-        public static MainWindow? Instance;
+        public static MainWindow Instance = null;
 
         /// <summary> Constructor </summary>
-        public MainWindow(Database obdd, App parent)
+        public MainWindow()
         {
-            Instance = this;
-            Parent = parent;
+            try { Instance = this; } catch (Exception) { }
             AppName = System.Windows.Application.Current.MainWindow.GetType().Assembly.GetName().Name;
-            bdd = obdd;
+            bdd = App.bdd;
             // Set DataContext
             this.DataContext = this;
 
             PlayList = new List<string[]>();//Initialize PlayList
 
-            Settings.LoadSettings();
             InitializeComponent();//Load and build interface from XAML file "MainWindow.xaml"
             IsDebugCheck();
             if (isDebug == false)
@@ -329,7 +327,7 @@ namespace AnotherMusicPlayer
                     item.Performers = (string)rep["Performers"];
                     item.Composers = (string)rep["Composers"];
                     item.Duration = Convert.ToInt64((string)rep["Duration"]);
-                    item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+                    item.DurationS = App.displayTime(Convert.ToInt64((string)rep["Duration"]));
 
                     item.Lyrics = (string)rep["Lyrics"];
                     item.Genres = (string)rep["Genres"];
@@ -363,7 +361,7 @@ namespace AnotherMusicPlayer
                     item.Performers = (string)rep["Performers"];
                     item.Composers = (string)rep["Composers"];
                     item.Duration = Convert.ToInt64((string)rep["Duration"]);
-                    item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+                    item.DurationS = App.displayTime(Convert.ToInt64((string)rep["Duration"]));
                 }
                 else { item = FilesTags.MediaInfoShort(path, false); }
             }
@@ -384,7 +382,7 @@ namespace AnotherMusicPlayer
             item.Composers = (string)rep["Composers"];
             item.Lyrics = (string)rep["Lyrics"];
             item.Duration = Convert.ToInt64((string)rep["Duration"]);
-            item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+            item.DurationS = App.displayTime(Convert.ToInt64((string)rep["Duration"]));
             item.Genres = (string)rep["Genres"];
             item.Copyright = (string)rep["Copyright"];
             item.Disc = Convert.ToUInt32(rep["Disc"]);
@@ -408,7 +406,7 @@ namespace AnotherMusicPlayer
             ret.Add("Composers", rep.Composers);
             ret.Add("Lyrics", rep.Lyrics);
             ret.Add("Duration", rep.Duration);
-            ret.Add("DurationS", displayTime(Convert.ToInt64(rep.Duration)));
+            ret.Add("DurationS", App.displayTime(Convert.ToInt64(rep.Duration)));
             ret.Add("Genres", rep.Genres);
             ret.Add("Copyright", rep.Copyright);
             ret.Add("Disc", rep.Disc);

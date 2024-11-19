@@ -143,6 +143,98 @@ namespace AnotherMusicPlayer.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap star_color {
+            get {
+                object obj = ResourceManager.GetObject("star_color", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap star_gray {
+            get {
+                object obj = ResourceManager.GetObject("star_gray", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
+        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///    xmlns:materialDesign=&quot;http://materialdesigninxaml.net/winfx/xaml/themes&quot;
+        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
+        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
+        ///
+        ///    &lt;ResourceDictionary.MergedDictionaries&gt;
+        ///        &lt;ResourceDictionary Source=&quot;pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignThem [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        public static string Style_Dark {
+            get {
+                return ResourceManager.GetString("Style_Dark", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
+        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
+        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
+        ///    xmlns:materialDesign=&quot;http://materialdesigninxaml.net/winfx/xaml/themes&quot;
+        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
+        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
+        ///
+        ///    &lt;ResourceDictionary.MergedDictionaries&gt;
+        ///        &lt;ResourceDictionary Source=&quot;pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignThem [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        public static string Style_Red {
+            get {
+                return ResourceManager.GetString("Style_Red", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
+        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
+        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
+        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
+        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
+        ///
+        ///    &lt;!--#region Files sizes--&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesUnit&quot;&gt;B&lt;/sys:String&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesKilo&quot;&gt;Kib&lt;/sys:String&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesMega&quot;&gt;Mib&lt;/sys:String&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesGiga&quot;&gt;Gib&lt; [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        public static string Translation_en {
+            get {
+                return ResourceManager.GetString("Translation_en", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
+        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
+        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
+        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
+        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
+        ///
+        ///    &lt;!--#region Files sizes--&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesUnit&quot;&gt;B&lt;/sys:String&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesKilo&quot;&gt;Kib&lt;/sys:String&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesMega&quot;&gt;Mib&lt;/sys:String&gt;
+        ///    &lt;sys:String x:Key=&quot;SizeBytesGiga&quot;&gt;Gib&lt; [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        public static string Translation_fr {
+            get {
+                return ResourceManager.GetString("Translation_fr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap window_close_icon {
             get {
                 object obj = ResourceManager.GetObject("window_close_icon", resourceCulture);

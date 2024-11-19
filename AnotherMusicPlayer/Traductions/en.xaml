@@ -14,6 +14,12 @@
     <sys:String x:Key="SizeBytesExa">Eib</sys:String>
     <!--#endregion-->
 
+    <!--#region Base Window -->
+    <sys:String x:Key="WindowBtnMinimize">Minimize</sys:String>
+    <sys:String x:Key="WindowBtnMaximize">Maximize</sys:String>
+    <sys:String x:Key="WindowBtnClose">Close</sys:String>
+    <!--#endregion-->
+
     <!--#region DialogBox -->
     <sys:String x:Key="DialogBoxTitle">Dialog</sys:String>
     <sys:String x:Key="DialogBoxBtnOk">Ok</sys:String>
@@ -26,10 +32,12 @@
     <sys:String x:Key="Album">Album</sys:String>
     <sys:String x:Key="Artist">Artists</sys:String>
     <sys:String x:Key="Duration">Duration</sys:String>
+    <sys:String x:Key="Position">Position</sys:String>
     <sys:String x:Key="Genre">Genre</sys:String>
     <sys:String x:Key="Rating">Rating</sys:String>
     <sys:String x:Key="Count">Played</sys:String>
     <sys:String x:Key="Lyrics">Lyrics</sys:String>
+    <sys:String x:Key="Progress">Progress</sys:String>
 
     <sys:String x:Key="Title2">Title:</sys:String>
     <sys:String x:Key="Album2">Album:</sys:String>
@@ -38,6 +46,8 @@
     <sys:String x:Key="Genres2">Genre:</sys:String>
     <sys:String x:Key="Rating2">Rating:</sys:String>
     <sys:String x:Key="Lyrics2">Lyrics:</sys:String>
+
+    <sys:String x:Key="PlaybackPositionLabel">Total: %X%, Position: %Y%</sys:String>
 
     <sys:String x:Key="BtnOpenToolTip">Open Files</sys:String>
     <sys:String x:Key="BtnPreviousToolTip">Previous Track</sys:String>
@@ -69,6 +79,7 @@
     <sys:String x:Key="ParamsConvDisclaimerLabel">Native audio support for the folowing formats only: aif,mp3(CBR),wma; Other formats are converted into Mp3 CBR</sys:String>
     
     <sys:String x:Key="ParamsConvKeepLabel">Convertion</sys:String>
+    <sys:String x:Key="ParamsConvModeLabel">Mode</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_TEMP">On the Fly</sys:String>
     <sys:String x:Key="ParamsConvKeepVals_REPLACE">Replace</sys:String>
 
@@ -83,13 +94,17 @@
     <sys:String x:Key="ParamsMemoryUsage0">Low</sys:String>
     <sys:String x:Key="ParamsMemoryUsage1">Full</sys:String>
 
-    <sys:String x:Key="ParamsAutoPlayLabel">Automatic replay at startup</sys:String>
+    <sys:String x:Key="ParamsAutoPlayLabel">Automatic play at startup</sys:String>
     <sys:String x:Key="ParamsAutoPlay0">No</sys:String>
     <sys:String x:Key="ParamsAutoPlay1">Yes</sys:String>
 
     <sys:String x:Key="ParamsAlwaysOnTopLabel">Always On Top</sys:String>
     <sys:String x:Key="ParamsAlwaysOnTop0">No</sys:String>
     <sys:String x:Key="ParamsAlwaysOnTop1">Yes</sys:String>
+
+    <sys:String x:Key="ParamsAutoCloseLyricsLabel">Auto Close Lyrics</sys:String>
+    <sys:String x:Key="ParamsAutoCloseLyrics0">No</sys:String>
+    <sys:String x:Key="ParamsAutoCloseLyrics1">Yes</sys:String>
 
     <sys:String x:Key="ParamsLibHiddenFilesUnixLabel">Show hidden files style Unix</sys:String>
     <sys:String x:Key="ParamsLibHiddenFilesUnix0">No</sys:String>

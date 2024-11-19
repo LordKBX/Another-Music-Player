@@ -27,8 +27,15 @@
     <UseWindowsForms>True</UseWindowsForms>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
     <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
-    <ForceDesignerDpiUnaware>true</ForceDesignerDpiUnaware>
+    <ForceDesignerDpiUnaware>false</ForceDesignerDpiUnaware>
+    <StartupObject>AnotherMusicPlayer.App</StartupObject>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Libs\**" />
+    <EmbeddedResource Remove="Libs\**" />
+    <None Remove="Libs\**" />
+    <Page Remove="Libs\**" />
+  </ItemGroup>
   <ItemGroup>
     <None Remove="icons\icon_large.ico" />
     <None Remove="play.png" />
@@ -47,29 +54,25 @@
   <ItemGroup>
     <PackageReference Include="ByteDev.M3u" Version="1.0.0" />
     <PackageReference Include="gong-wpf-dragdrop" Version="3.1.1" />
-    <PackageReference Include="m3uParser.NET" Version="1.0.17" />
     <PackageReference Include="MaterialDesignThemes" Version="4.3.0" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Core" Version="1.1.5" />
     <PackageReference Include="Microsoft-WindowsAPICodePack-Shell" Version="1.1.4" />
     <PackageReference Include="NAudio" Version="2.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="Serilog" Version="2.10.0" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.115.5" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.6" />
+    <PackageReference Include="System.Data.SQLite" Version="1.0.119" />
     <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
     <PackageReference Include="taglib-sharp-netstandard2.0" Version="2.1.0" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TabControl.NET6\TabControl.NET6.csproj" />
+    <ProjectReference Include="..\Libs\m3uParser\m3uParser.csproj" />
+    <ProjectReference Include="..\Libs\TabControl.NET6\TabControl.NET6.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="icons\icon_large.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <ApplicationDefinition Update="App.xaml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Properties\Resources.Designer.cs">

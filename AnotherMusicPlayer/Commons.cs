@@ -5,6 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Diagnostics;
+using System.Linq;
 
 namespace AnotherMusicPlayer
 {
@@ -21,6 +22,29 @@ namespace AnotherMusicPlayer
         public string Performers { get; set; }
         public string Composers { get; set; }
         public string AlbumArtists { get; set; }
+        public string Artists
+        {
+            get
+            {
+                List<string> list = new List<string>();
+                if (Composers.Trim().Length > 0) 
+                { 
+                    List<string> cpl = Composers.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                    foreach (string comp in cpl) { if (!list.Contains(comp)) { list.Add(comp); } }
+                }
+                if (Performers.Trim().Length > 0) 
+                { 
+                    List<string> pel = Performers.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                    foreach (string perf in pel) { if (!list.Contains(perf)) { list.Add(perf); } }
+                }
+                if (AlbumArtists.Trim().Length > 0) 
+                { 
+                    List<string> aal = AlbumArtists.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                    foreach (string artist in aal) { if (!list.Contains(artist)) { list.Add(artist); } }
+                }
+                return (list.Count > 0)?string.Join("; ", list):"";
+            }
+        }
 
         public string InnerUID { get; set; }
 
@@ -38,6 +62,29 @@ namespace AnotherMusicPlayer
             Duration = 0;
 
             InnerUID = Guid.NewGuid().ToString();
+        }
+
+        public static PlayListViewItem FromFilePath(string path) {
+            if (!File.Exists(path)) { return null; }
+            Dictionary<string, object> ret = App.bdd.DatabaseFileInfo(path);
+            if (ret != null)
+            {
+                PlayListViewItem item = new PlayListViewItem();
+                item.Selected = "";
+                item.Path = path;
+                item.OriginPath = path;
+                item.Name = "" + ret["Name"];
+                item.Album = "" + ret["Album"];
+                item.Duration = long.Parse("" + ret["Duration"]);
+                item.DurationS = App.displayTime(item.Duration);
+                item.Performers = "" + ret["Performers"];
+                item.Composers = "" + ret["Composers"];
+                item.AlbumArtists = "" + ret["AlbumArtists"];
+
+                return item;
+            }
+            else
+            { return FilesTags.MediaInfoShort(path, false); }
         }
     }
 

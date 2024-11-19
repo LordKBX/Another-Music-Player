@@ -46,7 +46,7 @@ namespace AnotherMusicPlayer
         private void Player_PlaylistPositionChanged(PlayerPlaylistPositionChangeParams e)
         {
             Debug.WriteLine("Player_PlaylistPositionChanged");
-            Debug.WriteLine(JsonConvert.SerializeObject(e));
+            //Debug.WriteLine(JsonConvert.SerializeObject(e));
             PlayListIndex = e.Position;
             if (PlayListIndex < Player.PlayList.Count)
             {
@@ -113,7 +113,7 @@ namespace AnotherMusicPlayer
         /// <summary> Event Callback when the played media length change(generaly when a new media is played) </summary>
         private void Player_LengthChanged(PlayerLengthChangedEventParams e)
         {
-            Dispatcher.BeginInvoke(new Action(() => { UpdateSize(displayTime((long)(e.duration))); }));
+            Dispatcher.BeginInvoke(new Action(() => { UpdateSize(App.displayTime((long)(e.duration))); }));
         }
 
         public long lastPlaybackPosition = 0;
@@ -121,7 +121,7 @@ namespace AnotherMusicPlayer
         private void Player_PositionChanged(PlayerPositionChangedEventParams e)
         {
             lastPlaybackPosition = e.Position;
-            Dispatcher.BeginInvoke(new Action(() => { UpdatePosition(displayTime((long)(e.Position))); }));
+            Dispatcher.BeginInvoke(new Action(() => { UpdatePosition(App.displayTime((long)(e.Position))); }));
             if (PreventUpdateSlider) { return; }
             float BarCalc = (e.Position > e.duration) ? 1000 : ((1000 * e.Position) / e.duration);
             Dispatcher.BeginInvoke(new Action(() =>
@@ -171,8 +171,8 @@ namespace AnotherMusicPlayer
         {
             Debug.WriteLine("StopPlaylist");
             Player.StopAll();
-            UpdatePosition(displayTime(0));
-            UpdateSize(displayTime(0));
+            UpdatePosition(App.displayTime(0));
+            UpdateSize(App.displayTime(0));
             UpdatePositionBar(0);
             if (PlayList.Count > 0) { UpdatePlaylist(0, false); }
             Dispatcher.BeginInvoke(new Action(() =>

@@ -48,11 +48,11 @@ namespace AnotherMusicPlayer
 
             PlayerPlaylistChangeParams evt = new PlayerPlaylistChangeParams();
             evt.playlist = PlayList.ToArray();
-            PlaylistChanged(evt);
+            PlaylistChanged?.Invoke(evt);
 
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = PlayListIndex;
-            PlaylistPositionChanged(evt2);
+            PlaylistPositionChanged?.Invoke(evt2);
 
             return (goodFiles > 0) ? true : false;
         }
@@ -173,11 +173,25 @@ namespace AnotherMusicPlayer
             }
         }
 
+        /// <summary> Read previous index in playlist </summary>
+        public static void PlaylistPrevious()
+        {
+            Debug.WriteLine("--> PlaylistPrevious <--");
+            PlayListIndex = ((PlayListIndex - 1) < 0) ? PlayList.Count - 1 : PlayListIndex - 1;
+            Play(PlayList[PlayListIndex]);
+            CurrentFile = PlayList[PlayListIndex];
+
+            PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
+            evt.Position = PlayListIndex;
+            PlaylistPositionChanged(evt);
+        }
+
         /// <summary> Read next index in playlist </summary>
         public static void PlaylistNext()
         {
             Debug.WriteLine("--> PlaylistNext <--");
             PlayListIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
+            if (!PlayLoop && PlayListIndex == 0) { return; }
             Play(PlayList[PlayListIndex]);
             CurrentFile = PlayList[PlayListIndex];
 
@@ -191,6 +205,7 @@ namespace AnotherMusicPlayer
         {
             //Debug.WriteLine("--> PlaylistPreloadNext <--");
             int nextIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
+            if (!PlayLoop && nextIndex == 0) { return; }
             if (ThreadList.ContainsKey(PlayList[nextIndex])) { return; }
             Open(PlayList[nextIndex], false);
         }

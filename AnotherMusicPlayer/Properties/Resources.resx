@@ -151,4 +151,22 @@
   <data name="Grip_transparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Grip_transparent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="star_color" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\star_color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="star_gray" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\star_gray.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Style_Dark" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Styles\Dark.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Style_Red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Styles\Red.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Translation_en" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Traductions\en.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="Translation_fr" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Traductions\fr.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>
