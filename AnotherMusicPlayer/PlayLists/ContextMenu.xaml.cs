@@ -24,7 +24,7 @@ namespace AnotherMusicPlayer
             if (otype == null || otype == "") { otype = "track"; }
             string type = otype = otype.ToLower().Trim();
 
-            ContextMenu cm = new PlayListsContextMenu() { Style = Parent.FindResource("CustomContextMenuStyle") as Style };
+            ContextMenu cm = new PlayListsContextMenu() { /*Style = Parent.FindResource("CustomContextMenuStyle") as Style*/ };
             for (int i = 0; i < cm.Items.Count; i++)
             {
                 if (((MenuItem)cm.Items[i]).Name == "PlayListPlay" && type.StartsWith("list"))
@@ -45,13 +45,13 @@ namespace AnotherMusicPlayer
                 else if (((MenuItem)cm.Items[i]).Name == "AddCategoryRadio" && type == "radioroot")
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
-                    ((MenuItem)cm.Items[i]).Header = Parent.FindResource("PlayListsContextMenuRadioAddCategory") as string;
+                    ((MenuItem)cm.Items[i]).Header = App.GetTranslation("PlayListsContextMenuRadioAddCategory");
                     ((MenuItem)cm.Items[i]).Click += CM_AddCategoryRadio;
                 }
                 else if (((MenuItem)cm.Items[i]).Name == "AddRadio" && type == "radioroot")
                 {
                     ((MenuItem)cm.Items[i]).Tag = parent;
-                    ((MenuItem)cm.Items[i]).Header = Parent.FindResource("PlayListsContextMenuRadioAddRadio") as string;
+                    ((MenuItem)cm.Items[i]).Header = App.GetTranslation("PlayListsContextMenuRadioAddRadio");
                     ((MenuItem)cm.Items[i]).Click += CM_AddRadio;
                 }
                 else { ((MenuItem)cm.Items[i]).Visibility = Visibility.Collapsed; }
@@ -67,7 +67,7 @@ namespace AnotherMusicPlayer
             //Dictionary<string, object> data = (Dictionary<string, object>)((TreeViewItem)sender).Tag;
             //Convert.ToInt32(data["Category"])
 
-            AddRadio ar = new AddRadio(Parent, false, 0);
+            AddRadio ar = new AddRadio(/*Parent, */false, 0);
             ar.ShowDialog();
             if (ar.Saved) { Init(); }
         }
@@ -75,39 +75,39 @@ namespace AnotherMusicPlayer
         private void CM_AddCategoryRadio(object sender, RoutedEventArgs e)
         {
             Debug.WriteLine(" ==> CM_AddCategoryRadio");
-            AddRadio ar = new AddRadio(Parent, true);
+            AddRadio ar = new AddRadio(/*Parent, */true);
             ar.ShowDialog();
             if (ar.Saved) { Init(); }
         }
 
         private void CM_RemoveTrackSelection(object sender, RoutedEventArgs e)
         {
-            TreeViewItem TItem = (Parent.PlaylistsTree.SelectedItem != null) ? (TreeViewItem)Parent.PlaylistsTree.SelectedItem : null;
-            if (TItem == null) { return; }
-            if (!TItem.Name.StartsWith("user_")) { return; }
+            //TreeViewItem TItem = (Parent.PlaylistsTree.SelectedItem != null) ? (TreeViewItem)Parent.PlaylistsTree.SelectedItem : null;
+            //if (TItem == null) { return; }
+            //if (!TItem.Name.StartsWith("user_")) { return; }
 
-            if (Parent.PlaylistsContents.SelectedItems.Count == 0) { return; }
+            //if (Parent.PlaylistsContents.SelectedItems.Count == 0) { return; }
 
-            bool ret = DialogBox.ShowDialog(
-                Parent,
-                Parent.FindResource("PlayListsContextMenuPlayListDeleteConfirmTitle") as string,
-                (Parent.PlaylistsContents.SelectedItems.Count > 1) ?
-                    Parent.FindResource("PlayListsContextMenuTrackDeleteConfirmMessage2") as string :
-                    (Parent.FindResource("PlayListsContextMenuTrackDeleteConfirmMessage") as string).Replace("%X%", ((MediaItem)Parent.PlaylistsContents.SelectedItem).Name),
-                DialogBoxButtons.YesNo,
-                DialogBoxIcons.Warning
-                );
+            //bool ret = DialogBox.ShowDialog(
+            //    Parent,
+            //    Parent.FindResource("PlayListsContextMenuPlayListDeleteConfirmTitle") as string,
+            //    (Parent.PlaylistsContents.SelectedItems.Count > 1) ?
+            //        Parent.FindResource("PlayListsContextMenuTrackDeleteConfirmMessage2") as string :
+            //        (Parent.FindResource("PlayListsContextMenuTrackDeleteConfirmMessage") as string).Replace("%X%", ((MediaItem)Parent.PlaylistsContents.SelectedItem).Name),
+            //    DialogBoxButtons.YesNo,
+            //    DialogBoxIcons.Warning
+            //    );
 
-            if (ret == true)
-            {
-                List<string> querys = new List<string>();
-                foreach (MediaItem row in Parent.PlaylistsContents.SelectedItems)
-                {
-                    querys.Add("DELETE FROM playlistsItems WHERE LIndex = '" + ((string)TItem.Tag) + "' AND Path = '" + Database.EscapeString(row.Path) + "'");
-                }
-                Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
-                userlistClick(TItem, null);
-            }
+            //if (ret == true)
+            //{
+            //    List<string> querys = new List<string>();
+            //    foreach (MediaItem row in Parent.PlaylistsContents.SelectedItems)
+            //    {
+            //        querys.Add("DELETE FROM playlistsItems WHERE LIndex = '" + ((string)TItem.Tag) + "' AND Path = '" + Database.EscapeString(row.Path) + "'");
+            //    }
+            //    Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
+            //    userlistClick(TItem, null);
+            //}
         }
 
         private void CM_DeleteList(object sender, RoutedEventArgs e)
@@ -120,17 +120,17 @@ namespace AnotherMusicPlayer
             int id = Convert.ToInt32(list_id);
 
             bool ret = DialogBox.ShowDialog(
-                Parent,
-                Parent.FindResource("PlayListsContextMenuPlayListDeleteConfirmTitle") as string,
-                (Parent.FindResource("PlayListsContextMenuPlayListDeleteConfirmMessage") as string).Replace("%X%", list_name),
+                //Parent,
+                App.GetTranslation("PlayListsContextMenuPlayListDeleteConfirmTitle") as string,
+                (App.GetTranslation("PlayListsContextMenuPlayListDeleteConfirmMessage") as string).Replace("%X%", list_name),
                 DialogBoxButtons.YesNo,
                 DialogBoxIcons.Warning
                 );
 
             if (ret == true)
             {
-                Parent.bdd.DatabaseQuerys(new string[] { "DELETE FROM playlists WHERE FIndex = " + id, "DELETE FROM playlistsItems WHERE LIndex = " + id }, true);
-                Parent.playLists.Init();
+                App.bdd.DatabaseQuerys(new string[] { "DELETE FROM playlists WHERE FIndex = " + id, "DELETE FROM playlistsItems WHERE LIndex = " + id }, true);
+                App.win1.playLists.Init();
             }
         }
 

@@ -1,6 +1,6 @@
 ﻿namespace AnotherMusicPlayer
 {
-    partial class Ratting2
+    partial class Rating2
     {
         /// <summary> 
         /// Variable nécessaire au concepteur.

@@ -1,4 +1,4 @@
-﻿namespace AnotherMusicPlayer.MainWindow2
+﻿namespace AnotherMusicPlayer
 {
     partial class PlaybackProgressBar
     {
@@ -28,45 +28,35 @@
         /// </summary>
         private void InitializeComponent()
         {
-            panel1 = new System.Windows.Forms.Panel();
-            panel2 = new System.Windows.Forms.Panel();
-            panel1.SuspendLayout();
+            progressBar1 = new NewProgressBar();
             SuspendLayout();
             // 
-            // panel1
+            // progressBar1
             // 
-            panel1.BackColor = System.Drawing.SystemColors.ControlDarkDark;
-            panel1.Controls.Add(panel2);
-            panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            panel1.Location = new System.Drawing.Point(0, 0);
-            panel1.Margin = new System.Windows.Forms.Padding(0);
-            panel1.Name = "panel1";
-            panel1.Size = new System.Drawing.Size(300, 30);
-            panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            panel2.BackColor = System.Drawing.Color.White;
-            panel2.Location = new System.Drawing.Point(0, 0);
-            panel2.Margin = new System.Windows.Forms.Padding(0);
-            panel2.Name = "panel2";
-            panel2.Size = new System.Drawing.Size(156, 30);
-            panel2.TabIndex = 0;
+            progressBar1.BackColor = System.Drawing.Color.FromArgb(64, 64, 64);
+            progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+            progressBar1.ForeColor = System.Drawing.Color.Silver;
+            progressBar1.Location = new System.Drawing.Point(0, 0);
+            progressBar1.Maximum = 100000;
+            progressBar1.Name = "progressBar1";
+            progressBar1.Size = new System.Drawing.Size(300, 30);
+            progressBar1.Step = 1;
+            progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            progressBar1.TabIndex = 0;
+            progressBar1.Value = 10000;
             // 
             // PlaybackProgressBar
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            Controls.Add(panel1);
+            Controls.Add(progressBar1);
             Name = "PlaybackProgressBar";
             Size = new System.Drawing.Size(300, 30);
-            panel1.ResumeLayout(false);
             ResumeLayout(false);
         }
 
         #endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
+        private NewProgressBar progressBar1;
     }
 }

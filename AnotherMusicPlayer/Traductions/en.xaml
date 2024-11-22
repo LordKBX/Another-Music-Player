@@ -144,6 +144,16 @@
     <!--#endregion-->
 
     <sys:String x:Key="LibraryNavigatorItemHome">Home</sys:String>
+    <sys:String x:Key="LibraryFiltersModeLabel">Filter</sys:String>
+
+    <sys:String x:Key="LibraryFiltersMode_none">None</sys:String>
+    <sys:String x:Key="LibraryFiltersMode_name">Name / Title</sys:String>
+    <sys:String x:Key="LibraryFiltersMode_artist">Artist</sys:String>
+    <sys:String x:Key="LibraryFiltersMode_album">Album</sys:String>
+    <sys:String x:Key="LibraryFiltersMode_genre">classification</sys:String>
+
+    <sys:String x:Key="LibraryFiltersGenreSearchBox.PlaceholderText">Search genre</sys:String>
+    <sys:String x:Key="LibraryFiltersSearchBox.PlaceholderText">Search</sys:String>
 
     <!--#region LIBRARY CONTEXT MENU STRINGS -->
     <sys:String x:Key="LibraryContextMenuGetBack">Return to parent folder</sys:String>

@@ -13,7 +13,7 @@ using Brush = System.Windows.Media.Brush;
 using Pen = System.Windows.Media.Pen;
 using System.Windows.Forms;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     internal static class Icons
     {

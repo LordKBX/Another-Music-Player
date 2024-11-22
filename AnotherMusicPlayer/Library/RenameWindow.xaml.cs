@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnotherMusicPlayer.MainWindow2Space;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -22,9 +23,9 @@ namespace AnotherMusicPlayer
         private string FolderPath;
         private string[] PathTab;
         public bool renamed = false;
-        public RenameWindow(MainWindow parent, string folderPath, string[] pathTab)
+        public RenameWindow(/*MainWindow parent, */string folderPath, string[] pathTab)
         {
-            Owner = parent;
+            /*Owner = parent;*/
             FolderPath = folderPath;
             PathTab = pathTab;
             InitializeComponent();
@@ -54,7 +55,7 @@ namespace AnotherMusicPlayer
                 List<string> list = new List<string>(PathTab);
                 list.Remove(PathTab[PathTab.Length - 1]);
 
-                Directory.Move(FolderPath, string.Join(MainWindow.SeparatorChar, list.ToArray()) + MainWindow.SeparatorChar + input.Text.Trim());
+                Directory.Move(FolderPath, string.Join(MainWindow2.SeparatorChar, list.ToArray()) + MainWindow2.SeparatorChar + input.Text.Trim());
                 renamed = true;
                 Close();
             };

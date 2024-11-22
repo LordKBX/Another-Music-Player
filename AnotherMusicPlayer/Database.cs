@@ -12,6 +12,7 @@ using System.Data.SQLite;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Threading;
+using AnotherMusicPlayer.MainWindow2Space;
 
 namespace AnotherMusicPlayer
 {
@@ -402,7 +403,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Get Basic Metadata from a list of file if stored in database </summary>
-        public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths, MainWindow parent = null, bool forceUpdate = false)
+        public Dictionary<string, Dictionary<string, object>> DatabaseFilesInfo(string[] paths, MainWindow2 parent = null, bool forceUpdate = false)
         {
             if (paths == null) { return null; }
             if (paths.Length == 0) { return null; }
@@ -486,7 +487,7 @@ namespace AnotherMusicPlayer
                 + "' WHERE Path='" + EscapeString(file) + "'";
 
             DatabaseQuerys(new string[] { query }, commit);
-            return (item != null) ? MainWindow.MediaItemToDatabaseItem(item) : null;
+            return (item != null) ? App.MediaItemToDatabaseItem(item) : null;
         }
 
         public bool DeleteFileAsync(string file, bool commit = false)

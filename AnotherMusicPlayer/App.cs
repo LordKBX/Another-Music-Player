@@ -7,6 +7,8 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
@@ -26,8 +28,8 @@ namespace AnotherMusicPlayer
         [Conditional("DEBUG")]
         public static void TestDebug() { App._IsDebug = true; }
 
-        private static ResourceDictionary Resources = new ResourceDictionary();
-        private static AnotherMusicPlayer.MainWindow2.MainWindow2 win1;
+        public static ResourceDictionary Resources = new ResourceDictionary();
+        public static AnotherMusicPlayer.MainWindow2Space.MainWindow2 win1;
 
         /// <summary>
         /// Point d'entrée principal de l'application.
@@ -40,9 +42,12 @@ namespace AnotherMusicPlayer
             TranslationUpdate();
             Player.INIT();
 
-            win1 = new AnotherMusicPlayer.MainWindow2.MainWindow2();
+            win1 = new AnotherMusicPlayer.MainWindow2Space.MainWindow2();
             win1.ShowDialog();
             win1.Dispose();
+            Player.StopAll(true);
+            FilesTags.WaitTimersEnd();
+
             Environment.Exit(0);
         }
 
@@ -131,6 +136,126 @@ namespace AnotherMusicPlayer
 
                 return new Bitmap(bitmap);
             }
+        }
+
+        public static BitmapImage BitmapToBitmapImage(this Bitmap bitmap)
+        {
+            using (var memory = new MemoryStream())
+            {
+                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
+                memory.Position = 0;
+
+                var bitmapImage = new BitmapImage();
+                bitmapImage.BeginInit();
+                bitmapImage.StreamSource = memory;
+                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+                bitmapImage.EndInit();
+                bitmapImage.Freeze();
+
+                return bitmapImage;
+            }
+        }
+
+        /// <summary> Generate current time Unix Timestamp </summary>
+        public static double UnixTimestamp() { return (DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds; }
+        /// <summary> Generate a Unix Timestamp </summary>
+        public static double UnixTimestamp(int year, int month, int day, int housr = 0, int minutes = 0, int seconds = 0)
+        {
+            DateTime date = new DateTime(year, month, day, housr, minutes, seconds, DateTimeKind.Utc);
+            return (date.Subtract(new DateTime(1970, 1, 1, 0, 0, 0, DateTimeKind.Utc))).TotalSeconds;
+        }
+
+        public static MediaItem DatabaseItemToMediaItem(Dictionary<string, object> rep)
+        {
+            MediaItem item = null;
+            item = new MediaItem();
+            item.Path = (string)rep["Path"];
+            item.Name = (string)rep["Name"];
+            item.Album = (string)rep["Album"];
+            item.AlbumArtists = (string)rep["AlbumArtists"];
+            item.Performers = (string)rep["Performers"];
+            item.Composers = (string)rep["Composers"];
+            item.Lyrics = (string)rep["Lyrics"];
+            item.Duration = Convert.ToInt64((string)rep["Duration"]);
+            item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+            item.Genres = (string)rep["Genres"];
+            item.Copyright = (string)rep["Copyright"];
+            item.Disc = Convert.ToUInt32(rep["Disc"]);
+            item.DiscCount = Convert.ToUInt32(rep["DiscCount"]);
+            item.Track = Convert.ToUInt32(rep["Track"]);
+            item.TrackCount = Convert.ToUInt32(rep["TrackCount"]);
+            item.Year = Convert.ToUInt32(rep["Year"]);
+            item.Rating = Convert.ToDouble((rep["Rating"] as string).Replace(".", ","));
+
+            return item;
+        }
+
+        public static Dictionary<string, object> MediaItemToDatabaseItem(MediaItem rep)
+        {
+            Dictionary<string, object> ret = new Dictionary<string, object>();
+            ret.Add("Path", rep.Path);
+            ret.Add("Name", rep.Name);
+            ret.Add("Album", rep.Album);
+            ret.Add("AlbumArtists", rep.AlbumArtists);
+            ret.Add("Performers", rep.Performers);
+            ret.Add("Composers", rep.Composers);
+            ret.Add("Lyrics", rep.Lyrics);
+            ret.Add("Duration", rep.Duration);
+            ret.Add("DurationS", displayTime(Convert.ToInt64(rep.Duration)));
+            ret.Add("Genres", rep.Genres);
+            ret.Add("Copyright", rep.Copyright);
+            ret.Add("Disc", rep.Disc);
+            ret.Add("DiscCount", rep.DiscCount);
+            ret.Add("Track", rep.Track);
+            ret.Add("TrackCount", rep.TrackCount);
+            ret.Add("Year", rep.Year);
+            return ret;
+        }
+
+        /// <summary> Convert a binary/bytes length in human readable string </summary>
+        public static String BytesLengthToString(long byteCount)
+        {
+            try
+            {
+                string[] suf = {
+                App.GetTranslation("SizeBytesUnit"),
+                    App.GetTranslation("SizeBytesKilo"),
+                    App.GetTranslation("SizeBytesMega"),
+                    App.GetTranslation("SizeBytesGiga"),
+                    App.GetTranslation("SizeBytesTera"),
+                    App.GetTranslation("SizeBytesPeta"),
+                    App.GetTranslation("SizeBytesExa")
+                }; //Longs run out around EB
+                if (byteCount == 0)
+                    return "0" + suf[0];
+                long bytes = Math.Abs(byteCount);
+                int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+                double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+                return (Math.Sign(byteCount) * num).ToString() + suf[place];
+            }
+            catch { return ""; }
+        }
+
+        /// <summary> Normalize a int into a fixed string length by adding 0 before the number until wanted string length reached </summary>
+        public static string NormalizeNumber(int number, int length)
+        {
+            string tstr = "" + number;
+            int dif = length - tstr.Length;
+            if (dif <= 0) { return tstr; }
+            for (int i = 0; i < dif; i++) { tstr = '0' + tstr; }
+            return tstr;
+        }
+
+        /// <summary> Return string hash of a byte array </summary>
+        public static string bytesHash(byte[] data)
+        {
+            return Convert.ToBase64String(SHA512.Create().ComputeHash(data)); ;
+        }
+
+        /// <summary> Return file string hash </summary>
+        public static string FileHash(string path)
+        {
+            using (FileStream s = System.IO.File.OpenRead(path)) { return Convert.ToBase64String(SHA512.Create().ComputeHash(s)); }
         }
     }
 }

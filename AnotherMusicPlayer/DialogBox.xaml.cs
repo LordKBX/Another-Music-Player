@@ -34,9 +34,9 @@ namespace AnotherMusicPlayer
     {
 
         public bool returnState;
-        public DialogBox(MainWindow owner)
+        public DialogBox(/*MainWindow owner*/)
         {
-            Owner = owner;
+            //Owner = owner;
             InitializeComponent();
             Resources = Owner.Resources;
             Style = FindResource("CustomWindowStyle") as Style;
@@ -67,9 +67,9 @@ namespace AnotherMusicPlayer
             Close();
         }
 
-        public static bool ShowDialog(MainWindow owner, string title, string message, DialogBoxButtons buttons = DialogBoxButtons.Ok, DialogBoxIcons icon = DialogBoxIcons.Warning, bool wide = false, string message2 = null)
+        public static bool ShowDialog(/*MainWindow owner, */string title, string message, DialogBoxButtons buttons = DialogBoxButtons.Ok, DialogBoxIcons icon = DialogBoxIcons.Warning, bool wide = false, string message2 = null)
         {
-            DialogBox dialog = new DialogBox(owner);
+            DialogBox dialog = new DialogBox(/*owner*/);
 
             dialog.returnState = false;
             dialog.TitleBlock.Text = title;

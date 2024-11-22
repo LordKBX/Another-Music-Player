@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     static class Translation
     {
@@ -47,8 +47,19 @@ namespace AnotherMusicPlayer.MainWindow2
             window.PlaybackTabTitleLabelInfo.Text = App.GetTranslation("Title2");
             window.PlaybackTabAlbumLabelInfo.Text = App.GetTranslation("Album2");
             window.PlaybackTabArtistsLabelInfo.Text = App.GetTranslation("Artist2");
+            window.PlaybackTabGenresLabelInfo.Text = App.GetTranslation("Genres2");
             window.PlaybackTabDurationLabelInfo.Text = App.GetTranslation("Duration2");
             window.PlaybackTabLyricsButton.Text = App.GetTranslation("Lyrics");
+
+            // Library Tab
+            window.LibraryFiltersModeLabel.Text = App.GetTranslation("LibraryFiltersModeLabel");
+            window.LibraryFiltersMode.Items[0] = App.GetTranslation("LibraryFiltersMode_none");
+            window.LibraryFiltersMode.Items[1] = App.GetTranslation("LibraryFiltersMode_name");
+            window.LibraryFiltersMode.Items[2] = App.GetTranslation("LibraryFiltersMode_artist");
+            window.LibraryFiltersMode.Items[3] = App.GetTranslation("LibraryFiltersMode_album");
+            window.LibraryFiltersMode.Items[4] = App.GetTranslation("LibraryFiltersMode_genre");
+            window.LibraryFiltersGenreSearchBox.PlaceholderText = " " + App.GetTranslation("LibraryFiltersGenreSearchBox.PlaceholderText");
+            window.LibraryFiltersSearchBox.PlaceholderText = " " + App.GetTranslation("LibraryFiltersSearchBox.PlaceholderText");
 
             // settings Tab
             window.SettingsTabLangGroupBox.Text = App.GetTranslation("ParamsLanguageLabel");
@@ -92,13 +103,6 @@ namespace AnotherMusicPlayer.MainWindow2
             window.SettingsTabEqualizerGroupBox.Text = App.GetTranslation("ParamsEqualizerLabel");
             window.SettingsTabEqualizerButton.Text = App.GetTranslation("ParamsEqualizerResetLabel");
 
-            if (window.SettingsTabEqualizerComboBox.Items.Count == 0)
-            {
-                List<string> keys = Player.EqualizerPresetsTab.Keys.ToList();
-                Debug.WriteLine(JsonConvert.SerializeObject(keys));
-                window.SettingsTabEqualizerComboBox.Items.Add("Perso");
-                for (int i = 0; i < keys.Count; i++) { window.SettingsTabEqualizerComboBox.Items.Add(keys[i]); } 
-            }
             window.SettingsTabEqualizerComboBox.Items[0] = App.GetTranslation("ParamsEqualizerPresets_Perso");
             window.SettingsTabEqualizerComboBox.Items[1] = App.GetTranslation("ParamsEqualizerPresets_Flat");
             window.SettingsTabEqualizerComboBox.Items[2] = App.GetTranslation("ParamsEqualizerPresets_Classic");

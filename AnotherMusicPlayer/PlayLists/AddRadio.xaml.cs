@@ -27,9 +27,9 @@ namespace AnotherMusicPlayer
         List<string> AutorizedCoverFileExtention = new List<string> { ".bmp", ".jpg", ".jpeg", ".png" };
         public bool Saved = false;
 
-        public AddRadio(MainWindow parent, bool categoryMode = false, int categoryId = 0)
+        public AddRadio(/*MainWindow parent, */bool categoryMode = false, int categoryId = 0)
         {
-            Owner = parent;
+            //Owner = parent;
             CategoryMode = categoryMode;
             InitializeComponent();
             /*Resources = App0.win1.Resources;*/
@@ -55,7 +55,7 @@ namespace AnotherMusicPlayer
             BtnClose.Click += (object sender, RoutedEventArgs e) => { Close(); };
             TopBar.MouseDown += TopBar_MouseDown;
 
-            RadioCover.Source = DefaultCover = MainWindow.Bimage("CoverImg");
+            RadioCover.Source = DefaultCover = App.BitmapToBitmapImage(Properties.Resources.CoverImg);
             RadioCover.Drop += Cover_Drop;
 
             BtnSave.Click += BtnSave_Click;

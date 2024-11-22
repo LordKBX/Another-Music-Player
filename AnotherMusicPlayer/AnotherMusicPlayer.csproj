@@ -18,7 +18,7 @@
     <PackageProjectUrl>https://github.com/LordKBX/Another-Music-Player</PackageProjectUrl>
     <PackageIcon>album_large.png</PackageIcon>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
-    <ApplicationIcon>icons\icon_large.ico</ApplicationIcon>
+    <ApplicationIcon>icon_large.ico</ApplicationIcon>
     <Configurations>Debug;Release</Configurations>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <NeutralLanguage>en</NeutralLanguage>
@@ -39,6 +39,7 @@
   <ItemGroup>
     <None Remove="icons\icon_large.ico" />
     <None Remove="play.png" />
+    <Content Include="icon_large.ico" />
     <None Include="..\LICENSE">
       <Pack>True</Pack>
       <PackagePath>
@@ -75,6 +76,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="MainWindow2\MainWindow2_WindowGestion.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

@@ -1,7 +1,7 @@
 ﻿using System.Drawing;
 using System.Windows.Forms;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     partial class MainWindow2
     {
@@ -52,14 +52,7 @@ namespace AnotherMusicPlayer.MainWindow2
             DisplayPlaybackSize = new Label();
             playbackProgressBar = new PlaybackProgressBar();
             tableLayoutPanel2 = new TableLayoutPanel();
-            tableLayoutPanel3 = new TableLayoutPanel();
-            BtnOpen = new Button();
-            BtnPrevious = new Button();
-            BtnPlayPause = new Button();
-            BtnNext = new Button();
-            BtnRepeat = new Button();
-            BtnShuffle = new Button();
-            BtnClearList = new Button();
+            panel3 = new Panel();
             TabControler = new Manina.Windows.Forms.TabControl();
             PlaybackTab = new Manina.Windows.Forms.Tab();
             PlaybackTabMainTableLayoutPanel = new TableLayoutPanel();
@@ -72,10 +65,12 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabAlbumLabelValue = new Label();
             PlaybackTabArtistsLabelInfo = new Label();
             PlaybackTabArtistsLabelValue = new Label();
+            PlaybackTabGenresLabelInfo = new Label();
+            PlaybackTabGenresLabelValue = new Label();
             PlaybackTabDurationLabelInfo = new Label();
             PlaybackTabDurationLabelValue = new Label();
+            PlaybackTabRatting = new Rating2();
             PlaybackTabLyricsButton = new Button();
-            PlaybackTabRatting = new Ratting2();
             FileCover = new Button();
             tableLayoutPanel4 = new TableLayoutPanel();
             PlaybackTabDataGridView = new DataGridView();
@@ -87,6 +82,16 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackPositionLabel = new Label();
             LibraryTab = new Manina.Windows.Forms.Tab();
             LibraryTabTableLayoutPanel = new TableLayoutPanel();
+            LibibraryNavigationPathContener = new FlowLayoutPanel();
+            LibraryFiltersGrid = new TableLayoutPanel();
+            LibraryFiltersModeLabel = new Label();
+            LibraryFiltersMode = new ComboBox();
+            LibraryFiltersGenreList = new ComboBox();
+            LibraryFiltersGenreSearchBox = new TextBox();
+            LibraryFiltersSearchBox = new TextBox();
+            LibraryTabSplitContainer = new SplitContainer();
+            LibibraryNavigationContent = new FlowLayoutPanel();
+            LibibrarySearchContent = new FlowLayoutPanel();
             PlayListsTab = new Manina.Windows.Forms.Tab();
             TableLayoutPanel = new TableLayoutPanel();
             SettingsTab = new Manina.Windows.Forms.Tab();
@@ -141,22 +146,26 @@ namespace AnotherMusicPlayer.MainWindow2
             SettingsTabEqualizerLabel08 = new Label();
             SettingsTabEqualizerLabel09 = new Label();
             SettingsTabEqualizerLabel10 = new Label();
-            LibibraryNavigationPathContener = new FlowLayoutPanel();
-            LibraryFiltersGrid = new TableLayoutPanel();
-            LibraryFiltersModeLabel = new Label();
-            LibraryFiltersMode = new ComboBox();
-            LibraryFiltersGenreList = new ComboBox();
-            LibraryFiltersGenreSearchBox = new TextBox();
-            LibraryFiltersSearchBox = new TextBox();
-            splitContainer1 = new SplitContainer();
-            LibibraryNavigationContent = new FlowLayoutPanel();
-            LibibrarySearchContent = new FlowLayoutPanel();
+            tableLayoutPanel3 = new TableLayoutPanel();
+            BtnOpen = new Button();
+            BtnPrevious = new Button();
+            BtnPlayPause = new Button();
+            BtnNext = new Button();
+            BtnRepeat = new Button();
+            BtnShuffle = new Button();
+            BtnClearList = new Button();
+            GridScanMetadata = new TableLayoutPanel();
+            textBox1 = new TextBox();
+            pictureBox1 = new PictureBox();
+            GridScanMetadataNb = new Label();
+            OverPanel = new Panel();
+            OverPanelLabel = new Label();
             GlobalTableLayoutPanel.SuspendLayout();
             MainWIndowHead.SuspendLayout();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             tableLayoutPanel2.SuspendLayout();
-            tableLayoutPanel3.SuspendLayout();
+            panel3.SuspendLayout();
             TabControler.SuspendLayout();
             PlaybackTab.SuspendLayout();
             PlaybackTabMainTableLayoutPanel.SuspendLayout();
@@ -167,6 +176,11 @@ namespace AnotherMusicPlayer.MainWindow2
             ((System.ComponentModel.ISupportInitialize)PlaybackTabDataGridView).BeginInit();
             LibraryTab.SuspendLayout();
             LibraryTabTableLayoutPanel.SuspendLayout();
+            LibraryFiltersGrid.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)LibraryTabSplitContainer).BeginInit();
+            LibraryTabSplitContainer.Panel1.SuspendLayout();
+            LibraryTabSplitContainer.Panel2.SuspendLayout();
+            LibraryTabSplitContainer.SuspendLayout();
             PlayListsTab.SuspendLayout();
             SettingsTab.SuspendLayout();
             panel2.SuspendLayout();
@@ -193,11 +207,10 @@ namespace AnotherMusicPlayer.MainWindow2
             ((System.ComponentModel.ISupportInitialize)SettingsTabEqualizerTrackBar08).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SettingsTabEqualizerTrackBar09).BeginInit();
             ((System.ComponentModel.ISupportInitialize)SettingsTabEqualizerTrackBar10).BeginInit();
-            LibraryFiltersGrid.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
-            splitContainer1.Panel1.SuspendLayout();
-            splitContainer1.Panel2.SuspendLayout();
-            splitContainer1.SuspendLayout();
+            tableLayoutPanel3.SuspendLayout();
+            GridScanMetadata.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
+            OverPanel.SuspendLayout();
             SuspendLayout();
             // 
             // GlobalTableLayoutPanel
@@ -241,6 +254,7 @@ namespace AnotherMusicPlayer.MainWindow2
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             MainWIndowHead.Size = new Size(919, 51);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
@@ -397,203 +411,49 @@ namespace AnotherMusicPlayer.MainWindow2
             // playbackProgressBar
             // 
             playbackProgressBar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            playbackProgressBar.BorderStyle = BorderStyle.FixedSingle;
-            playbackProgressBar.Cursor = Cursors.Hand;
-            playbackProgressBar.ForeColor = Color.Silver;
-            playbackProgressBar.Location = new Point(123, 17);
+            playbackProgressBar.ForeColor = Color.White;
+            playbackProgressBar.Location = new Point(120, 17);
+            playbackProgressBar.Margin = new Padding(0);
+            playbackProgressBar.MaxValue = 100000;
+            playbackProgressBar.MinimumSize = new Size(0, 25);
+            playbackProgressBar.MinValue = 0;
             playbackProgressBar.Name = "playbackProgressBar";
-            playbackProgressBar.Size = new Size(673, 25);
+            playbackProgressBar.Size = new Size(679, 25);
             playbackProgressBar.TabIndex = 1;
-            playbackProgressBar.Value = 50D;
+            playbackProgressBar.Value = 10000;
             // 
             // tableLayoutPanel2
             // 
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel2.Controls.Add(panel3, 0, 0);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 0);
-            tableLayoutPanel2.Controls.Add(TabControler, 0, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
             tableLayoutPanel2.Location = new Point(1, 52);
             tableLayoutPanel2.Margin = new Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel2.Size = new Size(919, 566);
             tableLayoutPanel2.TabIndex = 6;
             // 
-            // tableLayoutPanel3
+            // panel3
             // 
-            tableLayoutPanel3.ColumnCount = 1;
-            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Controls.Add(BtnOpen, 0, 0);
-            tableLayoutPanel3.Controls.Add(BtnPrevious, 0, 1);
-            tableLayoutPanel3.Controls.Add(BtnPlayPause, 0, 2);
-            tableLayoutPanel3.Controls.Add(BtnNext, 0, 3);
-            tableLayoutPanel3.Controls.Add(BtnRepeat, 0, 4);
-            tableLayoutPanel3.Controls.Add(BtnShuffle, 0, 5);
-            tableLayoutPanel3.Controls.Add(BtnClearList, 0, 6);
-            tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(859, 0);
-            tableLayoutPanel3.Margin = new Padding(0);
-            tableLayoutPanel3.Name = "tableLayoutPanel3";
-            tableLayoutPanel3.RowCount = 8;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(60, 566);
-            tableLayoutPanel3.TabIndex = 6;
-            // 
-            // BtnOpen
-            // 
-            BtnOpen.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnOpen.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnOpen.BackColor = Color.FromArgb(30, 30, 30);
-            BtnOpen.BackgroundImage = Properties.Resources.album_large;
-            BtnOpen.BackgroundImageLayout = ImageLayout.Center;
-            BtnOpen.Cursor = Cursors.Hand;
-            BtnOpen.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnOpen.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnOpen.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnOpen.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnOpen.FlatStyle = FlatStyle.Flat;
-            BtnOpen.Location = new Point(9, 3);
-            BtnOpen.Margin = new Padding(2, 3, 2, 3);
-            BtnOpen.Name = "BtnOpen";
-            BtnOpen.Size = new Size(41, 41);
-            BtnOpen.TabIndex = 0;
-            BtnOpen.UseVisualStyleBackColor = false;
-            // 
-            // BtnPrevious
-            // 
-            BtnPrevious.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnPrevious.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnPrevious.BackColor = Color.FromArgb(30, 30, 30);
-            BtnPrevious.BackgroundImage = Properties.Resources.album_large;
-            BtnPrevious.BackgroundImageLayout = ImageLayout.Center;
-            BtnPrevious.Cursor = Cursors.Hand;
-            BtnPrevious.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnPrevious.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnPrevious.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnPrevious.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnPrevious.FlatStyle = FlatStyle.Flat;
-            BtnPrevious.ImageAlign = ContentAlignment.TopLeft;
-            BtnPrevious.Location = new Point(9, 50);
-            BtnPrevious.Margin = new Padding(2, 3, 2, 3);
-            BtnPrevious.Name = "BtnPrevious";
-            BtnPrevious.Size = new Size(41, 41);
-            BtnPrevious.TabIndex = 0;
-            BtnPrevious.UseVisualStyleBackColor = false;
-            // 
-            // BtnPlayPause
-            // 
-            BtnPlayPause.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnPlayPause.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnPlayPause.BackColor = Color.FromArgb(30, 30, 30);
-            BtnPlayPause.BackgroundImage = Properties.Resources.album_large;
-            BtnPlayPause.BackgroundImageLayout = ImageLayout.Center;
-            BtnPlayPause.Cursor = Cursors.Hand;
-            BtnPlayPause.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnPlayPause.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnPlayPause.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnPlayPause.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnPlayPause.FlatStyle = FlatStyle.Flat;
-            BtnPlayPause.Location = new Point(9, 97);
-            BtnPlayPause.Margin = new Padding(2, 3, 2, 3);
-            BtnPlayPause.Name = "BtnPlayPause";
-            BtnPlayPause.Size = new Size(41, 41);
-            BtnPlayPause.TabIndex = 0;
-            BtnPlayPause.UseVisualStyleBackColor = false;
-            // 
-            // BtnNext
-            // 
-            BtnNext.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnNext.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnNext.BackColor = Color.FromArgb(30, 30, 30);
-            BtnNext.BackgroundImage = Properties.Resources.album_large;
-            BtnNext.BackgroundImageLayout = ImageLayout.Center;
-            BtnNext.Cursor = Cursors.Hand;
-            BtnNext.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnNext.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnNext.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnNext.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnNext.FlatStyle = FlatStyle.Flat;
-            BtnNext.Location = new Point(9, 144);
-            BtnNext.Margin = new Padding(2, 3, 2, 3);
-            BtnNext.Name = "BtnNext";
-            BtnNext.Size = new Size(41, 41);
-            BtnNext.TabIndex = 0;
-            BtnNext.UseVisualStyleBackColor = false;
-            // 
-            // BtnRepeat
-            // 
-            BtnRepeat.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnRepeat.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnRepeat.BackColor = Color.FromArgb(30, 30, 30);
-            BtnRepeat.BackgroundImage = Properties.Resources.album_large;
-            BtnRepeat.BackgroundImageLayout = ImageLayout.Center;
-            BtnRepeat.Cursor = Cursors.Hand;
-            BtnRepeat.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnRepeat.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnRepeat.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnRepeat.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnRepeat.FlatStyle = FlatStyle.Flat;
-            BtnRepeat.Location = new Point(9, 191);
-            BtnRepeat.Margin = new Padding(2, 3, 2, 3);
-            BtnRepeat.Name = "BtnRepeat";
-            BtnRepeat.Size = new Size(41, 41);
-            BtnRepeat.TabIndex = 0;
-            BtnRepeat.UseVisualStyleBackColor = false;
-            // 
-            // BtnShuffle
-            // 
-            BtnShuffle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnShuffle.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnShuffle.BackColor = Color.FromArgb(30, 30, 30);
-            BtnShuffle.BackgroundImage = Properties.Resources.album_large;
-            BtnShuffle.BackgroundImageLayout = ImageLayout.Center;
-            BtnShuffle.Cursor = Cursors.Hand;
-            BtnShuffle.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnShuffle.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnShuffle.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnShuffle.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnShuffle.FlatStyle = FlatStyle.Flat;
-            BtnShuffle.Location = new Point(9, 238);
-            BtnShuffle.Margin = new Padding(2, 3, 2, 3);
-            BtnShuffle.Name = "BtnShuffle";
-            BtnShuffle.Size = new Size(41, 41);
-            BtnShuffle.TabIndex = 0;
-            BtnShuffle.UseVisualStyleBackColor = false;
-            // 
-            // BtnClearList
-            // 
-            BtnClearList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnClearList.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnClearList.BackColor = Color.FromArgb(30, 30, 30);
-            BtnClearList.BackgroundImage = Properties.Resources.album_large;
-            BtnClearList.BackgroundImageLayout = ImageLayout.Center;
-            BtnClearList.Cursor = Cursors.Hand;
-            BtnClearList.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnClearList.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnClearList.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnClearList.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnClearList.FlatStyle = FlatStyle.Flat;
-            BtnClearList.ForeColor = Color.White;
-            BtnClearList.Location = new Point(9, 285);
-            BtnClearList.Margin = new Padding(2, 3, 2, 3);
-            BtnClearList.Name = "BtnClearList";
-            BtnClearList.Size = new Size(41, 41);
-            BtnClearList.TabIndex = 0;
-            BtnClearList.UseVisualStyleBackColor = false;
+            panel3.BorderStyle = BorderStyle.FixedSingle;
+            panel3.Controls.Add(TabControler);
+            panel3.Dock = DockStyle.Fill;
+            panel3.Location = new Point(0, 3);
+            panel3.Margin = new Padding(0, 3, 0, 0);
+            panel3.Name = "panel3";
+            panel3.Size = new Size(859, 563);
+            panel3.TabIndex = 1;
             // 
             // TabControler
             // 
-            TabControler.BackColor = Color.FromArgb(30, 30, 30);
+            TabControler.BackColor = Color.White;
+            TabControler.BorderStyle = BorderStyle.None;
             TabControler.ContentAlignment = Manina.Windows.Forms.Alignment.Center;
             TabControler.Controls.Add(PlaybackTab);
             TabControler.Controls.Add(LibraryTab);
@@ -604,7 +464,7 @@ namespace AnotherMusicPlayer.MainWindow2
             TabControler.Location = new Point(0, 0);
             TabControler.Margin = new Padding(0);
             TabControler.Name = "TabControler";
-            TabControler.Size = new Size(859, 566);
+            TabControler.Size = new Size(857, 561);
             TabControler.TabIndex = 7;
             TabControler.TabPadding = new Padding(0);
             TabControler.TabSize = new Size(100, 50);
@@ -612,12 +472,15 @@ namespace AnotherMusicPlayer.MainWindow2
             // 
             // PlaybackTab
             // 
-            PlaybackTab.BackColor = Color.Gray;
+            PlaybackTab.BackColor = Color.FromArgb(50, 50, 50);
             PlaybackTab.Controls.Add(PlaybackTabMainTableLayoutPanel);
             PlaybackTab.ForeColor = Color.White;
-            PlaybackTab.Location = new Point(1, 50);
+            PlaybackTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
+            PlaybackTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
+            PlaybackTab.Location = new Point(0, 50);
             PlaybackTab.Name = "PlaybackTab";
-            PlaybackTab.Size = new Size(857, 515);
+            PlaybackTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
+            PlaybackTab.Size = new Size(857, 512);
             PlaybackTab.Text = " Playback";
             // 
             // PlaybackTabMainTableLayoutPanel
@@ -635,7 +498,7 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabMainTableLayoutPanel.Name = "PlaybackTabMainTableLayoutPanel";
             PlaybackTabMainTableLayoutPanel.RowCount = 1;
             PlaybackTabMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlaybackTabMainTableLayoutPanel.Size = new Size(857, 515);
+            PlaybackTabMainTableLayoutPanel.Size = new Size(857, 512);
             PlaybackTabMainTableLayoutPanel.TabIndex = 0;
             // 
             // PlaybackTabLeftTableLayoutPanel
@@ -651,7 +514,7 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabLeftTableLayoutPanel.RowCount = 2;
             PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
             PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlaybackTabLeftTableLayoutPanel.Size = new Size(150, 513);
+            PlaybackTabLeftTableLayoutPanel.Size = new Size(150, 510);
             PlaybackTabLeftTableLayoutPanel.TabIndex = 1;
             // 
             // PlaybackTabLeftBottomPanel
@@ -662,7 +525,7 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabLeftBottomPanel.Location = new Point(0, 150);
             PlaybackTabLeftBottomPanel.Margin = new Padding(0);
             PlaybackTabLeftBottomPanel.Name = "PlaybackTabLeftBottomPanel";
-            PlaybackTabLeftBottomPanel.Size = new Size(150, 363);
+            PlaybackTabLeftBottomPanel.Size = new Size(150, 360);
             PlaybackTabLeftBottomPanel.TabIndex = 0;
             // 
             // PlaybackTabLeftBottomFlowLayoutPanel
@@ -675,16 +538,18 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabAlbumLabelValue);
             PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabArtistsLabelInfo);
             PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabArtistsLabelValue);
+            PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabGenresLabelInfo);
+            PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabGenresLabelValue);
             PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabDurationLabelInfo);
             PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabDurationLabelValue);
-            PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabLyricsButton);
             PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabRatting);
+            PlaybackTabLeftBottomFlowLayoutPanel.Controls.Add(PlaybackTabLyricsButton);
             PlaybackTabLeftBottomFlowLayoutPanel.Dock = DockStyle.Top;
             PlaybackTabLeftBottomFlowLayoutPanel.Location = new Point(0, 0);
             PlaybackTabLeftBottomFlowLayoutPanel.Margin = new Padding(3, 4, 3, 4);
             PlaybackTabLeftBottomFlowLayoutPanel.MinimumSize = new Size(150, 249);
             PlaybackTabLeftBottomFlowLayoutPanel.Name = "PlaybackTabLeftBottomFlowLayoutPanel";
-            PlaybackTabLeftBottomFlowLayoutPanel.Size = new Size(150, 249);
+            PlaybackTabLeftBottomFlowLayoutPanel.Size = new Size(150, 288);
             PlaybackTabLeftBottomFlowLayoutPanel.TabIndex = 0;
             // 
             // PlaybackTabTitleLabelInfo
@@ -748,10 +613,30 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabArtistsLabelValue.Size = new Size(140, 20);
             PlaybackTabArtistsLabelValue.TabIndex = 1;
             // 
+            // PlaybackTabGenresLabelInfo
+            // 
+            PlaybackTabGenresLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
+            PlaybackTabGenresLabelInfo.Location = new Point(2, 135);
+            PlaybackTabGenresLabelInfo.Margin = new Padding(2, 0, 0, 0);
+            PlaybackTabGenresLabelInfo.Name = "PlaybackTabGenresLabelInfo";
+            PlaybackTabGenresLabelInfo.Size = new Size(166, 24);
+            PlaybackTabGenresLabelInfo.TabIndex = 1;
+            PlaybackTabGenresLabelInfo.Text = "Genre:";
+            // 
+            // PlaybackTabGenresLabelValue
+            // 
+            PlaybackTabGenresLabelValue.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            PlaybackTabGenresLabelValue.Location = new Point(11, 159);
+            PlaybackTabGenresLabelValue.Margin = new Padding(11, 0, 0, 0);
+            PlaybackTabGenresLabelValue.MinimumSize = new Size(80, 20);
+            PlaybackTabGenresLabelValue.Name = "PlaybackTabGenresLabelValue";
+            PlaybackTabGenresLabelValue.Size = new Size(138, 22);
+            PlaybackTabGenresLabelValue.TabIndex = 1;
+            // 
             // PlaybackTabDurationLabelInfo
             // 
             PlaybackTabDurationLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold, GraphicsUnit.Point);
-            PlaybackTabDurationLabelInfo.Location = new Point(2, 135);
+            PlaybackTabDurationLabelInfo.Location = new Point(2, 181);
             PlaybackTabDurationLabelInfo.Margin = new Padding(2, 0, 0, 0);
             PlaybackTabDurationLabelInfo.Name = "PlaybackTabDurationLabelInfo";
             PlaybackTabDurationLabelInfo.Size = new Size(166, 24);
@@ -761,33 +646,18 @@ namespace AnotherMusicPlayer.MainWindow2
             // PlaybackTabDurationLabelValue
             // 
             PlaybackTabDurationLabelValue.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            PlaybackTabDurationLabelValue.Location = new Point(11, 159);
+            PlaybackTabDurationLabelValue.Location = new Point(11, 205);
             PlaybackTabDurationLabelValue.Margin = new Padding(11, 0, 0, 0);
             PlaybackTabDurationLabelValue.MinimumSize = new Size(80, 20);
             PlaybackTabDurationLabelValue.Name = "PlaybackTabDurationLabelValue";
             PlaybackTabDurationLabelValue.Size = new Size(138, 22);
             PlaybackTabDurationLabelValue.TabIndex = 1;
             // 
-            // PlaybackTabLyricsButton
-            // 
-            PlaybackTabLyricsButton.FlatAppearance.BorderColor = Color.White;
-            PlaybackTabLyricsButton.FlatAppearance.MouseDownBackColor = Color.Gray;
-            PlaybackTabLyricsButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(64, 64, 64);
-            PlaybackTabLyricsButton.FlatStyle = FlatStyle.Flat;
-            PlaybackTabLyricsButton.Location = new Point(3, 184);
-            PlaybackTabLyricsButton.Name = "PlaybackTabLyricsButton";
-            PlaybackTabLyricsButton.Size = new Size(94, 29);
-            PlaybackTabLyricsButton.TabIndex = 2;
-            PlaybackTabLyricsButton.Text = "Lyrics";
-            PlaybackTabLyricsButton.UseVisualStyleBackColor = true;
-            // 
             // PlaybackTabRatting
             // 
-            PlaybackTabRatting.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             PlaybackTabRatting.BackColor = Color.Transparent;
             PlaybackTabRatting.IsReadOnly = false;
-            PlaybackTabRatting.Location = new Point(0, 219);
-            PlaybackTabRatting.Margin = new Padding(0, 3, 0, 0);
+            PlaybackTabRatting.Location = new Point(3, 230);
             PlaybackTabRatting.MaximumSize = new Size(100, 20);
             PlaybackTabRatting.MinimumSize = new Size(100, 20);
             PlaybackTabRatting.Name = "PlaybackTabRatting";
@@ -795,6 +665,19 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabRatting.Size = new Size(100, 20);
             PlaybackTabRatting.TabIndex = 3;
             PlaybackTabRatting.Zoom = 1D;
+            // 
+            // PlaybackTabLyricsButton
+            // 
+            PlaybackTabLyricsButton.FlatAppearance.BorderColor = Color.White;
+            PlaybackTabLyricsButton.FlatAppearance.MouseDownBackColor = Color.Gray;
+            PlaybackTabLyricsButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(64, 64, 64);
+            PlaybackTabLyricsButton.FlatStyle = FlatStyle.Flat;
+            PlaybackTabLyricsButton.Location = new Point(3, 256);
+            PlaybackTabLyricsButton.Name = "PlaybackTabLyricsButton";
+            PlaybackTabLyricsButton.Size = new Size(94, 29);
+            PlaybackTabLyricsButton.TabIndex = 2;
+            PlaybackTabLyricsButton.Text = "Lyrics";
+            PlaybackTabLyricsButton.UseVisualStyleBackColor = true;
             // 
             // FileCover
             // 
@@ -827,7 +710,7 @@ namespace AnotherMusicPlayer.MainWindow2
             tableLayoutPanel4.RowCount = 2;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(704, 513);
+            tableLayoutPanel4.Size = new Size(704, 510);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // PlaybackTabDataGridView
@@ -844,9 +727,7 @@ namespace AnotherMusicPlayer.MainWindow2
             dataGridViewCellStyle1.SelectionForeColor = Color.White;
             PlaybackTabDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
             PlaybackTabDataGridView.BackgroundColor = Color.FromArgb(30, 30, 30);
-            PlaybackTabDataGridView.BorderStyle = BorderStyle.None;
             PlaybackTabDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            PlaybackTabDataGridView.ColumnHeadersBorderStyle = DataGridViewHeaderBorderStyle.Single;
             dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = Color.Teal;
             dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
@@ -902,7 +783,7 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabDataGridView.ShowCellErrors = false;
             PlaybackTabDataGridView.ShowEditingIcon = false;
             PlaybackTabDataGridView.ShowRowErrors = false;
-            PlaybackTabDataGridView.Size = new Size(704, 473);
+            PlaybackTabDataGridView.Size = new Size(704, 470);
             PlaybackTabDataGridView.TabIndex = 1;
             // 
             // SelectedColumn
@@ -966,12 +847,15 @@ namespace AnotherMusicPlayer.MainWindow2
             // 
             // LibraryTab
             // 
-            LibraryTab.BackColor = Color.Gray;
+            LibraryTab.BackColor = Color.FromArgb(50, 50, 50);
             LibraryTab.Controls.Add(LibraryTabTableLayoutPanel);
             LibraryTab.ForeColor = Color.White;
-            LibraryTab.Location = new Point(1, 50);
+            LibraryTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
+            LibraryTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
+            LibraryTab.Location = new Point(0, 50);
             LibraryTab.Name = "LibraryTab";
-            LibraryTab.Size = new Size(857, 515);
+            LibraryTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
+            LibraryTab.Size = new Size(857, 512);
             LibraryTab.Text = " Library";
             // 
             // LibraryTabTableLayoutPanel
@@ -982,7 +866,7 @@ namespace AnotherMusicPlayer.MainWindow2
             LibraryTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             LibraryTabTableLayoutPanel.Controls.Add(LibibraryNavigationPathContener, 0, 0);
             LibraryTabTableLayoutPanel.Controls.Add(LibraryFiltersGrid, 0, 1);
-            LibraryTabTableLayoutPanel.Controls.Add(splitContainer1, 0, 2);
+            LibraryTabTableLayoutPanel.Controls.Add(LibraryTabSplitContainer, 0, 2);
             LibraryTabTableLayoutPanel.Dock = DockStyle.Fill;
             LibraryTabTableLayoutPanel.Location = new Point(0, 0);
             LibraryTabTableLayoutPanel.Margin = new Padding(0);
@@ -992,22 +876,170 @@ namespace AnotherMusicPlayer.MainWindow2
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            LibraryTabTableLayoutPanel.Size = new Size(857, 515);
+            LibraryTabTableLayoutPanel.Size = new Size(857, 512);
             LibraryTabTableLayoutPanel.TabIndex = 1;
+            // 
+            // LibibraryNavigationPathContener
+            // 
+            LibibraryNavigationPathContener.Dock = DockStyle.Fill;
+            LibibraryNavigationPathContener.Location = new Point(1, 1);
+            LibibraryNavigationPathContener.Margin = new Padding(0);
+            LibibraryNavigationPathContener.Name = "LibibraryNavigationPathContener";
+            LibibraryNavigationPathContener.Size = new Size(855, 40);
+            LibibraryNavigationPathContener.TabIndex = 0;
+            // 
+            // LibraryFiltersGrid
+            // 
+            LibraryFiltersGrid.ColumnCount = 7;
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
+            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersModeLabel, 0, 0);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersMode, 1, 0);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreList, 2, 0);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreSearchBox, 3, 0);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersSearchBox, 4, 0);
+            LibraryFiltersGrid.Dock = DockStyle.Fill;
+            LibraryFiltersGrid.Location = new Point(4, 45);
+            LibraryFiltersGrid.Name = "LibraryFiltersGrid";
+            LibraryFiltersGrid.RowCount = 1;
+            LibraryFiltersGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            LibraryFiltersGrid.Size = new Size(849, 34);
+            LibraryFiltersGrid.TabIndex = 1;
+            // 
+            // LibraryFiltersModeLabel
+            // 
+            LibraryFiltersModeLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersModeLabel.AutoSize = true;
+            LibraryFiltersModeLabel.Location = new Point(3, 7);
+            LibraryFiltersModeLabel.Margin = new Padding(3, 0, 10, 0);
+            LibraryFiltersModeLabel.Name = "LibraryFiltersModeLabel";
+            LibraryFiltersModeLabel.Size = new Size(42, 20);
+            LibraryFiltersModeLabel.TabIndex = 0;
+            LibraryFiltersModeLabel.Text = "Filter";
+            // 
+            // LibraryFiltersMode
+            // 
+            LibraryFiltersMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersMode.BackColor = Color.DimGray;
+            LibraryFiltersMode.DropDownStyle = ComboBoxStyle.DropDownList;
+            LibraryFiltersMode.FlatStyle = FlatStyle.Flat;
+            LibraryFiltersMode.ForeColor = Color.White;
+            LibraryFiltersMode.FormattingEnabled = true;
+            LibraryFiltersMode.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
+            LibraryFiltersMode.Location = new Point(58, 3);
+            LibraryFiltersMode.Name = "LibraryFiltersMode";
+            LibraryFiltersMode.Size = new Size(144, 28);
+            LibraryFiltersMode.TabIndex = 1;
+            // 
+            // LibraryFiltersGenreList
+            // 
+            LibraryFiltersGenreList.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersGenreList.BackColor = Color.DimGray;
+            LibraryFiltersGenreList.DropDownStyle = ComboBoxStyle.DropDownList;
+            LibraryFiltersGenreList.FlatStyle = FlatStyle.Flat;
+            LibraryFiltersGenreList.ForeColor = Color.White;
+            LibraryFiltersGenreList.FormattingEnabled = true;
+            LibraryFiltersGenreList.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
+            LibraryFiltersGenreList.Location = new Point(208, 3);
+            LibraryFiltersGenreList.Name = "LibraryFiltersGenreList";
+            LibraryFiltersGenreList.Size = new Size(144, 28);
+            LibraryFiltersGenreList.TabIndex = 1;
+            // 
+            // LibraryFiltersGenreSearchBox
+            // 
+            LibraryFiltersGenreSearchBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersGenreSearchBox.BackColor = Color.DimGray;
+            LibraryFiltersGenreSearchBox.BorderStyle = BorderStyle.FixedSingle;
+            LibraryFiltersGenreSearchBox.CharacterCasing = CharacterCasing.Lower;
+            LibraryFiltersGenreSearchBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            LibraryFiltersGenreSearchBox.ForeColor = Color.White;
+            LibraryFiltersGenreSearchBox.Location = new Point(355, 2);
+            LibraryFiltersGenreSearchBox.Margin = new Padding(0, 2, 0, 7);
+            LibraryFiltersGenreSearchBox.Name = "LibraryFiltersGenreSearchBox";
+            LibraryFiltersGenreSearchBox.PlaceholderText = " Search Genre";
+            LibraryFiltersGenreSearchBox.Size = new Size(125, 30);
+            LibraryFiltersGenreSearchBox.TabIndex = 3;
+            LibraryFiltersGenreSearchBox.Text = " search genre";
+            // 
+            // LibraryFiltersSearchBox
+            // 
+            LibraryFiltersSearchBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersSearchBox.BackColor = Color.DimGray;
+            LibraryFiltersSearchBox.BorderStyle = BorderStyle.FixedSingle;
+            LibraryFiltersSearchBox.CharacterCasing = CharacterCasing.Lower;
+            LibraryFiltersSearchBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            LibraryFiltersSearchBox.ForeColor = Color.White;
+            LibraryFiltersSearchBox.Location = new Point(483, 2);
+            LibraryFiltersSearchBox.Margin = new Padding(3, 2, 0, 7);
+            LibraryFiltersSearchBox.Name = "LibraryFiltersSearchBox";
+            LibraryFiltersSearchBox.PlaceholderText = " Search";
+            LibraryFiltersSearchBox.Size = new Size(125, 30);
+            LibraryFiltersSearchBox.TabIndex = 3;
+            LibraryFiltersSearchBox.Text = " search";
+            // 
+            // LibraryTabSplitContainer
+            // 
+            LibraryTabSplitContainer.Dock = DockStyle.Fill;
+            LibraryTabSplitContainer.Location = new Point(4, 86);
+            LibraryTabSplitContainer.Name = "LibraryTabSplitContainer";
+            LibraryTabSplitContainer.Orientation = Orientation.Horizontal;
+            // 
+            // LibraryTabSplitContainer.Panel1
+            // 
+            LibraryTabSplitContainer.Panel1.Controls.Add(LibibraryNavigationContent);
+            LibraryTabSplitContainer.Panel1MinSize = 100;
+            // 
+            // LibraryTabSplitContainer.Panel2
+            // 
+            LibraryTabSplitContainer.Panel2.Controls.Add(LibibrarySearchContent);
+            LibraryTabSplitContainer.Panel2MinSize = 100;
+            LibraryTabSplitContainer.Size = new Size(849, 422);
+            LibraryTabSplitContainer.SplitterDistance = 219;
+            LibraryTabSplitContainer.SplitterWidth = 1;
+            LibraryTabSplitContainer.TabIndex = 3;
+            // 
+            // LibibraryNavigationContent
+            // 
+            LibibraryNavigationContent.AutoScroll = true;
+            LibibraryNavigationContent.Dock = DockStyle.Fill;
+            LibibraryNavigationContent.Location = new Point(0, 0);
+            LibibraryNavigationContent.Margin = new Padding(0);
+            LibibraryNavigationContent.Name = "LibibraryNavigationContent";
+            LibibraryNavigationContent.Size = new Size(849, 219);
+            LibibraryNavigationContent.TabIndex = 1;
+            // 
+            // LibibrarySearchContent
+            // 
+            LibibrarySearchContent.AutoScroll = true;
+            LibibrarySearchContent.Dock = DockStyle.Fill;
+            LibibrarySearchContent.Location = new Point(0, 0);
+            LibibrarySearchContent.Margin = new Padding(0);
+            LibibrarySearchContent.Name = "LibibrarySearchContent";
+            LibibrarySearchContent.Size = new Size(849, 202);
+            LibibrarySearchContent.TabIndex = 1;
             // 
             // PlayListsTab
             // 
-            PlayListsTab.BackColor = Color.Gray;
+            PlayListsTab.BackColor = Color.FromArgb(50, 50, 50);
             PlayListsTab.Controls.Add(TableLayoutPanel);
             PlayListsTab.ForeColor = Color.White;
-            PlayListsTab.Location = new Point(0, 0);
+            PlayListsTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
+            PlayListsTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
+            PlayListsTab.Location = new Point(1, 50);
             PlayListsTab.Name = "PlayListsTab";
-            PlayListsTab.Size = new Size(0, 0);
+            PlayListsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
+            PlayListsTab.Size = new Size(857, 515);
             PlayListsTab.Text = " PlayLists";
             // 
             // TableLayoutPanel
             // 
             TableLayoutPanel.BackColor = Color.FromArgb(30, 30, 30);
+            TableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             TableLayoutPanel.ColumnCount = 2;
             TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 171F));
             TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
@@ -1017,16 +1049,19 @@ namespace AnotherMusicPlayer.MainWindow2
             TableLayoutPanel.Name = "TableLayoutPanel";
             TableLayoutPanel.RowCount = 1;
             TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            TableLayoutPanel.Size = new Size(0, 0);
+            TableLayoutPanel.Size = new Size(857, 515);
             TableLayoutPanel.TabIndex = 1;
             // 
             // SettingsTab
             // 
-            SettingsTab.BackColor = Color.Gray;
+            SettingsTab.BackColor = Color.FromArgb(50, 50, 50);
             SettingsTab.Controls.Add(panel2);
             SettingsTab.ForeColor = Color.White;
+            SettingsTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
+            SettingsTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
             SettingsTab.Location = new Point(1, 50);
             SettingsTab.Name = "SettingsTab";
+            SettingsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
             SettingsTab.Size = new Size(857, 515);
             SettingsTab.Text = " Settings";
             // 
@@ -1034,6 +1069,7 @@ namespace AnotherMusicPlayer.MainWindow2
             // 
             panel2.AutoScroll = true;
             panel2.BackColor = Color.FromArgb(30, 30, 30);
+            panel2.BorderStyle = BorderStyle.FixedSingle;
             panel2.Controls.Add(flowLayoutPanel1);
             panel2.Dock = DockStyle.Fill;
             panel2.Location = new Point(0, 0);
@@ -1058,7 +1094,7 @@ namespace AnotherMusicPlayer.MainWindow2
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(836, 617);
+            flowLayoutPanel1.Size = new Size(834, 617);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // SettingsTabLangGroupBox
@@ -1803,148 +1839,254 @@ namespace AnotherMusicPlayer.MainWindow2
             SettingsTabEqualizerLabel10.Text = "-00.00";
             SettingsTabEqualizerLabel10.TextAlign = ContentAlignment.MiddleCenter;
             // 
-            // LibibraryNavigationPathContener
+            // tableLayoutPanel3
             // 
-            LibibraryNavigationPathContener.Dock = DockStyle.Fill;
-            LibibraryNavigationPathContener.Location = new Point(4, 4);
-            LibibraryNavigationPathContener.Name = "LibibraryNavigationPathContener";
-            LibibraryNavigationPathContener.Size = new Size(849, 34);
-            LibibraryNavigationPathContener.TabIndex = 0;
+            tableLayoutPanel3.ColumnCount = 1;
+            tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Controls.Add(BtnOpen, 0, 0);
+            tableLayoutPanel3.Controls.Add(BtnPrevious, 0, 1);
+            tableLayoutPanel3.Controls.Add(BtnPlayPause, 0, 2);
+            tableLayoutPanel3.Controls.Add(BtnNext, 0, 3);
+            tableLayoutPanel3.Controls.Add(BtnRepeat, 0, 4);
+            tableLayoutPanel3.Controls.Add(BtnShuffle, 0, 5);
+            tableLayoutPanel3.Controls.Add(BtnClearList, 0, 6);
+            tableLayoutPanel3.Controls.Add(GridScanMetadata, 0, 7);
+            tableLayoutPanel3.Dock = DockStyle.Fill;
+            tableLayoutPanel3.Location = new Point(859, 0);
+            tableLayoutPanel3.Margin = new Padding(0);
+            tableLayoutPanel3.Name = "tableLayoutPanel3";
+            tableLayoutPanel3.RowCount = 8;
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel3.Size = new Size(60, 566);
+            tableLayoutPanel3.TabIndex = 6;
             // 
-            // LibraryFiltersGrid
+            // BtnOpen
             // 
-            LibraryFiltersGrid.ColumnCount = 7;
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersModeLabel, 0, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersMode, 1, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreList, 2, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreSearchBox, 3, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersSearchBox, 4, 0);
-            LibraryFiltersGrid.Dock = DockStyle.Fill;
-            LibraryFiltersGrid.Location = new Point(4, 45);
-            LibraryFiltersGrid.Name = "LibraryFiltersGrid";
-            LibraryFiltersGrid.RowCount = 1;
-            LibraryFiltersGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            LibraryFiltersGrid.Size = new Size(849, 34);
-            LibraryFiltersGrid.TabIndex = 1;
+            BtnOpen.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnOpen.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnOpen.BackColor = Color.FromArgb(30, 30, 30);
+            BtnOpen.BackgroundImage = Properties.Resources.album_large;
+            BtnOpen.BackgroundImageLayout = ImageLayout.Center;
+            BtnOpen.Cursor = Cursors.Hand;
+            BtnOpen.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnOpen.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnOpen.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnOpen.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnOpen.FlatStyle = FlatStyle.Flat;
+            BtnOpen.Location = new Point(9, 3);
+            BtnOpen.Margin = new Padding(2, 3, 2, 3);
+            BtnOpen.Name = "BtnOpen";
+            BtnOpen.Size = new Size(41, 41);
+            BtnOpen.TabIndex = 0;
+            BtnOpen.UseVisualStyleBackColor = false;
             // 
-            // LibraryFiltersModeLabel
+            // BtnPrevious
             // 
-            LibraryFiltersModeLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            LibraryFiltersModeLabel.AutoSize = true;
-            LibraryFiltersModeLabel.Location = new Point(3, 7);
-            LibraryFiltersModeLabel.Margin = new Padding(3, 0, 10, 0);
-            LibraryFiltersModeLabel.Name = "LibraryFiltersModeLabel";
-            LibraryFiltersModeLabel.Size = new Size(50, 20);
-            LibraryFiltersModeLabel.TabIndex = 0;
-            LibraryFiltersModeLabel.Text = "label1";
+            BtnPrevious.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnPrevious.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnPrevious.BackColor = Color.FromArgb(30, 30, 30);
+            BtnPrevious.BackgroundImage = Properties.Resources.album_large;
+            BtnPrevious.BackgroundImageLayout = ImageLayout.Center;
+            BtnPrevious.Cursor = Cursors.Hand;
+            BtnPrevious.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnPrevious.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnPrevious.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnPrevious.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnPrevious.FlatStyle = FlatStyle.Flat;
+            BtnPrevious.ImageAlign = ContentAlignment.TopLeft;
+            BtnPrevious.Location = new Point(9, 50);
+            BtnPrevious.Margin = new Padding(2, 3, 2, 3);
+            BtnPrevious.Name = "BtnPrevious";
+            BtnPrevious.Size = new Size(41, 41);
+            BtnPrevious.TabIndex = 0;
+            BtnPrevious.UseVisualStyleBackColor = false;
             // 
-            // LibraryFiltersMode
+            // BtnPlayPause
             // 
-            LibraryFiltersMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            LibraryFiltersMode.BackColor = Color.DimGray;
-            LibraryFiltersMode.DropDownStyle = ComboBoxStyle.DropDownList;
-            LibraryFiltersMode.FlatStyle = FlatStyle.Flat;
-            LibraryFiltersMode.ForeColor = Color.White;
-            LibraryFiltersMode.FormattingEnabled = true;
-            LibraryFiltersMode.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
-            LibraryFiltersMode.Location = new Point(66, 3);
-            LibraryFiltersMode.Name = "LibraryFiltersMode";
-            LibraryFiltersMode.Size = new Size(144, 28);
-            LibraryFiltersMode.TabIndex = 1;
+            BtnPlayPause.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnPlayPause.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnPlayPause.BackColor = Color.FromArgb(30, 30, 30);
+            BtnPlayPause.BackgroundImage = Properties.Resources.album_large;
+            BtnPlayPause.BackgroundImageLayout = ImageLayout.Center;
+            BtnPlayPause.Cursor = Cursors.Hand;
+            BtnPlayPause.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnPlayPause.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnPlayPause.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnPlayPause.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnPlayPause.FlatStyle = FlatStyle.Flat;
+            BtnPlayPause.Location = new Point(9, 97);
+            BtnPlayPause.Margin = new Padding(2, 3, 2, 3);
+            BtnPlayPause.Name = "BtnPlayPause";
+            BtnPlayPause.Size = new Size(41, 41);
+            BtnPlayPause.TabIndex = 0;
+            BtnPlayPause.UseVisualStyleBackColor = false;
             // 
-            // LibraryFiltersGenreList
+            // BtnNext
             // 
-            LibraryFiltersGenreList.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            LibraryFiltersGenreList.BackColor = Color.DimGray;
-            LibraryFiltersGenreList.DropDownStyle = ComboBoxStyle.DropDownList;
-            LibraryFiltersGenreList.FlatStyle = FlatStyle.Flat;
-            LibraryFiltersGenreList.ForeColor = Color.White;
-            LibraryFiltersGenreList.FormattingEnabled = true;
-            LibraryFiltersGenreList.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
-            LibraryFiltersGenreList.Location = new Point(216, 3);
-            LibraryFiltersGenreList.Name = "LibraryFiltersGenreList";
-            LibraryFiltersGenreList.Size = new Size(144, 28);
-            LibraryFiltersGenreList.TabIndex = 1;
+            BtnNext.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnNext.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnNext.BackColor = Color.FromArgb(30, 30, 30);
+            BtnNext.BackgroundImage = Properties.Resources.album_large;
+            BtnNext.BackgroundImageLayout = ImageLayout.Center;
+            BtnNext.Cursor = Cursors.Hand;
+            BtnNext.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnNext.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnNext.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnNext.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnNext.FlatStyle = FlatStyle.Flat;
+            BtnNext.Location = new Point(9, 144);
+            BtnNext.Margin = new Padding(2, 3, 2, 3);
+            BtnNext.Name = "BtnNext";
+            BtnNext.Size = new Size(41, 41);
+            BtnNext.TabIndex = 0;
+            BtnNext.UseVisualStyleBackColor = false;
             // 
-            // LibraryFiltersGenreSearchBox
+            // BtnRepeat
             // 
-            LibraryFiltersGenreSearchBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            LibraryFiltersGenreSearchBox.BackColor = Color.DimGray;
-            LibraryFiltersGenreSearchBox.BorderStyle = BorderStyle.FixedSingle;
-            LibraryFiltersGenreSearchBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            LibraryFiltersGenreSearchBox.ForeColor = Color.White;
-            LibraryFiltersGenreSearchBox.Location = new Point(363, 2);
-            LibraryFiltersGenreSearchBox.Margin = new Padding(0, 0, 0, 7);
-            LibraryFiltersGenreSearchBox.Name = "LibraryFiltersGenreSearchBox";
-            LibraryFiltersGenreSearchBox.Size = new Size(125, 30);
-            LibraryFiltersGenreSearchBox.TabIndex = 3;
-            LibraryFiltersGenreSearchBox.Text = "Search Genre";
+            BtnRepeat.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnRepeat.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnRepeat.BackColor = Color.FromArgb(30, 30, 30);
+            BtnRepeat.BackgroundImage = Properties.Resources.album_large;
+            BtnRepeat.BackgroundImageLayout = ImageLayout.Center;
+            BtnRepeat.Cursor = Cursors.Hand;
+            BtnRepeat.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnRepeat.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnRepeat.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnRepeat.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnRepeat.FlatStyle = FlatStyle.Flat;
+            BtnRepeat.Location = new Point(9, 191);
+            BtnRepeat.Margin = new Padding(2, 3, 2, 3);
+            BtnRepeat.Name = "BtnRepeat";
+            BtnRepeat.Size = new Size(41, 41);
+            BtnRepeat.TabIndex = 0;
+            BtnRepeat.UseVisualStyleBackColor = false;
             // 
-            // LibraryFiltersSearchBox
+            // BtnShuffle
             // 
-            LibraryFiltersSearchBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            LibraryFiltersSearchBox.BackColor = Color.DimGray;
-            LibraryFiltersSearchBox.BorderStyle = BorderStyle.FixedSingle;
-            LibraryFiltersSearchBox.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
-            LibraryFiltersSearchBox.ForeColor = Color.White;
-            LibraryFiltersSearchBox.Location = new Point(491, 2);
-            LibraryFiltersSearchBox.Margin = new Padding(3, 2, 0, 7);
-            LibraryFiltersSearchBox.Name = "LibraryFiltersSearchBox";
-            LibraryFiltersSearchBox.Size = new Size(125, 30);
-            LibraryFiltersSearchBox.TabIndex = 3;
-            LibraryFiltersSearchBox.Text = "Search";
+            BtnShuffle.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnShuffle.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnShuffle.BackColor = Color.FromArgb(30, 30, 30);
+            BtnShuffle.BackgroundImage = Properties.Resources.album_large;
+            BtnShuffle.BackgroundImageLayout = ImageLayout.Center;
+            BtnShuffle.Cursor = Cursors.Hand;
+            BtnShuffle.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnShuffle.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnShuffle.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnShuffle.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnShuffle.FlatStyle = FlatStyle.Flat;
+            BtnShuffle.Location = new Point(9, 238);
+            BtnShuffle.Margin = new Padding(2, 3, 2, 3);
+            BtnShuffle.Name = "BtnShuffle";
+            BtnShuffle.Size = new Size(41, 41);
+            BtnShuffle.TabIndex = 0;
+            BtnShuffle.UseVisualStyleBackColor = false;
             // 
-            // splitContainer1
+            // BtnClearList
             // 
-            splitContainer1.Dock = DockStyle.Fill;
-            splitContainer1.Location = new Point(4, 86);
-            splitContainer1.Name = "splitContainer1";
-            splitContainer1.Orientation = Orientation.Horizontal;
+            BtnClearList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnClearList.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnClearList.BackColor = Color.FromArgb(30, 30, 30);
+            BtnClearList.BackgroundImage = Properties.Resources.album_large;
+            BtnClearList.BackgroundImageLayout = ImageLayout.Center;
+            BtnClearList.Cursor = Cursors.Hand;
+            BtnClearList.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnClearList.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnClearList.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnClearList.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnClearList.FlatStyle = FlatStyle.Flat;
+            BtnClearList.ForeColor = Color.White;
+            BtnClearList.Location = new Point(9, 285);
+            BtnClearList.Margin = new Padding(2, 3, 2, 3);
+            BtnClearList.Name = "BtnClearList";
+            BtnClearList.Size = new Size(41, 41);
+            BtnClearList.TabIndex = 0;
+            BtnClearList.UseVisualStyleBackColor = false;
             // 
-            // splitContainer1.Panel1
+            // GridScanMetadata
             // 
-            splitContainer1.Panel1.Controls.Add(LibibraryNavigationContent);
-            splitContainer1.Panel1MinSize = 100;
+            GridScanMetadata.ColumnCount = 1;
+            GridScanMetadata.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            GridScanMetadata.Controls.Add(textBox1, 0, 0);
+            GridScanMetadata.Controls.Add(pictureBox1, 0, 1);
+            GridScanMetadata.Controls.Add(GridScanMetadataNb, 0, 2);
+            GridScanMetadata.Dock = DockStyle.Bottom;
+            GridScanMetadata.Location = new Point(0, 426);
+            GridScanMetadata.Margin = new Padding(0);
+            GridScanMetadata.Name = "GridScanMetadata";
+            GridScanMetadata.RowCount = 3;
+            GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            GridScanMetadata.RowStyles.Add(new RowStyle());
+            GridScanMetadata.Size = new Size(60, 140);
+            GridScanMetadata.TabIndex = 1;
             // 
-            // splitContainer1.Panel2
+            // textBox1
             // 
-            splitContainer1.Panel2.Controls.Add(LibibrarySearchContent);
-            splitContainer1.Panel2MinSize = 100;
-            splitContainer1.Size = new Size(849, 425);
-            splitContainer1.SplitterDistance = 221;
-            splitContainer1.SplitterWidth = 1;
-            splitContainer1.TabIndex = 3;
+            textBox1.BackColor = Color.FromArgb(30, 30, 30);
+            textBox1.BorderStyle = BorderStyle.None;
+            textBox1.Dock = DockStyle.Fill;
+            textBox1.ForeColor = Color.White;
+            textBox1.Location = new Point(3, 3);
+            textBox1.Multiline = true;
+            textBox1.Name = "textBox1";
+            textBox1.Size = new Size(54, 44);
+            textBox1.TabIndex = 0;
+            textBox1.Text = "Scan Tags";
+            textBox1.TextAlign = HorizontalAlignment.Center;
             // 
-            // LibibraryNavigationContent
+            // pictureBox1
             // 
-            LibibraryNavigationContent.AutoScroll = true;
-            LibibraryNavigationContent.Dock = DockStyle.Fill;
-            LibibraryNavigationContent.FlowDirection = FlowDirection.TopDown;
-            LibibraryNavigationContent.Location = new Point(0, 0);
-            LibibraryNavigationContent.Margin = new Padding(0);
-            LibibraryNavigationContent.Name = "LibibraryNavigationContent";
-            LibibraryNavigationContent.Size = new Size(849, 221);
-            LibibraryNavigationContent.TabIndex = 1;
-            LibibraryNavigationContent.WrapContents = false;
+            pictureBox1.Dock = DockStyle.Fill;
+            pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
+            pictureBox1.Location = new Point(0, 50);
+            pictureBox1.Margin = new Padding(0);
+            pictureBox1.Name = "pictureBox1";
+            pictureBox1.Size = new Size(60, 60);
+            pictureBox1.TabIndex = 1;
+            pictureBox1.TabStop = false;
             // 
-            // LibibrarySearchContent
+            // GridScanMetadataNb
             // 
-            LibibrarySearchContent.AutoScroll = true;
-            LibibrarySearchContent.Dock = DockStyle.Fill;
-            LibibrarySearchContent.FlowDirection = FlowDirection.TopDown;
-            LibibrarySearchContent.Location = new Point(0, 0);
-            LibibrarySearchContent.Margin = new Padding(0);
-            LibibrarySearchContent.Name = "LibibrarySearchContent";
-            LibibrarySearchContent.Size = new Size(849, 203);
-            LibibrarySearchContent.TabIndex = 1;
-            LibibrarySearchContent.WrapContents = false;
+            GridScanMetadataNb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            GridScanMetadataNb.AutoSize = true;
+            GridScanMetadataNb.BackColor = Color.Transparent;
+            GridScanMetadataNb.ForeColor = Color.White;
+            GridScanMetadataNb.Location = new Point(3, 115);
+            GridScanMetadataNb.Name = "GridScanMetadataNb";
+            GridScanMetadataNb.Size = new Size(54, 20);
+            GridScanMetadataNb.TabIndex = 2;
+            GridScanMetadataNb.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // OverPanel
+            // 
+            OverPanel.BackColor = Color.FromArgb(50, 50, 50, 50);
+            OverPanel.Controls.Add(OverPanelLabel);
+            OverPanel.Dock = DockStyle.Top;
+            OverPanel.Location = new Point(1, 1);
+            OverPanel.Name = "OverPanel";
+            OverPanel.Size = new Size(921, 0);
+            OverPanel.TabIndex = 0;
+            // 
+            // OverPanelLabel
+            // 
+            OverPanelLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            OverPanelLabel.AutoSize = true;
+            OverPanelLabel.BackColor = Color.Transparent;
+            OverPanelLabel.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            OverPanelLabel.ForeColor = Color.White;
+            OverPanelLabel.Location = new Point(422, -43);
+            OverPanelLabel.Name = "OverPanelLabel";
+            OverPanelLabel.Size = new Size(43, 32);
+            OverPanelLabel.TabIndex = 0;
+            OverPanelLabel.Text = ". . .";
+            OverPanelLabel.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // MainWindow2
             // 
@@ -1954,6 +2096,7 @@ namespace AnotherMusicPlayer.MainWindow2
             BackColor = Color.White;
             ClientSize = new Size(923, 681);
             ControlBox = false;
+            Controls.Add(OverPanel);
             Controls.Add(GlobalTableLayoutPanel);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
@@ -1973,7 +2116,7 @@ namespace AnotherMusicPlayer.MainWindow2
             tableLayoutPanel1.PerformLayout();
             panel1.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
-            tableLayoutPanel3.ResumeLayout(false);
+            panel3.ResumeLayout(false);
             TabControler.ResumeLayout(false);
             PlaybackTab.ResumeLayout(false);
             PlaybackTabMainTableLayoutPanel.ResumeLayout(false);
@@ -1986,6 +2129,12 @@ namespace AnotherMusicPlayer.MainWindow2
             ((System.ComponentModel.ISupportInitialize)PlaybackTabDataGridView).EndInit();
             LibraryTab.ResumeLayout(false);
             LibraryTabTableLayoutPanel.ResumeLayout(false);
+            LibraryFiltersGrid.ResumeLayout(false);
+            LibraryFiltersGrid.PerformLayout();
+            LibraryTabSplitContainer.Panel1.ResumeLayout(false);
+            LibraryTabSplitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)LibraryTabSplitContainer).EndInit();
+            LibraryTabSplitContainer.ResumeLayout(false);
             PlayListsTab.ResumeLayout(false);
             SettingsTab.ResumeLayout(false);
             panel2.ResumeLayout(false);
@@ -2018,18 +2167,17 @@ namespace AnotherMusicPlayer.MainWindow2
             ((System.ComponentModel.ISupportInitialize)SettingsTabEqualizerTrackBar08).EndInit();
             ((System.ComponentModel.ISupportInitialize)SettingsTabEqualizerTrackBar09).EndInit();
             ((System.ComponentModel.ISupportInitialize)SettingsTabEqualizerTrackBar10).EndInit();
-            LibraryFiltersGrid.ResumeLayout(false);
-            LibraryFiltersGrid.PerformLayout();
-            splitContainer1.Panel1.ResumeLayout(false);
-            splitContainer1.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
-            splitContainer1.ResumeLayout(false);
+            tableLayoutPanel3.ResumeLayout(false);
+            GridScanMetadata.ResumeLayout(false);
+            GridScanMetadata.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
+            OverPanel.ResumeLayout(false);
+            OverPanel.PerformLayout();
             ResumeLayout(false);
         }
 
         #endregion
         private TableLayoutPanel MainWIndowHead;
-        private Label TitleLabel;
         private TableLayoutPanel tableLayoutPanel1;
         private TableLayoutPanel tableLayoutPanel2;
         private TableLayoutPanel tableLayoutPanel3;
@@ -2050,7 +2198,6 @@ namespace AnotherMusicPlayer.MainWindow2
         private TableLayoutPanel tableLayoutPanel4;
         private Button button1;
         private Label PlaybackTabDurationLabelValue;
-        private Ratting2 PlaybackTabRatting;
         private DataGridViewTextBoxColumn SelectedColumn;
         private DataGridViewTextBoxColumn NameColumn;
         private DataGridViewTextBoxColumn DurationColumn;
@@ -2073,7 +2220,6 @@ namespace AnotherMusicPlayer.MainWindow2
         internal Button BtnClearList;
         internal Label DisplayPlaybackPosition;
         internal Label DisplayPlaybackSize;
-        internal PlaybackProgressBar playbackProgressBar;
         internal Manina.Windows.Forms.TabControl TabControler;
         internal GroupBox SettingsTabLangGroupBox;
         internal ComboBox SettingsTabLangComboBox;
@@ -2131,18 +2277,29 @@ namespace AnotherMusicPlayer.MainWindow2
         internal GroupBox SettingsTabAutoCloseLyricsGroupBox;
         internal ComboBox SettingsTabAutoCloseLyricsComboBox;
         internal Label PlaybackPositionLabel;
-        private FlowLayoutPanel LibibraryNavigationPathContener;
         private TableLayoutPanel LibraryFiltersGrid;
         private Panel LibibraryNavigationContentScroll;
-        private Label LibraryFiltersModeLabel;
-        private ComboBox LibraryFiltersMode;
-        private ComboBox LibraryFiltersGenreList;
-        private TextBox LibraryFiltersGenreSearchBox;
-        private TextBox LibraryFiltersSearchBox;
-        private FlowLayoutPanel LibibraryNavigationContent;
-        private FlowLayoutPanel LibibrarySearchContent;
-        private SplitContainer splitContainer1;
+        internal Label LibraryFiltersModeLabel;
+        internal ComboBox LibraryFiltersMode;
+        internal ComboBox LibraryFiltersGenreList;
+        internal TextBox LibraryFiltersGenreSearchBox;
+        internal TextBox LibraryFiltersSearchBox;
+        internal Label PlaybackTabGenresLabelInfo;
+        private Label PlaybackTabGenresLabelValue;
         private FlowLayoutPanel flowLayoutPanel2;
-        private FlowLayoutPanel LibibraryNavigationContent;
+        internal FlowLayoutPanel LibibraryNavigationContent;
+        internal FlowLayoutPanel LibibrarySearchContent;
+        internal SplitContainer LibraryTabSplitContainer;
+        internal FlowLayoutPanel LibibraryNavigationPathContener;
+        private Panel OverPanel;
+        private Label OverPanelLabel;
+        private TableLayoutPanel GridScanMetadata;
+        private TextBox textBox1;
+        private PictureBox pictureBox1;
+        private Label GridScanMetadataNb;
+        internal PlaybackProgressBar playbackProgressBar;
+        private Rating2 PlaybackTabRatting;
+        private Panel panel3;
+        internal Label TitleLabel;
     }
 }

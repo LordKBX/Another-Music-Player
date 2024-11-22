@@ -194,10 +194,10 @@
     </Style>
 
     <!--#region GENERIC -->
-    <Style x:Key="CustomUserControl" TargetType="{x:Type local:Preview}">
+    <!--<Style x:Key="CustomUserControl" TargetType="{x:Type local:Preview}">
         <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
         <Setter Property="Background" Value="{StaticResource BackgroundColor}"/>
-    </Style>
+    </Style>-->
     <Style x:Key="CustomWindowStyle" TargetType="{x:Type Window}">
         <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -1224,12 +1224,12 @@
         <Setter Property="MaxHeight" Value="45"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonTrackButtonStars" TargetType="{x:Type local:Rating}">
+    <!--<Style x:Key="LibibraryNavigationContentFolderButtonTrackButtonStars" TargetType="{x:Type local:Rating}">
         <Setter Property="IsReadOnly" Value="False"/>
         <Setter Property="Zoom" Value="0.5"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
-    </Style>
+    </Style>-->
 
     <Style x:Key="LibibraryNavigationContentFolderButtonBorder" TargetType="{x:Type Border}">
         <Setter Property="BorderBrush" Value="{StaticResource FolderButton.Border}"/>

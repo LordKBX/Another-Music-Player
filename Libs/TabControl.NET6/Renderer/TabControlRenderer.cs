@@ -467,13 +467,13 @@ namespace Manina.Windows.Forms
             protected Color GetTabBackColor(DrawTabParams param)
             {
                 if ((param.State & ItemState.Pressed) != ItemState.Inactive)
-                    return UseTabColors ? param.Tab.BackColor.Lighten(0.1f) : PressedTabBackColor;
+                    return UseTabColors ? param.Tab.SelectedBackColor : InactiveTabBackColor;
                 else if ((param.State & ItemState.Hot) != ItemState.Inactive && param.IsSelected)
-                    return UseTabColors ? param.Tab.BackColor.Darken(0.05f) : HotAndActiveTabBackColor;
+                    return UseTabColors ? param.Tab.HotAndActiveTabBackColor : HotAndActiveTabBackColor;
                 else if ((param.State & ItemState.Hot) != ItemState.Inactive && !param.IsSelected)
-                    return UseTabColors ? param.Tab.BackColor.Darken(0.05f) : HotTabBackColor;
+                    return UseTabColors ? param.Tab.HotTabBackColor : HotTabBackColor;
                 else if (param.IsSelected)
-                    return UseTabColors ? param.Tab.BackColor : ActiveTabBackColor;
+                    return UseTabColors ? param.Tab.SelectedBackColor : ActiveTabBackColor;
                 else
                     return UseTabColors ? param.Tab.BackColor.Darken(0.1f) : InactiveTabBackColor;
             }

@@ -145,12 +145,6 @@
   <data name="window_maximize_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\icons\window_maximize_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="folder_open_icon_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\folder_open_icon_white.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="Grip_transparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Grip_transparent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="star_color" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\icons\star_color.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -168,5 +162,14 @@
   </data>
   <data name="Translation_fr" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Traductions\fr.xaml;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="folder_open_icon_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\folder_open_icon_white.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Grip_transparent" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\Grip_transparent.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="CoverImg" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\icons\album_small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

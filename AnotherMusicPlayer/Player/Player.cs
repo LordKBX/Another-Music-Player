@@ -24,9 +24,16 @@ using TagLib.Mpeg;
 
 namespace AnotherMusicPlayer
 {
+    public delegate void PlayerNotify();
+    public delegate void PlayerBoolNotify(bool state);
+
     /// <summary> Player class, user for retrieving media file info or playing music </summary>
     public partial class Player
     {
+        public static event PlayerNotify Paused = null;
+        public static event PlayerNotify Started = null;
+        public static event PlayerNotify Stoped = null;
+
         /// <summary> Give the List of native accepted file extentions </summary>
         public static readonly string[] AcceptedExtentions = new string[] { ".aiff", ".mp3", ".wma" };
         /// <summary> Give the List of accepted file extentions for conversion </summary>
@@ -133,7 +140,6 @@ namespace AnotherMusicPlayer
             InitializeEqualizer();
         }
 
-
         /// <summary> clear current file value </summary>
         public static void ClearCurrentFile() { CurrentFile = null; }
 
@@ -155,24 +161,28 @@ namespace AnotherMusicPlayer
         public static bool IsLoop() { return PlayLoop; }
 
         /// <summary> Stop all currently playing threads </summary>
-        public static void StopAll()
+        public static void StopAll(bool end = false)
         {
             if (Mode == Modes.File)
             {
                 if (ThreadList.Count > 0)
                 {
                     foreach (KeyValuePair<string, Thread> entry in ThreadList) { PlayStatus[entry.Key] = 2; }
-                    foreach (KeyValuePair<string, object> entry in AudioList) { try { ((AudioFileReader)entry.Value).Dispose(); } catch (Exception) { } }
+                    //foreach (KeyValuePair<string, object> entry in AudioList) { try { ((AudioFileReader)entry.Value).Dispose(); } catch (Exception) { } }
 
-                    ThreadList.Clear(); PlayStatus.Clear(); PlayNewPositions.Clear(); AudioList.Clear();
+                    //ThreadList.Clear(); PlayStatus.Clear(); PlayNewPositions.Clear(); AudioList.Clear();
                     CurrentFile = null;
-
-                    try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); }
-                    catch (Exception) { }
+                    if (!end)
+                    {
+                        Thread.Sleep(1000);
+                        try { GC.Collect(); GC.WaitForPendingFinalizers(); GC.Collect(); GC.WaitForPendingFinalizers(); }
+                        catch (Exception) { }
+                    }
                 }
             }
             else { RadioPlayer.Stop(); }
             _LatestPlayerStatus = PlayerStatus.Stop;
+            if (!end) { Stoped?.Invoke(); }
         }
 
         /// <summary> Stop media play for FilePath or CurrentFile if FilePath is null </summary>
@@ -183,11 +193,21 @@ namespace AnotherMusicPlayer
                 if (TestFile(FilePath))
                 {
                     if (FilePath == null) { FilePath = CurrentFile; }
-                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 2; _LatestPlayerStatus = PlayerStatus.Stop; return true; }
+                    if (PlayStatus.ContainsKey(FilePath)) { 
+                        PlayStatus[FilePath] = 2; 
+                        _LatestPlayerStatus = PlayerStatus.Stop;
+                        //Stoped?.Invoke();
+                        return true; 
+                    }
                 }
                 return false;
             }
-            else { RadioPlayer.Stop(); _LatestPlayerStatus = PlayerStatus.Stop; return true; }
+            else { 
+                RadioPlayer.Stop(); 
+                _LatestPlayerStatus = PlayerStatus.Stop;
+                Stoped?.Invoke();
+                return true; 
+            }
         }
 
         /// <summary> Test if file exist, if input = null remplace it with value in CurrentFile </summary>
@@ -221,10 +241,10 @@ namespace AnotherMusicPlayer
                         objThread.Start(FilePath);
                         ThreadList.Add(FilePath, objThread);
                         PlayStatus.Add(FilePath, (AutoPlay) ? 1 : 0);
-                        PlayNewPositions.Add(FilePath, -1);
                         if (AutoPlay)
                         {
                             CurrentFile = FilePath;
+                            Started?.Invoke();
                             return true;
                         }
                     }
@@ -236,7 +256,10 @@ namespace AnotherMusicPlayer
                 PlaylistClear();
                 PlayList.Add("Radio:" + FilePath);
                 RadioPlayer.Init(FilePath, RadioPlayer.RadioType.M3u);
-                if (AutoPlay) { RadioPlayer.Start(); }
+                if (AutoPlay) { 
+                    RadioPlayer.Start();
+                    Started?.Invoke(); 
+                }
             }
             return false;
         }
@@ -273,10 +296,18 @@ namespace AnotherMusicPlayer
                 if (FilePath == null) { return false; }
                 try
                 {
-                    if (FilePath == CurrentFile) { PlayStatus[FilePath] = 1; return true; }
+                    if (FilePath == CurrentFile) { 
+                        PlayStatus[FilePath] = 1;
+                        Started?.Invoke();
+                        return true; 
+                    }
                     if (TestFile(FilePath))
                     {
-                        if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 1; return true; }
+                        if (PlayStatus.ContainsKey(FilePath)) {
+                            PlayStatus[FilePath] = 1;
+                            Started?.Invoke(); 
+                            return true; 
+                        }
                         else { return Open(FilePath, true, playDuration); }
                     }
                 }
@@ -285,6 +316,7 @@ namespace AnotherMusicPlayer
             else
             {
                 RadioPlayer.Start();
+                Started?.Invoke();
             }
             return false;
         }
@@ -294,11 +326,21 @@ namespace AnotherMusicPlayer
         {
             if (Mode == Modes.File)
             {
-                if (IsSuspended) { IsSuspended = false; PlayStatus[CurrentFile] = 1; return true; } else { return Play(FilePath); }
+                if (IsSuspended) { 
+                    IsSuspended = false; 
+                    PlayStatus[CurrentFile] = 1; 
+                    Started?.Invoke();
+                    return true; 
+                } 
+                else {
+                    Started?.Invoke();
+                    return Play(FilePath); 
+                }
             }
             else
             {
                 if (IsSuspended) { IsSuspended = false; }
+                Started?.Invoke();
                 return await RadioPlayer.Start();
             }
         }
@@ -311,13 +353,18 @@ namespace AnotherMusicPlayer
                 if (TestFile(FilePath))
                 {
                     if (FilePath == null) { FilePath = CurrentFile; }
-                    if (PlayStatus.ContainsKey(FilePath)) { PlayStatus[FilePath] = 0; return true; }
+                    if (PlayStatus.ContainsKey(FilePath)) { 
+                        PlayStatus[FilePath] = 0; 
+                        Paused?.Invoke();
+                        return true;
+                    }
                 }
                 return false;
             }
             else
             {
                 RadioPlayer.Stop();
+                Paused?.Invoke();
                 return true;
             }
         }
@@ -337,6 +384,7 @@ namespace AnotherMusicPlayer
             }
             else
             {
+                Stoped?.Invoke();
                 RadioPlayer.Stop();
                 return true;
             }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     /* Originate from MaterialDesignThemes.Wpf https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/src/MaterialDesignThemes.Wpf/PackIconKind.cs */
     public enum IconKind

@@ -17,20 +17,20 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class InsertIntoPlaylistWindow : Window
     {
-        private new MainWindow Parent;
+        //private new MainWindow Parent;
         public int maxIndexList = 0;
 
-        public InsertIntoPlaylistWindow(MainWindow parent)
+        public InsertIntoPlaylistWindow(/*MainWindow parent*/)
         {
-            Owner = Parent = parent;
+            //Owner = Parent = parent;
             InitializeComponent();
-            Resources = Parent.Resources;
+            Resources = App.Resources;
             Style = FindResource("CustomWindowStyle") as Style;
 
             // FILLING WINDOW
-            Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description, MAX(LOrder) AS Lorder FROM playlists LEFT JOIN playlistsItems ON(LIndex = FIndex) GROUP BY Name ORDER BY Name ASC", "FIndex");
+            Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT FIndex,Name,Description, MAX(LOrder) AS Lorder FROM playlists LEFT JOIN playlistsItems ON(LIndex = FIndex) GROUP BY Name ORDER BY Name ASC", "FIndex");
             maxIndexList = 0;
-            rez.Add("!", new Dictionary<string, object>() { { "FIndex", "0" }, { "Name", Parent.FindResource("PlaylistsWindowAddIntoPlaylistNewElement") as string } });
+            rez.Add("!", new Dictionary<string, object>() { { "FIndex", "0" }, { "Name", App.GetTranslation("PlaylistsWindowAddIntoPlaylistNewElement") } });
 
             foreach (KeyValuePair<string, Dictionary<string, object>> row in rez)
             {
@@ -44,15 +44,15 @@ namespace AnotherMusicPlayer
                     Kind = (index == 0) ? MaterialDesignThemes.Wpf.PackIconKind.PlusThick : MaterialDesignThemes.Wpf.PackIconKind.PlaylistMusic,
                     HorizontalAlignment = HorizontalAlignment.Left,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Foreground = Parent.FindResource("TabControl.ForegroundColor") as SolidColorBrush,
+                    //Foreground = Parent.FindResource("TabControl.ForegroundColor") as SolidColorBrush,
                     Margin = new Thickness(0, 0, 3, 0)
                 });
                 sti.Children.Add(new AccessText() { Text = row.Value["Name"] as string, VerticalAlignment = VerticalAlignment.Center, HorizontalAlignment = HorizontalAlignment.Stretch });
                 lw.Items.Add(new ListViewItem() { Content = sti, Tag = row.Key, VerticalAlignment = VerticalAlignment.Center });
             }
 
-            Left = Parent.Left + ((Parent.Width - Width) / 2);
-            Top = Parent.Top + ((Parent.Height - Height) / 2);
+            //Left = Parent.Left + ((Parent.Width - Width) / 2);
+            //Top = Parent.Top + ((Parent.Height - Height) / 2);
 
 
             btnOk.Click += (object sender, RoutedEventArgs e) =>
@@ -77,9 +77,9 @@ namespace AnotherMusicPlayer
                 if (input1.Text.Trim().Length < 3)
                 {
                     DialogBox.ShowDialog(
-                        Parent,
-                        Parent.FindResource("PlaylistsWindowAddIntoPlaylistWarningTitle") as string,
-                        Parent.FindResource("PlaylistsWindowAddIntoPlaylistWarningNameSize") as string,
+                        //Parent,
+                        App.GetTranslation("PlaylistsWindowAddIntoPlaylistWarningTitle"),
+                        App.GetTranslation("PlaylistsWindowAddIntoPlaylistWarningNameSize"),
                         DialogBoxButtons.Ok,
                         DialogBoxIcons.Warning
                         );
@@ -90,9 +90,9 @@ namespace AnotherMusicPlayer
                     if (input2.Text.Trim().Length < 3)
                     {
                         DialogBox.ShowDialog(
-                            Parent,
-                            Parent.FindResource("PlaylistsWindowAddIntoPlaylistWarningTitle") as string,
-                            Parent.FindResource("PlaylistsWindowAddIntoPlaylistWarningDescriptionSize") as string,
+                            //Parent,
+                            App.GetTranslation("PlaylistsWindowAddIntoPlaylistWarningTitle"),
+                            App.GetTranslation("PlaylistsWindowAddIntoPlaylistWarningDescriptionSize"),
                             DialogBoxButtons.Ok,
                             DialogBoxIcons.Warning
                             );
@@ -102,8 +102,8 @@ namespace AnotherMusicPlayer
                 Close();
             };
 
-            Left = Owner.Left + ((Owner.Width - Width) / 2);
-            Top = Owner.Top + ((Owner.Height - Height) / 2);
+            //Left = Owner.Left + ((Owner.Width - Width) / 2);
+            //Top = Owner.Top + ((Owner.Height - Height) / 2);
 
             TopBar.MouseDown += TopBar_MouseDown;
             BtnClose.Click += (object sender, RoutedEventArgs e) => { this.Close(); };

@@ -12,6 +12,8 @@ using Newtonsoft.Json;
 using System.Threading;
 using System.Collections.Generic;
 using System.Linq;
+using System.Timers;
+using AnotherMusicPlayer.MainWindow2Space;
 
 namespace AnotherMusicPlayer
 {
@@ -96,7 +98,7 @@ namespace AnotherMusicPlayer
                     item.Album = tags.Tag.Album;
                     item.Path = FilePath;
                     item.OriginPath = OriginPath;
-                    item.Selected = (Selected) ? MainWindow.PlayListSelectionChar : "";
+                    item.Selected = (Selected) ? MainWindow2.PlayListSelectionChar : "";
                     item.Duration = (long)0;
                     item.DurationS = "00:00";
 
@@ -228,7 +230,7 @@ namespace AnotherMusicPlayer
                 item.Album = tags.Tag.Album;
                 item.Path = FilePath;
                 item.OriginPath = OriginPath;
-                item.Selected = (Selected) ? MainWindow.PlayListSelectionChar : "";
+                item.Selected = (Selected) ? MainWindow2.PlayListSelectionChar : "";
                 item.Duration = (long)0;
                 item.DurationS = "00:00";
 
@@ -255,37 +257,79 @@ namespace AnotherMusicPlayer
             return null;
         }
 
-        public static bool SaveRating(string FilePath, double RatingValue)
+        private static List<System.Timers.Timer> SaveRattingTimers = new List<System.Timers.Timer>();
+        private static Dictionary<System.Timers.Timer, (string, double)> SaveRattingTimersValues = new Dictionary<System.Timers.Timer, (string, double)>();
+        public static bool SaveRating(string FilePath, double RatingValue) { return SaveRating(FilePath, RatingValue, false); }
+        private static bool SaveRating(string FilePath, double RatingValue, bool loop = false)
         {
             if (!System.IO.File.Exists(FilePath)) { return false; }
             if (RatingValue < 0 || RatingValue > 5.0) { return false; }
-            if (Common.IsFileLocked(FilePath) && Player.GetCurrentFile() != FilePath) { return false; }
-            Debug.WriteLine("FilesTags.SaveRating");
-            Debug.WriteLine("Rating = " + RatingValue);
-            Debug.WriteLine("Math.Truncate(Rating) = " + Math.Truncate(RatingValue));
-            Debug.WriteLine("ReverseTableRateWindows[Math.Truncate(Rating)] = " + ReverseTableRateWindows[Math.Truncate(RatingValue)]);
-            Debug.WriteLine("ReverseTableRatePlayer[Math.Truncate(Rating)] = " + ReverseTableRatePlayer[Math.Truncate(RatingValue)]);
-
-            TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
-
-            TagLib.File fi = TagLib.File.Create(FilePath, ReadStyle.Average);
-            TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
-            TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
-            if (ReverseTableRateWindows.ContainsKey(RatingValue)) { frame1.Rating = ReverseTableRatePlayer[RatingValue]; }
-            else
-            {
-                frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(RatingValue)] + 1);
+            if (Common.IsFileLocked(FilePath)) {
+                if (!loop)
+                {
+                    System.Timers.Timer timer = new System.Timers.Timer();
+                    timer.Elapsed += Timer_Elapsed;
+                    timer.Interval = 1000;
+                    SaveRattingTimers.Add(timer);
+                    SaveRattingTimersValues.Add(timer, (FilePath, RatingValue));
+                    timer.Start();
+                }
+                return false;
             }
-            if (Player.GetCurrentFile() == FilePath)
+
+            try
             {
-                Player.Suspend();
-                Thread.Sleep(200);
-                fi.Save();
-                Player.Resume();
+                TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
+
+                TagLib.File fi = TagLib.File.Create(FilePath, ReadStyle.Average);
+                TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
+                TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
+                if (ReverseTableRateWindows.ContainsKey(RatingValue)) { frame1.Rating = ReverseTableRatePlayer[RatingValue]; }
+                else
+                {
+                    frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(RatingValue)] + 1);
+                }
+                if (Player.GetCurrentFile() == FilePath)
+                {
+                    Player.Suspend();
+                    Thread.Sleep(200);
+                    fi.Save();
+                    Player.Resume();
+                }
+                else { fi.Save(); }
+                return true;
             }
-            else { fi.Save(); }
-            return true;
+            catch (IOException) {
+                if (!loop)
+                {
+                    System.Timers.Timer timer = new System.Timers.Timer();
+                    timer.Elapsed += Timer_Elapsed;
+                    timer.Interval = 1000;
+                    SaveRattingTimers.Add(timer);
+                    SaveRattingTimersValues.Add(timer, (FilePath, RatingValue));
+                    timer.Start();
+                }
+                return false; 
+            }
+            catch (Exception) { return false; }
         }
 
+        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            //if (sender == null) { return; }
+            //if (sender.GetType() != typeof(System.Timers.Timer)) { return; }
+            System.Timers.Timer timer = sender as System.Timers.Timer;
+            (string, double) data = SaveRattingTimersValues[timer];
+            bool ret = SaveRating(data.Item1, data.Item2, true);
+            if (ret) { timer.Stop(); SaveRattingTimers.Remove(timer); SaveRattingTimersValues.Remove(timer); timer.Dispose(); }
+        }
+
+        public static void WaitTimersEnd() {
+            if (SaveRattingTimers.Count > 0)
+            { 
+                Thread.Sleep(2000);
+                foreach (System.Timers.Timer timer in SaveRattingTimers) { timer.Dispose(); }
+            }
+        }
     }
 }

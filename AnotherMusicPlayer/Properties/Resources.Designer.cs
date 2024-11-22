@@ -73,6 +73,16 @@ namespace AnotherMusicPlayer.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap CoverImg {
+            get {
+                object obj = ResourceManager.GetObject("CoverImg", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap folder_open_icon_white {
             get {
                 object obj = ResourceManager.GetObject("folder_open_icon_white", resourceCulture);

@@ -15,6 +15,7 @@ using System.Diagnostics;
 using TagLib;
 using Newtonsoft.Json;
 using System.Threading;
+using AnotherMusicPlayer.MainWindow2Space;
 
 namespace AnotherMusicPlayer
 {
@@ -23,7 +24,7 @@ namespace AnotherMusicPlayer
     /// </summary>
     public partial class TagsEditor : Window
     {
-        private new MainWindow Parent;
+        //private new MainWindow Parent;
         private string Mode;
         private TagLib.File Tags;
         private TagLib.IPicture[] pictures;
@@ -35,9 +36,9 @@ namespace AnotherMusicPlayer
         private List<string> Files;
         private new bool IsInitialized = false;
 
-        public TagsEditor(MainWindow parent, string mode = "track", string[] files = null)
+        public TagsEditor(/*MainWindow parent, */string mode = "track", string[] files = null)
         {
-            if (parent == null) { return; }
+            //if (parent == null) { return; }
             if (mode == null) { return; }
             if (files == null) { return; }
             mode = mode.ToLower();
@@ -58,14 +59,14 @@ namespace AnotherMusicPlayer
             }
             if (Files.Count == 0) { return; }
             Tags = TagLib.File.Create(Files[0]);
-            Owner = Parent = parent;
+            //Owner = Parent = parent;
             Resources = Owner.Resources;
             Mode = mode;
 
             InitializeComponent();
             Style = FindResource("CustomWindowStyle") as Style;
 
-            DefaultCover = MainWindow.BaseDir + "icons" + MainWindow.SeparatorChar + "album_small.png";
+            DefaultCover = MainWindow2.BaseDir + "icons" + MainWindow2.SeparatorChar + "album_small.png";
 
             if (mode == "album")
             {
@@ -147,7 +148,7 @@ namespace AnotherMusicPlayer
             CoverCMAdd.Click += CoverCMAdd_Click;
 
             TopBar.MouseDown += TopBar_MouseDown;
-            TopBarTitle.Text = Parent.FindResource("EditorTagWindowTitle") as string;
+            TopBarTitle.Text = App.GetTranslation("EditorTagWindowTitle");
             BtnClose.Click += (object sender, RoutedEventArgs e) => { this.Close(); };
 
             Tags.Dispose();
@@ -158,8 +159,8 @@ namespace AnotherMusicPlayer
 
         private void TagsEditor_Loaded(object sender, RoutedEventArgs e)
         {
-            Left = Parent.Left + ((Parent.Width - Width) / 2);
-            Top = Parent.Top + ((Parent.Height - Height) / 2);
+            //Left = Parent.Left + ((Parent.Width - Width) / 2);
+            //Top = Parent.Top + ((Parent.Height - Height) / 2);
         }
 
         private void TopBar_MouseDown(object sender, MouseButtonEventArgs e)
@@ -191,7 +192,7 @@ namespace AnotherMusicPlayer
             win.Height = win.MinHeight = win.MaxHeight = height;
             win.Content = new ScrollViewer() { VerticalScrollBarVisibility = ScrollBarVisibility.Auto };
             StackPanel st = new StackPanel();
-            Image imp = new Image() { Style = Parent.FindResource("HQImg") as Style };
+            Image imp = new Image() { /*Style = Parent.FindResource("HQImg") as Style*/ };
             imp.Source = BitmapCover;
             st.Children.Add(imp);
             ((ScrollViewer)win.Content).Content = st;

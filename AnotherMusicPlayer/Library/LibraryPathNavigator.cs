@@ -2,23 +2,25 @@
 using System.IO;
 using System.Collections.Generic;
 using System.Text;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using System.Windows.Forms;
+using AnotherMusicPlayer.MainWindow2Space;
 
 namespace AnotherMusicPlayer
 {
     class LibraryPathNavigator
     {
-        WrapPanel Contener;
+        FlowLayoutPanel Contener;
         string RootPath = "";
         string CurrentPath = "";
         Library Parent;
 
-        public LibraryPathNavigator(Library parent, WrapPanel contener, string basePath = null)
+        public LibraryPathNavigator(Library parent, FlowLayoutPanel contener, string basePath = null)
         {
             Contener = contener;
             Parent = parent;
@@ -41,42 +43,41 @@ namespace AnotherMusicPlayer
             try
             {
                 if (path == null) { path = CurrentPath; }
-                if (Contener.Children.Count > 0)
-                    Contener.Children.Clear();
+                if (Contener.Controls.Count > 0)
+                    Contener.Controls.Clear();
                 string workpath = path.Replace(RootPath, "");
-                workpath = workpath.TrimStart(MainWindow.SeparatorChar);
-                string[] workTab = workpath.Split(MainWindow.SeparatorChar);
+                workpath = workpath.TrimStart(MainWindow2.SeparatorChar);
+                string[] workTab = workpath.Split(MainWindow2.SeparatorChar);
 
                 int index = 0;
                 string newPath = RootPath;
 
-                TextBlock tb = new TextBlock();
-
-                tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
-                tb.Text = Parent.Parent.FindResource("LibraryNavigatorItemHome") as string;
+                Label tb = new Label() { Margin = new Padding(3, 7, 3, 7), AutoSize = true };
+                //tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
+                tb.Text = App.GetTranslation("LibraryNavigatorItemHome");
                 tb.Tag = RootPath;
-                tb.MouseLeftButtonDown += PathClicked;
-                tb.ContextMenu = MakeContextMenu(tb, RootPath);
-                Contener.Children.Add(tb);
+                tb.MouseDown += PathClicked;
+                tb.ContextMenuStrip = MakeContextMenu(tb, RootPath);
+                Contener.Controls.Add(tb);
 
                 foreach (string name in workTab)
                 {
                     if (name == "") { continue; }
 
-                    TextBlock tb2 = new TextBlock();
-                    tb2.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
+                    Label tb2 = new Label() { Margin = new Padding(3,5,3,5), AutoSize = true };
+                    //tb2.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
                     tb2.Text = "/";
-                    Contener.Children.Add(tb2);
+                    Contener.Controls.Add(tb2);
 
-                    newPath += MainWindow.SeparatorChar + name;
-                    TextBlock tb3 = new TextBlock();
-                    tb3.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
+                    newPath += MainWindow2.SeparatorChar + name;
+                    Label tb3 = new Label() { Margin = new Padding(3, 7, 3, 7), AutoSize = true };
+                    //tb3.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
                     tb3.Text = name;
                     tb3.Tag = newPath;
-                    tb3.MouseLeftButtonDown += PathClicked;
-                    tb3.ContextMenu = MakeContextMenu(tb3, newPath);
+                    tb3.MouseDown += PathClicked;
+                    tb3.ContextMenuStrip = MakeContextMenu(tb3, newPath);
 
-                    Contener.Children.Add(tb3);
+                    Contener.Controls.Add(tb3);
 
                     index += 1;
                 }
@@ -94,26 +95,26 @@ namespace AnotherMusicPlayer
             if (content == null) { return; }
             try
             {
-                if (Contener.Children.Count > 0)
-                    Contener.Children.Clear();
+                if (Contener.Controls.Count > 0)
+                    Contener.Controls.Clear();
 
-                TextBlock tb = new TextBlock();
-                tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
-                tb.Text = Parent.Parent.FindResource("LibraryNavigatorItemHome") as string;
+                Label tb = new Label();
+                //tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
+                tb.Text = App.GetTranslation("LibraryNavigatorItemHome");
                 tb.Tag = RootPath;
-                tb.MouseLeftButtonDown += PathClicked;
-                tb.ContextMenu = MakeContextMenu(tb, RootPath);
-                Contener.Children.Add(tb);
+                tb.MouseDown += PathClicked;
+                tb.ContextMenuStrip = MakeContextMenu(tb, RootPath);
+                Contener.Controls.Add(tb);
 
-                TextBlock tb2 = new TextBlock();
-                tb2.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
+                Label tb2 = new Label();
+                //tb2.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
                 tb2.Text = ">>";
-                Contener.Children.Add(tb2);
+                Contener.Controls.Add(tb2);
 
-                TextBlock tb3 = new TextBlock();
-                tb3.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
+                Label tb3 = new Label();
+                //tb3.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
                 tb3.Text = content;
-                Contener.Children.Add(tb3);
+                Contener.Controls.Add(tb3);
             }
             catch (Exception err)
             {
@@ -122,46 +123,46 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private void PathClicked(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PathClicked(object sender, MouseEventArgs e)
         {
-            string tag = (string)((TextBlock)sender).Tag;
-            string name = (string)((TextBlock)sender).Text;
+            string tag = (string)((Label)sender).Tag;
+            string name = (string)((Label)sender).Text;
             if (Parent != null)
                 Parent.DisplayPath(tag);
             else
                 Display(tag);
         }
 
-        private ContextMenu MakeContextMenu(TextBlock parent, string path)
+        private ContextMenuStrip MakeContextMenu(Label parent, string path)
         {
             //ContextMenu cm = new LibraryContextMenu() { Style = Contener.FindResource("CustomContextMenuStyle") as Style };
             bool back = (RootPath != path) ? true : false;
             string backPath = "";
             if (path != RootPath) { path = Directory.GetParent(path).FullName; }
 
-            ContextMenu cm = MainWindow.Instance.library.MakeContextMenu(parent, "folder", back, backPath);
-            ((LibraryContextMenu)cm).EditFolder.Visibility = Visibility.Collapsed;
-            ((LibraryContextMenu)cm).PlayListsAddFolder.Visibility = Visibility.Collapsed;
-            //for (int i = 0; i < cm.Items.Count; i++)
-            //{
-            //    if (((MenuItem)cm.Items[i]).Name.ToLower() == "addfolder")
-            //    {
-            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Add;
-            //    }
-            //    else if (((MenuItem)cm.Items[i]).Name.ToLower() == "addshufflefolder")
-            //    {
-            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_AddShuffle;
-            //    }
-            //    else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playfolder")
-            //    {
-            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_Play;
-            //    }
-            //    else if (((MenuItem)cm.Items[i]).Name.ToLower() == "playshufflefolder")
-            //    {
-            //        //((MenuItem)cm.Items[i]).Click += LibraryContextMenuAction_PlayShuffle;
-            //    }
-            //    else { ((MenuItem)cm.Items[i]).Visibility = Visibility.Collapsed; }
-            //}
+            LibraryContextMenu cm = App.win1.library.MakeContextMenu(parent, "folder", back, backPath);
+            cm.EditFolder.Visible = false;
+            cm.PlayListsAddFolder.Visible = false;
+            for (int i = 0; i < cm.Items.Count; i++)
+            {
+                if (((ToolStripItem)cm.Items[i]).Name.ToLower() == "addfolder")
+                {
+                    //((ToolStripItem)cm.Items[i]).Click += LibraryContextMenuAction_Add;
+                }
+                else if (((ToolStripItem)cm.Items[i]).Name.ToLower() == "addshufflefolder")
+                {
+                    //((ToolStripItem)cm.Items[i]).Click += LibraryContextMenuAction_AddShuffle;
+                }
+                else if (((ToolStripItem)cm.Items[i]).Name.ToLower() == "playfolder")
+                {
+                    //((ToolStripItem)cm.Items[i]).Click += LibraryContextMenuAction_Play;
+                }
+                else if (((ToolStripItem)cm.Items[i]).Name.ToLower() == "playshufflefolder")
+                {
+                    //((ToolStripItem)cm.Items[i]).Click += LibraryContextMenuAction_PlayShuffle;
+                }
+                else { ((ToolStripItem)cm.Items[i]).Visible = false; }
+            }
             return cm;
         }
 

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     /* Originate from MaterialDesignThemes.Wpf https://github.com/MaterialDesignInXAML/MaterialDesignInXamlToolkit/blob/master/src/MaterialDesignThemes.Wpf/PackIconDataFactory.cs */
     internal static class IconsData

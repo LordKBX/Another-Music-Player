@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
@@ -9,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     internal static class SettingsManagment
     {
@@ -60,6 +61,11 @@ namespace AnotherMusicPlayer.MainWindow2
             keys.Insert(0, "Perso");
             int idof = keys.IndexOf(Settings.EqualizerPreset);
             int wantedId = (idof >= 0) ? idof : 0;
+
+            if (window.SettingsTabEqualizerComboBox.Items.Count == 0)
+            {
+                for (int i = 0; i < keys.Count; i++) { window.SettingsTabEqualizerComboBox.Items.Add(keys[i]); }
+            }
             window.SettingsTabEqualizerComboBox.SelectedIndex = (wantedId >= 0 && wantedId < window.SettingsTabEqualizerComboBox.Items.Count) ? wantedId : 0;
 
             SetEqualizerBandValue(window.SettingsTabEqualizerTrackBar01, window.SettingsTabEqualizerLabel01, Settings.EqualizerBand1);

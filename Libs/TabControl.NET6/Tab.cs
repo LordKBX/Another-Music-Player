@@ -33,6 +33,18 @@ namespace Manina.Windows.Forms
         [Description("Gets or sets the tab icon."), DefaultValue(null)]
         public Image Icon { get => icon; set { icon = value; OnContentsChanged(EventArgs.Empty); } }
 
+        [Category("Appearance"), DefaultValue(typeof(Color), "Black")]
+        [Description("Gets or sets the SelectedBackColor color for the control.")]
+        public Color SelectedBackColor { get; set; }
+
+        [Category("Appearance"), DefaultValue(typeof(Color), "Black")]
+        [Description("Gets or sets the HotTabBackColor color for the control.")]
+        public Color HotTabBackColor { get; set; }
+
+        [Category("Appearance"), DefaultValue(typeof(Color), "Black")]
+        [Description("Gets or sets the HotAndActiveTabBackColor color for the control.")]
+        public Color HotAndActiveTabBackColor { get; set; }
+
         /// <summary>
         /// Gets or sets the font associated with the control.
         /// </summary>

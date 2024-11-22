@@ -10,11 +10,11 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TagLib;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer
 {
     public partial class PlaybackProgressBar : UserControl
     {
-        public delegate void PlaybackProgressBarNotifyValue(object? sender, double value);
+        public delegate void PlaybackProgressBarNotifyValue(object sender, int value);
 
         private bool _FreezeEvent = true;
         //public bool FreezeEvent
@@ -23,29 +23,38 @@ namespace AnotherMusicPlayer.MainWindow2
         //    set { _FreezeEvent = value; }
         //}
 
-        private double _MinValue = 0;
-        public double MinValue
+        public int MinValue
         {
-            get { return _MinValue; }
+            get { return progressBar1.Minimum; }
+            set
+            {
+                if (value >= progressBar1.Maximum) { return; }
+                progressBar1.Minimum = value;
+            }
         }
 
-        private double _MaxValue = 100;
-        public double MaxValue
+        public int MaxValue
         {
-            get { return _MaxValue; }
+            get { return progressBar1.Maximum; }
+            set { 
+                if(value <= progressBar1.Minimum) { return; }
+                progressBar1.Maximum = value;
+            }
         }
 
-        private double _Value = 0;
-        public double Value
+        private int _Value = 0;
+        public int Value
         {
             get { return _Value; }
             set
             {
                 //if (value != _Value)
                 //{
-                if (value > _MaxValue) { _Value = MaxValue; } else if (value < _MinValue) { _Value = MinValue; } else { _Value = Math.Round(value, 2, MidpointRounding.ToEven); }
+                if (value > MaxValue) { _Value = MaxValue; } 
+                else if (value < MinValue) { _Value = MinValue; } 
+                else { _Value = value; }
                 if (!_FreezeEvent) { Change?.Invoke(this, _Value); }
-                Calculate();
+                progressBar1.Value = _Value;
                 //}
             }
         }
@@ -56,11 +65,10 @@ namespace AnotherMusicPlayer.MainWindow2
         {
             InitializeComponent();
             this.SizeChanged += PlaybackProgressBar_SizeChanged;
-            this.BackColorChanged += (object sender, EventArgs e) => { panel1.BackColor = this.BackColor; };
-            this.ForeColorChanged += (object sender, EventArgs e) => { panel2.BackColor = this.ForeColor; };
+            this.BackColorChanged += (object sender, EventArgs e) => { progressBar1.BackColor = this.BackColor; };
+            this.ForeColorChanged += (object sender, EventArgs e) => { progressBar1.ForeColor = this.ForeColor; };
             this.MouseDown += PlaybackProgressBar_MouseDown;
-            panel1.MouseDown += PlaybackProgressBar_MouseDown;
-            panel2.MouseDown += PlaybackProgressBar_MouseDown;
+            progressBar1.MouseDown += PlaybackProgressBar_MouseDown;
             Calculate();
         }
 
@@ -68,26 +76,24 @@ namespace AnotherMusicPlayer.MainWindow2
         {
             if (e.Button != MouseButtons.Left) { return; }
             if (sender == null) { return; }
-            if (sender.GetType() != typeof(PlaybackProgressBar) && sender.GetType() != typeof(Panel)) { return; }
+            if (sender.GetType() != typeof(PlaybackProgressBar) && sender.GetType() != typeof(NewProgressBar)) { return; }
 
             Point pt = this.PointToClient(Cursor.Position);
             Debug.WriteLine("PlaybackProgressBar_MouseDown(" + ((Control)sender).Name + "), pt.X = " + pt.X);
-            double value = Math.Round(Convert.ToDouble(pt.X) * _MaxValue / panel1.Width, 2, MidpointRounding.ToEven);
+            double value = Convert.ToDouble(pt.X) * MaxValue / Width;
             Debug.WriteLine("PlaybackProgressBar_MouseDown(" + ((Control)sender) + "), _Value = " + value);
-            _Value = value;
-            Change?.Invoke(this, value);
+            _Value = Convert.ToInt32(Math.Round(value, 0, MidpointRounding.ToEven));
+            Change?.Invoke(this, _Value);
             Calculate();
         }
 
         private void Calculate() 
         {
-            panel2.Width = Convert.ToInt32(Math.Truncate(Math.Round(panel1.Width * _Value / _MaxValue, 0, MidpointRounding.ToEven)));
+            progressBar1.Value = _Value;
         }
 
         private void PlaybackProgressBar_SizeChanged(object sender, EventArgs e)
         {
-            panel2.Height = panel1.Height;
-            Calculate();
         }
     }
 }

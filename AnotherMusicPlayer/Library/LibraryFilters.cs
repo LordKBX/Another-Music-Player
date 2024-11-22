@@ -3,8 +3,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Media;
-using System.Windows.Input;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -32,13 +31,7 @@ namespace AnotherMusicPlayer
             if (FilterGenreSelector.Items.Count > 0)
                 FilterGenreSelector.Items.Clear();
             Debug.WriteLine(JsonConvert.SerializeObject(genresD.Keys));
-            FilterGenreSelector.Items.Add(new ComboBoxItem()
-            {
-                Content = "------",
-                Tag = null,
-                HorizontalContentAlignment = HorizontalAlignment.Left,
-                VerticalContentAlignment = VerticalAlignment.Center
-            });
+            FilterGenreSelector.Items.Add(new DropDownItem() { Value = "------", Data = null });
             List<string> genres = new List<string>();
             foreach (string key in genresD.Keys)
             {
@@ -61,59 +54,64 @@ namespace AnotherMusicPlayer
                 int cpt = 0;
                 foreach (string k in Counts.Keys) { cpt = Convert.ToInt32(Counts[k]["nb"]); break; }
 
-                FilterGenreSelector.Items.Add(new ComboBoxItem()
-                {
-                    Content = ((key == "0") ? "<N/A>" : key.Substring(0, 1).ToUpper() + key.Substring(1)) + " (" + cpt + ")",
-                    Tag = (key == "0") ? "" : key,
-                    HorizontalContentAlignment = HorizontalAlignment.Left,
-                    VerticalContentAlignment = VerticalAlignment.Center
+                FilterGenreSelector.Items.Add(new DropDownItem() { 
+                    Value = ((key == "0") ? "<N/A>" : key.Substring(0, 1).ToUpper() + key.Substring(1)) + " (" + cpt + ")", 
+                    Data = (key == "0") ? "" : key
                 });
             }
             FilterGenreSelector.SelectedIndex = 0;
         }
 
         /// <summary> Callback for index change on search type selector </summary>
-        private void FilterSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FilterSelector_SelectionChanged(object sender, EventArgs e)
         {
-            string tag = (string)((ComboBoxItem)FilterSelector.SelectedItem).Tag;
+            string tag = "";
+            if (FilterSelector.SelectedItem.GetType() == typeof(string)) { tag = (string)FilterSelector.SelectedItem; }
+            else if (FilterSelector.SelectedItem.GetType() == typeof(DropDownItem)) { tag = (string)((DropDownItem)FilterSelector.SelectedItem).Data; }
             //Debug.WriteLine(tag);
             if (tag == "")
             {
-                FiltersSearchInput.Visibility = Visibility.Collapsed;
+                FiltersSearchInput.Visible = false;
                 FiltersSearchInput.Text = "";
 
+                FiltersGenreInput.Visible = false;
+                FiltersGenreInput.Text = "";
+
                 FilterGenreSelector.SelectedIndex = 0;
-                FilterGenreSelector.Visibility = Visibility.Collapsed;
+                FilterGenreSelector.Visible = false;
 
             }
             else if (tag == "Name" || tag == "Artist" || tag == "Album")
             {
-                FilterGenreSelector.Visibility = Visibility.Collapsed;
+                FilterGenreSelector.Visible = false;
                 FilterGenreSelector.SelectedIndex = 0;
 
-                FiltersSearchInput.Visibility = Visibility.Visible;
+                FiltersSearchInput.Visible = true;
                 FiltersSearchInput.Text = "";
             }
             else if (tag == "Genre")
             {
-                FilterGenreSelector.Visibility = Visibility.Visible;
-                FiltersSearchInput.Visibility = Visibility.Collapsed;
+                FilterGenreSelector.Visible = true;
+                FiltersGenreInput.Visible = true;
+                FiltersSearchInput.Visible = false;
                 FilterGenreSelector.SelectedIndex = 0;
             }
         }
 
         /// <summary> Callback for index change on search media genre selector </summary>
-        private void FilterGenreSelector_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void FilterGenreSelector_SelectionChanged(object sender, EventArgs e)
         {
-            string mode = (string)((ComboBoxItem)FilterSelector.SelectedItem).Tag;
-            string genre = null;
-            try { genre = (string)((ComboBoxItem)FilterGenreSelector.SelectedItem).Tag; }
-            catch { }
+            string mode = "";
+            string genre = "";
+            if (FilterSelector.SelectedItem.GetType() == typeof(string)) { mode = (string)FilterSelector.SelectedItem; }
+            else if (FilterSelector.SelectedItem.GetType() == typeof(DropDownItem)) { mode = (string)((DropDownItem)FilterSelector.SelectedItem).Data; }
+            if (FilterGenreSelector.SelectedItem.GetType() == typeof(string)) { genre = (string)FilterGenreSelector.SelectedItem; }
+            else if (FilterGenreSelector.SelectedItem.GetType() == typeof(DropDownItem)) { genre = (string)((DropDownItem)FilterGenreSelector.SelectedItem).Data; }
+            
             if (mode != "Genre") { return; }
             if (genre == null) { DisplayPath(RootPath); }
             else
             {
-                e.Handled = true;
                 Dictionary<string, Dictionary<string, object>> files = Bdd.DatabaseQuery("SELECT Path FROM files WHERE LOWER(Genres) LIKE '%;" + genre + "' OR LOWER(Genres) LIKE '" + genre + ";%' OR LOWER(Genres) LIKE '%;" + genre + ";%' OR LOWER(Genres) LIKE '" + genre + "' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
                 List<string> paths = new List<string>();
                 foreach (KeyValuePair<string, Dictionary<string, object>> file in files) { paths.Add(file.Key); }
@@ -121,10 +119,8 @@ namespace AnotherMusicPlayer
                 pathNavigator.DisplayAlt("Search Genre: " + genre);
                 Debug.WriteLine(JsonConvert.SerializeObject(paths));
 
-                SearchResultsContener.ItemsSource = null;
-                NavigationContenerScollerBorder.Visibility = Visibility.Collapsed;
-                Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0);
-                SearchResultsContenerBorder.Visibility = Visibility.Visible;
+                Parent.LibraryTabSplitContainer.Panel1Collapsed = true;
+                Parent.LibraryTabSplitContainer.Panel2Collapsed = false;
 
                 Parent.setLoadingState(true);
                 Task.Delay(250);
@@ -143,8 +139,8 @@ namespace AnotherMusicPlayer
                             }
                         }
                     }
-                    SearchResultsContener.ItemsSource = list;
-                    SearchResultsContener.ScrollIntoView(list[0]);
+                    //SearchResultsContener.ItemsSource = list;
+                    SearchResultsContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
                 }
                 Parent.setLoadingState(false);
             }
@@ -153,13 +149,11 @@ namespace AnotherMusicPlayer
         /// <summary> Callback key down on search input for text search </summary>
         private void FiltersSearchInput_KeyDown(object sender, KeyEventArgs e)
         {
+            /*
             //Debug.WriteLine(e.Key.ToString());
             if (e.Key.ToString() == "Return")
             {
-                SearchResultsContener.ItemsSource = null;
-                NavigationContenerScollerBorder.Visibility = Visibility.Collapsed;
                 Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0);
-                SearchResultsContenerBorder.Visibility = Visibility.Visible;
 
                 string tag = (string)((ComboBoxItem)FilterSelector.SelectedItem).Tag;
                 string var = FiltersSearchInput.Text.ToLower();
@@ -194,7 +188,7 @@ namespace AnotherMusicPlayer
                 }
                 Parent.setLoadingState(false);
             }
-
+            */
         }
 
         private Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> getSearchSlice(uint start, uint end)

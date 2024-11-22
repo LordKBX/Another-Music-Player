@@ -1,53 +1,60 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media;
+using Control = System.Windows.Forms.Control;
+using Button = System.Windows.Forms.Button;
+using Color = System.Drawing.Color;
+using Pen = System.Drawing.Pen;
+using Timer = System.Windows.Forms.Timer;
+using ByteDev.Strings;
+using CustomExtensions;
+using Manina.Windows.Forms;
+using Newtonsoft.Json;
+using System.Threading;
+using System.Collections.ObjectModel;
+using Sprache;
+using static System.Net.Mime.MediaTypeNames;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using System.Windows.Interop;
+using System.Runtime.InteropServices;
+using NAudio.Gui;
+using System.Windows.Media.Imaging;
+using System.Windows;
+using System.Windows.Markup;
 
 namespace AnotherMusicPlayer.MainWindow2Space
 {
-    public partial class Lyrics : Form
+    public partial class MainWindow2 : Form
     {
-        public Lyrics(MediaItem data)
+        private void MainWindow2_SizeChanged(object sender, EventArgs e)
         {
-            InitializeComponent();
-            string title = data.Name;
-            string arts = data.Artists;
-            if (data.Album != null && data.Album.Trim().Length > 0) { title += " - " + data.Album.Trim(); }
-            else if (arts != null && arts.Trim().Length > 0) { title += " - " + arts.Trim(); }
-            Text = this.TitleLabel.Text = title;
-            richTextBox1.Text = data.Lyrics;
-            App.SetToolTip(this.TitleLabel, this.TitleLabel.Text);
-
-            MinimizeButton.Click += MinimizeButton_Click;
-            MaximizeButton.Click += MaximizeButton_Click;
-            CloseButton.Click += CloseButton_Click;
-
-            #region Window displasment gestion
-            MainWIndowHead.MouseDown += FormDragable_MouseDown;
-            MainWIndowHead.MouseMove += FormDragable_MouseMove;
-            MainWIndowHead.MouseUp += FormDragable_MouseUp;
-            TitleLabel.MouseDown += FormDragable_MouseDown;
-            TitleLabel.MouseMove += FormDragable_MouseMove;
-            TitleLabel.MouseUp += FormDragable_MouseUp;
-            #endregion
-
-            #region Window resize gestion
-            this.DoubleBuffered = true;
-            this.SetStyle(ControlStyles.ResizeRedraw, true);
-            this.ResizeRedraw = true;
-            GripButton.Tag = "MainWindow";
-            GripButton.MouseDown += SizerMouseDown;
-            GripButton.MouseMove += SizerMouseMove;
-            GripButton.MouseUp += SizerMouseUp;
-            #endregion
+            TabControler.TabSize = new System.Drawing.Size((TabControler.Width) / TabControler.Tabs.Count, 50);
+            if (Width > 800 && Height > 700)
+            { PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 250; PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 250; }
+            else
+            { PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 150; PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 150; }
+            if(PlaybackTabRatting != null)
+            PlaybackTabRatting.Margin = new Padding(Convert.ToInt32(Math.Truncate((PlaybackTabLeftBottomFlowLayoutPanel.Width - PlaybackTabRatting.Width) / 2.0)), 3, 0, 0);
         }
 
+        public void SetTitle(string title)
+        {
+            if (title != null && title.Trim() != "")
+            {
+                this.Text = title;
+                try { customThumbnail.Title = title; } catch { }
+                this.TitleLabel.Text = title;
+            }
+            else
+            {
+                try { customThumbnail.Title = App.AppName; } catch { }
+                this.TitleLabel.Text = App.AppName;
+            }
+            App.SetToolTip(this.TitleLabel, this.TitleLabel.Text);
+        }
 
         #region Generic Window Button
         public void MinimizeButton_Click(object? sender, EventArgs? e) { WindowState = FormWindowState.Minimized; }
@@ -64,7 +71,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 WindowState = FormWindowState.Maximized;
             }
         }
-        public void CloseButton_Click(object? sender, EventArgs? e) { App.DelToolTip(this.TitleLabel);  Close(); }
+        public void CloseButton_Click(object? sender, EventArgs? e) { Close(); }
         #endregion
 
         #region Window displasment gestion
@@ -226,6 +233,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {
             if (IsResizing) { IsResizing = false; }
         }
+
         #endregion
     }
 }

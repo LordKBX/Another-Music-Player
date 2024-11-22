@@ -18,10 +18,10 @@ using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace AnotherMusicPlayer
 {
-    public delegate void Ratting2RateChangedNotify(double value);
-    public delegate void Ratting2ZoomChangedNotify(double value);
+    public delegate void Ratting2RateChangedNotify(Rating2 sender, double value);
+    public delegate void Ratting2ZoomChangedNotify(Rating2 sender, double value);
 
-    public partial class Ratting2 : UserControl
+    public partial class Rating2 : UserControl
     {
         private double Max = 5.0;
         private double StarCaseWidth = 20.0;
@@ -36,11 +36,6 @@ namespace AnotherMusicPlayer
         #endregion  
 
         #region Zoom Property
-        /// <summary>
-        /// Handles changes to the StarForegroundColor property.
-        /// </summary>
-        private static void OnZoomChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { ((Rating)d).setZoom((double)e.NewValue); }
-
         private double _Zoom = 1.0;
         public double Zoom
         {
@@ -56,15 +51,12 @@ namespace AnotherMusicPlayer
             //for (int i = 0; i < 5; i++) { StarMatrix[i] = new Point(StarPoints[i].X * multiply, StarPoints[i].Y * multiply); }
             //foreach (Polygon star in Grid1.Children) { star.Width = caseSize; star.Points = StarMatrix; }
             //foreach (Polygon star in Grid2.Children) { star.Width = caseSize; star.Points = StarMatrix; }
-            //_Zoom = multiply; ZoomChanged?.Invoke(_Zoom);
+            //_Zoom = multiply; ZoomChanged?.Invoke(this, _Zoom);
             reDraw();
         }
         #endregion
 
         #region Rate Property
-        /// <summary>
-        /// StarForegroundColor Dependency Property
-        /// </summary>
         private double _Rate = 0;
         public double Rate
         {
@@ -72,29 +64,31 @@ namespace AnotherMusicPlayer
             set { setRate(value); }
         }
         public event Ratting2RateChangedNotify RateChanged;
-
-        /// <summary>
-        /// Handles changes to the StarForegroundColor property.
-        /// </summary>
-        private static void OnRateChanged(DependencyObject d, DependencyPropertyChangedEventArgs e) { ((Rating)d).setRate((double)e.NewValue); }
-
         #endregion
 
 
-        public Ratting2()
+        public Rating2()
         {
             InitializeComponent();
             tableLayoutPanel2.Width = 0;
             this.MouseMove += StarGrid_MouseMove;
+            this.MouseLeave += Ratting2_MouseLeave;
             this.MouseUp += StarGrid_MouseUp;
-            this.MouseDown += StarGrid_MouseMove;
+            this.MouseDown += Ratting2_MouseDown; ;
         }
+
+        private bool IsDown = false;
+        private void Ratting2_MouseDown(object sender, MouseEventArgs e)
+        { IsDown = true; StarGrid_MouseUp(sender, e); }
+
+        private void Ratting2_MouseLeave(object sender, EventArgs e) { if (IsDown) { return; } reDraw(); }
 
         private void StarGrid_MouseUp(object sender, EventArgs e) {
             if (_IsReadOnly) { return; }
             double caseW = StarCaseWidth * _Zoom;
             double posx = (int)(LastPos.X / caseW) + ((((LastPos.X / caseW) - (int)(LastPos.X / caseW)) >= 0.5) ? 0.5 : 0);
-            setRate(posx); 
+            setRate(posx);
+            IsDown = false;
         }
 
         System.Drawing.Point LastPos = new System.Drawing.Point(0, 0);
@@ -111,7 +105,7 @@ namespace AnotherMusicPlayer
         {
             if (rate < 0 || rate > Max) { return false; }
             _Rate = rate; reDraw();
-            RateChanged?.Invoke(_Rate);
+            RateChanged?.Invoke(this, _Rate);
             return true;
         }
 

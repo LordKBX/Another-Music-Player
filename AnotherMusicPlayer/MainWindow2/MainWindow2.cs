@@ -24,12 +24,19 @@ using NAudio.Gui;
 using System.Windows.Media.Imaging;
 using System.Windows;
 using System.Windows.Markup;
+using System.IO;
+using System.Windows.Documents;
+using System.Windows.Threading;
+using System.Windows.Shapes;
 
-namespace AnotherMusicPlayer.MainWindow2
+namespace AnotherMusicPlayer.MainWindow2Space
 {
     public partial class MainWindow2 : Form
     {
         private Timer LoadTimer = new Timer();
+
+        /// <summary> Used for storing object dependant of the Operating system </summary>
+        private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
 
         private static SolidColorBrush DefaultBrush = new SolidColorBrush(Colors.White);
 
@@ -62,14 +69,49 @@ namespace AnotherMusicPlayer.MainWindow2
         private ThumbnailToolBarButton buttonPlay = null;
         private ThumbnailToolBarButton buttonNext = null;
 
+        /// <summary> Char used in first collumn of PlayListView for displaying current played/selected media </summary>
+        public static string PlayListSelectionChar = "▶";
+        /// <summary> Short notation for ystem.IO.Path.DirectorySeparatorChar </summary>
+        public static char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
+        /// <summary> Base Diractory of the application </summary>
+        public static string BaseDir = AppDomain.CurrentDomain.BaseDirectory + SeparatorChar;
+
         private List<Lyrics> lyricsWindowsList = new List<Lyrics>();
+
+        public Library library;
+        public PlayLists playLists;
+
+        public void setLoadingState(bool state, string message = null)
+        {
+            if (this.InvokeRequired) { this.Invoke(() => { setLoadingState(state, message); }); return; }
+            if (state)
+            {
+                OverPanel.Dock = DockStyle.Fill;
+                OverPanel.Visible = true;
+                if (message == null) { message = "Loading ..."; }
+                OverPanelLabel.Text = message;
+            }
+            else
+            {
+                OverPanel.Dock = DockStyle.Top;
+                OverPanel.Height = 0;
+                OverPanel.Visible = false;
+            }
+        }
+        public void setMetadataScanningState(bool state, int nb = 0)
+        {
+            if (this.InvokeRequired) { this.Invoke(() => { setMetadataScanningState(state, nb); }); return; }
+            if (state == true) { GridScanMetadata.Visible = true; GridScanMetadataNb.Text = "" + nb; }
+            else { GridScanMetadata.Visible = false; }
+        }
 
         /// <summary> Object music player </summary>
         public MainWindow2()
         {
             InitializeComponent();
-            //Settings.LastPlaylistIndex = 4;
-            //Settings.SaveSettings();
+            library = new Library(this);
+            playLists = new PlayLists(this);
+
             PlaylistIndexAtLoading = Settings.LastPlaylistIndex;
             if (Settings.LastRepeatStatus == 0) { Player.Repeat(false); Player.Loop(false); }
             else if (Settings.LastRepeatStatus == 1) { Player.Repeat(true); Player.Loop(false); }
@@ -107,6 +149,7 @@ namespace AnotherMusicPlayer.MainWindow2
                 SettingsTab.Icon = IconSettings;
                 #endregion
 
+                #region Define playback elements
                 BtnOpen.BackgroundImage = IconOpen;
                 BtnOpen.Click += (object sender, EventArgs e) => { };
 
@@ -117,8 +160,6 @@ namespace AnotherMusicPlayer.MainWindow2
                 BtnPlayPause.Click += (object sender, EventArgs e) => 
                 { 
                     if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); } 
-                    BtnPlayPause.BackgroundImage = (Player.LatestPlayerStatus == PlayerStatus.Play) ? IconPlay : IconPause;
-                    buttonPlay.Icon = (Player.LatestPlayerStatus == PlayerStatus.Play) ? ThumbnailIconPlay : ThumbnailIconPause; 
                 };
 
                 BtnNext.BackgroundImage = IconNext;
@@ -138,93 +179,123 @@ namespace AnotherMusicPlayer.MainWindow2
                 BtnClearList.BackgroundImage = IconClearList;
                 BtnClearList.Click += (object sender, EventArgs e) => { Player.PlaylistClear(); };
 
-                PlaybackTabDataGridView.AutoGenerateColumns = false;
-                PlayListItems.Add(new PlayListViewItem() { Name = "TEST" });
-                PlaybackTabDataGridView.DataSource = PlayListItems;
                 playbackProgressBar.Change += PlaybackProgressBar_Change;
+                #endregion
 
+                #region Define PlaybackTabDataGridView initial data
+                PlaybackTabDataGridView.AutoGenerateColumns = false;
+                //PlayListItems.Add(new PlayListViewItem() { Name = "Loading ..." });
+                PlaybackTabDataGridView.DataSource = PlayListItems;
+                #endregion
+
+                #region Define Playback Left Pannel Actions
                 PlaybackTabLyricsButton.Visible = false;
                 PlaybackTabLyricsButton.Click += PlaybackTabLyricsButton_Click;
-
                 PlaybackTabRatting.RateChanged += PlaybackTabRatting_RateChanged;
+                #endregion
 
+                #region Define CustomThumbnail
+                customThumbnail = new TabbedThumbnail(this.Handle, this.Handle);
+                IntPtr Hicon1 = Properties.Resources.previous_24.GetHicon();
+                ThumbnailIconPrev = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon1).Clone();
+                DestroyIcon(Hicon1);
+
+                IntPtr Hicon2 = Properties.Resources.play_24.GetHicon();
+                ThumbnailIconPlay = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon2).Clone();
+                DestroyIcon(Hicon2);
+
+                IntPtr Hicon3 = Properties.Resources.pause_24.GetHicon();
+                ThumbnailIconPause = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon3).Clone();
+                DestroyIcon(Hicon3);
+
+                IntPtr Hicon4 = Properties.Resources.next_24.GetHicon();
+                ThumbnailIconNext = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon4).Clone();
+                DestroyIcon(Hicon4);
+
+                buttonPrev = new ThumbnailToolBarButton(ThumbnailIconPrev, "test");
+                buttonPrev.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { Player.PlaylistPrevious(); };
+                buttonPlay = new ThumbnailToolBarButton((Player.LatestPlayerStatus == PlayerStatus.Play) ? ThumbnailIconPlay : ThumbnailIconPause, "IconPlay");
+                buttonPlay.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); } };
+                buttonNext = new ThumbnailToolBarButton(ThumbnailIconNext, "IconNext");
+                buttonNext.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { Player.PlaylistNext(); };
+                TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this.Handle, new ThumbnailToolBarButton[] { buttonPrev, buttonPlay, buttonNext });
+                customThumbnail.SetWindowIcon(Properties.Resources.icon_large);
+                #endregion
+
+                #region Initialisation Library Filters
+                LibraryFiltersMode.SelectedIndex = 0;
+                LibraryFiltersGenreList.Visible = false;
+                LibraryFiltersGenreSearchBox.Visible = false;
+                LibraryFiltersSearchBox.Visible = false;
+                #endregion
+
+                #region Define Player class events
                 Player.PlaylistChanged += Player_PlaylistChanged;
                 Player.PositionChanged += Player_PositionChanged;
                 Player.LengthChanged += Player_LengthChanged;
                 Player.PlaylistPositionChanged += Player_PlaylistPositionChanged;
                 Player.PlayStoped += Player_PlayStoped;
 
-                Translate();
+                Player.Paused += Player_StatusChange;
+                Player.Stoped += Player_StatusChange;
+                Player.Started += Player_StatusChange;
+                #endregion
+
+                KeyboardLocal.Init(this);
+                KeyboardGlobal.Init();
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
 
             LoadTimer.Tick += LoadTimer_Tick;
-            LoadTimer.Interval = 1000;
+            LoadTimer.Interval = 200;
             LoadTimer.Start();
 
-            customThumbnail = new TabbedThumbnail(this.Handle, this.Handle);
-            IntPtr Hicon1 = Properties.Resources.previous_24.GetHicon();
-            ThumbnailIconPrev = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon1).Clone();
-            DestroyIcon(Hicon1);
-
-            IntPtr Hicon2 = Properties.Resources.play_24.GetHicon();
-            ThumbnailIconPlay = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon2).Clone();
-            DestroyIcon(Hicon2);
-
-            IntPtr Hicon3 = Properties.Resources.pause_24.GetHicon();
-            ThumbnailIconPause = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon3).Clone();
-            DestroyIcon(Hicon3);
-
-            IntPtr Hicon4 = Properties.Resources.next_24.GetHicon();
-            ThumbnailIconNext = (System.Drawing.Icon)System.Drawing.Icon.FromHandle(Hicon4).Clone();
-            DestroyIcon(Hicon4);
-
-            buttonPrev = new ThumbnailToolBarButton(ThumbnailIconPrev, "test");
-            buttonPrev.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { Player.PlaylistPrevious(); };
-            buttonPlay = new ThumbnailToolBarButton((Player.LatestPlayerStatus == PlayerStatus.Play) ? ThumbnailIconPlay : ThumbnailIconPause, "IconPlay");
-            buttonPlay.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { 
-                if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); }
-                BtnPlayPause.BackgroundImage = (Player.LatestPlayerStatus == PlayerStatus.Play) ? IconPlay : IconPause;
-                buttonPlay.Icon = (Player.LatestPlayerStatus == PlayerStatus.Play) ? ThumbnailIconPlay : ThumbnailIconPause;
-            };
-            buttonNext = new ThumbnailToolBarButton(ThumbnailIconNext, "IconNext");
-            buttonNext.Click += (object sender, ThumbnailButtonClickedEventArgs e) => { Player.PlaylistNext(); };
-            TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this.Handle, new ThumbnailToolBarButton[] { buttonPrev, buttonPlay, buttonNext });
-            customThumbnail.SetWindowIcon(Properties.Resources.icon_large);
+            this.FormClosed += MainWindow2_FormClosed;
         }
 
-        private void PlaybackTabRatting_RateChanged(double value)
+        private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) { KeyboardGlobal.Kill(); }
+
+        private void Player_StatusChange()
         {
+            if (this.InvokeRequired) { this.Invoke(() => { Player_StatusChange(); }); return; }
+            try
+            {
+                BtnPlayPause.BackgroundImage = (Player.LatestPlayerStatus == PlayerStatus.Play) ? IconPlay : IconPause;
+                buttonPlay.Icon = (Player.LatestPlayerStatus == PlayerStatus.Play) ? ThumbnailIconPlay : ThumbnailIconPause;
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+        }
+
+        private void LoadTimer_Tick(object? sender, EventArgs e)
+        {
+            if (LoadTimer == null) { return; }
+            LoadTimer.Dispose();
+            LoadTimer = null;
+            LibraryLoadOldPlaylist();
+            SettingsManagment.Init(this);
+            Translate();
+            library.DisplayPath();
+        }
+
+        private void PlaybackTabRatting_RateChanged(Rating2 sender, double value)
+        {
+            if (loadingRating) { return; }
             Debug.WriteLine("New Ratting = " + value);
+            if (PlaybackTabRatting.Tag == null) { return; }
+            if (PlaybackTabRatting.Tag.GetType() != typeof(string)) { return; }
+            string path = ("" + PlaybackTabRatting.Tag).Trim();
+            if(!File.Exists(path)) { return; }
+            FilesTags.SaveRating(path, value);
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         extern static bool DestroyIcon(IntPtr handle);
 
         #region MainWindow Events
-        private void LoadTimer_Tick(object? sender, EventArgs e)
-        {
-            if (LoadTimer == null) { return; }
-            SettingsManagment.Init(this);
-            LibraryLoadOldPlaylist();
-            LoadTimer.Dispose();
-            LoadTimer = null;
-        }
-
-        private void MainWindow2_SizeChanged(object sender, EventArgs e)
-        {
-            TabControler.TabSize = new System.Drawing.Size((TabControler.Width) / TabControler.Tabs.Count, 50);
-            if (Width > 800 && Height > 700)
-            { PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 250; PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 250; }
-            else
-            { PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 150; PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 150; }
-            PlaybackTabRatting.Margin = new Padding(Convert.ToInt32(Math.Truncate((PlaybackTabLeftBottomFlowLayoutPanel.Width - PlaybackTabRatting.Width) / 2.0)), 3, 0, 0);
-        }
-
-        private void PlaybackProgressBar_Change(object sender, double value)
+        private void PlaybackProgressBar_Change(object sender, int value)
         {
             long duration = Player.Length();
-            Player.Position(null, Convert.ToInt64(Math.Truncate(value * duration / 100)));
+            Player.Position(null, Convert.ToInt64(Math.Truncate(Convert.ToDouble(value) * duration / playbackProgressBar.MaxValue)));
         }
 
         private void PlaybackTabLyricsButton_Click(object sender, EventArgs e)
@@ -247,7 +318,7 @@ namespace AnotherMusicPlayer.MainWindow2
         #endregion
 
         #region UI Translation
-        public void Translate() { AnotherMusicPlayer.MainWindow2.Translation.Translate(this); }
+        public void Translate() { AnotherMusicPlayer.MainWindow2Space.Translation.Translate(this); }
         public void UpdateStyle() { }
         public void AlwaysOnTop(bool val) { this.TopMost = val; }
         private void ReplaceElementDualText(Control ctrl, string text) { ctrl.Text = text; App.SetToolTip(ctrl, text); }
@@ -261,7 +332,7 @@ namespace AnotherMusicPlayer.MainWindow2
             if (position > 0)
             {
                 DisplayPlaybackPosition.Text = App.displayTime(position);
-                playbackProgressBar.Value = position * 100 / duration;
+                playbackProgressBar.Value = Convert.ToInt32(Math.Round(Convert.ToDouble(position) * playbackProgressBar.MaxValue / duration, 0, MidpointRounding.ToEven));
 
                 Settings.LastPlaylistDuration = position;
                 Settings.SaveSettings();
@@ -281,7 +352,7 @@ namespace AnotherMusicPlayer.MainWindow2
             PlaybackTabDataGridView.FirstDisplayedScrollingRowIndex = pos;
             foreach (PlayListViewItem tm in PlayListItems) { tm.Selected = ""; }
             PlayListViewItem item = ((PlayListViewItem)PlaybackTabDataGridView.Rows[pos].DataBoundItem);
-            item.Selected = "■";
+            item.Selected = PlayListSelectionChar;
             string title = item.Name;
             string arts = item.Artists;
             if (item.Album != null && item.Album.Trim().Length > 0) { title += " - " + item.Album.Trim(); }
@@ -299,7 +370,10 @@ namespace AnotherMusicPlayer.MainWindow2
         #endregion
 
         #region Player event functions
-        private void Player_PlayStoped(PlayerPositionChangedEventParams e) { ChangeDisplayPlaybackPosition(e.Position, e.duration); }
+        private void Player_PlayStoped(PlayerPositionChangedEventParams e) { 
+            ChangeDisplayPlaybackPosition(e.Position, e.duration);
+            BtnPlayPause.BackgroundImage = (Player.LatestPlayerStatus == PlayerStatus.Play) ? IconPlay : IconPause;
+        }
         private void Player_PositionChanged(PlayerPositionChangedEventParams e) { ChangeDisplayPlaybackPosition(e.Position, e.duration); }
         private void Player_LengthChanged(PlayerLengthChangedEventParams e) { ChangeDisplayPlaybackPosition(-1, e.duration); }
 
@@ -318,22 +392,6 @@ namespace AnotherMusicPlayer.MainWindow2
             ChangePlaylistPosition(PlaylistIndexAtLoading);
         }
         #endregion
-
-        public void SetTitle(string title)
-        {
-            if (title != null && title.Trim() != "")
-            {
-                this.Text = title;
-                try { customThumbnail.Title = title; } catch { }
-                this.TitleLabel.Text = title;
-            }
-            else
-            {
-                try { customThumbnail.Title = App.AppName; } catch { }
-                this.TitleLabel.Text = App.AppName;
-            }
-            App.SetToolTip(this.TitleLabel, this.TitleLabel.Text);
-        }
 
         private void LibraryLoadOldPlaylist()
         {
@@ -419,6 +477,7 @@ namespace AnotherMusicPlayer.MainWindow2
             return Player.PlaylistEnqueue(files, random, playIndex, statupDuration, autoplay);
         }
 
+        private bool loadingRating = false;
         private void UpdateLeftPannelMediaInfo(PlayListViewItem item)
         {
             Dictionary<string, Dictionary<string, object>> data = null;
@@ -465,7 +524,7 @@ namespace AnotherMusicPlayer.MainWindow2
                 if (bi == null) { FileCover.BackgroundImage = Properties.Resources.album_large; }
                 else { FileCover.BackgroundImage = App.BitmapImage2Bitmap(bi); }
 
-                PlaybackTabTitleLabelValue.Text = item.Name;
+                ReplaceElementDualText(PlaybackTabTitleLabelValue, item.Name);
                 if (item.Album.Trim().Length > 0)
                 { PlaybackTabAlbumLabelInfo.Visible = true; PlaybackTabAlbumLabelValue.Visible = true; ReplaceElementDualText(PlaybackTabAlbumLabelValue, item.Album); }
                 else { PlaybackTabAlbumLabelInfo.Visible = false; PlaybackTabAlbumLabelValue.Visible = false; }
@@ -474,200 +533,28 @@ namespace AnotherMusicPlayer.MainWindow2
                 { PlaybackTabArtistsLabelInfo.Visible = true; PlaybackTabArtistsLabelValue.Visible = true; ReplaceElementDualText(PlaybackTabArtistsLabelValue, item.Artists); }
                 else { PlaybackTabArtistsLabelInfo.Visible = false; PlaybackTabArtistsLabelValue.Visible = false; }
 
+                if (path.StartsWith("Radio|") || item2.Genres == null || item2.Genres.Trim().Length == 0)
+                { PlaybackTabGenresLabelInfo.Visible = false; PlaybackTabGenresLabelValue.Visible = false; }
+                else { PlaybackTabGenresLabelInfo.Visible = true; PlaybackTabGenresLabelValue.Visible = true; ReplaceElementDualText(PlaybackTabGenresLabelValue, item2.Genres); }
+
                 if (path.StartsWith("Radio|"))
                 { PlaybackTabDurationLabelInfo.Visible = false; PlaybackTabDurationLabelValue.Visible = false; }
-                else { PlaybackTabDurationLabelInfo.Visible = true; PlaybackTabDurationLabelValue.Visible = true; PlaybackTabDurationLabelValue.Text = item.DurationS; }
+                else { PlaybackTabDurationLabelInfo.Visible = true; PlaybackTabDurationLabelValue.Visible = true; ReplaceElementDualText(PlaybackTabDurationLabelValue, item2.DurationS); }
 
                 if (!path.StartsWith("Radio|") && item2.Lyrics != null && item2.Lyrics.Trim().Length > 0)
                 { PlaybackTabLyricsButton.Visible = true; PlaybackTabLyricsButton.Tag = item2; }
                 else { PlaybackTabLyricsButton.Visible = false; }
 
-                if (!path.StartsWith("Radio|")) { PlaybackTabRatting.Visible = true; PlaybackTabRatting.Rate = item2.Rating; } else { PlaybackTabRatting.Visible = false; }
+                if (!path.StartsWith("Radio|")) {
+                    loadingRating = true;
+                    PlaybackTabRatting.Visible = true; 
+                    PlaybackTabRatting.Rate = item2.Rating; 
+                    PlaybackTabRatting.Tag = path;
+                    loadingRating = false;
+                } 
+                else { PlaybackTabRatting.Visible = false; }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
-
-
-        #region Generic Window Button
-        public void MinimizeButton_Click(object? sender, EventArgs? e) { WindowState = FormWindowState.Minimized; }
-        public void MaximizeButton_Click(object? sender, EventArgs? e)
-        {
-            if (WindowState == FormWindowState.Maximized) { this.MaximumSize = new System.Drawing.Size(0, 0); WindowState = FormWindowState.Normal; }
-            else
-            {
-                Screen screen = Screen.FromControl(this);
-                int x = screen.WorkingArea.X - screen.Bounds.X;
-                int y = screen.WorkingArea.Y - screen.Bounds.Y;
-                this.MaximizedBounds = new Rectangle(x, y, screen.WorkingArea.Width, screen.WorkingArea.Height);
-                this.MaximumSize = screen.WorkingArea.Size;
-                WindowState = FormWindowState.Maximized;
-            }
-        }
-        public void CloseButton_Click(object? sender, EventArgs? e) { Close(); }
-        #endregion
-
-        #region Window displasment gestion
-        private Dictionary<string, bool> draggings = new Dictionary<string, bool>();
-        private Dictionary<string, System.Drawing.Point> dragCursorPoints = new Dictionary<string, System.Drawing.Point>();
-        private Dictionary<string, System.Drawing.Point> dragFormPoints = new Dictionary<string, System.Drawing.Point>();
-        private Dictionary<string, Form> dragForms = new Dictionary<string, Form>();
-
-        private void FormDragable_InitTab(object sender, bool active)
-        {
-            try
-            {
-                TableLayoutPanel label1 = (TableLayoutPanel)sender;
-                string label = label1.Tag as string;
-                Control parent = label1.Parent;
-                while (parent.GetType().Name == "TableLayoutPanel") { parent = parent.Parent; }
-
-                draggings.Add(label, active);
-                dragCursorPoints.Add(label, System.Windows.Forms.Cursor.Position);
-                dragFormPoints.Add(label, label1.Location);
-                dragForms.Add(label, (Form)parent);
-            }
-            catch (Exception) { }
-        }
-
-        public void FormDragable_MouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (sender == null) { return; }
-            while (sender.GetType().Name != "TableLayoutPanel") { sender = ((Control)sender).Parent; }
-            string label = ((TableLayoutPanel)sender).Tag as string;
-            if (!draggings.ContainsKey(label)) { FormDragable_InitTab(sender, true); }
-            else
-            {
-                draggings[label] = true;
-                dragCursorPoints[label] = System.Windows.Forms.Cursor.Position;
-                dragFormPoints[label] = dragForms[label].Location;
-            }
-        }
-
-        public void FormDragable_MouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            try
-            {
-                if (sender == null) { return; }
-                while (sender.GetType().Name != "TableLayoutPanel") { sender = ((Control)sender).Parent; }
-                string label = ((TableLayoutPanel)sender).Tag as string;
-                if (!draggings.ContainsKey(label)) { FormDragable_InitTab(sender, false); }
-                if (draggings[label])
-                {
-                    System.Drawing.Point dif = System.Drawing.Point.Subtract(System.Windows.Forms.Cursor.Position, new System.Drawing.Size(dragCursorPoints[label]));
-                    dragForms[label].Location = System.Drawing.Point.Add(dragFormPoints[label], new System.Drawing.Size(dif));
-                }
-            }
-            catch (Exception) { }
-        }
-
-        public void FormDragable_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            if (sender == null) { return; }
-            while (sender.GetType().Name != "TableLayoutPanel") { sender = ((Control)sender).Parent; }
-            string label = ((TableLayoutPanel)sender).Tag as string;
-            draggings[label] = false;
-        }
-
-        public void FormDragable_Clear(string id)
-        {
-            if (draggings.ContainsKey(id))
-            {
-                draggings.Remove(id);
-                dragCursorPoints.Remove(id);
-                dragFormPoints.Remove(id);
-                dragForms.Remove(id);
-            }
-        }
-        #endregion
-
-        #region Window resize gestion
-        private bool IsResizing = false;
-        private int ResizePosX = 0;
-        private int ResizePosY = 0;
-        private int ResizeSizeW = 0;
-        private int ResizeSizeH = 0;
-
-        private void SizerInitTab(object sender, bool active, int x, int y)
-        {
-            try
-            {
-                System.Windows.Forms.Button label1 = (System.Windows.Forms.Button)sender;
-                string label = label1.Tag as string;
-                if (IsResizing) { return; }
-                IsResizing = true;
-                ResizePosX = x;
-                ResizePosY = y;
-                ResizeSizeW = this.Width;
-                ResizeSizeH = this.Height;
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
-            }
-        }
-
-        public void SizerMouseDown(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            try
-            {
-                string label = ((System.Windows.Forms.Button)sender).Tag as string;
-                if (!IsResizing) { SizerInitTab(sender, true, Cursor.Position.X, Cursor.Position.Y); }
-                else
-                {
-                    IsResizing = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
-            }
-        }
-        public void SizerMouseMove(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            try
-            {
-                Debug.WriteLine("SizerMouseMove");
-                if (!IsResizing) { return; }
-                if (IsResizing)
-                {
-                    Debug.WriteLine("Calculate");
-                    this.Width = Cursor.Position.X - ResizePosX + ResizeSizeW;
-                    this.Height = Cursor.Position.Y - ResizePosY + ResizeSizeH;
-
-
-                    Debug.WriteLine("ResizeSizeW = " + ResizeSizeW);
-                    Debug.WriteLine("ResizeSizeH = " + ResizeSizeH);
-                    Debug.WriteLine("Width = " + Width);
-                    Debug.WriteLine("Height = " + Height);
-
-                    this.ResizeRedraw = true;
-                }
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
-            }
-        }
-        public void SizerMouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-        {
-            try { IsResizing = false; }
-            catch (Exception ex)
-            {
-                Debug.WriteLine(ex.Message);
-                Debug.WriteLine(ex.StackTrace);
-            }
-        }
-
-        public void SizerClear(string id)
-        {
-            if (IsResizing) { IsResizing = false; }
-        }
-
-        #endregion
-
-
     }
 }

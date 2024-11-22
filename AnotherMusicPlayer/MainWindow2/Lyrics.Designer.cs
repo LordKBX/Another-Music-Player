@@ -1,4 +1,4 @@
-﻿namespace AnotherMusicPlayer.MainWindow2
+﻿namespace AnotherMusicPlayer.MainWindow2Space
 {
     partial class Lyrics
     {

@@ -25,8 +25,12 @@ namespace AnotherMusicPlayer
                 AudioFileReader audioFile = null;
                 Equalizer equalizer = null;
                 WaveOutEvent outputDevice = null;
-
-                try { audioFile = new AudioFileReader(FilePath); }
+                long msval = 0;
+                try { 
+                    audioFile = new AudioFileReader(FilePath);
+                    msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
+                    if (PlayNewPositions.ContainsKey(FilePath) && PlayNewPositions[FilePath] > -1) { audioFile.Position = PlayNewPositions[FilePath] * msval; }
+                }
                 catch (InvalidOperationException err)
                 {
                     Debug.WriteLine("ERROR ==> VBR File detected, try file convertion");
@@ -117,7 +121,6 @@ namespace AnotherMusicPlayer
                         outputDevice.Stop();
                         if (IsSuspended == true)
                         {
-                            long msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
                             PlayNewPositions[FilePath] = audioFile.Position / msval;
                             try { outputDevice.Stop(); } catch { }
                             outputDevice.Dispose();
@@ -133,7 +136,6 @@ namespace AnotherMusicPlayer
                     }
                     if (ret2 != -1)
                     {
-                        long msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
                         audioFile.Position = ret2 * msval;
                         PlayNewPositions[FilePath] = -1;
                     }
@@ -164,17 +166,20 @@ namespace AnotherMusicPlayer
 
                     Thread.Sleep(100);
                 }
-                try { outputDevice.Stop(); } catch (Exception) { }
 
-                outputDevice.Dispose();
-                ((AudioFileReader)audioFile).Close(); ((AudioFileReader)audioFile).Dispose();
+                // EndOfStreamException thread cleanup process 
+                if (outputDevice != null) { 
+                    try { outputDevice.Stop(); } catch (Exception) { } 
+                    outputDevice.Dispose(); outputDevice = null; 
+                }
+                if (equalizer != null) { equalizer = null; }
+                if (audioFile != null) { 
+                    try { audioFile.Close(); } catch (Exception) { } 
+                    audioFile.Dispose(); audioFile = null; 
+                }
                 PlayStatus.Remove(FilePath);
                 PlayNewPositions.Remove(FilePath);
-                if (AudioList.ContainsKey(FilePath))
-                {
-                    ((AudioFileReader)AudioList[FilePath]).Dispose();
-                    AudioList.Remove(FilePath);
-                }
+                if (AudioList.ContainsKey(FilePath)) { AudioList.Remove(FilePath); }
                 ThreadList.Remove(FilePath);
             }
             catch (Exception error) { Debug.WriteLine(JsonConvert.SerializeObject(error)); }

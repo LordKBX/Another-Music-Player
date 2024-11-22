@@ -6,41 +6,49 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Collections.Generic;
 
-namespace AnotherMusicPlayer
+namespace AnotherMusicPlayer.MainWindow2Space
 {
-    public partial class MainWindow : Window
+    public static class KeyboardGlobal
     {
+        private static GlobalKeyboardListener _listener = null;
         /// <summary>
         /// Initialize Global Keyboard listener for Media Buttons
         /// </summary>
-        private void KeyboardGlobalListenerInit()
+        public static void Init()
         {
+            if (_listener != null) { return; }
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                GlobalKeyboardListener _listener = new GlobalKeyboardListener(this);
-                _listener.OnKeyPressed += (sender, e) => { 
-                    string re = e.KeyPressed.ToString(); 
-                    //Debug.WriteLine(re);
-                    //Debug.WriteLine("Focus = " + ((this.IsActive) ? "True" : "False") );
-                    
-                    if (re == "MediaPlayPause") { Pause(); }
-                    if (re == "MediaPreviousTrack") { PreviousTrack(); }
-                    if (re == "MediaNextTrack") { NextTrack(); }
+                _listener = new GlobalKeyboardListener();
+                _listener.OnKeyPressed += (sender, e) =>
+                {
+                    try
+                    {
+                        string re = e.KeyPressed.ToString();
+                        //Debug.WriteLine(re);
+                        //Debug.WriteLine("Focus = " + ((this.IsActive) ? "True" : "False") );
+
+                        if (re == "MediaPlayPause")
+                        {
+                            try { if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); } }
+                            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+                        }
+                        if (re == "MediaPreviousTrack") { Player.Stop(Player.GetCurrentFile()); Player.PlaylistPrevious(); }
+                        if (re == "MediaNextTrack") { Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); }
+                    }
+                    catch(Exception ex0) { Debug.WriteLine(ex0.Message + "\r\n" + ex0.StackTrace); }
                 };
                 _listener.HookKeyboard();
-                ListReferences.Add("KeyboardListener", _listener);
             }
         }
 
         /// <summary>
         /// Destroy Global Keyboard listener
         /// </summary>
-        private void KeyboardGlobalListenerKill()
+        public static void Kill()
         {
-            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
-            {
-                ((GlobalKeyboardListener)ListReferences["KeyboardListener"]).UnHookKeyboard();
-            }
+            if (_listener == null) { return; }
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows)) { _listener.UnHookKeyboard(); } 
         }
     }
 
@@ -73,11 +81,8 @@ namespace AnotherMusicPlayer
         private LowLevelKeyboardProc _proc;
         private IntPtr _hookID = IntPtr.Zero;
 
-        private MainWindow parent;
-
-        public GlobalKeyboardListener(MainWindow origin)
+        public GlobalKeyboardListener()
         {
-            parent = origin;
             _proc = HookCallback;
         }
 
