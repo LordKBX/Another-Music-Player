@@ -7,6 +7,8 @@ using System.Security.Cryptography;
 using System.Diagnostics;
 using System.Linq;
 using MaterialDesignColors.ColorManipulation;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace AnotherMusicPlayer
 {
@@ -123,6 +125,28 @@ namespace AnotherMusicPlayer
         {
             System.Windows.Media.Color ncolor = System.Windows.Media.Color.FromArgb(input.A, input.R, input.G, input.B).Darken(quantity);
             return System.Drawing.Color.FromArgb(ncolor.A, ncolor.R, ncolor.G, ncolor.B);
+        }
+    }
+
+    public static class ControlExtensions
+    {
+        public static T Clone<T>(this T controlToClone)
+            where T : Control
+        {
+            PropertyInfo[] controlProperties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
+
+            T instance = Activator.CreateInstance<T>();
+
+            foreach (PropertyInfo propInfo in controlProperties)
+            {
+                if (propInfo.CanWrite)
+                {
+                    if (propInfo.Name != "WindowTarget")
+                        propInfo.SetValue(instance, propInfo.GetValue(controlToClone, null), null);
+                }
+            }
+
+            return instance;
         }
     }
 }

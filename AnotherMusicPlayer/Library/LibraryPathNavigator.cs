@@ -53,7 +53,7 @@ namespace AnotherMusicPlayer
                 string newPath = RootPath;
 
                 Label tb = new Label() { Margin = new Padding(3, 7, 3, 7), AutoSize = true };
-                //tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
+                //tb.Style = Parent.Parent.FindResource("LibraryNavigationPathItem") as Style;
                 tb.Text = App.GetTranslation("LibraryNavigatorItemHome");
                 tb.Tag = RootPath;
                 tb.MouseDown += PathClicked;
@@ -65,13 +65,13 @@ namespace AnotherMusicPlayer
                     if (name == "") { continue; }
 
                     Label tb2 = new Label() { Margin = new Padding(3,5,3,5), AutoSize = true };
-                    //tb2.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
+                    //tb2.Style = Parent.Parent.FindResource("LibraryNavigationPathItemAlt") as Style;
                     tb2.Text = "/";
                     Contener.Controls.Add(tb2);
 
                     newPath += MainWindow2.SeparatorChar + name;
                     Label tb3 = new Label() { Margin = new Padding(3, 7, 3, 7), AutoSize = true };
-                    //tb3.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
+                    //tb3.Style = Parent.Parent.FindResource("LibraryNavigationPathItem") as Style;
                     tb3.Text = name;
                     tb3.Tag = newPath;
                     tb3.MouseDown += PathClicked;
@@ -99,7 +99,7 @@ namespace AnotherMusicPlayer
                     Contener.Controls.Clear();
 
                 Label tb = new Label();
-                //tb.Style = Parent.Parent.FindResource("LibibraryNavigationPathItem") as Style;
+                //tb.Style = Parent.Parent.FindResource("LibraryNavigationPathItem") as Style;
                 tb.Text = App.GetTranslation("LibraryNavigatorItemHome");
                 tb.Tag = RootPath;
                 tb.MouseDown += PathClicked;
@@ -107,12 +107,12 @@ namespace AnotherMusicPlayer
                 Contener.Controls.Add(tb);
 
                 Label tb2 = new Label();
-                //tb2.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
+                //tb2.Style = Parent.Parent.FindResource("LibraryNavigationPathItemAlt") as Style;
                 tb2.Text = ">>";
                 Contener.Controls.Add(tb2);
 
                 Label tb3 = new Label();
-                //tb3.Style = Parent.Parent.FindResource("LibibraryNavigationPathItemAlt") as Style;
+                //tb3.Style = Parent.Parent.FindResource("LibraryNavigationPathItemAlt") as Style;
                 tb3.Text = content;
                 Contener.Controls.Add(tb3);
             }
@@ -127,7 +127,7 @@ namespace AnotherMusicPlayer
         {
             string tag = (string)((Label)sender).Tag;
             string name = (string)((Label)sender).Text;
-            if (Parent != null)
+            if (Parent != null && tag != null)
                 Parent.DisplayPath(tag);
             else
                 Display(tag);

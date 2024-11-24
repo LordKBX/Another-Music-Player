@@ -24,6 +24,8 @@ namespace AnotherMusicPlayer
             LibraryContextMenu cm = new LibraryContextMenu() { 
                 //Style = Parent.FindResource("CustomContextMenuStyle") as Style 
             };
+            cm.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
+            cm.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
             for (int i = 0; i < cm.Items.Count; i++)
             {
                 if (cm.Items[i].Name == "BackFolder" && back == true)
@@ -124,7 +126,7 @@ namespace AnotherMusicPlayer
             }
             else
             {
-                string track = (string)((Button)item.Tag).Tag;
+                string track = (string)((Control)item.Tag).Tag;
                 //Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
             }
         }
@@ -132,7 +134,7 @@ namespace AnotherMusicPlayer
         private void CM_AddPlaylistAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Button)item.Tag).Tag;
+            string[] tracks = (string[])((Control)item.Tag).Tag;
             //Parent.playLists.RecordTracksIntoPlaylist(tracks);
         }
 
@@ -144,9 +146,7 @@ namespace AnotherMusicPlayer
                 string folder = null;
 
                 if (item.Tag == null) { return; }
-                else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
-                else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
-                else if (item.Tag.GetType().Name == "Label") { folder = ((Label)item.Tag).Tag as string; }
+                else { folder = ((Control)item.Tag).Tag as string; }
 
                 if (folder == null) { return; }
                 string[] tracks = getDirectoryMediaFIles(folder, true);
@@ -171,7 +171,7 @@ namespace AnotherMusicPlayer
             }
             else
             {
-                string track = (string)((Button)item.Tag).Tag;
+                string track = (string)((Control)item.Tag).Tag;
                 Player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
             }
         }
@@ -179,7 +179,7 @@ namespace AnotherMusicPlayer
         private void CM_AddAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Button)item.Tag).Tag;
+            string[] tracks = (string[])((Control)item.Tag).Tag;
             Player.PlaylistEnqueue(tracks, false, 0, 0, true);
         }
 
@@ -188,9 +188,7 @@ namespace AnotherMusicPlayer
             ToolStripItem item = (ToolStripItem)sender;
             string folder = null;
             if (item.Tag == null) { return; }
-            else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
-            else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
-            else if (item.Tag.GetType().Name == "Label") { folder = ((Label)item.Tag).Tag as string; }
+            else { folder = ((Control)item.Tag).Tag as string; }
             if (folder == null) { return; }
             Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
         }
@@ -200,7 +198,7 @@ namespace AnotherMusicPlayer
         private void CM_AddShuffledAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Button)item.Tag).Tag;
+            string[] tracks = (string[])((Control)item.Tag).Tag;
             Player.PlaylistEnqueue(tracks, true, 0, 0, true);
         }
 
@@ -221,9 +219,7 @@ namespace AnotherMusicPlayer
             {
                 string folder = null;
                 if (item.Tag == null) { return; }
-                else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
-                else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
-                else if (item.Tag.GetType().Name == "Label") { folder = ((Label)item.Tag).Tag as string; }
+                else { folder = ((Control)item.Tag).Tag as string; }
                 if (folder == null) { return; }
                 Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
             }
@@ -247,7 +243,7 @@ namespace AnotherMusicPlayer
             }
             else
             {
-                string track = (string)((Button)item.Tag).Tag;
+                string track = (string)((Control)item.Tag).Tag;
                 Player.PlaylistClear();
                 Player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
             }
@@ -256,7 +252,7 @@ namespace AnotherMusicPlayer
         private void CM_PlayAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Button)item.Tag).Tag;
+            string[] tracks = (string[])((Control)item.Tag).Tag;
             Player.PlaylistClear();
             Player.PlaylistEnqueue(tracks, false, 0, 0, true);
         }
@@ -266,9 +262,7 @@ namespace AnotherMusicPlayer
             ToolStripItem item = (ToolStripItem)sender;
             string folder = null;
             if (item.Tag == null) { return; }
-            else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
-            else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
-            else if (item.Tag.GetType().Name == "Label") { folder = ((Label)item.Tag).Tag as string; }
+            else { folder = ((Control)item.Tag).Tag as string; }
             if (folder == null) { return; }
             Player.PlaylistClear();
             Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
@@ -279,7 +273,7 @@ namespace AnotherMusicPlayer
         private void CM_PlayShuffledAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Button)item.Tag).Tag;
+            string[] tracks = (string[])((Control)item.Tag).Tag;
             Player.PlaylistClear();
             Player.PlaylistEnqueue(tracks, true, 0, 0, true);
         }
@@ -305,10 +299,7 @@ namespace AnotherMusicPlayer
                 {
                     string folder = null;
                     if (item.Tag == null) { return; }
-                    else if (item.Tag.GetType().Name == "Button") { folder = ((Button)item.Tag).Tag as string; }
-                    else if (item.Tag.GetType().Name == "AlignablePanel") { folder = ((AlignablePanel)item.Tag).Tag as string; }
-                    else if (item.Tag.GetType().Name == "Label") { folder = ((Label)item.Tag).Tag as string; }
-                    else { Debug.WriteLine(item.Tag.GetType().Name); }
+                    else { folder = ((Control)item.Tag).Tag as string; }
 
                     if (folder == null) { return; }
                     Player.PlaylistClear();

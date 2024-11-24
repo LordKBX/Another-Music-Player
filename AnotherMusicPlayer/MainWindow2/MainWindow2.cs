@@ -28,6 +28,8 @@ using System.IO;
 using System.Windows.Documents;
 using System.Windows.Threading;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using AnotherMusicPlayer.Components;
 
 namespace AnotherMusicPlayer.MainWindow2Space
 {
@@ -253,6 +255,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             this.FormClosed += MainWindow2_FormClosed;
         }
 
+        private void MainWindow2_Resize(object sender, EventArgs e) {
+        }
+
         private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) { KeyboardGlobal.Kill(); }
 
         private void Player_StatusChange()
@@ -275,6 +280,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsManagment.Init(this);
             Translate();
             library.DisplayPath();
+            this.Resize += MainWindow2_Resize;
         }
 
         private void PlaybackTabRatting_RateChanged(Rating2 sender, double value)

@@ -1063,13 +1063,13 @@
 
     <!--#region LIBRARY -->
     <!--#region PATH BAR -->
-    <Style x:Key="LibibraryNavigationPathContenerStyle" TargetType="{x:Type WrapPanel}">
+    <Style x:Key="LibraryNavigationPathContenerStyle" TargetType="{x:Type WrapPanel}">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
         <Setter Property="FlowDirection" Value="LeftToRight"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationPathItem" TargetType="{x:Type TextBlock}">
+    <Style x:Key="LibraryNavigationPathItem" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="4,0,4,2"/>
         <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
         <Setter Property="TextDecorations" Value="Underline"/>
@@ -1077,17 +1077,17 @@
         <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationPathItemAlt" TargetType="{x:Type TextBlock}">
+    <Style x:Key="LibraryNavigationPathItemAlt" TargetType="{x:Type TextBlock}">
         <Setter Property="Margin" Value="4,0,4,2"/>
         <Setter Property="TextWrapping" Value="WrapWithOverflow"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundColor}"/>
     </Style>
     <!--#endregion-->
 
-    <Style x:Key="LibibraryNavigationFilterInput" TargetType="{x:Type TextBox}" BasedOn="{StaticResource InputStyle}">
+    <Style x:Key="LibraryNavigationFilterInput" TargetType="{x:Type TextBox}" BasedOn="{StaticResource InputStyle}">
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButton" TargetType="{x:Type Button}">
+    <Style x:Key="LibraryNavigationContentFolderButton" TargetType="{x:Type Button}">
         <Setter Property="Margin" Value="5"/>
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="MinWidth" Value="90"/>
@@ -1139,7 +1139,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentAlbum" TargetType="{x:Type Button}">
+    <Style x:Key="LibraryNavigationContentAlbum" TargetType="{x:Type Button}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Cursor" Value="Arrow"/>
         <Setter Property="Margin" Value="0, 0, 0, 5"/>
@@ -1159,7 +1159,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentAlbumTitle" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibraryNavigationContentAlbumTitle" TargetType="{x:Type AccessText}">
         <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="FontSize" Value="15"/>
         <Setter Property="Foreground" Value="{StaticResource AlbumButton.Foreground}"/>
@@ -1168,7 +1168,7 @@
         <Setter Property="TextTrimming" Value="CharacterEllipsis"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentAlbumDisk" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibraryNavigationContentAlbumDisk" TargetType="{x:Type AccessText}">
         <Setter Property="FontWeight" Value="Normal"/>
         <Setter Property="FontStyle" Value="Italic"/>
         <Setter Property="FontSize" Value="13"/>
@@ -1179,7 +1179,7 @@
         <Setter Property="Margin" Value="0, 5, 0, 0"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonTrackButton" TargetType="{x:Type Button}">
+    <Style x:Key="LibraryNavigationContentFolderButtonTrackButton" TargetType="{x:Type Button}">
         <Setter Property="BorderBrush" Value="{StaticResource TrackButton.Border}"/>
         <Setter Property="Background" Value="{StaticResource TrackButton.Background}"/>
         <Setter Property="Foreground" Value="{StaticResource TrackButton.Foreground}"/>
@@ -1213,7 +1213,7 @@
         </Style.Triggers>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonTrackButtonAccessText" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibraryNavigationContentFolderButtonTrackButtonAccessText" TargetType="{x:Type AccessText}">
         <Setter Property="HorizontalAlignment" Value="Left"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
         <Setter Property="TextAlignment" Value="Left"/>
@@ -1224,21 +1224,21 @@
         <Setter Property="MaxHeight" Value="45"/>
     </Style>
 
-    <!--<Style x:Key="LibibraryNavigationContentFolderButtonTrackButtonStars" TargetType="{x:Type local:Rating}">
+    <!--<Style x:Key="LibraryNavigationContentFolderButtonTrackButtonStars" TargetType="{x:Type local:Rating}">
         <Setter Property="IsReadOnly" Value="False"/>
         <Setter Property="Zoom" Value="0.5"/>
         <Setter Property="VerticalAlignment" Value="Bottom"/>
         <Setter Property="HorizontalAlignment" Value="Left"/>
     </Style>-->
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonBorder" TargetType="{x:Type Border}">
+    <Style x:Key="LibraryNavigationContentFolderButtonBorder" TargetType="{x:Type Border}">
         <Setter Property="BorderBrush" Value="{StaticResource FolderButton.Border}"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Margin" Value="3"/>
         <Setter Property="Cursor" Value="Hand"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonImg" TargetType="{x:Type Image}">
+    <Style x:Key="LibraryNavigationContentFolderButtonImg" TargetType="{x:Type Image}">
         <Setter Property="MaxWidth" Value="53"/>
         <Setter Property="MaxHeight" Value="53"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -1246,13 +1246,13 @@
         <Setter Property="RenderOptions.BitmapScalingMode" Value="LowQuality"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonViewBox" TargetType="{x:Type Viewbox}">
+    <Style x:Key="LibraryNavigationContentFolderButtonViewBox" TargetType="{x:Type Viewbox}">
         <Setter Property="MinWidth" Value="90"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Stretch"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonText" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibraryNavigationContentFolderButtonText" TargetType="{x:Type AccessText}">
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="TextAlignment" Value="Center"/>
@@ -1263,13 +1263,13 @@
         <Setter Property="Margin" Value="0,0,5,0"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButton2" TargetType="{x:Type Button}">
+    <Style x:Key="LibraryNavigationContentFolderButton2" TargetType="{x:Type Button}">
         <Setter Property="Cursor" Value="Hand"/>
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Top"/>
     </Style>
 
-    <Style x:Key="LibibraryNavigationContentFolderButtonText2" TargetType="{x:Type AccessText}">
+    <Style x:Key="LibraryNavigationContentFolderButtonText2" TargetType="{x:Type AccessText}">
         <Setter Property="HorizontalAlignment" Value="Stretch"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="TextAlignment" Value="Center"/>

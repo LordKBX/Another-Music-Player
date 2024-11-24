@@ -125,17 +125,22 @@ namespace AnotherMusicPlayer
             return false;
         }
 
-        public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
+        public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage, Bitmap defaultImage = null)
         {
-            using (MemoryStream outStream = new MemoryStream())
+            try
             {
-                BitmapEncoder enc = new BmpBitmapEncoder();
-                enc.Frames.Add(BitmapFrame.Create(bitmapImage));
-                enc.Save(outStream);
-                System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
+                if (bitmapImage == null) { throw new Exception("bitmapImage is null"); }
+                using (MemoryStream outStream = new MemoryStream())
+                {
+                    BitmapEncoder enc = new BmpBitmapEncoder();
+                    enc.Frames.Add(BitmapFrame.Create(bitmapImage));
+                    enc.Save(outStream);
+                    System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
 
-                return new Bitmap(bitmap);
+                    return new Bitmap(bitmap);
+                }
             }
+            catch (Exception ex) { return defaultImage; }
         }
 
         public static BitmapImage BitmapToBitmapImage(this Bitmap bitmap)

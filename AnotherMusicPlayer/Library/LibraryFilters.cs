@@ -28,10 +28,10 @@ namespace AnotherMusicPlayer
         {
             //Bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = REPLACE(REPLACE(REPLACE(REPLACE(Genres, ',', ';'), ' ,', ';'), ', ', ';'), '; ';')" }, true);
             Dictionary<string, Dictionary<string, object>> genresD = Bdd.DatabaseQuery("SELECT Genres FROM files GROUP BY Genres ORDER BY TRIM(Genres) ASC", "Genres");
-            if (FilterGenreSelector.Items.Count > 0)
-                FilterGenreSelector.Items.Clear();
+            if (Parent.LibraryFiltersGenreList.Items.Count > 0)
+                Parent.LibraryFiltersGenreList.Items.Clear();
             Debug.WriteLine(JsonConvert.SerializeObject(genresD.Keys));
-            FilterGenreSelector.Items.Add(new DropDownItem() { Value = "------", Data = null });
+            Parent.LibraryFiltersGenreList.Items.Add(new DropDownItem() { Value = "------", Data = null });
             List<string> genres = new List<string>();
             foreach (string key in genresD.Keys)
             {
@@ -54,59 +54,59 @@ namespace AnotherMusicPlayer
                 int cpt = 0;
                 foreach (string k in Counts.Keys) { cpt = Convert.ToInt32(Counts[k]["nb"]); break; }
 
-                FilterGenreSelector.Items.Add(new DropDownItem() { 
+                Parent.LibraryFiltersGenreList.Items.Add(new DropDownItem() { 
                     Value = ((key == "0") ? "<N/A>" : key.Substring(0, 1).ToUpper() + key.Substring(1)) + " (" + cpt + ")", 
                     Data = (key == "0") ? "" : key
                 });
             }
-            FilterGenreSelector.SelectedIndex = 0;
+            Parent.LibraryFiltersGenreList.SelectedIndex = 0;
         }
 
         /// <summary> Callback for index change on search type selector </summary>
-        private void FilterSelector_SelectionChanged(object sender, EventArgs e)
+        private void LibraryFiltersMode_SelectionChanged(object sender, EventArgs e)
         {
             string tag = "";
-            if (FilterSelector.SelectedItem.GetType() == typeof(string)) { tag = (string)FilterSelector.SelectedItem; }
-            else if (FilterSelector.SelectedItem.GetType() == typeof(DropDownItem)) { tag = (string)((DropDownItem)FilterSelector.SelectedItem).Data; }
+            if (Parent.LibraryFiltersMode.SelectedItem.GetType() == typeof(string)) { tag = (string)Parent.LibraryFiltersMode.SelectedItem; }
+            else if (Parent.LibraryFiltersMode.SelectedItem.GetType() == typeof(DropDownItem)) { tag = (string)((DropDownItem)Parent.LibraryFiltersMode.SelectedItem).Data; }
             //Debug.WriteLine(tag);
             if (tag == "")
             {
-                FiltersSearchInput.Visible = false;
-                FiltersSearchInput.Text = "";
+                Parent.LibraryFiltersSearchBox.Visible = false;
+                Parent.LibraryFiltersSearchBox.Text = "";
 
-                FiltersGenreInput.Visible = false;
-                FiltersGenreInput.Text = "";
+                Parent.LibraryFiltersGenreSearchBox.Visible = false;
+                Parent.LibraryFiltersGenreSearchBox.Text = "";
 
-                FilterGenreSelector.SelectedIndex = 0;
-                FilterGenreSelector.Visible = false;
+                Parent.LibraryFiltersGenreList.SelectedIndex = 0;
+                Parent.LibraryFiltersGenreList.Visible = false;
 
             }
             else if (tag == "Name" || tag == "Artist" || tag == "Album")
             {
-                FilterGenreSelector.Visible = false;
-                FilterGenreSelector.SelectedIndex = 0;
+                Parent.LibraryFiltersGenreList.Visible = false;
+                Parent.LibraryFiltersGenreList.SelectedIndex = 0;
 
-                FiltersSearchInput.Visible = true;
-                FiltersSearchInput.Text = "";
+                Parent.LibraryFiltersSearchBox.Visible = true;
+                Parent.LibraryFiltersSearchBox.Text = "";
             }
             else if (tag == "Genre")
             {
-                FilterGenreSelector.Visible = true;
-                FiltersGenreInput.Visible = true;
-                FiltersSearchInput.Visible = false;
-                FilterGenreSelector.SelectedIndex = 0;
+                Parent.LibraryFiltersGenreList.Visible = true;
+                Parent.LibraryFiltersGenreSearchBox.Visible = true;
+                Parent.LibraryFiltersSearchBox.Visible = false;
+                Parent.LibraryFiltersGenreList.SelectedIndex = 0;
             }
         }
 
         /// <summary> Callback for index change on search media genre selector </summary>
-        private void FilterGenreSelector_SelectionChanged(object sender, EventArgs e)
+        private void LibraryFiltersGenreList_SelectionChanged(object sender, EventArgs e)
         {
             string mode = "";
             string genre = "";
-            if (FilterSelector.SelectedItem.GetType() == typeof(string)) { mode = (string)FilterSelector.SelectedItem; }
-            else if (FilterSelector.SelectedItem.GetType() == typeof(DropDownItem)) { mode = (string)((DropDownItem)FilterSelector.SelectedItem).Data; }
-            if (FilterGenreSelector.SelectedItem.GetType() == typeof(string)) { genre = (string)FilterGenreSelector.SelectedItem; }
-            else if (FilterGenreSelector.SelectedItem.GetType() == typeof(DropDownItem)) { genre = (string)((DropDownItem)FilterGenreSelector.SelectedItem).Data; }
+            if (Parent.LibraryFiltersMode.SelectedItem.GetType() == typeof(string)) { mode = (string)Parent.LibraryFiltersMode.SelectedItem; }
+            else if (Parent.LibraryFiltersMode.SelectedItem.GetType() == typeof(DropDownItem)) { mode = (string)((DropDownItem)Parent.LibraryFiltersMode.SelectedItem).Data; }
+            if (Parent.LibraryFiltersGenreList.SelectedItem.GetType() == typeof(string)) { genre = (string)Parent.LibraryFiltersGenreList.SelectedItem; }
+            else if (Parent.LibraryFiltersGenreList.SelectedItem.GetType() == typeof(DropDownItem)) { genre = (string)((DropDownItem)Parent.LibraryFiltersGenreList.SelectedItem).Data; }
             
             if (mode != "Genre") { return; }
             if (genre == null) { DisplayPath(RootPath); }
@@ -139,24 +139,24 @@ namespace AnotherMusicPlayer
                             }
                         }
                     }
-                    //SearchResultsContener.ItemsSource = list;
-                    SearchResultsContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
+                    //Parent.LibrarySearchContent.ItemsSource = list;
+                    Parent.LibraryNavigationPathContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
                 }
                 Parent.setLoadingState(false);
             }
         }
 
         /// <summary> Callback key down on search input for text search </summary>
-        private void FiltersSearchInput_KeyDown(object sender, KeyEventArgs e)
+        private void LibraryFiltersSearchBox_KeyDown(object sender, KeyEventArgs e)
         {
             /*
             //Debug.WriteLine(e.Key.ToString());
             if (e.Key.ToString() == "Return")
             {
-                Parent.LibibrarySearchContentGridRow2.Height = new GridLength(0);
+                Parent.LibrarySearchContentGridRow2.Height = new GridLength(0);
 
-                string tag = (string)((ComboBoxItem)FilterSelector.SelectedItem).Tag;
-                string var = FiltersSearchInput.Text.ToLower();
+                string tag = (string)((ComboBoxItem)Parent.LibraryFiltersMode.SelectedItem).Tag;
+                string var = Parent.LibraryFiltersSearchBox.Text.ToLower();
                 Dictionary<string, Dictionary<string, object>> files = null;
                 if (tag == "Artist")
                 {

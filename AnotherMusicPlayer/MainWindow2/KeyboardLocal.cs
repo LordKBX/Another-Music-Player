@@ -74,8 +74,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         }
                         else if (parent.TabControler.SelectedIndex == 1)
                         {
-                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) { parent.LibibrarySearchContent.VerticalScroll.Value -= 15; }
-                            else { parent.LibibraryNavigationContent.VerticalScroll.Value -= 15; }
+                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) { parent.LibrarySearchContent.VerticalScroll.Value -= 15; }
+                            else { parent.LibraryNavigationContent.VerticalScroll.Value -= 15; }
                         }
                     }
                     if (e.KeyCode == Keys.Down)
@@ -90,8 +90,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         }
                         else if (parent.TabControler.SelectedIndex == 1)
                         {
-                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) { parent.LibibrarySearchContent.VerticalScroll.Value += 15; }
-                            else { parent.LibibraryNavigationContent.VerticalScroll.Value += 15; }
+                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) { parent.LibrarySearchContent.VerticalScroll.Value += 15; }
+                            else { parent.LibraryNavigationContent.VerticalScroll.Value += 15; }
                         }
                     }
                 }

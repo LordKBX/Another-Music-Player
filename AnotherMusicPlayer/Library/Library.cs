@@ -18,6 +18,11 @@ using AnotherMusicPlayer;
 using AnotherMusicPlayer.MainWindow2Space;
 using System.Drawing;
 using MaterialDesignColors.ColorManipulation;
+using static System.Net.Mime.MediaTypeNames;
+using AnotherMusicPlayer.Components;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using System.Runtime.ConstrainedExecution;
+using System.ComponentModel;
 
 namespace AnotherMusicPlayer
 {
@@ -27,22 +32,7 @@ namespace AnotherMusicPlayer
         public MainWindow2 Parent;
         /// <summary> Database object </summary>
         public Database Bdd;
-        /// <summary> Zone to display current path(relative to library folder) </summary>
-        FlowLayoutPanel NavigatorBar;
-        /// <summary> Zone to display content of current path </summary>
-        FlowLayoutPanel NavigationContener;
 
-        /// <summary> Zone to display content of current search results </summary>
-        FlowLayoutPanel SearchResultsContener;
-
-        /// <summary> Combobox serving to select filtering/search mode </summary>
-        ComboBox FilterSelector;
-        /// <summary> Combobox serving to select genre for filtering/search mode </summary>
-        ComboBox FilterGenreSelector;
-        /// <summary> Input text zone serving to communication genre searched for filtering/search mode </summary>
-        TextBox FiltersGenreInput;
-        /// <summary> Input text zone serving to communication title searched for filtering/search mode </summary>
-        TextBox FiltersSearchInput;
         /// <summary> Library root path </summary>
         string RootPath;
 
@@ -65,13 +55,18 @@ namespace AnotherMusicPlayer
             set { }
         }
 
+        Bitmap defaultCover = Properties.Resources.CoverImg;
+        BitmapImage defaultBICover = App.BitmapToBitmapImage(Properties.Resources.CoverImg);
         Bitmap FolderIcon = Icons.FromIconKind(IconKind.FolderOpen, 35, new SolidColorBrush(Colors.White));
         System.Drawing.Color ButtonBackColor = System.Drawing.Color.FromArgb(255, 60, 60, 60);
+        System.Drawing.Color ButtonForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
         //System.Drawing.Color ButtonMouseOverBackColor = Common.LightenDrawingColor(ButtonBackColor, 30);
         System.Drawing.Color ButtonMouseOverBackColor = System.Drawing.Color.FromArgb(255, 90, 90, 90);
         //System.Drawing.Color ButtonMouseDownBackColor = Common.LightenDrawingColor(ButtonBackColor, 30);
         System.Drawing.Color ButtonMouseDownBackColor = System.Drawing.Color.FromArgb(255, 120, 120, 120);
         System.Drawing.Color ButtonBorderColor = System.Drawing.Color.White;
+
+        Button BaseFolderButton = null;
 
         /// <summary> Create a Library watcher </summary>
         private void CreateWatcher()
@@ -143,17 +138,8 @@ namespace AnotherMusicPlayer
             if (!UpdateRootPath((root == null) ? Settings.LibFolder : root)) { throw new InvalidDataException("Root Path Invalid !"); }
             Parent = parent;
             Bdd = App.bdd;
-            NavigatorBar = Parent.LibibraryNavigationPathContener;
-            NavigationContener = Parent.LibibraryNavigationContent;
 
-            SearchResultsContener = Parent.LibibrarySearchContent;
-
-            FilterSelector = Parent.LibraryFiltersMode;
-            FilterGenreSelector = Parent.LibraryFiltersGenreList;
-            FiltersGenreInput = Parent.LibraryFiltersGenreSearchBox;
-            FiltersSearchInput = Parent.LibraryFiltersSearchBox;
-
-            pathNavigator = new LibraryPathNavigator(this, NavigatorBar, RootPath);
+            pathNavigator = new LibraryPathNavigator(this, Parent.LibraryNavigationPathContener, RootPath);
 
             App.bdd.DatabaseQuerys(new string[] { "UPDATE files SET Genres = NULL WHERE TRIM(Genres) = ''" }, true);
 
@@ -161,29 +147,72 @@ namespace AnotherMusicPlayer
 
             Parent.LibraryTabSplitContainer.Panel1Collapsed = false;
             Parent.LibraryTabSplitContainer.Panel2Collapsed = true;
-            Parent.LibibraryNavigationContent.Controls.Clear();
-            Parent.LibibrarySearchContent.Controls.Clear();
+            Parent.LibraryNavigationContentFolders.Controls.Clear();
+            Parent.LibrarySearchContent.Controls.Clear();
+            if (Parent.LibraryNavigationContent.Controls.Count > 1)
+            {
+                for (int i = Parent.LibraryNavigationContent.Controls.Count - 1; i >= 1; i++)
+                {
+                    Parent.LibraryNavigationContent.Controls.RemoveAt(i);
+                    Parent.LibraryNavigationContent.RowStyles.RemoveAt(i);
+                }
+                Parent.LibraryNavigationContent.RowCount = 1;
+            }
 
             Parent.LibraryFiltersGenreList.Visible = false;
             Parent.LibraryFiltersGenreSearchBox.Visible = false;
             Parent.LibraryFiltersSearchBox.Visible = false;
-            FiltersGenreInput.Text = "";
-            FiltersSearchInput.Text = "";
+            Parent.LibraryFiltersGenreSearchBox.Text = "";
+            Parent.LibraryFiltersSearchBox.Text = "";
 
-            FilterSelector.SelectedIndexChanged += FilterSelector_SelectionChanged;
-            FilterGenreSelector.SelectedIndexChanged += FilterGenreSelector_SelectionChanged;
-            FiltersGenreInput.KeyDown += FiltersSearchInput_KeyDown;
-            FiltersSearchInput.KeyDown += FiltersSearchInput_KeyDown;
+            Parent.LibraryFiltersMode.SelectedIndexChanged += LibraryFiltersMode_SelectionChanged;
+            Parent.LibraryFiltersGenreList.SelectedIndexChanged += LibraryFiltersGenreList_SelectionChanged;
+            Parent.LibraryFiltersGenreSearchBox.KeyDown += LibraryFiltersSearchBox_KeyDown;
+            Parent.LibraryFiltersSearchBox.KeyDown += LibraryFiltersSearchBox_KeyDown;
 
             CreateWatcher();
             InvokeScan();
         }
 
-        private double LibibrarySearchContent_CalcCollumnWidth()
+        private double LibrarySearchContent_CalcCollumnWidth()
         {
-            //double calc = (Parent.LibibrarySearchContent.ActualWidth - Parent.LibibrarySearchContentC4.Width - Parent.LibibrarySearchContentC5.Width - 20) / 3;
+            //double calc = (Parent.LibrarySearchContent.ActualWidth - Parent.LibrarySearchContentC4.Width - Parent.LibrarySearchContentC5.Width - 20) / 3;
             //return (calc > 0) ? calc : 0;
             return 0;
+        }
+
+        public void BuildBaseFolderButton() 
+        {
+            BaseFolderButton = new Button()
+            {
+                Text = "",
+                Tag = null,
+                Image = FolderIcon,
+                ImageAlign = System.Drawing.ContentAlignment.TopCenter,
+                TextImageRelation = TextImageRelation.ImageAboveText,
+                Width = 90,
+                Height = 90,
+                Padding = new Padding(3, 3, 3, 3),
+                FlatStyle = FlatStyle.Flat,
+                BackColor = ButtonBackColor,
+                ForeColor = ButtonForeColor
+            };
+            BaseFolderButton.FlatAppearance.MouseOverBackColor = ButtonMouseOverBackColor;
+            BaseFolderButton.FlatAppearance.MouseDownBackColor = ButtonMouseDownBackColor;
+            BaseFolderButton.FlatAppearance.CheckedBackColor = ButtonMouseDownBackColor;
+            BaseFolderButton.FlatAppearance.BorderColor = ButtonBorderColor;
+            BaseFolderButton.FlatAppearance.BorderSize = 1;
+            BaseFolderButton.ContextMenuStrip = MakeContextMenu(BaseFolderButton, "folder");
+        }
+
+        public Button CreateFolderButton(string path) {
+            if (BaseFolderButton == null) { BuildBaseFolderButton(); }
+            Button btn = BaseFolderButton.Clone();
+            btn.Text = path.Substring(path.LastIndexOf(MainWindow2.SeparatorChar) + 1);
+            btn.Tag = path;
+            btn.Image = FolderIcon;
+            btn.Click += BtnFolder_Click;
+            return btn;
         }
 
         /// <summary> Update var RootPath and return if value is valid or not </summary>
@@ -195,61 +224,41 @@ namespace AnotherMusicPlayer
             if (!Directory.Exists(path)) { return; }
             _CurrentPath = path;
 
-            FiltersSearchInput.Visible = false;
-            FiltersSearchInput.Text = "";
+            Parent.LibraryFiltersSearchBox.Visible = false;
+            Parent.LibraryFiltersSearchBox.Text = "";
 
-            FilterSelector.SelectedIndex = 0;
-            FilterGenreSelector.SelectedIndex = 0;
-            FilterGenreSelector.Visible = false;
+            Parent.LibraryFiltersMode.SelectedIndex = 0;
+            Parent.LibraryFiltersGenreList.SelectedIndex = 0;
+            Parent.LibraryFiltersGenreList.Visible = false;
 
             pathNavigator.Display(path);
-            Parent.LibibraryNavigationContent.Tag = path;
-            Parent.LibibraryNavigationContent.Controls.Clear();
-            Parent.LibibraryNavigationContent.AutoScrollOffset = new System.Drawing.Point(0, 0);
-            Parent.LibibraryNavigationContent.ContextMenuStrip = MakeContextMenu(Parent.LibibraryNavigationContent, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);
-            Parent.LibibraryNavigationContent.ContextMenuStrip.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
-            Parent.LibibraryNavigationContent.ContextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
-            Parent.LibibraryNavigationContent.SuspendLayout();
+            Parent.LibraryNavigationContentFolders.SuspendLayout();
+            Parent.LibraryNavigationContentFolders.Tag = path;
+            Parent.LibraryNavigationContentFolders.Controls.Clear();
+            Parent.LibraryNavigationContentFolders.AutoScrollOffset = new System.Drawing.Point(0, 0);
+            Parent.LibraryNavigationContentFolders.ContextMenuStrip = MakeContextMenu(Parent.LibraryNavigationContent, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);
+            Parent.LibraryNavigationContentFolders.ContextMenuStrip.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
+            Parent.LibraryNavigationContentFolders.ContextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
+
+            if (Parent.LibraryNavigationContent.Controls.Count > 1)
+            {
+                for (int i = Parent.LibraryNavigationContent.Controls.Count - 1; i >= 1; i--)
+                {
+                    Parent.LibraryNavigationContent.Controls.RemoveAt(i);
+                    Parent.LibraryNavigationContent.RowStyles.RemoveAt(i);
+                }
+                Parent.LibraryNavigationContent.RowCount = 1;
+            }
 
             string[] dirs = Directory.GetDirectories(path);
             foreach (string dir in dirs)
             {
-                //if (NavigationContener.Controls.Count > 5) { continue; }
                 if (Settings.LibFolderShowHiden == false)
-                {
-                    DirectoryInfo dirInfo = new DirectoryInfo(dir);
-                    if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; }
-                }
-                if (Settings.LibFolderShowUnixHiden == false)
-                {
-                    string name = dir.Replace(path, "").TrimStart(MainWindow2.SeparatorChar);
-                    if (name[0] == '.') { continue; }
-                }
-                string[] tab = dir.Split(MainWindow2.SeparatorChar);
+                { DirectoryInfo dirInfo = new DirectoryInfo(dir); if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; } }
+                if (Settings.LibFolderShowUnixHiden == false) 
+                { string name = dir.Replace(path, "").TrimStart(MainWindow2.SeparatorChar); if (name[0] == '.') { continue; } }
 
-                Button button = new Button()
-                {
-                    Text = tab[tab.Length - 1],
-                    Tag = dir,
-                    Image = FolderIcon,
-                    ImageAlign = System.Drawing.ContentAlignment.TopCenter,
-                    TextImageRelation = TextImageRelation.ImageAboveText,
-                    Width = 90, Height = 90,
-                    Padding = new Padding(3,3,3,3),
-                    FlatStyle = FlatStyle.Flat,
-                    BackColor = ButtonBackColor
-                };
-                button.FlatAppearance.MouseOverBackColor = ButtonMouseOverBackColor;
-                button.FlatAppearance.MouseDownBackColor = ButtonMouseDownBackColor;
-                button.FlatAppearance.CheckedBackColor = ButtonMouseDownBackColor;
-                button.FlatAppearance.BorderColor = ButtonBorderColor;
-                button.FlatAppearance.BorderSize = 1;
-                button.ContextMenuStrip = MakeContextMenu(button, "folder");
-                button.ContextMenuStrip.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
-                button.ContextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
-                button.Click += BtnFolder_Click;
-
-                NavigationContener.Controls.Add(button);
+                Parent.LibraryNavigationContentFolders.Controls.Add(CreateFolderButton(dir));
             }
 
             string[] filesList = Directory.GetFiles(path);
@@ -260,26 +269,19 @@ namespace AnotherMusicPlayer
                 List<string> endFiles = new List<string>();
                 foreach (string file in files.Keys.ToArray())
                 {
+                    if (Settings.LibFolderShowHiden == false)
+                    { FileInfo dirInfo = new FileInfo(file); if (dirInfo.Attributes.HasFlag(FileAttributes.Hidden)) { continue; } }
+                    if (Settings.LibFolderShowUnixHiden == false)
+                    { string name = file.Replace(path, "").TrimStart(MainWindow2.SeparatorChar); if (name[0] == '.') { continue; } }
+
                     string fi = file.Replace(path + MainWindow2.SeparatorChar, "");
-                    if (!fi.Contains(MainWindow2.SeparatorChar))
-                    {
-                        endFiles.Add(file);
-                    }
+                    if (!fi.Contains(MainWindow2.SeparatorChar)) { endFiles.Add(file); }
                 }
 
-                FlowLayoutPanel panel = new FlowLayoutPanel() { 
-                    FlowDirection = System.Windows.Forms.FlowDirection.TopDown, 
-                    MinimumSize = new System.Drawing.Size(100, 50), 
-                    Dock = DockStyle.Top,
-                    Visible = true, WrapContents = false, AutoScroll = false, 
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink, AutoSize = true
-                };
-                NavigationContener.Controls.Add(panel);
-
                 Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> tabInfo = GetTabInfoFromFiles(endFiles.ToArray());
-                ContentBlocks(tabInfo, panel);
+                ContentBlocks(tabInfo, Parent.LibraryNavigationContent, clear: false);
             }
-            NavigationContener.ResumeLayout();
+            Parent.LibraryNavigationContentFolders.ResumeLayout();
             Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() => { Parent.setLoadingState(false); }));
         }
 
@@ -310,14 +312,16 @@ namespace AnotherMusicPlayer
             return tab;
         }
 
-        public bool ContentBlocks(Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> infoTab, FlowLayoutPanel contener, bool uniqueDir = true, bool clear = true)
+        public bool ContentBlocks(Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> infoTab, TableLayoutPanel contener, bool uniqueDir = true, bool clear = true)
         {
             Debug.WriteLine("--> ContentBlocks START <--");
             if (infoTab == null) { Debug.WriteLine("--> ContentBlocks NO FILE 0 <--"); return false; }
             if (infoTab.Count == 0) { Debug.WriteLine("--> ContentBlocks NO FILE 1 <--"); return false; }
+
+            Bitmap baseCover = defaultCover;
+
             try
             {
-                BitmapImage defaultCover = App.BitmapToBitmapImage(Properties.Resources.CoverImg);
                 if (uniqueDir)
                 {
                     MediaItem item1 = null;
@@ -331,130 +335,24 @@ namespace AnotherMusicPlayer
                     string[] t = System.IO.Directory.GetFiles(folder);
                     foreach (string file in t)
                     {
-                        if (file.EndsWith("Cover.jpg") || file.EndsWith("Cover.png")) { defaultCover = new BitmapImage(new Uri(file)); }
+                        if (file.EndsWith("Cover.jpg") || file.EndsWith("Cover.png")) { defaultCover = new Bitmap(file); }
                     }
                 }
 
-                if (clear == true) { contener.Controls.Clear(); }
+                if (clear == true && contener.Controls.Count > 1) {
+                    for (int i = contener.Controls.Count - 1; i >= 1; i++) {
+                        contener.Controls.RemoveAt(i);
+                        contener.RowStyles.RemoveAt(i);
+                    }
+                    contener.RowCount = 1;
+                }
 
                 foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> albumT in infoTab)
                 {
-                    string coverPath = albumT.Value.Values.First().First().Value.Path;
-                    string al = albumT.Key;
-
-                    List<string> brList = new List<string>();
-                    Button br = new Button() { /*Style = Parent.FindResource("LibibraryNavigationContentAlbum") as Style*/ };
-                    if (al == null || al.Trim() == "")
-                    {
-                        if (uniqueDir) { al = "<UNKWON ALBUM>"; }
-                        else { al = albumT.Value.Values.First().First().Value.Name; }
-                        br.ContextMenuStrip = new ContextMenuStrip();
-                    }
-                    else { br.ContextMenuStrip = MakeContextMenu(br, "album"); }
-                    TableLayoutPanel gr = new TableLayoutPanel() { };
-                    gr.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150));
-                    gr.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize, 150));
-                    Button im = new Button() { MinimumSize = new System.Drawing.Size(150, 150), BackgroundImageLayout = ImageLayout.Zoom, BackColor = System.Drawing.Color.Black };
-                    im.BackgroundImage = App.BitmapImage2Bitmap(FilesTags.MediaPicture(coverPath, Bdd, true, 150, 150, false) ?? defaultCover);
-                    //if (im.Source != defaultCover && Settings.MemoryUsage == 1)
-                    //{
-                    //    FlowLayoutPanel p = new FlowLayoutPanel() { 
-                    //        FlowDirection = System.Windows.Forms.FlowDirection.TopDown, 
-                    //        Visible = true, WrapContents = false, AutoScroll = false,
-                    //        AutoSizeMode = AutoSizeMode.GrowAndShrink, AutoSize = true,
-                    //        Dock = DockStyle.Top
-                    //    };
-                    //    Image imp = new Image() { Style = Parent.FindResource("HQImg") as Style };
-
-                    //    string ret = Bdd.DatabaseGetCover(coverPath);
-                    //    imp.Source = FilesTags.MediaPicture(coverPath, Bdd, true, 0, 0, false) ?? defaultCover;
-                    //    p.Controls.Add(imp);
-                    //    im.ToolTip = p;
-                    //}
-
-                    FlowLayoutPanel st0 = new FlowLayoutPanel() { 
-                        FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight, 
-                        Visible = true, WrapContents = false, AutoScroll = false 
-                    };
-                    //StackPanel st0 = new StackPanel()
-                    //{
-                    //    Orientation = Orientation.Horizontal,
-                    //    VerticalAlignment = VerticalAlignment.Top,
-                    //    HorizontalAlignment = HorizontalAlignment.Center,
-                    //    Style = Parent.FindResource("thumbnailBlock") as Style
-                    //};
-                    st0.Controls.Add(im);
-
-                    FlowLayoutPanel st1 = new FlowLayoutPanel()
-                    {
-                        FlowDirection = System.Windows.Forms.FlowDirection.TopDown,
-                        WrapContents = false,
-                        Margin = new Padding(5, 0, 0, 0),
-                        MinimumSize = new System.Drawing.Size(100, 50),
-                        Dock = DockStyle.Top
-                    };
-                    Label lb = new Label() { Text = al };
-                    lb.Disposed += (object sender, EventArgs e) => { App.DelToolTip((Label)sender); };
-                    App.SetToolTip(lb, al);
-                    st1.Controls.Add(lb);
-
-                    foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> discT in albumT.Value)
-                    {
-                        if (albumT.Value.Count > 1)
-                            st1.Controls.Add(new Label() { Text = "Disc " + discT.Key });
-
-                        List<KeyValuePair<string, MediaItem>> myList = discT.Value.ToList();
-                        myList.Sort((pair1, pair2) =>
-                        {
-                            uint trackcmp = pair1.Value.Track - pair2.Value.Track;
-                            if (trackcmp == 0) { return pair1.Value.Name.CompareTo(pair2.Value.Name); }
-                            else { return (int)trackcmp; }
-                        }
-                        );
-                        FlowLayoutPanel st2 = new FlowLayoutPanel()
-                        {
-                            FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight, 
-                            Dock = DockStyle.Fill
-                        };
-                        foreach (KeyValuePair<string, MediaItem> trackT in myList)
-                        {
-                            brList.Add(trackT.Value.Path);
-                            string textName = ((trackT.Value.Track == 0) ? "" : App.NormalizeNumber((int)trackT.Value.Track, ("" + trackT.Value.TrackCount).Length) + ". ") + trackT.Value.Name;
-                            FlowLayoutPanel pan = new FlowLayoutPanel() { FlowDirection = System.Windows.Forms.FlowDirection.TopDown, WrapContents = false, AutoSize = true };
-                            pan.Disposed += (object sender, EventArgs e) => { App.DelToolTip((FlowLayoutPanel)sender); };
-                            App.SetToolTip(pan, textName);
-                            pan.Controls.Add(new Label() { Text = textName });
-                            Rating2 rt = new Rating2()
-                            {
-                                Rate = trackT.Value.Rating,
-                                Tag = trackT.Value.Path,
-                                //BackgroundColor = Parent.FindResource("TrackButton.StarsBackground") as SolidColorBrush
-                            };
-                            rt.RateChanged += Library_RateChanged;
-                            pan.Controls.Add(rt);
-
-                            //Button btn = new Button()
-                            //{
-                            //    Content = pan,
-                            //    Tag = trackT.Value.Path,
-                            //    //ToolTip = textName,
-                            //    //Style = Parent.FindResource("LibibraryNavigationContentFolderButtonTrackButton") as Style//
-                            //};
-                            //pan.Click += BtnTrack_Click;
-                            pan.MouseDoubleClick += BtnTrack_MouseDoubleClick;
-                            pan.ContextMenuStrip = MakeContextMenu(pan, "file");
-                            st2.Controls.Add(pan);
-                        }
-                        st1.Controls.Add(st2);
-                    }
-                    br.Tag = brList.ToArray();
-
-                    gr.Controls.Add(st0);
-                    gr.SetColumn(st0, 0);
-                    gr.Controls.Add(st1);
-                    gr.SetColumn(st1, 1);
-                    br.Controls.Add(gr);
-                    contener.Controls.Add(br);
+                    AlbumBlock albumBlock = new AlbumBlock(albumT, uniqueDir, defaultCover) { Dock = DockStyle.Top };
+                    contener.RowCount += 1;
+                    contener.RowStyles.Add(new RowStyle(SizeType.AutoSize, 50));
+                    contener.Controls.Add(albumBlock);
                 }
             }
             catch (Exception err)

@@ -82,7 +82,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackPositionLabel = new Label();
             LibraryTab = new Manina.Windows.Forms.Tab();
             LibraryTabTableLayoutPanel = new TableLayoutPanel();
-            LibibraryNavigationPathContener = new FlowLayoutPanel();
+            LibraryNavigationPathContener = new FlowLayoutPanel();
             LibraryFiltersGrid = new TableLayoutPanel();
             LibraryFiltersModeLabel = new Label();
             LibraryFiltersMode = new ComboBox();
@@ -90,8 +90,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersGenreSearchBox = new TextBox();
             LibraryFiltersSearchBox = new TextBox();
             LibraryTabSplitContainer = new SplitContainer();
-            LibibraryNavigationContent = new FlowLayoutPanel();
-            LibibrarySearchContent = new FlowLayoutPanel();
+            LibraryNavigationContent = new TableLayoutPanel();
+            LibraryNavigationContentFolders = new FlowLayoutPanel();
+            LibrarySearchContent = new FlowLayoutPanel();
             PlayListsTab = new Manina.Windows.Forms.Tab();
             TableLayoutPanel = new TableLayoutPanel();
             SettingsTab = new Manina.Windows.Forms.Tab();
@@ -181,6 +182,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTabSplitContainer.Panel1.SuspendLayout();
             LibraryTabSplitContainer.Panel2.SuspendLayout();
             LibraryTabSplitContainer.SuspendLayout();
+            LibraryNavigationContent.SuspendLayout();
             PlayListsTab.SuspendLayout();
             SettingsTab.SuspendLayout();
             panel2.SuspendLayout();
@@ -864,7 +866,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTabTableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             LibraryTabTableLayoutPanel.ColumnCount = 1;
             LibraryTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            LibraryTabTableLayoutPanel.Controls.Add(LibibraryNavigationPathContener, 0, 0);
+            LibraryTabTableLayoutPanel.Controls.Add(LibraryNavigationPathContener, 0, 0);
             LibraryTabTableLayoutPanel.Controls.Add(LibraryFiltersGrid, 0, 1);
             LibraryTabTableLayoutPanel.Controls.Add(LibraryTabSplitContainer, 0, 2);
             LibraryTabTableLayoutPanel.Dock = DockStyle.Fill;
@@ -879,14 +881,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTabTableLayoutPanel.Size = new Size(857, 512);
             LibraryTabTableLayoutPanel.TabIndex = 1;
             // 
-            // LibibraryNavigationPathContener
+            // LibraryNavigationPathContener
             // 
-            LibibraryNavigationPathContener.Dock = DockStyle.Fill;
-            LibibraryNavigationPathContener.Location = new Point(1, 1);
-            LibibraryNavigationPathContener.Margin = new Padding(0);
-            LibibraryNavigationPathContener.Name = "LibibraryNavigationPathContener";
-            LibibraryNavigationPathContener.Size = new Size(855, 40);
-            LibibraryNavigationPathContener.TabIndex = 0;
+            LibraryNavigationPathContener.Dock = DockStyle.Fill;
+            LibraryNavigationPathContener.Location = new Point(1, 1);
+            LibraryNavigationPathContener.Margin = new Padding(0);
+            LibraryNavigationPathContener.Name = "LibraryNavigationPathContener";
+            LibraryNavigationPathContener.Size = new Size(855, 40);
+            LibraryNavigationPathContener.TabIndex = 0;
             // 
             // LibraryFiltersGrid
             // 
@@ -991,37 +993,57 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             // LibraryTabSplitContainer.Panel1
             // 
-            LibraryTabSplitContainer.Panel1.Controls.Add(LibibraryNavigationContent);
+            LibraryTabSplitContainer.Panel1.AutoScroll = true;
+            LibraryTabSplitContainer.Panel1.Controls.Add(LibraryNavigationContent);
             LibraryTabSplitContainer.Panel1MinSize = 100;
             // 
             // LibraryTabSplitContainer.Panel2
             // 
-            LibraryTabSplitContainer.Panel2.Controls.Add(LibibrarySearchContent);
+            LibraryTabSplitContainer.Panel2.Controls.Add(LibrarySearchContent);
             LibraryTabSplitContainer.Panel2MinSize = 100;
             LibraryTabSplitContainer.Size = new Size(849, 422);
             LibraryTabSplitContainer.SplitterDistance = 219;
             LibraryTabSplitContainer.SplitterWidth = 1;
             LibraryTabSplitContainer.TabIndex = 3;
             // 
-            // LibibraryNavigationContent
+            // LibraryNavigationContent
             // 
-            LibibraryNavigationContent.AutoScroll = true;
-            LibibraryNavigationContent.Dock = DockStyle.Fill;
-            LibibraryNavigationContent.Location = new Point(0, 0);
-            LibibraryNavigationContent.Margin = new Padding(0);
-            LibibraryNavigationContent.Name = "LibibraryNavigationContent";
-            LibibraryNavigationContent.Size = new Size(849, 219);
-            LibibraryNavigationContent.TabIndex = 1;
+            LibraryNavigationContent.AutoSize = true;
+            LibraryNavigationContent.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            LibraryNavigationContent.ColumnCount = 1;
+            LibraryNavigationContent.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            LibraryNavigationContent.Controls.Add(LibraryNavigationContentFolders, 0, 0);
+            LibraryNavigationContent.Dock = DockStyle.Top;
+            LibraryNavigationContent.Location = new Point(0, 0);
+            LibraryNavigationContent.Margin = new Padding(0);
+            LibraryNavigationContent.MinimumSize = new Size(0, 150);
+            LibraryNavigationContent.Name = "LibraryNavigationContent";
+            LibraryNavigationContent.RowCount = 1;
+            LibraryNavigationContent.RowStyles.Add(new RowStyle());
+            LibraryNavigationContent.Size = new Size(849, 150);
+            LibraryNavigationContent.TabIndex = 0;
             // 
-            // LibibrarySearchContent
+            // LibraryNavigationContentFolders
             // 
-            LibibrarySearchContent.AutoScroll = true;
-            LibibrarySearchContent.Dock = DockStyle.Fill;
-            LibibrarySearchContent.Location = new Point(0, 0);
-            LibibrarySearchContent.Margin = new Padding(0);
-            LibibrarySearchContent.Name = "LibibrarySearchContent";
-            LibibrarySearchContent.Size = new Size(849, 202);
-            LibibrarySearchContent.TabIndex = 1;
+            LibraryNavigationContentFolders.AutoSize = true;
+            LibraryNavigationContentFolders.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            LibraryNavigationContentFolders.Dock = DockStyle.Top;
+            LibraryNavigationContentFolders.Location = new Point(0, 0);
+            LibraryNavigationContentFolders.Margin = new Padding(0);
+            LibraryNavigationContentFolders.MinimumSize = new Size(0, 150);
+            LibraryNavigationContentFolders.Name = "LibraryNavigationContentFolders";
+            LibraryNavigationContentFolders.Size = new Size(849, 150);
+            LibraryNavigationContentFolders.TabIndex = 2;
+            // 
+            // LibrarySearchContent
+            // 
+            LibrarySearchContent.AutoScroll = true;
+            LibrarySearchContent.Dock = DockStyle.Fill;
+            LibrarySearchContent.Location = new Point(0, 0);
+            LibrarySearchContent.Margin = new Padding(0);
+            LibrarySearchContent.Name = "LibrarySearchContent";
+            LibrarySearchContent.Size = new Size(849, 202);
+            LibrarySearchContent.TabIndex = 1;
             // 
             // PlayListsTab
             // 
@@ -2132,9 +2154,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersGrid.ResumeLayout(false);
             LibraryFiltersGrid.PerformLayout();
             LibraryTabSplitContainer.Panel1.ResumeLayout(false);
+            LibraryTabSplitContainer.Panel1.PerformLayout();
             LibraryTabSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)LibraryTabSplitContainer).EndInit();
             LibraryTabSplitContainer.ResumeLayout(false);
+            LibraryNavigationContent.ResumeLayout(false);
+            LibraryNavigationContent.PerformLayout();
             PlayListsTab.ResumeLayout(false);
             SettingsTab.ResumeLayout(false);
             panel2.ResumeLayout(false);
@@ -2278,7 +2303,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal ComboBox SettingsTabAutoCloseLyricsComboBox;
         internal Label PlaybackPositionLabel;
         private TableLayoutPanel LibraryFiltersGrid;
-        private Panel LibibraryNavigationContentScroll;
+        private Panel LibraryNavigationContentScroll;
         internal Label LibraryFiltersModeLabel;
         internal ComboBox LibraryFiltersMode;
         internal ComboBox LibraryFiltersGenreList;
@@ -2287,10 +2312,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal Label PlaybackTabGenresLabelInfo;
         private Label PlaybackTabGenresLabelValue;
         private FlowLayoutPanel flowLayoutPanel2;
-        internal FlowLayoutPanel LibibraryNavigationContent;
-        internal FlowLayoutPanel LibibrarySearchContent;
+        internal FlowLayoutPanel LibrarySearchContent;
         internal SplitContainer LibraryTabSplitContainer;
-        internal FlowLayoutPanel LibibraryNavigationPathContener;
+        internal FlowLayoutPanel LibraryNavigationPathContener;
         private Panel OverPanel;
         private Label OverPanelLabel;
         private TableLayoutPanel GridScanMetadata;
@@ -2301,5 +2325,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private Rating2 PlaybackTabRatting;
         private Panel panel3;
         internal Label TitleLabel;
+        internal TableLayoutPanel LibraryNavigationContent;
+        internal FlowLayoutPanel LibraryNavigationContentFolders;
     }
 }
