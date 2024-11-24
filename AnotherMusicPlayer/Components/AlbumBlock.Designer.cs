@@ -32,7 +32,9 @@
             label1 = new System.Windows.Forms.Label();
             MainTableLayoutPanel = new System.Windows.Forms.TableLayoutPanel();
             tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            diskBlock1 = new DiskBlock();
             MainTableLayoutPanel.SuspendLayout();
+            tableLayoutPanel1.SuspendLayout();
             SuspendLayout();
             // 
             // button1
@@ -91,14 +93,28 @@
             tableLayoutPanel1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.Controls.Add(diskBlock1, 0, 1);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
             tableLayoutPanel1.Location = new System.Drawing.Point(153, 28);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.Size = new System.Drawing.Size(142, 0);
+            tableLayoutPanel1.Size = new System.Drawing.Size(142, 84);
             tableLayoutPanel1.TabIndex = 2;
+            // 
+            // diskBlock1
+            // 
+            diskBlock1.AutoSize = true;
+            diskBlock1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            diskBlock1.BackColor = System.Drawing.Color.Transparent;
+            diskBlock1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            diskBlock1.Location = new System.Drawing.Point(0, 0);
+            diskBlock1.Margin = new System.Windows.Forms.Padding(0);
+            diskBlock1.MinimumSize = new System.Drawing.Size(200, 0);
+            diskBlock1.Name = "diskBlock1";
+            diskBlock1.Size = new System.Drawing.Size(200, 84);
+            diskBlock1.TabIndex = 0;
             // 
             // AlbumBlock
             // 
@@ -114,6 +130,8 @@
             Size = new System.Drawing.Size(298, 148);
             MainTableLayoutPanel.ResumeLayout(false);
             MainTableLayoutPanel.PerformLayout();
+            tableLayoutPanel1.ResumeLayout(false);
+            tableLayoutPanel1.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -123,5 +141,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel MainTableLayoutPanel;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private DiskBlock diskBlock1;
     }
 }

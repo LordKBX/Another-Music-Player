@@ -160,21 +160,25 @@
 
     <sys:String x:Key="LibraryContextMenuAddGeneric">Ajouter à la liste de lecture</sys:String>
     <sys:String x:Key="LibraryContextMenuAddAlbum">Ajouter l'album à la liste de lecture</sys:String>
+    <sys:String x:Key="LibraryContextMenuAddDisk">Ajouter le disque à la liste de lecture</sys:String>
     <sys:String x:Key="LibraryContextMenuAddFolder">Ajouter le dossier à la liste de lecture</sys:String>
     <sys:String x:Key="LibraryContextMenuAddTrack">Ajouter la piste à la liste de lecture</sys:String>
 
     <sys:String x:Key="LibraryContextMenuAddShuffleGeneric">Ajouter aléatoirement à la liste de lecture</sys:String>
     <sys:String x:Key="LibraryContextMenuAddShuffleAlbum">Ajouter aléatoirement l'album à la liste de lecture</sys:String>
     <sys:String x:Key="LibraryContextMenuAddShuffleFolder">Ajouter aléatoirement le dossier à la liste de lecture</sys:String>
+    <sys:String x:Key="LibraryContextMenuAddShuffleDisk">Ajouter aléatoirement le disque à la liste de lecture</sys:String>
     <!--<sys:String x:Key="LibraryContextMenuAddShuffleTrack">Ajouter aléatoirement la piste à la liste de lecture</sys:String>-->
 
     <sys:String x:Key="LibraryContextMenuPlayGeneric">Lire</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayAlbum">Lire l'album</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayDisk">Lire le disque</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayFolder">Lire le dossier</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayTrack">Lire la piste</sys:String>
 
     <sys:String x:Key="LibraryContextMenuPlayShuffleGeneric">Lire aléatoirement</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayShuffleAlbum">Lire aléatoirement l'album</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayShuffleDisk">Lire aléatoirement le disque</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayShuffleFolder">Lire aléatoirement le dossier</sys:String>
     <!--<sys:String x:Key="LibraryContextMenuPlayShuffleTrack">Ajouter aléatoirement la piste</sys:String>-->
 
@@ -186,6 +190,7 @@
 
     <sys:String x:Key="LibraryContextMenuPlayListsAddGeneric">Ajouter une la liste</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddAlbum">Ajouter l'album à un liste</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayListsAddDisk">Ajouter le disque à un liste</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddFolder">Ajouter le dossier à une liste</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddTrack">Ajouter la piste à une liste</sys:String>
 

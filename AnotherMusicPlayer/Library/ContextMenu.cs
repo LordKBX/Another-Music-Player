@@ -1,4 +1,5 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -40,6 +41,7 @@ namespace AnotherMusicPlayer
                     if (type == "track") { cm.Items[i].Click += CM_AddTrack; }
                     if (type == "selection") { cm.Items[i].Click += CM_AddTrack; }
                     if (type == "album") { cm.Items[i].Click += CM_AddAlbum; }
+                    if (type == "disk") { cm.Items[i].Click += CM_AddAlbum; }
                     if (type == "folder") { cm.Items[i].Click += CM_AddFolder; }
                     cm.Items[i].Visible = true;
                 }
@@ -47,6 +49,7 @@ namespace AnotherMusicPlayer
                 {
                     cm.Items[i].Tag = parent;
                     if (type == "album") { cm.Items[i].Click += CM_AddShuffledAlbum; }
+                    if (type == "disk") { cm.Items[i].Click += CM_AddShuffledAlbum; }
                     if (type == "folder") { cm.Items[i].Click += CM_AddShuffledFolder; }
                     if (type == "selection") { cm.Items[i].Click += CM_AddShuffledFolder; }
                     cm.Items[i].Visible = true;
@@ -57,6 +60,7 @@ namespace AnotherMusicPlayer
                     if (type == "track") { cm.Items[i].Click += CM_PlayTrack; }
                     if (type == "selection") { cm.Items[i].Click += CM_PlayTrack; }
                     if (type == "album") { cm.Items[i].Click += CM_PlayAlbum; }
+                    if (type == "disk") { cm.Items[i].Click += CM_PlayAlbum; }
                     if (type == "folder") { cm.Items[i].Click += CM_PlayFolder; }
                     cm.Items[i].Visible = true;
 
@@ -65,6 +69,7 @@ namespace AnotherMusicPlayer
                 {
                     cm.Items[i].Tag = parent;
                     if (type == "album") { cm.Items[i].Click += CM_PlayShuffledAlbum; }
+                    if (type == "disk") { cm.Items[i].Click += CM_PlayShuffledAlbum; }
                     if (type == "folder") { cm.Items[i].Click += CM_PlayShuffledFolder; }
                     if (type == "selection") { cm.Items[i].Click += CM_PlayShuffledFolder; }
                     cm.Items[i].Visible = true;
@@ -89,6 +94,7 @@ namespace AnotherMusicPlayer
                     if (type == "track") { cm.Items[i].Click += CM_AddPlaylistTrack; }
                     if (type == "selection") { cm.Items[i].Click += CM_AddPlaylistTrack; }
                     if (type == "album") { cm.Items[i].Click += CM_AddPlaylistAlbum; }
+                    if (type == "disk") { cm.Items[i].Click += CM_AddPlaylistAlbum; }
                     if (type == "folder") { cm.Items[i].Click += CM_AddPlaylistFolder; }
                     cm.Items[i].Visible = true;
 
@@ -121,13 +127,13 @@ namespace AnotherMusicPlayer
                 {
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
-                    //Parent.playLists.RecordTracksIntoPlaylist(files.ToArray());
+                    Parent.playLists.RecordTracksIntoPlaylist(files.ToArray());
                 }
             }
             else
             {
                 string track = (string)((Control)item.Tag).Tag;
-                //Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
+                Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
             }
         }
 
@@ -135,7 +141,7 @@ namespace AnotherMusicPlayer
         {
             ToolStripItem item = (ToolStripItem)sender;
             string[] tracks = (string[])((Control)item.Tag).Tag;
-            //Parent.playLists.RecordTracksIntoPlaylist(tracks);
+            Parent.playLists.RecordTracksIntoPlaylist(tracks);
         }
 
         private void CM_AddPlaylistFolder(object sender, EventArgs e)
@@ -150,12 +156,12 @@ namespace AnotherMusicPlayer
 
                 if (folder == null) { return; }
                 string[] tracks = getDirectoryMediaFIles(folder, true);
-                //Parent.playLists.RecordTracksIntoPlaylist(tracks);
+                Parent.playLists.RecordTracksIntoPlaylist(tracks);
             }
             catch(Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
         }
 
-        #region ContextMenu Add Playlist functions
+        #region ContextMenu Add PlayBacklist functions
         private void CM_AddTrack(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
@@ -194,7 +200,7 @@ namespace AnotherMusicPlayer
         }
         #endregion
 
-        #region ContextMenu Add Shuffle Playlist functions
+        #region ContextMenu Add Shuffle PlayBacklist functions
         private void CM_AddShuffledAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
@@ -226,7 +232,7 @@ namespace AnotherMusicPlayer
         }
         #endregion
 
-        #region ContextMenu Play functions
+        #region ContextMenu PlayBack functions
         private void CM_PlayTrack(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
@@ -269,7 +275,7 @@ namespace AnotherMusicPlayer
         }
         #endregion
 
-        #region ContextMenu Play Shuffled functions
+        #region ContextMenu PlayBack Shuffled functions
         private void CM_PlayShuffledAlbum(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
@@ -283,7 +289,6 @@ namespace AnotherMusicPlayer
             try
             {
                 ToolStripItem item = (ToolStripItem)sender; 
-                Debug.WriteLine(item.Tag.GetType().Name);
                 if (item.Tag.GetType().Name == "ListView")
                 {
                     ListView view = (ListView)item.Tag;
@@ -408,18 +413,22 @@ namespace AnotherMusicPlayer
         public ToolStripItem AddFolder = null;
         public ToolStripItem AddTrack = null;
         public ToolStripItem AddAlbum = null;
+        public ToolStripItem AddDisk = null;
         public ToolStripItem AddSelection = null;
         // ADD IN PLAYLIST RANDOMIZED
         public ToolStripItem AddShuffleFolder = null;
         public ToolStripItem AddShuffleAlbum = null;
+        public ToolStripItem AddShuffleDisk = null;
         // PLAYLIST ORDONED
         public ToolStripItem PlayFolder = null;
         public ToolStripItem PlayTrack = null;
         public ToolStripItem PlayAlbum = null;
+        public ToolStripItem PlayDisk = null;
         public ToolStripItem PlaySelection = null;
         // REPLACE PLAYLIST RANDOMIZED
         public ToolStripItem PlayShuffleFolder = null;
         public ToolStripItem PlayShuffleAlbum = null;
+        public ToolStripItem PlayShuffleDisk = null;
         public ToolStripItem PlayShuffleSelection = null;
         // PARTIE Edition
         public ToolStripItem EditFile = null;
@@ -431,6 +440,7 @@ namespace AnotherMusicPlayer
         public ToolStripItem PlayListsAddTrack = null;
         public ToolStripItem PlayListsAddSelection = null;
         public ToolStripItem PlayListsAddAlbum = null;
+        public ToolStripItem PlayListsAddDisk = null;
 
         public LibraryContextMenu()
         {
@@ -442,18 +452,22 @@ namespace AnotherMusicPlayer
             AddFolder = Items.Add(App.GetTranslation("LibraryContextMenuAddFolder"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
             AddTrack = Items.Add(App.GetTranslation("LibraryContextMenuAddTrack"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
             AddAlbum = Items.Add(App.GetTranslation("LibraryContextMenuAddAlbum"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
+            AddDisk = Items.Add(App.GetTranslation("LibraryContextMenuAddAddDisk"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
             AddSelection = Items.Add(App.GetTranslation("LibraryContextMenuAddGeneric"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
             // ADD IN PLAYLIST RANDOMIZED
             AddShuffleFolder = Items.Add(App.GetTranslation("LibraryContextMenuAddShuffleFolder"), Icons.FromIconKind(IconKind.ShuffleVariant, ButtonIconSize, DefaultBrush));
             AddShuffleAlbum = Items.Add(App.GetTranslation("LibraryContextMenuAddShuffleAlbum"), Icons.FromIconKind(IconKind.ShuffleVariant, ButtonIconSize, DefaultBrush));
+            AddShuffleDisk = Items.Add(App.GetTranslation("LibraryContextMenuAddShuffleDisk"), Icons.FromIconKind(IconKind.ShuffleVariant, ButtonIconSize, DefaultBrush));
             // PLAYLIST ORDONED
             PlayFolder = Items.Add(App.GetTranslation("LibraryContextMenuPlayFolder"), Icons.FromIconKind(IconKind.FolderPlay, ButtonIconSize, DefaultBrush));
             PlayTrack = Items.Add(App.GetTranslation("LibraryContextMenuPlayTrack"), Icons.FromIconKind(IconKind.PlayBox, ButtonIconSize, DefaultBrush));
             PlayAlbum = Items.Add(App.GetTranslation("LibraryContextMenuPlayAlbum"), Icons.FromIconKind(IconKind.Album, ButtonIconSize, DefaultBrush));
+            PlayDisk = Items.Add(App.GetTranslation("LibraryContextMenuPlayDisk"), Icons.FromIconKind(IconKind.Album, ButtonIconSize, DefaultBrush));
             PlaySelection = Items.Add(App.GetTranslation("LibraryContextMenuPlayGeneric"), Icons.FromIconKind(IconKind.Album, ButtonIconSize, DefaultBrush));
             // REPLACE PLAYLIST RANDOMIZED
             PlayShuffleFolder = Items.Add(App.GetTranslation("LibraryContextMenuPlayShuffleFolder"), Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush));
             PlayShuffleAlbum = Items.Add(App.GetTranslation("LibraryContextMenuPlayShuffleAlbum"), Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush));
+            PlayShuffleDisk = Items.Add(App.GetTranslation("LibraryContextMenuPlayShuffleDisk"), Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush));
             PlayShuffleSelection = Items.Add(App.GetTranslation("LibraryContextMenuPlayShuffleGeneric"), Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush));
             // PARTIE Edition
             EditFile = Items.Add(App.GetTranslation("LibraryContextMenuEditFile"), Icons.FromIconKind(IconKind.FileEdit, ButtonIconSize, DefaultBrush));
@@ -465,24 +479,29 @@ namespace AnotherMusicPlayer
             PlayListsAddTrack = Items.Add(App.GetTranslation("LibraryContextMenuPlayListsAddTrack"), Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush));
             PlayListsAddSelection = Items.Add(App.GetTranslation("LibraryContextMenuPlayListsAddGeneric"), Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush));
             PlayListsAddAlbum = Items.Add(App.GetTranslation("LibraryContextMenuPlayListsAddAlbum"), Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush));
+            PlayListsAddDisk = Items.Add(App.GetTranslation("LibraryContextMenuPlayListsAddDisk"), Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush));
 
             BackFolder.Name = nameof(BackFolder);
 
             AddFolder.Name = nameof(AddFolder);
             AddTrack.Name = nameof(AddTrack);
             AddAlbum.Name = nameof(AddAlbum);
+            AddDisk.Name = nameof(AddDisk);
             AddSelection.Name = nameof(AddSelection);
 
             AddShuffleFolder.Name = nameof(AddShuffleFolder);
             AddShuffleAlbum.Name = nameof(AddShuffleAlbum);
+            AddShuffleDisk.Name = nameof(AddShuffleDisk);
 
             PlayFolder.Name = nameof(PlayFolder);
             PlayTrack.Name = nameof(PlayTrack);
             PlayAlbum.Name = nameof(PlayAlbum);
+            PlayDisk.Name = nameof(PlayDisk);
             PlaySelection.Name = nameof(PlaySelection);
 
             PlayShuffleFolder.Name = nameof(PlayShuffleFolder);
             PlayShuffleAlbum.Name = nameof(PlayShuffleAlbum);
+            PlayShuffleDisk.Name = nameof(PlayShuffleDisk);
             PlayShuffleSelection.Name = nameof(PlayShuffleSelection);
 
             EditFile.Name = nameof(EditFile);
@@ -494,6 +513,7 @@ namespace AnotherMusicPlayer
             PlayListsAddTrack.Name = nameof(PlayListsAddTrack);
             PlayListsAddSelection.Name = nameof(PlayListsAddSelection);
             PlayListsAddAlbum.Name = nameof(PlayListsAddAlbum);
+            PlayListsAddDisk.Name = nameof(PlayListsAddDisk);
         }
 
         public void Update() {
@@ -503,18 +523,22 @@ namespace AnotherMusicPlayer
             AddFolder.ForeColor = _ForeColor; AddFolder.Text = App.GetTranslation("LibraryContextMenuAddFolder"); AddFolder.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
             AddTrack.ForeColor = _ForeColor; AddTrack.Text = App.GetTranslation("LibraryContextMenuAddTrack"); AddTrack.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
             AddAlbum.ForeColor = _ForeColor; AddAlbum.Text = App.GetTranslation("LibraryContextMenuAddAlbum"); AddAlbum.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
+            AddDisk.ForeColor = _ForeColor; AddDisk.Text = App.GetTranslation("LibraryContextMenuAddDisk"); AddDisk.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
             AddSelection.ForeColor = _ForeColor; AddSelection.Text = App.GetTranslation("LibraryContextMenuAddGeneric"); AddSelection.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
             // ADD IN PLAYLIST RANDOMIZED
             AddShuffleFolder.ForeColor = _ForeColor; AddShuffleFolder.Text = App.GetTranslation("LibraryContextMenuAddShuffleFolder"); AddShuffleFolder.Image = Icons.FromIconKind(IconKind.ShuffleVariant, ButtonIconSize, DefaultBrush);
             AddShuffleAlbum.ForeColor = _ForeColor; AddShuffleAlbum.Text = App.GetTranslation("LibraryContextMenuAddShuffleAlbum"); AddShuffleAlbum.Image = Icons.FromIconKind(IconKind.ShuffleVariant, ButtonIconSize, DefaultBrush);
+            AddShuffleDisk.ForeColor = _ForeColor; AddShuffleDisk.Text = App.GetTranslation("LibraryContextMenuAddShuffleDisk"); AddShuffleDisk.Image = Icons.FromIconKind(IconKind.ShuffleVariant, ButtonIconSize, DefaultBrush);
             // PLAYLIST ORDONED
             PlayFolder.ForeColor = _ForeColor; PlayFolder.Text = App.GetTranslation("LibraryContextMenuPlayFolder"); PlayFolder.Image = Icons.FromIconKind(IconKind.FolderPlay, ButtonIconSize, DefaultBrush);
             PlayTrack.ForeColor = _ForeColor; PlayTrack.Text = App.GetTranslation("LibraryContextMenuPlayTrack"); PlayTrack.Image = Icons.FromIconKind(IconKind.PlayBox, ButtonIconSize, DefaultBrush);
             PlayAlbum.ForeColor = _ForeColor; PlayAlbum.Text = App.GetTranslation("LibraryContextMenuPlayAlbum"); PlayAlbum.Image = Icons.FromIconKind(IconKind.Album, ButtonIconSize, DefaultBrush);
+            PlayDisk.ForeColor = _ForeColor; PlayDisk.Text = App.GetTranslation("LibraryContextMenuPlayDisk"); PlayDisk.Image = Icons.FromIconKind(IconKind.Album, ButtonIconSize, DefaultBrush);
             PlaySelection.ForeColor = _ForeColor; PlaySelection.Text = App.GetTranslation("LibraryContextMenuPlayGeneric"); PlaySelection.Image = Icons.FromIconKind(IconKind.Album, ButtonIconSize, DefaultBrush);
             // REPLACE PLAYLIST RANDOMIZED
             PlayShuffleFolder.ForeColor = _ForeColor; PlayShuffleFolder.Text = App.GetTranslation("LibraryContextMenuPlayShuffleFolder"); PlayShuffleFolder.Image = Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush);
             PlayShuffleAlbum.ForeColor = _ForeColor; PlayShuffleAlbum.Text = App.GetTranslation("LibraryContextMenuPlayShuffleAlbum"); PlayShuffleAlbum.Image = Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush);
+            PlayShuffleDisk.ForeColor = _ForeColor; PlayShuffleDisk.Text = App.GetTranslation("LibraryContextMenuPlayShuffleDisk"); PlayShuffleDisk.Image = Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush);
             PlayShuffleSelection.ForeColor = _ForeColor; PlayShuffleSelection.Text = App.GetTranslation("LibraryContextMenuPlayShuffleGeneric"); PlayShuffleSelection.Image = Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush);
             // PARTIE Edition
             EditFile.ForeColor = _ForeColor; EditFile.Text = App.GetTranslation("LibraryContextMenuEditFile"); EditFile.Image = Icons.FromIconKind(IconKind.FileEdit, ButtonIconSize, DefaultBrush);
@@ -526,6 +550,7 @@ namespace AnotherMusicPlayer
             PlayListsAddTrack.ForeColor = _ForeColor; PlayListsAddTrack.Text = App.GetTranslation("LibraryContextMenuPlayListsAddTrack"); PlayListsAddTrack.Image = Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush);
             PlayListsAddSelection.ForeColor = _ForeColor; PlayListsAddSelection.Text = App.GetTranslation("LibraryContextMenuPlayListsAddGeneric"); PlayListsAddSelection.Image = Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush);
             PlayListsAddAlbum.ForeColor = _ForeColor; PlayListsAddAlbum.Text = App.GetTranslation("LibraryContextMenuPlayListsAddAlbum"); PlayListsAddAlbum.Image = Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush);
+            PlayListsAddDisk.ForeColor = _ForeColor; PlayListsAddDisk.Text = App.GetTranslation("LibraryContextMenuPlayListsAddDisk"); PlayListsAddDisk.Image = Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush);
         }
     }
 }

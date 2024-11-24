@@ -1,8 +1,10 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
+using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -21,9 +23,6 @@ namespace AnotherMusicPlayer.Components
             tableLayoutPanel1.Controls.Clear();
             tableLayoutPanel1.RowStyles.Clear();
             tableLayoutPanel1.RowCount = 1;
-            tableLayoutPanel1.ControlAdded += (object sender, ControlEventArgs e) => { RefreshHeight(); };
-            tableLayoutPanel1.ControlRemoved += (object sender, ControlEventArgs e) => { RefreshHeight(); };
-            tableLayoutPanel1.Resize += (object sender, EventArgs e) => { RefreshHeight(); };
             if (uniqueDir)
             {
                 MediaItem item1 = null;
@@ -52,27 +51,10 @@ namespace AnotherMusicPlayer.Components
                 if (tableLayoutPanel1.Controls.Count > 0) { tableLayoutPanel1.RowCount += 1; }
                 tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize, 50));
                 tableLayoutPanel1.Controls.Add(block);
+                brList.AddRange((List<string>)block.Tag);
             }
             this.ContextMenuStrip = App.win1.library.MakeContextMenu(this, "album");
             this.Tag = brList.ToArray();
-            RefreshHeight();
-        }
-
-        private void RefreshHeight()
-        {
-            if (this.Parent != null)
-            {
-                this.Width = this.Parent.Width - 30;
-            }
-            if (tableLayoutPanel1.Controls.Count > 1)
-            {
-                int height = 0;
-                for (int i = 0; i < tableLayoutPanel1.Controls.Count; i++) 
-                { height += tableLayoutPanel1.Controls[i].Height + tableLayoutPanel1.Controls[i].Margin.Top + tableLayoutPanel1.Controls[i].Margin.Bottom; }
-
-                tableLayoutPanel1.Height = height;
-                this.Height = 6 + tableLayoutPanel1.Height;
-            }
         }
     }
 }

@@ -40,18 +40,19 @@
             label1.AutoEllipsis = true;
             label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             label1.ForeColor = System.Drawing.Color.White;
-            label1.Location = new System.Drawing.Point(3, 10);
+            label1.Location = new System.Drawing.Point(3, 1);
             label1.MaximumSize = new System.Drawing.Size(0, 75);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(242, 23);
+            label1.Size = new System.Drawing.Size(136, 23);
             label1.TabIndex = 0;
             label1.Text = "label1";
             // 
             // rating21
             // 
+            rating21.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             rating21.BackColor = System.Drawing.Color.Transparent;
             rating21.IsReadOnly = false;
-            rating21.Location = new System.Drawing.Point(3, 43);
+            rating21.Location = new System.Drawing.Point(145, 0);
             rating21.Margin = new System.Windows.Forms.Padding(3, 0, 3, 5);
             rating21.MaximumSize = new System.Drawing.Size(100, 20);
             rating21.MinimumSize = new System.Drawing.Size(100, 20);
@@ -63,18 +64,18 @@
             // 
             // tableLayoutPanel1
             // 
-            tableLayoutPanel1.ColumnCount = 1;
+            tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
-            tableLayoutPanel1.Controls.Add(rating21, 0, 1);
+            tableLayoutPanel1.Controls.Add(rating21, 1, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
-            tableLayoutPanel1.RowCount = 2;
+            tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(248, 68);
+            tableLayoutPanel1.Size = new System.Drawing.Size(248, 25);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // TrackButton
@@ -84,10 +85,11 @@
             BackColor = System.Drawing.Color.FromArgb(54, 54, 54);
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             Controls.Add(tableLayoutPanel1);
-            MaximumSize = new System.Drawing.Size(250, 70);
-            MinimumSize = new System.Drawing.Size(250, 70);
+            Margin = new System.Windows.Forms.Padding(0);
+            MaximumSize = new System.Drawing.Size(0, 27);
+            MinimumSize = new System.Drawing.Size(250, 27);
             Name = "TrackButton";
-            Size = new System.Drawing.Size(248, 68);
+            Size = new System.Drawing.Size(248, 25);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }

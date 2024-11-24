@@ -160,21 +160,25 @@
     
     <sys:String x:Key="LibraryContextMenuAddGeneric">Add to Playing queue</sys:String>
     <sys:String x:Key="LibraryContextMenuAddAlbum">Add Album to Playing queue</sys:String>
+    <sys:String x:Key="LibraryContextMenuAddDisk">Add Disk to Playing queue</sys:String>
     <sys:String x:Key="LibraryContextMenuAddFolder">Add Folder to Playing queue</sys:String>
     <sys:String x:Key="LibraryContextMenuAddTrack">Add Track to Playing queue</sys:String>
 
     <sys:String x:Key="LibraryContextMenuAddShuffleGeneric">Add randomly into Playing queue</sys:String>
     <sys:String x:Key="LibraryContextMenuAddShuffleAlbum">Add Album randomly into Playing queue</sys:String>
     <sys:String x:Key="LibraryContextMenuAddShuffleFolder">Add Folder randomly into Playing queue</sys:String>
+    <sys:String x:Key="LibraryContextMenuAddShuffleDisk">Add Disk randomly into Playing queue</sys:String>
     <!--<sys:String x:Key="LibraryContextMenuAddShuffleTrack">Add Track randomly into PlayList</sys:String>-->
 
     <sys:String x:Key="LibraryContextMenuPlayGeneric">Play</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayAlbum">Play Album</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayDisk">Play Disk</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayFolder">Play Folder</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayTrack">Play Track</sys:String>
 
     <sys:String x:Key="LibraryContextMenuPlayShuffleGeneric">Play randomly</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayShuffleAlbum">Play Album randomly</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayShuffleDisk">Play Disk randomly</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayShuffleFolder">Play Folder randomly</sys:String>
     <!--<sys:String x:Key="LibraryContextMenuPlayShuffleTrack">Play Track randomly</sys:String>-->
 
@@ -186,6 +190,7 @@
 
     <sys:String x:Key="LibraryContextMenuPlayListsAddGeneric">Add into a Playlist</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddAlbum">Add Album into a Playlist</sys:String>
+    <sys:String x:Key="LibraryContextMenuPlayListsAddDisk">Add Disk into a Playlist</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddFolder">Add Folder into a Playlist</sys:String>
     <sys:String x:Key="LibraryContextMenuPlayListsAddTrack">Add Track into a Playlist</sys:String>
 

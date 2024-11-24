@@ -23,6 +23,7 @@ using AnotherMusicPlayer.Components;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using System.Runtime.ConstrainedExecution;
 using System.ComponentModel;
+using System.Timers;
 
 namespace AnotherMusicPlayer
 {
@@ -224,6 +225,16 @@ namespace AnotherMusicPlayer
             if (!Directory.Exists(path)) { return; }
             _CurrentPath = path;
 
+            if (Parent.LibraryNavigationContent.Controls.Count > 1)
+            {
+                for (int i = Parent.LibraryNavigationContent.Controls.Count - 1; i >= 1; i--)
+                {
+                    Parent.LibraryNavigationContent.Controls.RemoveAt(i);
+                    Parent.LibraryNavigationContent.RowStyles.RemoveAt(i);
+                }
+                Parent.LibraryNavigationContent.RowCount = 1;
+            }
+
             Parent.LibraryFiltersSearchBox.Visible = false;
             Parent.LibraryFiltersSearchBox.Text = "";
 
@@ -239,16 +250,6 @@ namespace AnotherMusicPlayer
             Parent.LibraryNavigationContentFolders.ContextMenuStrip = MakeContextMenu(Parent.LibraryNavigationContent, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);
             Parent.LibraryNavigationContentFolders.ContextMenuStrip.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
             Parent.LibraryNavigationContentFolders.ContextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
-
-            if (Parent.LibraryNavigationContent.Controls.Count > 1)
-            {
-                for (int i = Parent.LibraryNavigationContent.Controls.Count - 1; i >= 1; i--)
-                {
-                    Parent.LibraryNavigationContent.Controls.RemoveAt(i);
-                    Parent.LibraryNavigationContent.RowStyles.RemoveAt(i);
-                }
-                Parent.LibraryNavigationContent.RowCount = 1;
-            }
 
             string[] dirs = Directory.GetDirectories(path);
             foreach (string dir in dirs)
@@ -351,7 +352,7 @@ namespace AnotherMusicPlayer
                 {
                     AlbumBlock albumBlock = new AlbumBlock(albumT, uniqueDir, defaultCover) { Dock = DockStyle.Top };
                     contener.RowCount += 1;
-                    contener.RowStyles.Add(new RowStyle(SizeType.AutoSize, 50));
+                    contener.RowStyles.Add(new RowStyle(SizeType.AutoSize, 150));
                     contener.Controls.Add(albumBlock);
                 }
             }
