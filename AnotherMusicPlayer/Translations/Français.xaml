@@ -61,8 +61,8 @@
     <sys:String x:Key="BtnLibToolTip">Médiathèque</sys:String>
     <sys:String x:Key="BtnDebugToolTip">Debug Export Vars</sys:String>
 
-    <sys:String x:Key="PlayingQueueCMClrear">Vider Liste de lecture</sys:String>
-    <sys:String x:Key="PlayingQueueCMRemove">Retirer Selection de la Liste de lecture</sys:String>
+    <sys:String x:Key="PlayingQueueCMPlay">Lire la piste</sys:String>
+    <sys:String x:Key="PlayingQueueCMRemove">Retirer de la Liste</sys:String>
 
     <sys:String x:Key="TabPlaylist">Lecture</sys:String>
     <sys:String x:Key="TabLibrary">Médiathèque</sys:String>
@@ -71,8 +71,6 @@
 
     <!--#region SETTINGS-->
     <sys:String x:Key="ParamsLanguageLabel">Langue</sys:String>
-    <sys:String x:Key="ParamsLanguageVals_EN">English</sys:String>
-    <sys:String x:Key="ParamsLanguageVals_FR">Français</sys:String>
 
     <sys:String x:Key="ParamsStyleLabel">Aparence</sys:String>
 
@@ -248,6 +246,7 @@
 
     <!--#region PlayLists-->
     <sys:String x:Key="PlayListsHeaderCol1">Liste de lecture</sys:String>
+    <sys:String x:Key="PlayListsTabVoidLabel">Aucune selection valide</sys:String>
 
     <sys:String x:Key="PlayListsAuto">Automatique</sys:String>
     <sys:String x:Key="PlayListsAuto_lastImports">Derniers arrivages</sys:String>
@@ -259,8 +258,18 @@
     <sys:String x:Key="PlayListsRadioDefault">Divers</sys:String>
 
     <sys:String x:Key="PlayListsContextMenuPlayListPlay">Lire la liste</sys:String>
-    <sys:String x:Key="PlayListsContextMenuPlayListDelete">Supprimer la liste</sys:String>
-    <sys:String x:Key="PlayListsContextMenuTrackDelete">Supprimer selection de la liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListAddCustom">Ajouter une liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListDeleteCustom">Supprimer la liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListRenameCustom">Renommer la liste</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListPlayRadio">Lire WebRadio</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListAddRadio">Ajouter une WebRadio</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListDeleteRadio">Supprimer WebRadio</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListEditRadio">Modifier WebRadio</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListAddRadioCategory">Ajouter une Catégorie</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListDeleteRadioCategory">Supprimer Catégorie</sys:String>
+    <sys:String x:Key="PlayListsContextMenuPlayListRenameRadioCategory">Renommer Catégorie</sys:String>
+    
+    <sys:String x:Key="PlayListsContextMenuTrackDelete">Supprimer la piste</sys:String>
     
     <sys:String x:Key="PlayListsContextMenuPlayListDeleteConfirmTitle">Suppression de liste</sys:String>
     <sys:String x:Key="PlayListsContextMenuPlayListDeleteConfirmMessage">Confirmez-vous la suppression de la liste '%X%' ?</sys:String>

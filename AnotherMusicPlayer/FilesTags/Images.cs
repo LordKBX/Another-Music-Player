@@ -86,7 +86,7 @@ namespace AnotherMusicPlayer
                         char SeparatorChar = System.IO.Path.DirectorySeparatorChar;
                         string folder = FilePath.Substring(0, FilePath.LastIndexOf(SeparatorChar));
                         bitmap = (System.IO.File.Exists(folder + SeparatorChar + "Cover.jpg")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.jpg"))
-                            : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : App.BitmapToBitmapImage(Properties.Resources.CoverImg));
+                            : ((System.IO.File.Exists(folder + SeparatorChar + "Cover.png")) ? new BitmapImage(new Uri(folder + SeparatorChar + "Cover.png")) : BitmapMagic.BitmapToBitmapImage(Properties.Resources.CoverImg));
                     }
                     tags.Dispose();
                 }

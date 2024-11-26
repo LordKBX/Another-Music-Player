@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Media.Imaging;
 using System.Xml;
 using TagLib.Riff;
 
@@ -41,8 +42,9 @@ namespace AnotherMusicPlayer.Components
             string al = albumT.Key;
             if (al == null || al.Trim() == "") { if (uniqueDir) { al = "<UNKWON ALBUM>"; } else { al = albumT.Value.Values.First().First().Value.Name; } }
             label1.Text = al;
-
-            button1.BackgroundImage = App.BitmapImage2Bitmap(FilesTags.MediaPicture(coverPath, App.bdd, true, 150, 150, false), defaultCover);
+            BitmapImage bi = BitmapMagic.BitmapToBitmapImage(defaultCover);
+            try { bi = FilesTags.MediaPicture(coverPath, App.bdd, true, 150, 150, false); } catch (Exception) { }
+            button1.BackgroundImage = BitmapMagic.BitmapImage2Bitmap(bi);
             List<string> brList = new List<string>();
 
             foreach (KeyValuePair<uint, Dictionary<string, MediaItem>> disk in albumT.Value)

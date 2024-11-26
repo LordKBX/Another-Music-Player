@@ -79,9 +79,7 @@ namespace AnotherMusicPlayer
             if (sender.GetType() != typeof(PlaybackProgressBar) && sender.GetType() != typeof(NewProgressBar)) { return; }
 
             Point pt = this.PointToClient(Cursor.Position);
-            Debug.WriteLine("PlaybackProgressBar_MouseDown(" + ((Control)sender).Name + "), pt.X = " + pt.X);
             double value = Convert.ToDouble(pt.X) * MaxValue / Width;
-            Debug.WriteLine("PlaybackProgressBar_MouseDown(" + ((Control)sender) + "), _Value = " + value);
             _Value = Convert.ToInt32(Math.Round(value, 0, MidpointRounding.ToEven));
             Change?.Invoke(this, _Value);
             Calculate();

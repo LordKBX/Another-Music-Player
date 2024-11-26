@@ -26,8 +26,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
         public static void LoadSettings()
         {
-            if (Settings.Lang.StartsWith("en-")) { window.SettingsTabLangComboBox.SelectedIndex = 0; }
-            else if (Settings.Lang.StartsWith("fr-")) { window.SettingsTabLangComboBox.SelectedIndex = 1; }
+            if (Settings.Lang == App.Languages[0]) { window.SettingsTabLangComboBox.SelectedIndex = 0; }
+            else if (Settings.Lang == App.Languages[1]) { window.SettingsTabLangComboBox.SelectedIndex = 1; }
             else  { window.SettingsTabLangComboBox.SelectedIndex = -1; }
 
             Type tr = typeof(Properties.Resources);
@@ -130,11 +130,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static void SettingsTabLangComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             //throw new NotImplementedException();
-            if (window.SettingsTabLangComboBox.SelectedIndex == 0) { Settings.Lang = "en-US"; }
-            else if (window.SettingsTabLangComboBox.SelectedIndex == 1) { Settings.Lang = "fr-FR"; }
-            else { return; }
-            Settings.SaveSettings();
-            window.Translate();
+            try
+            {
+                if (window.SettingsTabLangComboBox.SelectedIndex >= 0) { Settings.Lang = App.Languages[window.SettingsTabLangComboBox.SelectedIndex]; }
+                else { return; }
+                Settings.SaveSettings();
+                window.Translate();
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
         private static void SettingsTabStyleComboBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -184,7 +187,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             {
                 Settings.LibFolder = trimed;
                 Settings.SaveSettings();
-                //scan
+                App.win1.library.InvokeScan();
             }
         }
 
@@ -195,7 +198,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             {
                 Settings.LibFolderShowUnixHiden = rez;
                 Settings.SaveSettings();
-                //scan
+                App.win1.library.DisplayPath(App.win1.library.CurrentPath);
             }
         }
 
@@ -206,7 +209,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             {
                 Settings.LibFolderShowHiden = rez;
                 Settings.SaveSettings();
-                //scan
+                App.win1.library.DisplayPath(App.win1.library.CurrentPath);
             }
         }
 

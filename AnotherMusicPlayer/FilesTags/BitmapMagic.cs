@@ -13,29 +13,22 @@ namespace AnotherMusicPlayer
         {
             string base64String = string.Empty;
 
-
             MemoryStream memoryStream = new MemoryStream();
             bmp.Save(memoryStream, imageFormat);
-
 
             memoryStream.Position = 0;
             byte[] byteBuffer = memoryStream.ToArray();
 
-
             memoryStream.Close();
-
 
             base64String = Convert.ToBase64String(byteBuffer);
             byteBuffer = null;
-
 
             return base64String;
         }
 
         public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage)
         {
-            // BitmapImage bitmapImage = new BitmapImage(new Uri("../Images/test.png", UriKind.Relative));
-
             using (MemoryStream outStream = new MemoryStream())
             {
                 BitmapEncoder enc = new BmpBitmapEncoder();

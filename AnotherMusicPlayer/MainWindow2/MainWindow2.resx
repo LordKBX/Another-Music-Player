@@ -132,6 +132,47 @@
   <metadata name="AlbumColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
+  <metadata name="PlayListsTabTreeImageList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <data name="PlayListsTabTreeImageList.ImageStream" mimetype="application/x-microsoft.net.object.binary.base64">
+    <value>
+        AAEAAAD/////AQAAAAAAAAAMAgAAAEZTeXN0ZW0uV2luZG93cy5Gb3JtcywgQ3VsdHVyZT1uZXV0cmFs
+        LCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAAmU3lzdGVtLldpbmRvd3MuRm9ybXMu
+        SW1hZ2VMaXN0U3RyZWFtZXIBAAAABERhdGEHAgIAAAAJAwAAAA8DAAAAAgMAAAJNU0Z0AUkBTAIBAQQB
+        AAF4AQABeAEAARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMAASADAAEBAQABIAYAASD/
+        AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/AH4AA20B6iAAAy4BRjz/Ay4BRjz/XAAE/wNtAeoc
+        AEj/Ay0BRAQACP8DLQFEBAAM/wMTARkEAANNAZMI/1wACP8DbQHqGABI/wgACP8IAAj/BAAI/wNGAX0D
+        TQGTBP9cAAz/GABI/wNeAdIDIwEzCP8DXgHSAyMBMwj/BAAM/wQABP8QACD/LAAM/xgAaP8EAAz/AxMB
+        GQT/EAAg/ywADP8YAGz/DAAI/xAAIP8oAAOmAfgM/wMzAVEUAID/EAAg/yQAA6YB+BT/AzMBURAAgP8Q
+        ACD/IAADpgH4HP8DMwFRDABI/zQABP8QACD/HAADpgH4JP8DMwFRCAAQ/yAAEP8DZgHgPP8QACD/GAAD
+        pgH4LP8DMwFRBAAQ/xQACP8DXQHMEP8EADz/EAAg/xQAA6YB+DT/AzMBURD/FAAI/wNdAcwQ/ygAA0cB
+        ghT/QAADsgH6TP8UAAj/A10BzBD/GAADIwEzFP8DjgH1BAFIAFD/IAAM/wMGAQcIAAMCAQMDowH3FP8D
+        IwEzWABA/wNVAa80/wMGAQcIABD/A0kBiGgAQP8EAANVAa0s/wMEAQUMAANdAcU4AAFCAU0BPgcAAT4D
+        AAEoAwABQAMAASADAAEBAQABAQYAAQEWAAP/gQAC/wH+Af8EAAL/Af4BfwIAAREBCAL/Af4BPwIAATMB
+        IAL/Af4BPwMAASIB8AEPAf4BPwMAASAB8AEPAf4BPwMAARwB8AEPAfwBHwQAAfABDwH4AQ8EAAHwAQ8B
+        8AEHAgABPwH+AfABDwHgAQMBDwHwAgAB8AEPAcABAQEPAoABAAHwAQ8BgAEAAQ8BgAH/AcAC/wIAAQ8B
+        gAH8AQMC/wIAAQ8B8AHAAT8C/wMAAQEBgwP/AgABgAEDAb8B/ws=
+</value>
+  </data>
+  <metadata name="ColumnPlayCount.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PlayListsColumnName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PlayListsColumnArtists.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PlayListsColumnAlbum.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PlayListsColumnDuration.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="PlayListsColumnRating.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pictureBox1.InitialImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

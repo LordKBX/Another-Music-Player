@@ -17,16 +17,12 @@ namespace AnotherMusicPlayer
 {
     public partial class Library
     {
-        public LibraryContextMenu MakeContextMenu(object parent, string otype = null, bool back = false, string backPath = "")
+        public LibraryContextMenu MakeContextMenu(Control parent, string otype = null, bool back = false, string backPath = "")
         {
             if (otype == null || otype == "") { otype = "track"; }
             string type = otype = otype.ToLower();
             if (type == "file") { type = "track"; }
-            LibraryContextMenu cm = new LibraryContextMenu() { 
-                //Style = Parent.FindResource("CustomContextMenuStyle") as Style 
-            };
-            cm.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
-            cm.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
+            LibraryContextMenu cm = new LibraryContextMenu();
             for (int i = 0; i < cm.Items.Count; i++)
             {
                 if (cm.Items[i].Name == "BackFolder" && back == true)
@@ -82,7 +78,7 @@ namespace AnotherMusicPlayer
                     if (type == "track") { cm.Items[i].Click += CM_EditTrack; }
                     if (type == "album") { cm.Items[i].Click += CM_EditAlbum; }
                     if (type == "folder") {
-                        if (App.win1.library.CurrentPath == Settings.LibFolder && parent.GetType().Name == "AlignablePanel") 
+                        if (App.win1.library.CurrentPath == Settings.LibFolder && (parent.Name == "LibraryNavigationContentFolders" || parent.Name == "LibrarySearchContent")) 
                         { cm.Items[i].Visible = false; }
                         else { cm.Items[i].Click += CM_EditFolder; }
                     }
@@ -127,13 +123,13 @@ namespace AnotherMusicPlayer
                 {
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
-                    Parent.playLists.RecordTracksIntoPlaylist(files.ToArray());
+                    //Parent.playLists.RecordTracksIntoPlaylist(files.ToArray());
                 }
             }
             else
             {
                 string track = (string)((Control)item.Tag).Tag;
-                Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
+                //Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
             }
         }
 
@@ -141,7 +137,7 @@ namespace AnotherMusicPlayer
         {
             ToolStripItem item = (ToolStripItem)sender;
             string[] tracks = (string[])((Control)item.Tag).Tag;
-            Parent.playLists.RecordTracksIntoPlaylist(tracks);
+            //Parent.playLists.RecordTracksIntoPlaylist(tracks);
         }
 
         private void CM_AddPlaylistFolder(object sender, EventArgs e)
@@ -156,7 +152,7 @@ namespace AnotherMusicPlayer
 
                 if (folder == null) { return; }
                 string[] tracks = getDirectoryMediaFIles(folder, true);
-                Parent.playLists.RecordTracksIntoPlaylist(tracks);
+                //Parent.playLists.RecordTracksIntoPlaylist(tracks);
             }
             catch(Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
         }
@@ -445,6 +441,9 @@ namespace AnotherMusicPlayer
         public LibraryContextMenu()
         {
             Font = new Font("Segoe UI", 15, System.Drawing.FontStyle.Regular, GraphicsUnit.Point);
+            base.BackColor = _BackColor = App.style.GetColor("ContextMenuBackColor");
+            base.ForeColor = _ForeColor = App.style.GetColor("ContextMenuForeColor");
+
             RenderMode = ToolStripRenderMode.System;
             // PARTIE BACK BUTTON
             BackFolder = Items.Add(App.GetTranslation("LibraryContextMenuGetBack"), Icons.FromIconKind(IconKind.ArrowLeftTop, ButtonIconSize, DefaultBrush));
@@ -516,7 +515,9 @@ namespace AnotherMusicPlayer
             PlayListsAddDisk.Name = nameof(PlayListsAddDisk);
         }
 
-        public void Update() {
+        public void Update()
+        {
+            DefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor(_ForeColor));
             // PARTIE BACK BUTTON
             BackFolder.ForeColor = _ForeColor; BackFolder.Text = App.GetTranslation("LibraryContextMenuGetBack"); BackFolder.Image = Icons.FromIconKind(IconKind.ArrowLeftTop, ButtonIconSize, DefaultBrush);
             // ADD IN PLAYLIST ORDONED

@@ -5,8 +5,6 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Text;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 using Newtonsoft.Json;
 using System.Windows.Media;
 using GongSolutions.Wpf.DragDrop;
@@ -17,480 +15,241 @@ using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Threading;
 using AnotherMusicPlayer.MainWindow2Space;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using System.Windows.Forms;
+using System.Security.AccessControl;
+using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
+using System.Windows.Controls;
 
 namespace AnotherMusicPlayer
 {
-    public partial class PlayLists : IDropTarget
+    public partial class PlayLists
     {
-        //private MainWindow Parent;
-        private bool isBuild = false;
-
-        public void DragOver(IDropInfo dropInfo)
-        {
-            dropInfo.Effects = DragDropEffects.Move;
-            dropInfo.DropTargetAdorner = DropTargetAdorners.Highlight;
-        }
-
-        public void Drop(IDropInfo dropInfo)
-        {
-            //if (Parent.PlaylistsTree.SelectedItem == null) { return; }
-            //TreeViewItem tvi = (TreeViewItem)Parent.PlaylistsTree.SelectedItem;
-            //if (!tvi.Name.StartsWith("user_")) { return; }
-            //string id = (string)tvi.Tag;
-
-            //if (Parent.PlaylistsContents.SelectedItems.Count == 0) { return; }
-            //ObservableCollection<MediaItem> list = (ObservableCollection<MediaItem>)Parent.PlaylistsContents.ItemsSource;
-            //ObservableCollection<MediaItem> listTmp = new ObservableCollection<MediaItem>();
-            //int newIndex = dropInfo.InsertIndex - 1;
-            //if (newIndex < 0) { newIndex = 0; }
-            //Debug.WriteLine("newIndex = " + newIndex);
-
-            //if (Parent.PlaylistsContents.SelectedItems.Count == 1)
-            //{
-            //    MediaItem target = (MediaItem)dropInfo.DragInfo.SourceItem;
-            //    Debug.WriteLine("target = " + JsonConvert.SerializeObject(target));
-
-            //    foreach (MediaItem row in list)
-            //    {
-            //        if (listTmp.Count == newIndex) { listTmp.Add(target); }
-            //        if (row.Path != target.Path) { listTmp.Add(row); }
-            //    }
-            //}
-            //else if (Parent.PlaylistsContents.SelectedItems.Count > 1)
-            //{
-            //    MediaItem[] selection = new MediaItem[Parent.PlaylistsContents.SelectedItems.Count];
-            //    Parent.PlaylistsContents.SelectedItems.CopyTo(selection, 0);
-            //    Parent.PlaylistsContents.SelectedIndex = -1;
-            //    List<MediaItem> selectionList = new List<MediaItem>(selection);
-            //    Debug.WriteLine("targets = " + JsonConvert.SerializeObject(selection));
-            //    foreach (MediaItem row in list)
-            //    {
-            //        if (listTmp.Count == newIndex)
-            //        {
-            //            foreach (MediaItem row2 in selection) listTmp.Add(row2);
-            //        }
-
-            //        if (!selectionList.Contains(row)) { listTmp.Add(row); }
-            //    }
-            //}
-
-            //Parent.PlaylistsContents.ItemsSource = listTmp;
-
-            //List<string> querys = new List<string>();
-
-            //int offset = 1;
-            //foreach (MediaItem row in listTmp) { querys.Add("UPDATE playlistsItems SET LOrder = '" + offset + "' WHERE Path = '" + Database.EscapeString(row.Path) + "'"); offset += 1; }
-            //Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
-        }
-
-        public PlayLists(/*MainWindow parent*/MainWindow2 parent)
-        {
-            //if (parent == null) { return; }
-            //Parent = parent;
-            //Init();
-            //isBuild = true;
-            //Parent.PlaylistsContents.MouseDoubleClick += PlaylistsContents_MouseDoubleClick;
-            //Parent.PlaylistsContents.ContextMenu = null;
-            //Parent.PlaylistsContents.SelectionChanged += PlaylistsContents_SelectionChanged;
-            //Parent.PlaylistsContents.KeyUp += PlaylistsContents_KeyUp;
-
-            //Parent.PlaylistsContents.Visibility = Visibility.Visible;
-            //Parent.PlaylistsRadioContentsBorder.Visibility = Visibility.Collapsed;
-            //Parent.PlaylistsRadioContents2Border.Visibility = Visibility.Collapsed;
-
-            //Parent.PlaylistsRadioContents2BtnPlay.Click += PlaylistsRadioContents2BtnPlay_Click;
-
-            //Parent.PlaylistsTreeWWebRadioAddButton.MouseUp += PlaylistsTreeWWebRadioAddButton_MouseUp;
-        }
-
-        private void PlaylistsTreeWWebRadioAddButton_MouseUp(object sender, MouseButtonEventArgs e)
-        {
-            //Parent.PlaylistsTreeWWebRadioAddButton.ContextMenu.IsOpen = true;
-        }
-
-        private void PlaylistsContents_KeyUp(object sender, KeyEventArgs e)
-        {
-            //if (Parent.PlaylistsTree.SelectedItem == null) { Debug.WriteLine("NOPE 1"); return; }
-            //TreeViewItem tvi = (TreeViewItem)Parent.PlaylistsTree.SelectedItem;
-            //if (!tvi.Name.StartsWith("user_")) { Debug.WriteLine("NOPE 1"); return; }
-
-            //if (e.Key == Key.Delete) { CM_RemoveTrackSelection(null, null); }
-        }
-
-        private void PlaylistsContents_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            //Parent.PlaylistsContents.ContextMenu = null;
-            //if (Parent.PlaylistsContents.SelectedItems.Count == 0) { return; }
-            //else
-            //{
-            //    TreeViewItem TItem = (Parent.PlaylistsTree.SelectedItem != null) ? (TreeViewItem)Parent.PlaylistsTree.SelectedItem : null;
-            //    if (TItem == null) { return; }
-            //    if (!TItem.Name.StartsWith("user_")) { return; }
-            //    Parent.PlaylistsContents.ContextMenu = MakeContextMenu(Parent.PlaylistsContents, "content");
-            //}
-        }
-
-        private void PlaylistsContents_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //if (Parent.PlaylistsContents.SelectedIndex != -1)
-            //{
-            //    Player.PlaylistClear();
-            //    Player.PlaylistEnqueue(new string[] { ((MediaItem)Parent.PlaylistsContents.SelectedItem).Path }, false, 0, 0, true);
-            //}
-        }
-
+        private MainWindow2 Parent;
+        private bool isBuild = false; 
         private List<string> autoList = new List<string>() { "lastImports", "mostPlayed", "mostRecentlyPlayed", "bestRating" };
+
+        public PlayLists(MainWindow2 parent)
+        {
+            if (parent == null) { return; }
+            Parent = parent;
+            isBuild = true;
+            Parent.PlaylistsTree.Nodes[0].ContextMenuStrip = null;
+            Parent.PlaylistsTree.Nodes[1].ContextMenuStrip = MakeNodeContextMenu(Parent.PlaylistsTree.Nodes[1], PlayListsNodeContextMenuType.Custom);
+            Parent.PlaylistsTree.Nodes[2].ContextMenuStrip = MakeNodeContextMenu(Parent.PlaylistsTree.Nodes[2], PlayListsNodeContextMenuType.Radio);
+            Parent.PlaylistsTree.NodeMouseClick += PlaylistsTree_NodeMouseClick;
+            Parent.PlaylistsTree.NodeMouseDoubleClick += PlaylistsTree_NodeMouseDoubleClick;
+
+            Init();
+        }
+
+        #region Display Panel functions
+        private void DisplayVoidPanel() {
+            Parent.PlayListsTabSplitContainer1.Panel1Collapsed = false;
+            Parent.PlayListsTabSplitContainer1.Panel2Collapsed = true;
+            Parent.PlayListsTabSplitContainer2.Panel1Collapsed = true;
+            Parent.PlayListsTabSplitContainer2.Panel2Collapsed = true;
+        }
+        private void DisplayListPanel() {
+            Parent.PlayListsTabSplitContainer1.Panel1Collapsed = true;
+            Parent.PlayListsTabSplitContainer1.Panel2Collapsed = false;
+            Parent.PlayListsTabSplitContainer2.Panel1Collapsed = false;
+            Parent.PlayListsTabSplitContainer2.Panel2Collapsed = true;
+        }
+        private void DisplayRadioPanel() {
+            Parent.PlayListsTabSplitContainer1.Panel1Collapsed = true;
+            Parent.PlayListsTabSplitContainer1.Panel2Collapsed = false;
+            Parent.PlayListsTabSplitContainer2.Panel1Collapsed = true;
+            Parent.PlayListsTabSplitContainer2.Panel2Collapsed = false;
+        }
+        #endregion
+
         public void Init()
         {
-            //((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Clear();
-            //((TreeViewItem)Parent.PlaylistsTree.Items[1]).Items.Clear();
-            //((TreeViewItem)Parent.PlaylistsTree.Items[2]).Items.Clear();
-            //double itemMaxWidth = 148;
+            Parent.PlaylistsTree.Nodes[0].Nodes.Clear(); Parent.PlaylistsTree.Nodes[1].Nodes.Clear(); Parent.PlaylistsTree.Nodes[2].Nodes.Clear();
+            DisplayVoidPanel();
+            Parent.PlayListsTabDataGridView.AutoGenerateColumns = false;
 
-            //foreach (string archetype in autoList)
-            //{
-            //    TreeViewItem item = new TreeViewItem()
-            //    {
-            //        Header = new TextBlock() { Text = Parent.FindResource("PlayListsAuto_" + archetype) as string, TextTrimming = TextTrimming.CharacterEllipsis },
-            //        Tag = "auto_" + archetype,
-            //        Name = "auto_" + archetype,
-            //        MaxWidth = itemMaxWidth
-            //    };
-            //    item.MouseLeftButtonUp += autolistClick;
-            //    item.MouseDoubleClick += autolistDoubleClick;
-            //    item.ContextMenu = MakeContextMenu(item, "list");
-            //    ((TreeViewItem)Parent.PlaylistsTree.Items[0]).Items.Add(item);
-            //}
-
-            //Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT FIndex,Name,Description FROM playlists ORDER BY LOWER(Name) ASC", "FIndex");
-            //foreach (KeyValuePair<string, Dictionary<string, object>> row in rez)
-            //{
-            //    TreeViewItem item = new TreeViewItem()
-            //    {
-            //        Header = new TextBlock() { Text = row.Value["Name"] as string, TextTrimming = TextTrimming.CharacterEllipsis },
-            //        Tag = row.Value["FIndex"] as string,
-            //        Name = "user_" + row.Value["FIndex"] as string,
-            //        MaxWidth = itemMaxWidth
-            //    };
-            //    if (row.Value["Description"] != null && row.Value["Description"] as string != "") { item.ToolTip = row.Value["Description"] as string; }
-            //    item.MouseLeftButtonUp += userlistClick;
-            //    item.MouseDoubleClick += userlistDoubleClick;
-            //    item.ContextMenu = MakeContextMenu(item, "listCustom");
-            //    ((TreeViewItem)Parent.PlaylistsTree.Items[1]).Items.Add(item);
-            //}
-
-            //TreeViewItem itemx = new TreeViewItem()
-            //{
-            //    Header = new TextBlock() { Text = Parent.FindResource("PlayListsRadioDefault") as string, TextTrimming = TextTrimming.CharacterEllipsis },
-            //    Tag = "0",
-            //    Name = "radioCategory_0",
-            //    MaxWidth = itemMaxWidth
-            //};
-            //itemx.ContextMenu = MakeContextMenu(itemx, "radioCategory");
-            //itemx.MouseLeftButtonUp += RadioCategory_MouseLeftButtonUp;
-            //((TreeViewItem)Parent.PlaylistsTree.Items[2]).Items.Add(itemx);
-
-            //Dictionary<string, Dictionary<string, object>> dataRadioCategories = Parent.bdd.DatabaseQuery("SELECT * FROM radiosCategories ORDER BY LOWER(Name) ASC", "RID");
-            //foreach (KeyValuePair<string, Dictionary<string, object>> row in dataRadioCategories)
-            //{
-            //    TreeViewItem item = new TreeViewItem()
-            //    {
-            //        Header = new TextBlock() { Text = row.Value["Name"] as string, TextTrimming = TextTrimming.CharacterEllipsis },
-            //        Tag = row.Value["CRID"] as string,
-            //        Name = "radioCategory_" + row.Value["CRID"] as string,
-            //        MaxWidth = itemMaxWidth
-            //    };
-            //    item.ContextMenu = MakeContextMenu(item, "radioCategory");
-            //    ((TreeViewItem)Parent.PlaylistsTree.Items[2]).Items.Add(item);
-            //}
-
-            //Dictionary<string, Dictionary<string, object>> rez2 = Parent.bdd.DatabaseQuery("SELECT * FROM radios ORDER BY LOWER(Name) ASC", "RID");
-            //foreach (KeyValuePair<string, Dictionary<string, object>> row in rez2)
-            //{
-            //    foreach (TreeViewItem crow in ((TreeViewItem)Parent.PlaylistsTree.Items[2]).Items)
-            //    {
-            //        if (crow.Name == ("radioCategory_" + row.Value["Category"] as string))
-            //        {
-            //            TreeViewItem item = new TreeViewItem()
-            //            {
-            //                Header = new TextBlock() { Text = row.Value["Name"] as string, TextTrimming = TextTrimming.CharacterEllipsis },
-            //                Tag = row.Value,
-            //                Name = "radio_" + row.Value["RID"] as string,
-            //                MaxWidth = itemMaxWidth
-            //            };
-            //            item.MouseLeftButtonUp += radioClick;
-            //            item.MouseDoubleClick += radioDoubleClick;
-            //            item.ContextMenu = MakeContextMenu(item, "radio");
-            //            crow.Items.Add(item);
-            //        }
-            //    }
-            //}
-
-            //Parent.PlaylistsTreeWWebRadioAddButton.ContextMenu = MakeContextMenu(Parent.PlaylistsTreeWWebRadioAddButton, "radioroot");
-        }
-
-        private void RadioCategory_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            //throw new NotImplementedException();
-        }
-
-        private void radioDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //PlaylistsRadioContents2BtnPlay_Click(null, null);
-        }
-
-        private Dictionary<string, object> CurentRadio = null;
-        private async void radioClick(object sender, MouseButtonEventArgs e)
-        {
-            //if (CurentRadio == (Dictionary<string, object>)((TreeViewItem)sender).Tag)
-            //{
-            //    Parent.PlaylistsRadioContents2Border.Visibility = Visibility.Visible;
-            //    Parent.PlaylistsRadioContentsBorder.Visibility = Visibility.Collapsed;
-            //    Parent.PlaylistsContents.Visibility = Visibility.Collapsed;
-            //    return;
-            //}
-            //CurentRadio = (Dictionary<string, object>)((TreeViewItem)sender).Tag;
-            ////Debug.WriteLine(JsonConvert.SerializeObject(CurentRadio));
-
-            //Parent.PlaylistsRadioContents2Border.Visibility = Visibility.Visible;
-            //Parent.PlaylistsRadioContentsBorder.Visibility = Visibility.Collapsed;
-            //Parent.PlaylistsContents.Visibility = Visibility.Collapsed;
-
-            //Debug.WriteLine("CurentRadio[\"FType\"] = " + CurentRadio["FType"]);
-            //Parent.PlaylistsRadioContents2Label.Text = CurentRadio["Name"] as string;
-            //Parent.PlaylistsRadioContents2Description.Text = CurentRadio["Description"] as string;
-            //System.Windows.Media.Imaging.BitmapImage bi = null;
-            //string logo = CurentRadio["Logo"] as string;
-            //string[] logoTab = logo.Split(',');
-            //if (logoTab.Length > 1) { logo = logoTab[1]; }
-            //try { bi = BitmapMagic.Base64StringToBitmap(logo); }
-            //catch (Exception err)
-            //{
-            //    Debug.WriteLine("CurentRadio[\"Logo\"] = " + logo);
-            //    Debug.WriteLine(JsonConvert.SerializeObject(err));
-            //}
-            //Parent.RadioCover.Source = (bi ?? MainWindow.Bimage("CoverImg"));
-        }
-
-        private async void PlaylistsRadioContents2BtnPlay_Click(object sender, RoutedEventArgs e)
-        {
-            //RadioPlayer.Stop();
-            //if (CurentRadio["FType"] as string == "Stream")
-            //{ Player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.Stream, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
-            //else if (CurentRadio["FType"] as string == "M3u")
-            //{ Player.OpenStream(CurentRadio["Url"] as string, RadioPlayer.RadioType.M3u, CurentRadio["RID"] as string, CurentRadio["Name"] as string, true, CurentRadio["UrlPrefix"] as string); }
-        }
-
-        private void autolistDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            string archetype = ((string)((TreeViewItem)sender).Tag).Replace("auto_", "");
-            Dictionary<string, Dictionary<string, object>> rez = autolistData(archetype);
-            Debug.WriteLine("--> QUERY");
-            List<string> files = new List<string>();
-            Dictionary<string, int> countList = new Dictionary<string, int>();
-            foreach (string key in rez.Keys)
+            foreach (string archetype in autoList)
             {
-                files.Add(key);
+                TreeNode item = new TreeNode()
+                {
+                    Text = App.GetTranslation("PlayListsAuto_" + archetype),
+                    Tag = "auto_" + archetype,
+                    Name = "auto_" + archetype
+                };
+                item.ContextMenuStrip = MakeNodeContextMenu(item, PlayListsNodeContextMenuType.Auto);
+                Parent.PlaylistsTree.Nodes[0].Nodes.Add(item);
             }
-            Player.PlaylistClear();
-            Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+
+            Parent.PlaylistsTree.Nodes[0].Expand();
+            Parent.PlaylistsTree.Nodes[1].Expand();
+            Parent.PlaylistsTree.Nodes[2].Expand();
+
+            Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT FIndex,Name,Description FROM playlists ORDER BY LOWER(Name) ASC", "FIndex");
+            foreach (KeyValuePair<string, Dictionary<string, object>> row in rez)
+            {
+                TreeNode item = new TreeNode() { Text = "" + row.Value["Name"], Tag = "" + row.Value["FIndex"], ToolTipText = "" + row.Value["Description"] };
+                item.ContextMenuStrip = MakeNodeContextMenu(item, PlayListsNodeContextMenuType.CustomNode);
+                Parent.PlaylistsTree.Nodes[1].Nodes.Add(item);
+            }
+
+            Dictionary<string, TreeNode> radioCats = new Dictionary<string, TreeNode>();
+            Dictionary<string, Dictionary<string, object>> rez2 = App.bdd.DatabaseQuery(
+                "SELECT radios.RID,radios.Category,radios.Name,radios.Url,radios.UrlPrefix,radios.FType,radios.Fragmented,radios.Logo,radios.Description, " 
+                + "radiosCategories.CRID,radiosCategories.Name AS CName, radiosCategories.Description AS CDescription, radiosCategories.Logo AS CLogo FROM radios "
+                + "LEFT JOIN radiosCategories ON(radios.Category = radiosCategories.CRID) "
+                + "ORDER BY radios.Category ASC, LOWER(radios.Name) ASC", "RID");
+            foreach (KeyValuePair<string, Dictionary<string, object>> row in rez2)
+            {
+                int CRID = int.Parse("" + row.Value["Category"]);
+                string CName = "" + row.Value["CName"];
+
+                TreeNode item = new TreeNode() { Text = "" + row.Value["Name"], Tag = row.Value, ToolTipText = "" + row.Value["Description"] };
+                item.ContextMenuStrip = MakeNodeContextMenu(item, PlayListsNodeContextMenuType.RadioNode);
+
+                if (CRID > 0) {
+                    if (radioCats.ContainsKey(CName)) { radioCats[CName].Nodes.Add(item); }
+                    else
+                    {
+                        TreeNode itemCat = new TreeNode() { Text = CName, Tag = row.Value, ToolTipText = "" + row.Value["CDescription"] };
+                        itemCat.ContextMenuStrip = MakeNodeContextMenu(itemCat, PlayListsNodeContextMenuType.RadioCategory);
+                        itemCat.Nodes.Add(item);
+                        radioCats.Add(CName, itemCat);
+                    }
+                }
+                else { Parent.PlaylistsTree.Nodes[2].Nodes.Add(item); }
+            }
+            radioCats.Clear();
         }
 
-        private void autolistClick(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void PlaylistsTree_NodeMouseClick(object sender, System.Windows.Forms.TreeNodeMouseClickEventArgs e)
         {
-            //try
-            //{
-            //    Parent.PlaylistsContents.Visibility = Visibility.Visible;
-            //    Parent.PlaylistsRadioContentsBorder.Visibility = Visibility.Collapsed;
-            //    Parent.PlaylistsRadioContents2Border.Visibility = Visibility.Collapsed;
-            //    Debug.WriteLine("--> autolistClick");
-            //    string archetype = ((string)((TreeViewItem)sender).Tag).Replace("auto_", "");
-            //    Debug.WriteLine("--> autolistClick, Archetype: " + archetype);
+            TreeNode parent = e.Node.Parent;
+            if (e.Node.Level > 0) { while (parent.Parent != null) { parent = parent.Parent; } }
 
-            //    if (archetype == autoList[0]) { Parent.PlaylistsContentsC0.Width = 0; }
-            //    else if (archetype == autoList[1]) { Parent.PlaylistsContentsC0.Width = 50; }
-            //    else if (archetype == autoList[2]) { Parent.PlaylistsContentsC0.Width = 50; }
-            //    if (archetype == autoList[3]) { Parent.PlaylistsContentsC0.Width = 0; }
+            if (e.Button == System.Windows.Forms.MouseButtons.Left)
+            {
+                if (e.Node.Level == 0) { DisplayVoidPanel(); }
+                else
+                {
 
-            //    try
-            //    {
-            //        SizeChangedInfo sifo = new SizeChangedInfo(Parent.PlaylistsContents, new Size(0, 0), true, true);
-            //        System.Reflection.ConstructorInfo[] gd = typeof(System.Windows.SizeChangedEventArgs).GetConstructors(System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            //        SizeChangedEventArgs ea = gd[0].Invoke(new object[] { (Parent.PlaylistsContents as FrameworkElement), sifo }) as SizeChangedEventArgs;
-            //        ea.RoutedEvent = ListView.SizeChangedEvent;
-            //        Parent.PlaylistsContents.RaiseEvent(ea);
-            //    }
-            //    catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
+                    if (parent.Index == 2)
+                    {
+                        if (e.Node.Level > 1) { /*return;*/ }
+                    }
+                    else if (parent.Index == 0)
+                    {
+                        if (e.Node.Index == 0) { OpenAutoPlaylist(AutoPlaylistTypes.LastImports); }
+                        else if (e.Node.Index == 1) { OpenAutoPlaylist(AutoPlaylistTypes.MostPlayed); }
+                        else if (e.Node.Index == 2) { OpenAutoPlaylist(AutoPlaylistTypes.MostRecentlyPlayed); }
+                        else if (e.Node.Index == 3) { OpenAutoPlaylist(AutoPlaylistTypes.BestRating); }
+                        else { DisplayVoidPanel(); }
+                    }
+                    else if (parent.Index == 1)
+                    {
 
-            //    Dictionary<string, Dictionary<string, object>> rez = autolistData(archetype);
-            //    Debug.WriteLine("--> QUERY");
-            //    List<string> files = new List<string>();
-            //    Dictionary<string, int> countList = new Dictionary<string, int>();
-            //    foreach (string key in rez.Keys)
-            //    {
-            //        files.Add(key);
-            //        if (archetype == "mostPlayed" || archetype == "mostRecentlyPlayed") { countList.Add(key, Convert.ToInt32(rez[key]["Cpt"] as string)); }
-            //    }
-            //    Debug.WriteLine("--> Display build");
-            //    fillContentSpace(files.ToArray(), (countList.Count > 0) ? countList : null);
-            //}
-            //catch (System.NullReferenceException err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-            //catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-            //Parent.PlaylistsContents.ContextMenu = null;
-
-            //GongSolutions.Wpf.DragDrop.DragDrop.SetIsDragSource(Parent.PlaylistsContents, false);
-            //GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(Parent.PlaylistsContents, false);
-            //GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(Parent.PlaylistsContents, null);
+                    }
+                    else { DisplayVoidPanel(); }
+                }
+            }
+            else if (e.Button == System.Windows.Forms.MouseButtons.Right)
+            {
+                if (e.Node.Index == 2) {  }
+                else if (e.Node.Index == 3) {  }
+            }
         }
 
-        private Dictionary<string, Dictionary<string, object>> autolistData(string name, int maxLimit = 50)
+        private void PlaylistsTree_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            if (e.Node.Level == 0) { return; }
+            TreeNode parent = e.Node.Parent;
+            while (parent.Parent != null) { parent = parent.Parent; }
+
+            if (parent.Index == 0)
+            {
+                AutoPlaylistTypes playlistType = AutoPlaylistTypes.LastImports;
+                if (e.Node.Index == 0) { playlistType = AutoPlaylistTypes.LastImports; }
+                if (e.Node.Index == 1) { playlistType = AutoPlaylistTypes.MostPlayed; }
+                if (e.Node.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
+                if (e.Node.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
+                List<PlayListsLineItem> files = autolistData(playlistType, 100);
+                List<string> paths = new List<string>();
+                foreach (PlayListsLineItem item in files) { paths.Add(item.Path); }
+                Player.StopAll();
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(paths.ToArray(), false, 0, 0, true);
+            }
+            else if (parent.Index == 2)
+            {
+            }
+            else if (parent.Index == 1)
+            {
+
+            }
+        }
+
+        private List<PlayListsLineItem> autolistData(AutoPlaylistTypes playlistType, int maxLimit = 50)
         {
             string query = "";
-            if (name == autoList[0]) { query = "SELECT * FROM files ORDER BY LastUpdate DESC LIMIT " + maxLimit; /*Parent.PlaylistsContentsC0.Width = 0;*/ }
-            else if (name == autoList[1]) { query = "SELECT * FROM playCounts ORDER BY Cpt DESC, LastPlay DESC LIMIT " + maxLimit; /*Parent.PlaylistsContentsC0.Width = 50;*/ }
-            else if (name == autoList[2]) { query = "SELECT * FROM playCounts ORDER BY LastPlay DESC LIMIT " + maxLimit; /*Parent.PlaylistsContentsC0.Width = 50;*/ }
-            if (name == autoList[3]) { query = "SELECT * FROM files ORDER BY Rating DESC LIMIT " + maxLimit; /*Parent.PlaylistsContentsC0.Width = 0;*/ }
+            if (playlistType == AutoPlaylistTypes.LastImports) { query = "SELECT * FROM files ORDER BY InsertionDate DESC, LastUpdate DESC LIMIT " + maxLimit; }
+            else if (playlistType == AutoPlaylistTypes.MostPlayed) { query = "SELECT files.*,playCounts.Cpt FROM files JOIN playCounts ON(playCounts.Path = files.Path) WHERE files.Path in (SELECT Path FROM playCounts ORDER BY Cpt DESC, LastPlay DESC LIMIT "+ maxLimit + ") ORDER BY playCounts.Cpt DESC, playCounts.LastPlay DESC"; }
+            else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { query = "SELECT files.*,playCounts.Cpt FROM files JOIN playCounts ON(playCounts.Path = files.Path) WHERE files.Path in (SELECT Path FROM playCounts ORDER BY LastPlay DESC LIMIT " + maxLimit + ") ORDER BY playCounts.LastPlay DESC"; }
+            if (playlistType == AutoPlaylistTypes.BestRating) { query = "SELECT * FROM files ORDER BY REPLACE(Rating, '.', ',') DESC LIMIT " + maxLimit; }
 
-            return App.bdd.DatabaseQuery(query, "Path");
-        }
+            List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+            Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery(query, "Path");
+            if (rez == null) { return files; }
+            foreach (string key in rez.Keys)
+            {
+                List<string> artists = new List<string>();
+                if (rez[key]["Composers"] != null)
+                {
+                    string[] cl = ((string)rez[key]["Composers"]).Split(';');
+                    foreach (string c in cl) { if (c != "" && !artists.Contains(c)) { artists.Add(c); } }
+                }
+                if (rez[key]["Performers"] != null)
+                {
+                    string[] cl = ((string)rez[key]["Performers"]).Split(';');
+                    foreach (string c in cl) { if (c != "" && !artists.Contains(c)) { artists.Add(c); } }
+                }
+                if (rez[key]["AlbumArtists"] != null)
+                {
+                    string[] cl = ((string)rez[key]["AlbumArtists"]).Split(';');
+                    foreach (string c in cl) { if (c != "" && !artists.Contains(c)) { artists.Add(c); } }
+                }
+                long duration = 0;
+                if (rez[key]["Duration"] != null) { duration = Convert.ToInt64("" + rez[key]["Duration"]); }
+                double rating = 0;
+                if (rez[key]["Rating"] != null) { rating = Convert.ToDouble(("" + rez[key]["Rating"]).Replace(".", ",")); }
+                files.Add(new PlayListsLineItem(
+                    "" + rez[key]["Path"], "" + rez[key]["Name"],
+                    (artists.Count > 0) ? string.Join(';', artists) : "", "" + rez[key]["Album"], duration, (float)rating
+                    ));
+                if (playlistType == AutoPlaylistTypes.MostPlayed || playlistType == AutoPlaylistTypes.MostRecentlyPlayed)
+                { files[files.Count - 1].PlayCount = Convert.ToInt32("" + rez[key]["Cpt"]); }
+            }
 
-        private void userlistDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            int id = Convert.ToInt32((string)((TreeViewItem)sender).Tag);
-            List<string> files = userlistData(id);
-            Player.PlaylistClear();
-            Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
-        }
-
-        public void userlistClick(object sender, MouseButtonEventArgs e)
-        {
-            //Parent.PlaylistsContents.Visibility = Visibility.Visible;
-            //Parent.PlaylistsRadioContentsBorder.Visibility = Visibility.Collapsed;
-            //Parent.PlaylistsRadioContents2Border.Visibility = Visibility.Collapsed;
-            //int id = Convert.ToInt32((string)((TreeViewItem)sender).Tag);
-            //Debug.WriteLine("--> Item_MouseLeftButtonUp, Id: " + id);
-            //Parent.PlaylistsContentsC0.Width = 0;
-            //List<string> files = userlistData(id);
-
-            //if (files == null) { Parent.PlaylistsContents.ItemsSource = new ObservableCollection<MediaItem>(); return; }
-            //Debug.WriteLine("--> Display build");
-            //fillContentSpace(files.ToArray(), null);
-
-            //GongSolutions.Wpf.DragDrop.DragDrop.SetIsDragSource(Parent.PlaylistsContents, true);
-            //GongSolutions.Wpf.DragDrop.DragDrop.SetIsDropTarget(Parent.PlaylistsContents, true);
-            //GongSolutions.Wpf.DragDrop.DragDrop.SetDropHandler(Parent.PlaylistsContents, this);
-
-            //Parent.PlaylistsContents.ContextMenu = null;
-        }
-
-        private List<string> userlistData(int id)
-        {
-            string query = "SELECT PIndex,LOrder,Path FROM playlistsItems WHERE LIndex = " + id + " ORDER BY LOrder ASC";
-            Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery(query, "LOrder");
-
-            if (rez == null) { return null; }
-            List<string> files = new List<string>();
-            foreach (Dictionary<string, object> row in rez.Values) { files.Add(row["Path"] as string); }
             return files;
         }
 
-        private void fillContentSpace(string[] files, Dictionary<string, int> countList = null)
+        private void OpenAutoPlaylist(AutoPlaylistTypes playlistType, bool startPlay = false)
         {
-            //try
-            //{
-            //    Parent.PlaylistsContents.ItemsSource = new ObservableCollection<MediaItem>();
-            //    if (files.Length == 0) { return; }
-            //    ObservableCollection<MediaItem> tmp = new ObservableCollection<MediaItem>();
-            //    foreach (string file in files)
-            //    {
-            //        if (File.Exists(file))
-            //        {
-            //            Dictionary<string, object> data = Parent.bdd.DatabaseFileInfo(file, true);
-            //            if (data == null) { continue; }
-            //            tmp.Add(new MediaItem()
-            //            {
-            //                Path = data["Path"] as string,
-            //                Name = data["Name"] as string,
-            //                Album = data["Album"] as string,
-            //                Size = Convert.ToInt64(data["Size"] as string),
-            //                Duration = Convert.ToInt64(data["Duration"] as string),
-            //                //DurationS = MainWindow.displayTime(Convert.ToInt64(data["Duration"] as string)),
-            //                DurationS = "00:00",
-            //                Genres = data["Genres"] as string,
-            //                Performers = data["Performers"] as string,
-            //                Composers = data["Composers"] as string,
-            //                Copyright = data["Copyright"] as string,
-            //                AlbumArtists = data["AlbumArtists"] as string,
-            //                Lyrics = data["Lyrics"] as string,
-            //                Disc = Convert.ToUInt32(data["Disc"] as string),
-            //                DiscCount = Convert.ToUInt32(data["DiscCount"] as string),
-            //                Track = Convert.ToUInt32(data["Track"] as string),
-            //                TrackCount = Convert.ToUInt32(data["TrackCount"] as string),
-            //                Year = Convert.ToUInt32(data["Year"] as string),
-            //                Rating = Convert.ToDouble((data["Rating"] as string).Replace('.', ',')),
-            //                PlayCount = Convert.ToUInt32((countList == null) ? 0 : ((countList.ContainsKey(file)) ? countList[file] : 0))
-            //            });
-            //        }
-            //    }
-            //    if (tmp.Count > 0)
-            //    {
-            //        Parent.PlaylistsContents.ItemsSource = tmp;
-            //        Parent.PlaylistsContents.ScrollIntoView(tmp[0]);
-            //    }
-            //}
-            //catch (System.NullReferenceException err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-            //catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); }
-        }
+            DisplayListPanel();
+            Parent.setLoadingState(true);
+            Parent.PlayListsTabDataGridView.ReadOnly = false;
+            Parent.PlayListsTabDataGridView.DataSource = null;
+            Parent.PlayListsTabDataGridView.Invalidate();
+            List<PlayListsLineItem> files = autolistData(playlistType, 100);
+            if (playlistType == AutoPlaylistTypes.LastImports) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
+            else if (playlistType == AutoPlaylistTypes.MostPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = true; }
+            else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = true; }
+            else if (playlistType == AutoPlaylistTypes.BestRating) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
 
-        public bool RecordTracksIntoPlaylist(string[] tracks)
-        {
-            if (tracks.Length < 1) { return false; }
-            //List<string> clearTracks = new List<string>();
-            //foreach (string track in tracks)
-            //{
-            //    string trackTrimed = track.Trim();
-            //    if (trackTrimed != "") { if (System.IO.File.Exists(trackTrimed)) { clearTracks.Add(trackTrimed); } }
-            //}
-            //if (clearTracks.Count < 1) { return false; }
-            //InsertIntoPlaylistWindow window = new InsertIntoPlaylistWindow(Parent)
-            //{
-            //    Owner = Parent,
-            //    Title = Parent.FindResource("PlaylistsWindowAddIntoPlaylistTitle") as string,
-            //    Tag = null
-            //};
-
-            //window.ShowDialog();
-
-            //int listId = 0;
-            //if (window.Tag != null)
-            //{
-            //    string id = (string)window.Tag;
-            //    if (id == "!")
-            //    {
-            //        string name = window.input1.Text.Trim(); string desc = window.input2.Text.Trim();
-            //        if (desc == "") { desc = null; }
-            //        listId = window.maxIndexList + 1;
-            //        Parent.bdd.DatabaseQuerys(new string[] {
-            //            "INSERT INTO playlists(FIndex,Name,Description) VALUES('" + listId + "', '" + Database.EscapeString(name) + "', " + ((desc == null)?"NULL":"'"+desc+"'") + ")"
-            //        }, true);
-            //        Parent.playLists.Init();
-            //    }
-            //    else { listId = Convert.ToInt32(id); }
-            //}
-            //if (listId == 0) { return false; }
-
-            //int startOrder = 0;
-            //Dictionary<string, Dictionary<string, object>> rez = Parent.bdd.DatabaseQuery("SELECT LOrder FROM playlistsItems WHERE LIndex = '" + listId + "' ORDER BY LOrder DESC LIMIT 1", "LOrder");
-            //if (rez != null) { foreach (string key in rez.Keys) { startOrder = Convert.ToInt32(key); break; } }
-
-            //string query = "INSERT INTO playlistsItems(LIndex, Path, LOrder) VALUES";
-            //List<string> querys = new List<string>(); int offset = 1;
-            //foreach (string track in clearTracks) { querys.Add(query + "('" + listId + "', '" + Database.EscapeString(track) + "', '" + (startOrder + offset) + "')"); offset += 1; }
-            //Parent.bdd.DatabaseQuerys(querys.ToArray(), true);
-
-            //if (Parent.PlaylistsTree.SelectedItem != null)
-            //{ if ((string)((TreeViewItem)Parent.PlaylistsTree.SelectedItem).Tag == "" + listId) { Parent.playLists.userlistClick(Parent.PlaylistsTree.SelectedItem, null); } }
-            return true;
+            if (files == null) { return; }
+            if (files.Count > 0) { Parent.PlayListsTabDataGridView.DataSource = files; }
+            Parent.PlayListsTabDataGridView.Invalidate();
+            Parent.setLoadingState(false);
         }
     }
 }

@@ -77,8 +77,14 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="MainWindow2\ContextMenu.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="MainWindow2\MainWindow2_WindowGestion.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="PlayLists\ContextMenu.cs">
+      <SubType>Code</SubType>
     </Compile>
     <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>

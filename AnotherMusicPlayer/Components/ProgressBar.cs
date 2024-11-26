@@ -30,11 +30,11 @@ namespace AnotherMusicPlayer
             Brush back = new SolidBrush(this.BackColor);
             Brush fore = new SolidBrush(this.ForeColor);
 
-            int width = (int)((rec.Width - 2) * ((double)Value / Maximum));
+            int width = (int)((rec.Width) * ((double)Value / Maximum));
             if (ProgressBarRenderer.IsSupported) { 
                 ProgressBarRenderer.DrawHorizontalBar(e.Graphics, e.ClipRectangle);
-                e.Graphics.FillRectangle(back, 0, 0, rec.Width - 1, rec.Height - 1);
-                e.Graphics.FillRectangle(fore, 0, 0, width - 1, rec.Height - 1);
+                e.Graphics.FillRectangle(back, 0, 0, rec.Width, rec.Height);
+                e.Graphics.FillRectangle(fore, 0, 0, width, rec.Height);
             }
         }
     }

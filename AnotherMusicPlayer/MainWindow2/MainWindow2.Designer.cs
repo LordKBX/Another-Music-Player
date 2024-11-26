@@ -31,12 +31,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
         /// </summary>
         private void InitializeComponent()
         {
+            components = new System.ComponentModel.Container();
             DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle4 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle5 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle6 = new DataGridViewCellStyle();
-            DataGridViewCellStyle dataGridViewCellStyle3 = new DataGridViewCellStyle();
+            TreeNode treeNode1 = new TreeNode("Automatic");
+            TreeNode treeNode2 = new TreeNode("Recorded");
+            TreeNode treeNode3 = new TreeNode("Web Radio");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow2));
             GlobalTableLayoutPanel = new TableLayoutPanel();
             MainWIndowHead = new TableLayoutPanel();
@@ -73,13 +72,13 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLyricsButton = new Button();
             FileCover = new Button();
             tableLayoutPanel4 = new TableLayoutPanel();
+            PlaybackPositionLabel = new Label();
             PlaybackTabDataGridView = new DataGridView();
             SelectedColumn = new DataGridViewTextBoxColumn();
             NameColumn = new DataGridViewTextBoxColumn();
             DurationColumn = new DataGridViewTextBoxColumn();
             ArtistsColumn = new DataGridViewTextBoxColumn();
             AlbumColumn = new DataGridViewTextBoxColumn();
-            PlaybackPositionLabel = new Label();
             LibraryTab = new Manina.Windows.Forms.Tab();
             LibraryTabTableLayoutPanel = new TableLayoutPanel();
             LibraryNavigationPathContener = new FlowLayoutPanel();
@@ -94,7 +93,28 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFolders = new FlowLayoutPanel();
             LibrarySearchContent = new FlowLayoutPanel();
             PlayListsTab = new Manina.Windows.Forms.Tab();
-            TableLayoutPanel = new TableLayoutPanel();
+            PlayListsTabTableLayoutPanel = new TableLayoutPanel();
+            PlaylistsTree = new TreeView();
+            PlayListsTabTreeImageList = new ImageList(components);
+            PlayListsTabSplitContainer1 = new SplitContainer();
+            tableLayoutPanel5 = new TableLayoutPanel();
+            PlayListsTabVoidLabel = new Label();
+            PlayListsTabSplitContainer2 = new SplitContainer();
+            PlayListsTabDataGridView = new DataGridView();
+            ColumnPlayCount = new DataGridViewTextBoxColumn();
+            PlayListsColumnName = new DataGridViewTextBoxColumn();
+            PlayListsColumnArtists = new DataGridViewTextBoxColumn();
+            PlayListsColumnAlbum = new DataGridViewTextBoxColumn();
+            PlayListsColumnDuration = new DataGridViewTextBoxColumn();
+            PlayListsColumnRating = new DataGridViewImageColumn();
+            PlayListsTabRadioPanel = new TableLayoutPanel();
+            PlayListsTabRadioPanelLeft = new TableLayoutPanel();
+            PlayListsTabRadioPanelIcon = new Button();
+            PlayListsTabRadioButton = new Button();
+            PlayListsTabRadioPanelRight = new TableLayoutPanel();
+            PlayListsTabRadioPanelTitleLabel = new Label();
+            PlayListsTabRadioPanelRightScrollPanel = new TableLayoutPanel();
+            PlayListsTabRadioPanelRightPanelDescriptionLabel = new Label();
             SettingsTab = new Manina.Windows.Forms.Tab();
             panel2 = new Panel();
             flowLayoutPanel1 = new FlowLayoutPanel();
@@ -184,6 +204,21 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTabSplitContainer.SuspendLayout();
             LibraryNavigationContent.SuspendLayout();
             PlayListsTab.SuspendLayout();
+            PlayListsTabTableLayoutPanel.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PlayListsTabSplitContainer1).BeginInit();
+            PlayListsTabSplitContainer1.Panel1.SuspendLayout();
+            PlayListsTabSplitContainer1.Panel2.SuspendLayout();
+            PlayListsTabSplitContainer1.SuspendLayout();
+            tableLayoutPanel5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PlayListsTabSplitContainer2).BeginInit();
+            PlayListsTabSplitContainer2.Panel1.SuspendLayout();
+            PlayListsTabSplitContainer2.Panel2.SuspendLayout();
+            PlayListsTabSplitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)PlayListsTabDataGridView).BeginInit();
+            PlayListsTabRadioPanel.SuspendLayout();
+            PlayListsTabRadioPanelLeft.SuspendLayout();
+            PlayListsTabRadioPanelRight.SuspendLayout();
+            PlayListsTabRadioPanelRightScrollPanel.SuspendLayout();
             SettingsTab.SuspendLayout();
             panel2.SuspendLayout();
             flowLayoutPanel1.SuspendLayout();
@@ -290,6 +325,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MinimizeButton.Name = "MinimizeButton";
             MinimizeButton.Size = new Size(44, 45);
             MinimizeButton.TabIndex = 1;
+            MinimizeButton.Tag = "WindowButton";
             MinimizeButton.UseVisualStyleBackColor = false;
             MinimizeButton.Click += MinimizeButton_Click;
             // 
@@ -305,6 +341,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MaximizeButton.Name = "MaximizeButton";
             MaximizeButton.Size = new Size(44, 45);
             MaximizeButton.TabIndex = 2;
+            MaximizeButton.Tag = "WindowButton";
             MaximizeButton.UseVisualStyleBackColor = false;
             MaximizeButton.Click += MaximizeButton_Click;
             // 
@@ -320,6 +357,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             CloseButton.Name = "CloseButton";
             CloseButton.Size = new Size(44, 45);
             CloseButton.TabIndex = 3;
+            CloseButton.Tag = "WindowButton";
             CloseButton.UseVisualStyleBackColor = false;
             CloseButton.Click += CloseButton_Click;
             // 
@@ -703,8 +741,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             tableLayoutPanel4.ColumnCount = 1;
             tableLayoutPanel4.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Controls.Add(PlaybackTabDataGridView, 0, 1);
             tableLayoutPanel4.Controls.Add(PlaybackPositionLabel, 0, 0);
+            tableLayoutPanel4.Controls.Add(PlaybackTabDataGridView, 0, 1);
             tableLayoutPanel4.Dock = DockStyle.Fill;
             tableLayoutPanel4.Location = new Point(152, 1);
             tableLayoutPanel4.Margin = new Padding(0);
@@ -715,85 +753,49 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel4.Size = new Size(704, 510);
             tableLayoutPanel4.TabIndex = 2;
             // 
+            // PlaybackPositionLabel
+            // 
+            PlaybackPositionLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            PlaybackPositionLabel.AutoSize = true;
+            PlaybackPositionLabel.Location = new Point(3, 10);
+            PlaybackPositionLabel.Name = "PlaybackPositionLabel";
+            PlaybackPositionLabel.Size = new Size(698, 20);
+            PlaybackPositionLabel.TabIndex = 2;
+            PlaybackPositionLabel.Text = "label1";
+            // 
             // PlaybackTabDataGridView
             // 
+            PlaybackTabDataGridView.AccessibleRole = AccessibleRole.None;
             PlaybackTabDataGridView.AllowUserToAddRows = false;
             PlaybackTabDataGridView.AllowUserToDeleteRows = false;
             PlaybackTabDataGridView.AllowUserToResizeColumns = false;
             PlaybackTabDataGridView.AllowUserToResizeRows = false;
-            dataGridViewCellStyle1.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle1.BackColor = Color.FromArgb(128, 64, 64);
-            dataGridViewCellStyle1.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle1.ForeColor = Color.White;
-            dataGridViewCellStyle1.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = Color.White;
-            PlaybackTabDataGridView.AlternatingRowsDefaultCellStyle = dataGridViewCellStyle1;
-            PlaybackTabDataGridView.BackgroundColor = Color.FromArgb(30, 30, 30);
-            PlaybackTabDataGridView.ClipboardCopyMode = DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
-            dataGridViewCellStyle2.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = Color.Teal;
-            dataGridViewCellStyle2.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle2.ForeColor = Color.White;
-            dataGridViewCellStyle2.SelectionBackColor = Color.Teal;
-            dataGridViewCellStyle2.SelectionForeColor = Color.White;
-            dataGridViewCellStyle2.WrapMode = DataGridViewTriState.True;
-            PlaybackTabDataGridView.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             PlaybackTabDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             PlaybackTabDataGridView.Columns.AddRange(new DataGridViewColumn[] { SelectedColumn, NameColumn, DurationColumn, ArtistsColumn, AlbumColumn });
-            dataGridViewCellStyle4.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = Color.DimGray;
-            dataGridViewCellStyle4.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle4.ForeColor = Color.White;
-            dataGridViewCellStyle4.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = DataGridViewTriState.False;
-            PlaybackTabDataGridView.DefaultCellStyle = dataGridViewCellStyle4;
             PlaybackTabDataGridView.Dock = DockStyle.Fill;
             PlaybackTabDataGridView.EnableHeadersVisualStyles = false;
-            PlaybackTabDataGridView.GridColor = Color.Black;
-            PlaybackTabDataGridView.Location = new Point(0, 40);
-            PlaybackTabDataGridView.Margin = new Padding(0);
+            PlaybackTabDataGridView.Location = new Point(3, 43);
             PlaybackTabDataGridView.MultiSelect = false;
             PlaybackTabDataGridView.Name = "PlaybackTabDataGridView";
             PlaybackTabDataGridView.ReadOnly = true;
-            dataGridViewCellStyle5.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = SystemColors.ControlDarkDark;
-            dataGridViewCellStyle5.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            dataGridViewCellStyle5.ForeColor = SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = DataGridViewTriState.True;
-            PlaybackTabDataGridView.RowHeadersDefaultCellStyle = dataGridViewCellStyle5;
             PlaybackTabDataGridView.RowHeadersVisible = false;
             PlaybackTabDataGridView.RowHeadersWidth = 51;
             PlaybackTabDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-            dataGridViewCellStyle6.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = Color.DimGray;
-            dataGridViewCellStyle6.ForeColor = Color.White;
-            dataGridViewCellStyle6.SelectionBackColor = SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = SystemColors.HighlightText;
-            PlaybackTabDataGridView.RowsDefaultCellStyle = dataGridViewCellStyle6;
-            PlaybackTabDataGridView.RowTemplate.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleLeft;
-            PlaybackTabDataGridView.RowTemplate.DefaultCellStyle.BackColor = Color.DimGray;
-            PlaybackTabDataGridView.RowTemplate.DefaultCellStyle.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            PlaybackTabDataGridView.RowTemplate.DefaultCellStyle.ForeColor = Color.White;
-            PlaybackTabDataGridView.RowTemplate.DefaultCellStyle.SelectionBackColor = SystemColors.Highlight;
-            PlaybackTabDataGridView.RowTemplate.DefaultCellStyle.SelectionForeColor = SystemColors.HighlightText;
-            PlaybackTabDataGridView.RowTemplate.Height = 25;
+            PlaybackTabDataGridView.RowTemplate.Height = 29;
             PlaybackTabDataGridView.ScrollBars = ScrollBars.Vertical;
             PlaybackTabDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             PlaybackTabDataGridView.ShowCellErrors = false;
             PlaybackTabDataGridView.ShowEditingIcon = false;
             PlaybackTabDataGridView.ShowRowErrors = false;
-            PlaybackTabDataGridView.Size = new Size(704, 470);
-            PlaybackTabDataGridView.TabIndex = 1;
+            PlaybackTabDataGridView.Size = new Size(698, 464);
+            PlaybackTabDataGridView.TabIndex = 3;
             // 
             // SelectedColumn
             // 
             SelectedColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             SelectedColumn.DataPropertyName = "Selected";
-            dataGridViewCellStyle3.Font = new Font("Wingdings 3", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle1.Font = new Font("Wingdings", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle1;
             SelectedColumn.HeaderText = "";
             SelectedColumn.MinimumWidth = 30;
             SelectedColumn.Name = "SelectedColumn";
@@ -836,16 +838,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             AlbumColumn.MinimumWidth = 6;
             AlbumColumn.Name = "AlbumColumn";
             AlbumColumn.ReadOnly = true;
-            // 
-            // PlaybackPositionLabel
-            // 
-            PlaybackPositionLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            PlaybackPositionLabel.AutoSize = true;
-            PlaybackPositionLabel.Location = new Point(3, 10);
-            PlaybackPositionLabel.Name = "PlaybackPositionLabel";
-            PlaybackPositionLabel.Size = new Size(698, 20);
-            PlaybackPositionLabel.TabIndex = 2;
-            PlaybackPositionLabel.Text = "label1";
             // 
             // LibraryTab
             // 
@@ -1048,31 +1040,333 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // PlayListsTab
             // 
             PlayListsTab.BackColor = Color.FromArgb(50, 50, 50);
-            PlayListsTab.Controls.Add(TableLayoutPanel);
+            PlayListsTab.Controls.Add(PlayListsTabTableLayoutPanel);
             PlayListsTab.ForeColor = Color.White;
             PlayListsTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
             PlayListsTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
-            PlayListsTab.Location = new Point(1, 50);
+            PlayListsTab.Location = new Point(0, 50);
             PlayListsTab.Name = "PlayListsTab";
             PlayListsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            PlayListsTab.Size = new Size(857, 515);
+            PlayListsTab.Size = new Size(857, 512);
             PlayListsTab.Text = " PlayLists";
             // 
-            // TableLayoutPanel
+            // PlayListsTabTableLayoutPanel
             // 
-            TableLayoutPanel.BackColor = Color.FromArgb(30, 30, 30);
-            TableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
-            TableLayoutPanel.ColumnCount = 2;
-            TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 171F));
-            TableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            TableLayoutPanel.Dock = DockStyle.Fill;
-            TableLayoutPanel.Location = new Point(0, 0);
-            TableLayoutPanel.Margin = new Padding(0);
-            TableLayoutPanel.Name = "TableLayoutPanel";
-            TableLayoutPanel.RowCount = 1;
-            TableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            TableLayoutPanel.Size = new Size(857, 515);
-            TableLayoutPanel.TabIndex = 1;
+            PlayListsTabTableLayoutPanel.BackColor = Color.FromArgb(30, 30, 30);
+            PlayListsTabTableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
+            PlayListsTabTableLayoutPanel.ColumnCount = 2;
+            PlayListsTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            PlayListsTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            PlayListsTabTableLayoutPanel.Controls.Add(PlaylistsTree, 0, 0);
+            PlayListsTabTableLayoutPanel.Controls.Add(PlayListsTabSplitContainer1, 1, 0);
+            PlayListsTabTableLayoutPanel.Dock = DockStyle.Fill;
+            PlayListsTabTableLayoutPanel.Location = new Point(0, 0);
+            PlayListsTabTableLayoutPanel.Margin = new Padding(0);
+            PlayListsTabTableLayoutPanel.Name = "PlayListsTabTableLayoutPanel";
+            PlayListsTabTableLayoutPanel.RowCount = 1;
+            PlayListsTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            PlayListsTabTableLayoutPanel.Size = new Size(857, 512);
+            PlayListsTabTableLayoutPanel.TabIndex = 1;
+            // 
+            // PlaylistsTree
+            // 
+            PlaylistsTree.BackColor = Color.FromArgb(30, 30, 30);
+            PlaylistsTree.BorderStyle = BorderStyle.None;
+            PlaylistsTree.Dock = DockStyle.Fill;
+            PlaylistsTree.Font = new Font("Segoe UI", 12F, FontStyle.Regular, GraphicsUnit.Point);
+            PlaylistsTree.ForeColor = Color.White;
+            PlaylistsTree.FullRowSelect = true;
+            PlaylistsTree.HideSelection = false;
+            PlaylistsTree.ImageIndex = 0;
+            PlaylistsTree.ImageList = PlayListsTabTreeImageList;
+            PlaylistsTree.Location = new Point(1, 1);
+            PlaylistsTree.Margin = new Padding(0);
+            PlaylistsTree.Name = "PlaylistsTree";
+            treeNode1.Checked = true;
+            treeNode1.ImageKey = "filter_icon.png";
+            treeNode1.Name = "PlayListsTabTreeNodeAutomatic";
+            treeNode1.SelectedImageKey = "filter_icon.png";
+            treeNode1.Text = "Automatic";
+            treeNode2.Checked = true;
+            treeNode2.ImageKey = "floppy_icon.png";
+            treeNode2.Name = "PlayListsTabTreeNodeRecorded";
+            treeNode2.SelectedImageKey = "floppy_icon.png";
+            treeNode2.Text = "Recorded";
+            treeNode3.Checked = true;
+            treeNode3.ImageKey = "radio_icon.png";
+            treeNode3.Name = "PlayListsTabTreeNodeWebRario";
+            treeNode3.SelectedImageKey = "radio_icon.png";
+            treeNode3.Text = "Web Radio";
+            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
+            PlaylistsTree.SelectedImageIndex = 0;
+            PlaylistsTree.Size = new Size(200, 510);
+            PlaylistsTree.TabIndex = 0;
+            // 
+            // PlayListsTabTreeImageList
+            // 
+            PlayListsTabTreeImageList.ColorDepth = ColorDepth.Depth32Bit;
+            PlayListsTabTreeImageList.ImageStream = (ImageListStreamer)resources.GetObject("PlayListsTabTreeImageList.ImageStream");
+            PlayListsTabTreeImageList.TransparentColor = Color.Transparent;
+            PlayListsTabTreeImageList.Images.SetKeyName(0, "dot.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(1, "filter_icon.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(2, "floppy_icon.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(3, "radio_icon.png");
+            // 
+            // PlayListsTabSplitContainer1
+            // 
+            PlayListsTabSplitContainer1.Dock = DockStyle.Fill;
+            PlayListsTabSplitContainer1.Location = new Point(202, 1);
+            PlayListsTabSplitContainer1.Margin = new Padding(0);
+            PlayListsTabSplitContainer1.Name = "PlayListsTabSplitContainer1";
+            PlayListsTabSplitContainer1.Orientation = Orientation.Horizontal;
+            // 
+            // PlayListsTabSplitContainer1.Panel1
+            // 
+            PlayListsTabSplitContainer1.Panel1.Controls.Add(tableLayoutPanel5);
+            // 
+            // PlayListsTabSplitContainer1.Panel2
+            // 
+            PlayListsTabSplitContainer1.Panel2.Controls.Add(PlayListsTabSplitContainer2);
+            PlayListsTabSplitContainer1.Size = new Size(654, 510);
+            PlayListsTabSplitContainer1.SplitterDistance = 96;
+            PlayListsTabSplitContainer1.SplitterWidth = 1;
+            PlayListsTabSplitContainer1.TabIndex = 1;
+            // 
+            // tableLayoutPanel5
+            // 
+            tableLayoutPanel5.ColumnCount = 1;
+            tableLayoutPanel5.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Controls.Add(PlayListsTabVoidLabel, 0, 0);
+            tableLayoutPanel5.Dock = DockStyle.Fill;
+            tableLayoutPanel5.Location = new Point(0, 0);
+            tableLayoutPanel5.Margin = new Padding(0);
+            tableLayoutPanel5.Name = "tableLayoutPanel5";
+            tableLayoutPanel5.RowCount = 1;
+            tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            tableLayoutPanel5.Size = new Size(654, 96);
+            tableLayoutPanel5.TabIndex = 0;
+            // 
+            // PlayListsTabVoidLabel
+            // 
+            PlayListsTabVoidLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            PlayListsTabVoidLabel.AutoSize = true;
+            PlayListsTabVoidLabel.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            PlayListsTabVoidLabel.Location = new Point(3, 32);
+            PlayListsTabVoidLabel.Name = "PlayListsTabVoidLabel";
+            PlayListsTabVoidLabel.Size = new Size(648, 32);
+            PlayListsTabVoidLabel.TabIndex = 0;
+            PlayListsTabVoidLabel.Text = "VOID";
+            PlayListsTabVoidLabel.TextAlign = ContentAlignment.MiddleCenter;
+            // 
+            // PlayListsTabSplitContainer2
+            // 
+            PlayListsTabSplitContainer2.Dock = DockStyle.Fill;
+            PlayListsTabSplitContainer2.Location = new Point(0, 0);
+            PlayListsTabSplitContainer2.Margin = new Padding(0);
+            PlayListsTabSplitContainer2.Name = "PlayListsTabSplitContainer2";
+            PlayListsTabSplitContainer2.Orientation = Orientation.Horizontal;
+            // 
+            // PlayListsTabSplitContainer2.Panel1
+            // 
+            PlayListsTabSplitContainer2.Panel1.Controls.Add(PlayListsTabDataGridView);
+            // 
+            // PlayListsTabSplitContainer2.Panel2
+            // 
+            PlayListsTabSplitContainer2.Panel2.Controls.Add(PlayListsTabRadioPanel);
+            PlayListsTabSplitContainer2.Size = new Size(654, 413);
+            PlayListsTabSplitContainer2.SplitterDistance = 124;
+            PlayListsTabSplitContainer2.SplitterWidth = 1;
+            PlayListsTabSplitContainer2.TabIndex = 2;
+            // 
+            // PlayListsTabDataGridView
+            // 
+            PlayListsTabDataGridView.AllowUserToAddRows = false;
+            PlayListsTabDataGridView.AllowUserToDeleteRows = false;
+            PlayListsTabDataGridView.AllowUserToResizeColumns = false;
+            PlayListsTabDataGridView.AllowUserToResizeRows = false;
+            PlayListsTabDataGridView.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            PlayListsTabDataGridView.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            PlayListsTabDataGridView.Columns.AddRange(new DataGridViewColumn[] { ColumnPlayCount, PlayListsColumnName, PlayListsColumnArtists, PlayListsColumnAlbum, PlayListsColumnDuration, PlayListsColumnRating });
+            PlayListsTabDataGridView.Dock = DockStyle.Fill;
+            PlayListsTabDataGridView.Location = new Point(0, 0);
+            PlayListsTabDataGridView.MultiSelect = false;
+            PlayListsTabDataGridView.Name = "PlayListsTabDataGridView";
+            PlayListsTabDataGridView.RowHeadersVisible = false;
+            PlayListsTabDataGridView.RowHeadersWidthSizeMode = DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders;
+            PlayListsTabDataGridView.RowTemplate.Height = 29;
+            PlayListsTabDataGridView.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            PlayListsTabDataGridView.ShowCellErrors = false;
+            PlayListsTabDataGridView.ShowEditingIcon = false;
+            PlayListsTabDataGridView.ShowRowErrors = false;
+            PlayListsTabDataGridView.Size = new Size(654, 124);
+            PlayListsTabDataGridView.TabIndex = 0;
+            // 
+            // ColumnPlayCount
+            // 
+            ColumnPlayCount.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
+            ColumnPlayCount.DataPropertyName = "PlayCount";
+            ColumnPlayCount.HeaderText = "Played";
+            ColumnPlayCount.MinimumWidth = 60;
+            ColumnPlayCount.Name = "ColumnPlayCount";
+            ColumnPlayCount.ReadOnly = true;
+            ColumnPlayCount.Width = 60;
+            // 
+            // PlayListsColumnName
+            // 
+            PlayListsColumnName.DataPropertyName = "Name";
+            PlayListsColumnName.HeaderText = "Name";
+            PlayListsColumnName.MinimumWidth = 6;
+            PlayListsColumnName.Name = "PlayListsColumnName";
+            PlayListsColumnName.ReadOnly = true;
+            // 
+            // PlayListsColumnArtists
+            // 
+            PlayListsColumnArtists.DataPropertyName = "Artists";
+            PlayListsColumnArtists.HeaderText = "Artists";
+            PlayListsColumnArtists.MinimumWidth = 6;
+            PlayListsColumnArtists.Name = "PlayListsColumnArtists";
+            PlayListsColumnArtists.ReadOnly = true;
+            // 
+            // PlayListsColumnAlbum
+            // 
+            PlayListsColumnAlbum.DataPropertyName = "Album";
+            PlayListsColumnAlbum.HeaderText = "Album";
+            PlayListsColumnAlbum.MinimumWidth = 6;
+            PlayListsColumnAlbum.Name = "PlayListsColumnAlbum";
+            PlayListsColumnAlbum.ReadOnly = true;
+            // 
+            // PlayListsColumnDuration
+            // 
+            PlayListsColumnDuration.DataPropertyName = "Duration";
+            PlayListsColumnDuration.HeaderText = "Duration";
+            PlayListsColumnDuration.MinimumWidth = 6;
+            PlayListsColumnDuration.Name = "PlayListsColumnDuration";
+            PlayListsColumnDuration.ReadOnly = true;
+            // 
+            // PlayListsColumnRating
+            // 
+            PlayListsColumnRating.DataPropertyName = "Rating";
+            PlayListsColumnRating.HeaderText = "Rating";
+            PlayListsColumnRating.MinimumWidth = 6;
+            PlayListsColumnRating.Name = "PlayListsColumnRating";
+            PlayListsColumnRating.ReadOnly = true;
+            // 
+            // PlayListsTabRadioPanel
+            // 
+            PlayListsTabRadioPanel.ColumnCount = 2;
+            PlayListsTabRadioPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            PlayListsTabRadioPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            PlayListsTabRadioPanel.Controls.Add(PlayListsTabRadioPanelLeft, 0, 0);
+            PlayListsTabRadioPanel.Controls.Add(PlayListsTabRadioPanelRight, 1, 0);
+            PlayListsTabRadioPanel.Dock = DockStyle.Fill;
+            PlayListsTabRadioPanel.Location = new Point(0, 0);
+            PlayListsTabRadioPanel.Margin = new Padding(10);
+            PlayListsTabRadioPanel.Name = "PlayListsTabRadioPanel";
+            PlayListsTabRadioPanel.RowCount = 1;
+            PlayListsTabRadioPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            PlayListsTabRadioPanel.Size = new Size(654, 288);
+            PlayListsTabRadioPanel.TabIndex = 0;
+            // 
+            // PlayListsTabRadioPanelLeft
+            // 
+            PlayListsTabRadioPanelLeft.ColumnCount = 1;
+            PlayListsTabRadioPanelLeft.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            PlayListsTabRadioPanelLeft.Controls.Add(PlayListsTabRadioPanelIcon, 0, 0);
+            PlayListsTabRadioPanelLeft.Controls.Add(PlayListsTabRadioButton, 0, 1);
+            PlayListsTabRadioPanelLeft.Dock = DockStyle.Fill;
+            PlayListsTabRadioPanelLeft.Location = new Point(0, 0);
+            PlayListsTabRadioPanelLeft.Margin = new Padding(0);
+            PlayListsTabRadioPanelLeft.Name = "PlayListsTabRadioPanelLeft";
+            PlayListsTabRadioPanelLeft.RowCount = 2;
+            PlayListsTabRadioPanelLeft.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
+            PlayListsTabRadioPanelLeft.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            PlayListsTabRadioPanelLeft.Size = new Size(200, 288);
+            PlayListsTabRadioPanelLeft.TabIndex = 1;
+            // 
+            // PlayListsTabRadioPanelIcon
+            // 
+            PlayListsTabRadioPanelIcon.BackColor = Color.Black;
+            PlayListsTabRadioPanelIcon.Enabled = false;
+            PlayListsTabRadioPanelIcon.FlatAppearance.BorderColor = Color.Black;
+            PlayListsTabRadioPanelIcon.FlatAppearance.BorderSize = 0;
+            PlayListsTabRadioPanelIcon.FlatAppearance.MouseDownBackColor = Color.Black;
+            PlayListsTabRadioPanelIcon.FlatAppearance.MouseOverBackColor = Color.Black;
+            PlayListsTabRadioPanelIcon.FlatStyle = FlatStyle.Flat;
+            PlayListsTabRadioPanelIcon.ForeColor = Color.Black;
+            PlayListsTabRadioPanelIcon.Location = new Point(0, 0);
+            PlayListsTabRadioPanelIcon.Margin = new Padding(0);
+            PlayListsTabRadioPanelIcon.Name = "PlayListsTabRadioPanelIcon";
+            PlayListsTabRadioPanelIcon.Size = new Size(200, 200);
+            PlayListsTabRadioPanelIcon.TabIndex = 0;
+            PlayListsTabRadioPanelIcon.Text = "button2";
+            PlayListsTabRadioPanelIcon.UseVisualStyleBackColor = false;
+            // 
+            // PlayListsTabRadioButton
+            // 
+            PlayListsTabRadioButton.BackColor = Color.FromArgb(64, 64, 64);
+            PlayListsTabRadioButton.Dock = DockStyle.Top;
+            PlayListsTabRadioButton.FlatAppearance.BorderColor = Color.FromArgb(64, 64, 64);
+            PlayListsTabRadioButton.FlatAppearance.BorderSize = 0;
+            PlayListsTabRadioButton.FlatAppearance.MouseDownBackColor = SystemColors.WindowFrame;
+            PlayListsTabRadioButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(84, 84, 84);
+            PlayListsTabRadioButton.FlatStyle = FlatStyle.Flat;
+            PlayListsTabRadioButton.ForeColor = Color.White;
+            PlayListsTabRadioButton.Location = new Point(3, 203);
+            PlayListsTabRadioButton.Name = "PlayListsTabRadioButton";
+            PlayListsTabRadioButton.Size = new Size(194, 40);
+            PlayListsTabRadioButton.TabIndex = 1;
+            PlayListsTabRadioButton.Text = "Play";
+            PlayListsTabRadioButton.UseVisualStyleBackColor = false;
+            // 
+            // PlayListsTabRadioPanelRight
+            // 
+            PlayListsTabRadioPanelRight.ColumnCount = 1;
+            PlayListsTabRadioPanelRight.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
+            PlayListsTabRadioPanelRight.Controls.Add(PlayListsTabRadioPanelTitleLabel, 0, 0);
+            PlayListsTabRadioPanelRight.Controls.Add(PlayListsTabRadioPanelRightScrollPanel, 0, 1);
+            PlayListsTabRadioPanelRight.Dock = DockStyle.Fill;
+            PlayListsTabRadioPanelRight.Location = new Point(203, 3);
+            PlayListsTabRadioPanelRight.Name = "PlayListsTabRadioPanelRight";
+            PlayListsTabRadioPanelRight.RowCount = 2;
+            PlayListsTabRadioPanelRight.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            PlayListsTabRadioPanelRight.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            PlayListsTabRadioPanelRight.Size = new Size(448, 282);
+            PlayListsTabRadioPanelRight.TabIndex = 2;
+            // 
+            // PlayListsTabRadioPanelTitleLabel
+            // 
+            PlayListsTabRadioPanelTitleLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            PlayListsTabRadioPanelTitleLabel.AutoSize = true;
+            PlayListsTabRadioPanelTitleLabel.Font = new Font("Segoe UI", 14F, FontStyle.Regular, GraphicsUnit.Point);
+            PlayListsTabRadioPanelTitleLabel.Location = new Point(3, 9);
+            PlayListsTabRadioPanelTitleLabel.Name = "PlayListsTabRadioPanelTitleLabel";
+            PlayListsTabRadioPanelTitleLabel.Size = new Size(442, 32);
+            PlayListsTabRadioPanelTitleLabel.TabIndex = 0;
+            PlayListsTabRadioPanelTitleLabel.Text = "label2";
+            // 
+            // PlayListsTabRadioPanelRightScrollPanel
+            // 
+            PlayListsTabRadioPanelRightScrollPanel.AutoScroll = true;
+            PlayListsTabRadioPanelRightScrollPanel.ColumnCount = 1;
+            PlayListsTabRadioPanelRightScrollPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
+            PlayListsTabRadioPanelRightScrollPanel.Controls.Add(PlayListsTabRadioPanelRightPanelDescriptionLabel, 0, 0);
+            PlayListsTabRadioPanelRightScrollPanel.Dock = DockStyle.Fill;
+            PlayListsTabRadioPanelRightScrollPanel.Location = new Point(3, 53);
+            PlayListsTabRadioPanelRightScrollPanel.Name = "PlayListsTabRadioPanelRightScrollPanel";
+            PlayListsTabRadioPanelRightScrollPanel.RowCount = 1;
+            PlayListsTabRadioPanelRightScrollPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
+            PlayListsTabRadioPanelRightScrollPanel.Size = new Size(442, 226);
+            PlayListsTabRadioPanelRightScrollPanel.TabIndex = 1;
+            // 
+            // PlayListsTabRadioPanelRightPanelDescriptionLabel
+            // 
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.AutoSize = true;
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Dock = DockStyle.Top;
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Location = new Point(3, 0);
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Name = "PlayListsTabRadioPanelRightPanelDescriptionLabel";
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Size = new Size(436, 40);
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.TabIndex = 3;
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Text = "label3 qsosif ioqlsh fiuqshf ikuqfg qiukf qliukf qilfuk qsduif qsiluk fiulk igulk ";
             // 
             // SettingsTab
             // 
@@ -1081,10 +1375,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTab.ForeColor = Color.White;
             SettingsTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
             SettingsTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
-            SettingsTab.Location = new Point(1, 50);
+            SettingsTab.Location = new Point(0, 50);
             SettingsTab.Name = "SettingsTab";
             SettingsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            SettingsTab.Size = new Size(857, 515);
+            SettingsTab.Size = new Size(857, 512);
             SettingsTab.Text = " Settings";
             // 
             // panel2
@@ -1097,7 +1391,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             panel2.Location = new Point(0, 0);
             panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(857, 515);
+            panel2.Size = new Size(857, 512);
             panel2.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -1144,7 +1438,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLangComboBox.FlatStyle = FlatStyle.Flat;
             SettingsTabLangComboBox.ForeColor = Color.Black;
             SettingsTabLangComboBox.FormattingEnabled = true;
-            SettingsTabLangComboBox.Items.AddRange(new object[] { "English", "Français" });
             SettingsTabLangComboBox.Location = new Point(6, 27);
             SettingsTabLangComboBox.Margin = new Padding(3, 4, 3, 4);
             SettingsTabLangComboBox.MaxDropDownItems = 2;
@@ -2161,6 +2454,24 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContent.ResumeLayout(false);
             LibraryNavigationContent.PerformLayout();
             PlayListsTab.ResumeLayout(false);
+            PlayListsTabTableLayoutPanel.ResumeLayout(false);
+            PlayListsTabSplitContainer1.Panel1.ResumeLayout(false);
+            PlayListsTabSplitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)PlayListsTabSplitContainer1).EndInit();
+            PlayListsTabSplitContainer1.ResumeLayout(false);
+            tableLayoutPanel5.ResumeLayout(false);
+            tableLayoutPanel5.PerformLayout();
+            PlayListsTabSplitContainer2.Panel1.ResumeLayout(false);
+            PlayListsTabSplitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)PlayListsTabSplitContainer2).EndInit();
+            PlayListsTabSplitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)PlayListsTabDataGridView).EndInit();
+            PlayListsTabRadioPanel.ResumeLayout(false);
+            PlayListsTabRadioPanelLeft.ResumeLayout(false);
+            PlayListsTabRadioPanelRight.ResumeLayout(false);
+            PlayListsTabRadioPanelRight.PerformLayout();
+            PlayListsTabRadioPanelRightScrollPanel.ResumeLayout(false);
+            PlayListsTabRadioPanelRightScrollPanel.PerformLayout();
             SettingsTab.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
@@ -2210,7 +2521,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private Button GripButton;
         private TableLayoutPanel PlaybackTabMainTableLayoutPanel;
         private TableLayoutPanel LibraryTabTableLayoutPanel;
-        private TableLayoutPanel TableLayoutPanel;
         private Panel panel2;
         private FlowLayoutPanel flowLayoutPanel1;
         private TableLayoutPanel PlaybackTabLeftTableLayoutPanel;
@@ -2223,11 +2533,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private TableLayoutPanel tableLayoutPanel4;
         private Button button1;
         private Label PlaybackTabDurationLabelValue;
-        private DataGridViewTextBoxColumn SelectedColumn;
-        private DataGridViewTextBoxColumn NameColumn;
-        private DataGridViewTextBoxColumn DurationColumn;
-        private DataGridViewTextBoxColumn ArtistsColumn;
-        private DataGridViewTextBoxColumn AlbumColumn;
         private TableLayoutPanel SettingsTabConvTableLayoutPanel;
         private TableLayoutPanel SettingsTabLibraryTableLayoutPanel;
         private TableLayoutPanel SettingsTabEqualizerTableLayoutPanel;
@@ -2251,7 +2556,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal Label PlaybackTabTitleLabelInfo;
         internal Label PlaybackTabAlbumLabelInfo;
         internal Label PlaybackTabArtistsLabelInfo;
-        internal DataGridView PlaybackTabDataGridView;
         internal Label PlaybackTabDurationLabelInfo;
         internal Button PlaybackTabLyricsButton;
         internal GroupBox SettingsTabStyleGroupBox;
@@ -2327,5 +2631,33 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal Label TitleLabel;
         internal TableLayoutPanel LibraryNavigationContent;
         internal FlowLayoutPanel LibraryNavigationContentFolders;
+        private ImageList PlayListsTabTreeImageList;
+        internal TreeView PlaylistsTree;
+        internal SplitContainer PlayListsTabSplitContainer1;
+        internal SplitContainer PlayListsTabSplitContainer2;
+        internal TableLayoutPanel tableLayoutPanel5;
+        internal DataGridView PlayListsTabDataGridView;
+        internal TableLayoutPanel PlayListsTabRadioPanel;
+        internal TableLayoutPanel PlayListsTabRadioPanelLeft;
+        internal Button PlayListsTabRadioPanelIcon;
+        internal Button PlayListsTabRadioButton;
+        internal TableLayoutPanel PlayListsTabRadioPanelRight;
+        internal Label PlayListsTabRadioPanelTitleLabel;
+        internal TableLayoutPanel PlayListsTabRadioPanelRightScrollPanel;
+        internal Label PlayListsTabRadioPanelRightPanelDescriptionLabel;
+        private DataGridViewTextBoxColumn ColumnPlayCount;
+        private DataGridViewTextBoxColumn PlayListsColumnName;
+        private DataGridViewTextBoxColumn PlayListsColumnArtists;
+        private DataGridViewTextBoxColumn PlayListsColumnAlbum;
+        private DataGridViewTextBoxColumn PlayListsColumnDuration;
+        private DataGridViewImageColumn PlayListsColumnRating;
+        private DataGridViewTextBoxColumn SelectedColumn;
+        private DataGridViewTextBoxColumn NameColumn;
+        private DataGridViewTextBoxColumn DurationColumn;
+        private DataGridViewTextBoxColumn ArtistsColumn;
+        private DataGridViewTextBoxColumn AlbumColumn;
+        internal DataGridView PlaybackTabDataGridView;
+        internal TableLayoutPanel PlayListsTabTableLayoutPanel;
+        internal Label PlayListsTabVoidLabel;
     }
 }

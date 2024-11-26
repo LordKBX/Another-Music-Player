@@ -1,4 +1,6 @@
 ﻿using AnotherMusicPlayer.Properties;
+using AnotherMusicPlayer.Styles;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,13 +9,18 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using TagLib;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace AnotherMusicPlayer
 {
@@ -21,6 +28,7 @@ namespace AnotherMusicPlayer
     {
         public static readonly string AppName = "AnotherMusicPlayer";
         public static Database bdd = new Database();
+        public static List<string> Languages = new List<string> { "English", "Français" };
 
         private static bool _IsDebug = false;
         public static bool IsDebug { get { return App._IsDebug; } }
@@ -30,6 +38,7 @@ namespace AnotherMusicPlayer
 
         public static ResourceDictionary Resources = new ResourceDictionary();
         public static AnotherMusicPlayer.MainWindow2Space.MainWindow2 win1;
+        public static Styles.Style style = new Dark();
 
         /// <summary>
         /// Point d'entrée principal de l'application.
@@ -69,20 +78,25 @@ namespace AnotherMusicPlayer
 
         public static void TranslationUpdate()
         {
-            if (Resources.MergedDictionaries.Count < 1) { Resources.MergedDictionaries.Add(new ResourceDictionary()); }
-            string end = "";
-            if (Settings.Lang == null) { end = "en"; }
-            else if (Settings.Lang.StartsWith("fr-")) { end = "fr"; }
-            else { end = "en"; }
-            if (Resources.MergedDictionaries.Count < 1)
+            if (win1 != null && win1.InvokeRequired) { win1.Invoke(() => { TranslationUpdate(); }); return; }
+            try
             {
-                Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Traductions/" + end + ".xaml", UriKind.Absolute) });
+                string end = "";
+                if (Settings.Lang == null) { end = App.Languages[0]; }
+                else if (App.Languages.IndexOf(Settings.Lang) > -1) { end = Settings.Lang; }
+                else { end = App.Languages[0]; }
+                if (Resources.MergedDictionaries.Count < 1)
+                {
+                    Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Translations/" + end + ".xaml", UriKind.Absolute) });
+                }
+                else
+                {
+                    //Resources.MergedDictionaries.Clear();
+                    //Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Translations/" + end + ".xaml", UriKind.Absolute) });
+                    Resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Translations/" + end + ".xaml", UriKind.Absolute) };
+                }
             }
-            else
-            {
-                Resources.MergedDictionaries[0].Clear();
-                Resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Traductions/" + end + ".xaml", UriKind.Absolute) };
-            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
         /// <summary> Get string stored in traduction file </summary>
@@ -91,6 +105,9 @@ namespace AnotherMusicPlayer
             try { return (string)Resources.MergedDictionaries[0][reference]; }
             catch { return ""; }
         }
+
+        public static System.Windows.Media.Color DrawingColorToMediaColor(System.Drawing.Color col)
+        { return System.Windows.Media.Color.FromArgb(col.A, col.R, col.G, col.B); }
 
         private static Dictionary<Control, ToolTip> DefinedToolTipArray = new Dictionary<Control, ToolTip>();
 
@@ -123,42 +140,6 @@ namespace AnotherMusicPlayer
             }
             catch (Exception/* ex*/) { }
             return false;
-        }
-
-        public static Bitmap BitmapImage2Bitmap(BitmapImage bitmapImage, Bitmap defaultImage = null)
-        {
-            try
-            {
-                if (bitmapImage == null) { throw new Exception("bitmapImage is null"); }
-                using (MemoryStream outStream = new MemoryStream())
-                {
-                    BitmapEncoder enc = new BmpBitmapEncoder();
-                    enc.Frames.Add(BitmapFrame.Create(bitmapImage));
-                    enc.Save(outStream);
-                    System.Drawing.Bitmap bitmap = new System.Drawing.Bitmap(outStream);
-
-                    return new Bitmap(bitmap);
-                }
-            }
-            catch (Exception ex) { return defaultImage; }
-        }
-
-        public static BitmapImage BitmapToBitmapImage(this Bitmap bitmap)
-        {
-            using (var memory = new MemoryStream())
-            {
-                bitmap.Save(memory, System.Drawing.Imaging.ImageFormat.Jpeg);
-                memory.Position = 0;
-
-                var bitmapImage = new BitmapImage();
-                bitmapImage.BeginInit();
-                bitmapImage.StreamSource = memory;
-                bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
-                bitmapImage.EndInit();
-                bitmapImage.Freeze();
-
-                return bitmapImage;
-            }
         }
 
         /// <summary> Generate current time Unix Timestamp </summary>

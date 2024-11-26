@@ -80,10 +80,11 @@ namespace AnotherMusicPlayer
         {
             if (fi == null) { return; }
             string query = "INSERT INTO files(Path, Name, Album, Performers, Composers, Genres, Copyright, AlbumArtists, Lyrics, Duration, Size, Disc, " +
-                "DiscCount, Track, TrackCount, Year, Rating, LastUpdate) VALUES('";
+                "DiscCount, Track, TrackCount, Year, Rating, InsertionDate, LastUpdate) VALUES('";
             query += Database.EscapeString(fi.FullName) + "',";
             query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0','0.0',";
 
+            query += "'" + fi.CreationTimeUtc.ToFileTime() + "',";
             query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
 
             if (commit == true) { Bdd.DatabaseQuerys(new string[] { query }); }

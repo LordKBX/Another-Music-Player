@@ -156,6 +156,7 @@ namespace AnotherMusicPlayer
                     + "Rating REAL NOT NULL DEFAULT 0, "
                     + "Duration INTEGER, "
                     + "Size INTEGER, "
+                    + "InsertionDate BIGINT, "
                     + "LastUpdate BIGINT,  PRIMARY KEY(\"Path\")"
                     + ")");
                 DatabaseDetectOrCreateTable("queue", "CREATE TABLE queue(MIndex TEXT, Path1 TEXT, Path2 TEXT)");
@@ -453,7 +454,8 @@ namespace AnotherMusicPlayer
                 }
             };
             // Start 5 concurrent consuming actions.
-            Parallel.Invoke(action, action, action, action, action, action);
+            try { Parallel.Invoke(action, action, action, action, action, action); }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
 
             if (IsInTransaction()) { DatabaseTansactionEnd(); }
             return ret;

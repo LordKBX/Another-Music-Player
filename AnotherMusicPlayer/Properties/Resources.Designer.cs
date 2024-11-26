@@ -83,6 +83,36 @@ namespace AnotherMusicPlayer.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap dialog_error {
+            get {
+                object obj = ResourceManager.GetObject("dialog_error", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap dialog_info {
+            get {
+                object obj = ResourceManager.GetObject("dialog_info", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap dialog_warning {
+            get {
+                object obj = ResourceManager.GetObject("dialog_warning", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap folder_open_icon_white {
             get {
                 object obj = ResourceManager.GetObject("folder_open_icon_white", resourceCulture);
@@ -171,6 +201,116 @@ namespace AnotherMusicPlayer.Properties {
         }
         
         /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_0_0 {
+            get {
+                object obj = ResourceManager.GetObject("stars_0_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_0_5 {
+            get {
+                object obj = ResourceManager.GetObject("stars_0_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_1_0 {
+            get {
+                object obj = ResourceManager.GetObject("stars_1_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_1_5 {
+            get {
+                object obj = ResourceManager.GetObject("stars_1_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_2_0 {
+            get {
+                object obj = ResourceManager.GetObject("stars_2_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_2_5 {
+            get {
+                object obj = ResourceManager.GetObject("stars_2_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_3_0 {
+            get {
+                object obj = ResourceManager.GetObject("stars_3_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_3_5 {
+            get {
+                object obj = ResourceManager.GetObject("stars_3_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_4_0 {
+            get {
+                object obj = ResourceManager.GetObject("stars_4_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_4_5 {
+            get {
+                object obj = ResourceManager.GetObject("stars_4_5", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap stars_5_0 {
+            get {
+                object obj = ResourceManager.GetObject("stars_5_0", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
         ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
         ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
@@ -201,44 +341,6 @@ namespace AnotherMusicPlayer.Properties {
         public static string Style_Red {
             get {
                 return ResourceManager.GetString("Style_Red", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
-        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
-        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
-        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
-        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
-        ///
-        ///    &lt;!--#region Files sizes--&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesUnit&quot;&gt;B&lt;/sys:String&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesKilo&quot;&gt;Kib&lt;/sys:String&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesMega&quot;&gt;Mib&lt;/sys:String&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesGiga&quot;&gt;Gib&lt; [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        public static string Translation_en {
-            get {
-                return ResourceManager.GetString("Translation_en", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
-        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot; 
-        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot; 
-        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
-        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
-        ///
-        ///    &lt;!--#region Files sizes--&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesUnit&quot;&gt;B&lt;/sys:String&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesKilo&quot;&gt;Kib&lt;/sys:String&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesMega&quot;&gt;Mib&lt;/sys:String&gt;
-        ///    &lt;sys:String x:Key=&quot;SizeBytesGiga&quot;&gt;Gib&lt; [le reste de la chaîne a été tronqué]&quot;;.
-        /// </summary>
-        public static string Translation_fr {
-            get {
-                return ResourceManager.GetString("Translation_fr", resourceCulture);
             }
         }
         

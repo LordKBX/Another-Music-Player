@@ -105,7 +105,7 @@ namespace AnotherMusicPlayer
         {
             //window = (MainWindow)System.Windows.Application.Current.Windows[0];
             //Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => {
-            Lang = App.bdd.DatabaseGetParam("Lang", "en-US");
+            Lang = App.bdd.DatabaseGetParam("Lang", App.Languages[0]);
 
             ConversionMode = Convert.ToInt32(App.bdd.DatabaseGetParam("ConversionMode", "1"));
             ConversionBitRate = Convert.ToInt32(App.bdd.DatabaseGetParam("ConversionBitRate", "128"));

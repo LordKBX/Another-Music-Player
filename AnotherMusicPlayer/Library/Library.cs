@@ -57,7 +57,7 @@ namespace AnotherMusicPlayer
         }
 
         Bitmap defaultCover = Properties.Resources.CoverImg;
-        BitmapImage defaultBICover = App.BitmapToBitmapImage(Properties.Resources.CoverImg);
+        BitmapImage defaultBICover = BitmapMagic.BitmapToBitmapImage(Properties.Resources.CoverImg);
         Bitmap FolderIcon = Icons.FromIconKind(IconKind.FolderOpen, 35, new SolidColorBrush(Colors.White));
         System.Drawing.Color ButtonBackColor = System.Drawing.Color.FromArgb(255, 60, 60, 60);
         System.Drawing.Color ButtonForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
@@ -130,7 +130,7 @@ namespace AnotherMusicPlayer
             {
                 Thread.Sleep(200);
                 InsertBddFile(new FileInfo(e.FullPath), true);
-                Bdd.UpdateFileAsync(e.FullPath, true);
+                //Bdd.UpdateFileAsync(e.FullPath, true);
             }
         }
 
@@ -172,7 +172,7 @@ namespace AnotherMusicPlayer
             Parent.LibraryFiltersSearchBox.KeyDown += LibraryFiltersSearchBox_KeyDown;
 
             CreateWatcher();
-            InvokeScan();
+            //InvokeScan();
         }
 
         private double LibrarySearchContent_CalcCollumnWidth()
@@ -248,9 +248,7 @@ namespace AnotherMusicPlayer
             Parent.LibraryNavigationContentFolders.Controls.Clear();
             Parent.LibraryNavigationContentFolders.AutoScrollOffset = new System.Drawing.Point(0, 0);
             Parent.LibraryNavigationContentFolders.ContextMenuStrip = MakeContextMenu(Parent.LibraryNavigationContent, "folder", (path != Settings.LibFolder) ? true : false, (path != Settings.LibFolder) ? path : null);
-            Parent.LibraryNavigationContentFolders.ContextMenuStrip.BackColor = System.Drawing.Color.FromArgb(255, 30, 30, 30);
-            Parent.LibraryNavigationContentFolders.ContextMenuStrip.ForeColor = System.Drawing.Color.FromArgb(255, 255, 255, 255);
-
+            
             string[] dirs = Directory.GetDirectories(path);
             foreach (string dir in dirs)
             {

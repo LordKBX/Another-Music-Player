@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnotherMusicPlayer.MainWindow2Space;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -54,6 +55,8 @@ namespace AnotherMusicPlayer
             evt2.Position = PlayListIndex;
             PlaylistPositionChanged?.Invoke(evt2);
 
+            SavePlaylist();
+
             return (goodFiles > 0) ? true : false;
         }
 
@@ -90,6 +93,26 @@ namespace AnotherMusicPlayer
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = PlayListIndex;
             PlaylistPositionChanged(evt2);
+
+            SavePlaylist();
+        }
+
+        private static void SavePlaylist()
+        {
+            int lindex = 1;
+            List<string> querys = new List<string>() { "DELETE FROM queue;" };
+            foreach (string line in PlayList)
+            {
+                string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
+                query += App.NormalizeNumber(lindex, 10) + "','";
+                query += Database.EscapeString(line) + "',";
+                //query += ((line[1] == null) ? "NULL" : "'" + Database.EscapeString(line[1]) + "'");
+                query += "NULL";
+                query += ")";
+                lindex += 1;
+                querys.Add(query);
+            }
+            App.bdd.DatabaseQuerys(querys.ToArray(), true);
         }
 
         /// <summary> Clear playlist </summary>
@@ -107,6 +130,8 @@ namespace AnotherMusicPlayer
             PlayerPlaylistPositionChangeParams evt2 = new PlayerPlaylistPositionChangeParams();
             evt2.Position = PlayListIndex;
             PlaylistPositionChanged(evt2);
+
+            List<string> querys = new List<string>() { "DELETE FROM queue;" };
         }
 
         /// <summary> Read playlist </summary>

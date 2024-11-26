@@ -55,7 +55,7 @@ namespace AnotherMusicPlayer
             BtnClose.Click += (object sender, RoutedEventArgs e) => { Close(); };
             TopBar.MouseDown += TopBar_MouseDown;
 
-            RadioCover.Source = DefaultCover = App.BitmapToBitmapImage(Properties.Resources.CoverImg);
+            RadioCover.Source = DefaultCover = BitmapMagic.BitmapToBitmapImage(Properties.Resources.CoverImg);
             RadioCover.Drop += Cover_Drop;
 
             BtnSave.Click += BtnSave_Click;

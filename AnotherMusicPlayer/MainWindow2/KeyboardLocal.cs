@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using AnotherMusicPlayer;
+using System.Runtime.CompilerServices;
 
 namespace AnotherMusicPlayer.MainWindow2Space
 {
@@ -42,6 +43,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {  // intercept keyboard event on UI to prevent selected button activation via keyboard
             if (sender == null) { return; }
             if (sender.GetType() == typeof(TextBox)) { return; }
+            if (parent.InvokeRequired) { parent.Invoke(() => { LocalControlEvent(sender, e); }); return; }
             try
             {
                 double ntime = App.UnixTimestamp();
@@ -66,11 +68,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     {
                         if (parent.TabControler.SelectedIndex == 0)
                         {
-                            if (parent.PlaybackTabDataGridView.SelectedRows.Count > 0)
-                            {
-                                if (parent.PlaybackTabDataGridView.SelectedRows[0].Index > 0)
-                                { parent.PlaybackTabDataGridView.Rows[parent.PlaybackTabDataGridView.SelectedRows[0].Index - 1].Selected = true; }
-                            }
+                            //if (parent.PlaybackTabDataGridView.SelectedRows.Count > 0)
+                            //{
+                            //    int index = parent.PlaybackTabDataGridView.SelectedRows[0].Index - 1;
+                            //    if (index >= 0 && index < parent.PlaybackTabDataGridView.Rows.Count){ parent.PlaybackTabDataGridView.Rows[index].Selected = true; }
+                            //}
                         }
                         else if (parent.TabControler.SelectedIndex == 1)
                         {
@@ -82,11 +84,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     {
                         if (parent.TabControler.SelectedIndex == 0)
                         {
-                            if (parent.PlaybackTabDataGridView.SelectedRows.Count > 0)
-                            {
-                                if (parent.PlaybackTabDataGridView.SelectedRows[0].Index < parent.PlaybackTabDataGridView.Rows.Count - 1)
-                                { parent.PlaybackTabDataGridView.Rows[parent.PlaybackTabDataGridView.SelectedRows[0].Index + 1].Selected = true; }
-                            }
+                            //if (parent.PlaybackTabDataGridView.SelectedRows.Count > 0)
+                            //{
+                            //    int index = parent.PlaybackTabDataGridView.SelectedRows[0].Index + 1;
+                            //    if (index >= 0 && index < parent.PlaybackTabDataGridView.Rows.Count) { parent.PlaybackTabDataGridView.Rows[index].Selected = true; }
+                            //}
                         }
                         else if (parent.TabControler.SelectedIndex == 1)
                         {
