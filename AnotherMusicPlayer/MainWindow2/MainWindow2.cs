@@ -114,12 +114,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             Common.SetGlobalColor(this);
             //this.BackColor = App.style.GetColor("WindowBackColor");
 
-            SolidColorBrush PlaybackIconDefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor( App.style.GetColor("GlobalIconColor") ));
+            SolidColorBrush PlaybackIconDefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor(App.style.GetColor("GlobalIconColor")));
             int PlaybackButtonIconSize = App.style.GetValue<int>("GlobalIconSize", 24);
 
             #region Define Tabs Icons
             int TabIconSize = App.style.GetValue<int>("TabIconSize", 24);
-            SolidColorBrush IconTabBrush = new SolidColorBrush(App.DrawingColorToMediaColor( App.style.GetColor("TabIconColor") ));
+            SolidColorBrush IconTabBrush = new SolidColorBrush(App.DrawingColorToMediaColor(App.style.GetColor("TabIconColor")));
             IconPlayback = Icons.FromIconKind(IconKind.Music, TabIconSize, IconTabBrush);
             IconLibrary = Icons.FromIconKind(IconKind.FolderMusic, TabIconSize, IconTabBrush);
             IconPlayLists = Icons.FromIconKind(IconKind.PlaylistMusic, TabIconSize, IconTabBrush);
@@ -386,7 +386,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
         #endregion
 
         #region UI Translation
-        public void Translate() {
+        public void Translate()
+        {
             if (this.InvokeRequired) { this.Invoke(() => { this.Translate(); }); return; }
             AnotherMusicPlayer.MainWindow2Space.Translation.Translate(this);
             playLists.Init();

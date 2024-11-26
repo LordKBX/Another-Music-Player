@@ -312,6 +312,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             TitleLabel.TabIndex = 0;
             TitleLabel.Text = "Title";
             TitleLabel.TextAlign = ContentAlignment.MiddleLeft;
+            TitleLabel.DoubleClick += TitleLabel_DoubleClick;
             // 
             // MinimizeButton
             // 
