@@ -28,10 +28,10 @@ DisableProgramGroupPage=yes
 DisableWelcomePage=no
 ; The [Icons] "quicklaunchicon" entry uses {userappdata} but its [Tasks] entry has a proper IsAdminInstallMode Check.
 ;UsedUserAreasWarning=no
-LicenseFile=D:\CODES\VS\MediaPlayer\LICENSE
+LicenseFile=D:\CODES\VS\MusicPlayer2\LICENSE
 ; Uncomment the following line to run in non administrative install mode (install for current user only.)
 PrivilegesRequired=admin
-OutputDir=D:\CODES\VS\MediaPlayer\Installers
+OutputDir=D:\CODES\VS\MusicPlayer2\Installers
 OutputBaseFilename={#MyAppExeName}-{#MyAppVersion}-{#BuildVersion}-ib({#MyInstallerVersion})
 Compression=lzma                                              
 SolidCompression=yes
