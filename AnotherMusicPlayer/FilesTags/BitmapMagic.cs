@@ -74,6 +74,21 @@ namespace AnotherMusicPlayer
             return bitmapImage;
         }
 
+        public static Bitmap Base64StringToTrueBitmap(string base64String)
+        {
+            try
+            {
+                byte[] byteBuffer = Convert.FromBase64String(base64String);
+                MemoryStream memoryStream = new MemoryStream(byteBuffer);
+                memoryStream.Position = 0;
+
+                Bitmap btm = new Bitmap(memoryStream);
+
+                return btm;
+            }
+            catch (Exception) { return null; }
+        }
+
         private static void BitmapImage_DownloadCompleted(object sender, EventArgs e)
         {
             ((BitmapImage)sender).Freeze();

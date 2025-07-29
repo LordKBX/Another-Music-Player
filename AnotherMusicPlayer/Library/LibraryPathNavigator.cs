@@ -7,8 +7,6 @@ using System.Windows;
 using System.Windows.Media;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
-using System.Windows.Forms;
 using AnotherMusicPlayer.MainWindow2Space;
 
 namespace AnotherMusicPlayer
@@ -25,10 +23,7 @@ namespace AnotherMusicPlayer
             Contener = contener;
             Parent = parent;
             if (Directory.Exists(basePath)) { RootPath = basePath; }
-            else
-            {
-                RootPath = Settings.LibFolder;
-            }
+            else { RootPath = Settings.LibFolder; }
         }
 
         public bool UpdateRootPath(string basePath = null)
@@ -45,6 +40,7 @@ namespace AnotherMusicPlayer
                 if (path == null) { path = CurrentPath; }
                 if (Contener.Controls.Count > 0)
                     Contener.Controls.Clear();
+                Common.PurgeMemory();
                 string workpath = path.Replace(RootPath, "");
                 workpath = workpath.TrimStart(MainWindow2.SeparatorChar);
                 string[] workTab = workpath.Split(MainWindow2.SeparatorChar);
@@ -56,7 +52,7 @@ namespace AnotherMusicPlayer
                 //tb.Style = Parent.Parent.FindResource("LibraryNavigationPathItem") as Style;
                 tb.Text = App.GetTranslation("LibraryNavigatorItemHome");
                 tb.Tag = RootPath;
-                tb.MouseDown += PathClicked;
+                tb.Click += PathClicked;
                 tb.ContextMenuStrip = MakeContextMenu(tb, RootPath);
                 Contener.Controls.Add(tb);
 
@@ -74,7 +70,7 @@ namespace AnotherMusicPlayer
                     //tb3.Style = Parent.Parent.FindResource("LibraryNavigationPathItem") as Style;
                     tb3.Text = name;
                     tb3.Tag = newPath;
-                    tb3.MouseDown += PathClicked;
+                    tb3.Click += PathClicked;
                     tb3.ContextMenuStrip = MakeContextMenu(tb3, newPath);
 
                     Contener.Controls.Add(tb3);
@@ -123,14 +119,14 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private void PathClicked(object sender, MouseEventArgs e)
+        private void PathClicked(object sender, EventArgs e)
         {
+            Debug.WriteLine("PathClicked()");
             string tag = (string)((Label)sender).Tag;
             string name = (string)((Label)sender).Text;
+            Display(tag);
             if (Parent != null && tag != null)
                 Parent.DisplayPath(tag);
-            else
-                Display(tag);
         }
 
         private ContextMenuStrip MakeContextMenu(Label parent, string path)

@@ -51,6 +51,31 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         Player.PlaylistRemoveIndex(id);
                     };
                 }
+                else if (cm.Items[i].Name == "EditTrack")
+                {
+                    cm.Items[i].Click += (object sender, EventArgs e) => {
+                        if (App.win1.PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
+                        int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
+                        string trackPath = Player.PlayList[id];
+
+                        if (Player.Index == id) { Player.Stop(); }
+                        Player.PlaylistRemoveIndex(id);
+
+                        TagsEditor tags = new TagsEditor(this, "track", new string[] { trackPath });
+
+                        if (tags.ShowDialog() == DialogResult.OK)
+                        {
+                            if (tags.CoverChanged == true) { App.bdd.DatabaseClearCover(trackPath); }
+                            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+                            {
+                                Thread.Sleep(200);
+                                this.library.DisplayPath(this.library.CurrentPath);
+                            }));
+                        }
+
+                        if (Player.Index == id) { Player.Play(); }
+                    };
+                }
             }
             return cm;
         }
@@ -77,6 +102,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         // ITEMS
         public ToolStripItem PlayTrack = null;
         public ToolStripItem RemoveTrack = null;
+        public ToolStripItem EditTrack = null;
 
         public PlayBackContextMenu()
         {
@@ -88,9 +114,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             PlayTrack = Items.Add(App.GetTranslation("PlayingQueueCMPlay"), Icons.FromIconKind(IconKind.PlayCircle, ButtonIconSize, DefaultBrush));
             RemoveTrack = Items.Add(App.GetTranslation("PlayingQueueCMRemove"), Icons.FromIconKind(IconKind.PlaylistMinus, ButtonIconSize, DefaultBrush));
+            EditTrack = Items.Add(App.GetTranslation("PlayingQueueCMEdit"), Icons.FromIconKind(IconKind.FileEdit, ButtonIconSize, DefaultBrush));
 
             PlayTrack.Name = nameof(PlayTrack);
             RemoveTrack.Name = nameof(RemoveTrack);
+            EditTrack.Name = nameof(EditTrack);
         }
 
         public void Update()
@@ -104,6 +132,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             RemoveTrack.ForeColor = _ForeColor;
             RemoveTrack.Text = App.GetTranslation("PlayingQueueCMRemove");
             RemoveTrack.Image = Icons.FromIconKind(IconKind.PlaylistMinus, ButtonIconSize, DefaultBrush);
+
+            EditTrack.ForeColor = _ForeColor;
+            EditTrack.Text = App.GetTranslation("PlayingQueueCMEdit");
+            EditTrack.Image = Icons.FromIconKind(IconKind.PlaylistMinus, ButtonIconSize, DefaultBrush);
         }
     }
 }

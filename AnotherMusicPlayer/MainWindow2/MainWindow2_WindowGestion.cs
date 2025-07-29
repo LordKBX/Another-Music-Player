@@ -33,9 +33,23 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {
             TabControler.TabSize = new System.Drawing.Size((TabControler.Width) / TabControler.Tabs.Count, 50);
             if (Width > 800 && Height > 700)
-            { PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 250; PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 250; }
+            { 
+                PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 250; 
+                PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 250;
+                PlaybackTabTitleLabelValue.Width = 240;
+                PlaybackTabAlbumLabelValue.Width = 240;
+                PlaybackTabArtistsLabelValue.Width = 240;
+                PlaybackTabGenresLabelValue.Width = 240;
+            }
             else
-            { PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 150; PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 150; }
+            { 
+                PlaybackTabMainTableLayoutPanel.ColumnStyles[0].Width = 150; 
+                PlaybackTabLeftTableLayoutPanel.RowStyles[0].Height = 150;
+                PlaybackTabTitleLabelValue.Width = 142;
+                PlaybackTabAlbumLabelValue.Width = 142;
+                PlaybackTabArtistsLabelValue.Width = 142;
+                PlaybackTabGenresLabelValue.Width = 142;
+            }
             if(PlaybackTabRatting != null)
             PlaybackTabRatting.Margin = new Padding(Convert.ToInt32(Math.Truncate((PlaybackTabLeftBottomFlowLayoutPanel.Width - PlaybackTabRatting.Width) / 2.0)), 3, 0, 0);
         }
@@ -55,6 +69,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
             App.SetToolTip(this.TitleLabel, this.TitleLabel.Text);
         }
+
+        private void TitleLabel_DoubleClick(object sender, EventArgs e) { MaximizeButton_Click(null, null); }
 
         #region Generic Window Button
         public void MinimizeButton_Click(object? sender, EventArgs? e) { WindowState = FormWindowState.Minimized; }

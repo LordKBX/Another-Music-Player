@@ -67,7 +67,7 @@ namespace AnotherMusicPlayer
                 Transaction.Dispose();
                 inTransaction = false;
             }
-            catch { Debug.WriteLine("--> DatabaseTansactionEnd() : Catch ERROR <--"); }
+            catch { Debug.WriteLine("--> DatabaseTansactionEnd() : Catch ERROR <--"); inTransaction = false; }
         }
 
         /// <summary> Commit transaction </summary>

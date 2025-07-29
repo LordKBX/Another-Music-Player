@@ -30,11 +30,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                         if (re == "MediaPlayPause")
                         {
-                            try { if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); } }
+                            try { MainWindow2.PlayPause(); }
                             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
                         }
-                        if (re == "MediaPreviousTrack") { Player.Stop(Player.GetCurrentFile()); Player.PlaylistPrevious(); }
-                        if (re == "MediaNextTrack") { Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); }
+                        if (re == "MediaPreviousTrack") { if (Player.Mode == Player.Modes.Radio) { return; }; Player.Stop(Player.GetCurrentFile()); Player.PlaylistPrevious(); }
+                        if (re == "MediaNextTrack") { if (Player.Mode == Player.Modes.Radio) { return; }; Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); }
                     }
                     catch(Exception ex0) { Debug.WriteLine(ex0.Message + "\r\n" + ex0.StackTrace); }
                 };

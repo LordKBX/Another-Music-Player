@@ -19,7 +19,7 @@ namespace AnotherMusicPlayer.Components
     [DefaultProperty("AutoSize")]
     public partial class TrackButton : System.Windows.Forms.UserControl
     {
-        private MediaItem item = null;
+        public MediaItem item = null;
 
         public TrackButton() { Init(null); }
         public TrackButton(MediaItem item) { Init(item); }
@@ -40,6 +40,7 @@ namespace AnotherMusicPlayer.Components
                 this.ContextMenuStrip = App.win1.library.MakeContextMenu(this, "file");
                 this.Tag = item.Path;
             }
+            //else { throw new Exception("MediaItem not valid"); }
         }
 
         private void TrackButton_DoubleClick(object sender, EventArgs e)

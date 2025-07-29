@@ -180,9 +180,10 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
-            else { RadioPlayer.Stop(); }
             _LatestPlayerStatus = PlayerStatus.Stop;
             if (!end) { Stoped?.Invoke(); }
+            RadioPlayer.Stop();
+            Mode = Modes.File;
         }
 
         /// <summary> Stop media play for FilePath or CurrentFile if FilePath is null </summary>
@@ -267,11 +268,11 @@ namespace AnotherMusicPlayer
         /// <summary> Open a new media playing thread </summary>
         public static async void OpenStream(string streamUrl, RadioPlayer.RadioType streamType, string streamID = "", string streamName = "", bool streamAutoPlay = false, string streamPrefix = "")
         {
-            Mode = Modes.Radio;
-
             StopAll();
             PlayList.Clear();
             PlayListIndex = 0;
+
+            Mode = Modes.Radio;
 
             RadioPlayer.Init(streamUrl, streamType, streamPrefix, streamName);
             CurrentFile = "Radio|" + streamID + "|" + RadioPlayer.radioPrefix + RadioPlayer.PathStream;

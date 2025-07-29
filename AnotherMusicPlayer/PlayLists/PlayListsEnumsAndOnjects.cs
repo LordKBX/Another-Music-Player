@@ -14,6 +14,9 @@ namespace AnotherMusicPlayer
 
     internal class PlayListsLineItem{
         public int PlayCount { get; set; } = 0;
+        public int PlaylistId { get; set; } = 0;
+        public int PlaylistItemId { get; set; } = 0;
+        public int PlaylistOrder { get; set; } = 0;
         public string Path { get; set; }
         public string Name { get; set; }
         public string Artists { get; set; }
@@ -46,5 +49,34 @@ namespace AnotherMusicPlayer
             try { Rating = (Bitmap)Properties.Resources.ResourceManager.GetObject(name); }
             catch (Exception) { Rating = Properties.Resources.stars_0_5; }
         }
+    }
+
+    public class PlayListItem
+    {
+        public int FIndex { get; set; } = 0;
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+    }
+
+    public class WebRadioItem
+    {
+        public int RID { get; set; } = 0;
+        public int Category { get; set; } = 0;
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string Logo { get; set; } = null;
+        public string Url { get; set; } = "";
+        public string UrlPrefix { get; set; } = "";
+        public string FType { get; set; } = "";
+        public int Fragmented { get; set; } = 0;
+    }
+
+    public class WebRadioCategoryItem
+    {
+        public int CRID { get; set; } = 0;
+        public string Name { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string Logo { get; set; } = null;
+        public List<WebRadioItem> Childs = new List<WebRadioItem>();
     }
 }

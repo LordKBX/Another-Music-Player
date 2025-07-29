@@ -45,20 +45,21 @@
             // 
             // tableLayoutPanel1
             // 
+            tableLayoutPanel1.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             tableLayoutPanel1.ColumnCount = 1;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(TitleLabel, 0, 0);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel1.Controls.Add(flowLayoutPanel1, 0, 2);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
+            tableLayoutPanel1.Location = new System.Drawing.Point(1, 1);
             tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 80F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(586, 271);
+            tableLayoutPanel1.Size = new System.Drawing.Size(584, 269);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // TitleLabel
@@ -69,7 +70,7 @@
             TitleLabel.ForeColor = System.Drawing.Color.White;
             TitleLabel.Location = new System.Drawing.Point(3, 11);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new System.Drawing.Size(580, 28);
+            TitleLabel.Size = new System.Drawing.Size(578, 28);
             TitleLabel.TabIndex = 0;
             TitleLabel.Text = "label1";
             // 
@@ -85,7 +86,7 @@
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new System.Drawing.Size(580, 135);
+            tableLayoutPanel2.Size = new System.Drawing.Size(578, 133);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // MessageIcon
@@ -95,7 +96,7 @@
             MessageIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             MessageIcon.FlatAppearance.BorderSize = 0;
             MessageIcon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            MessageIcon.Location = new System.Drawing.Point(3, 20);
+            MessageIcon.Location = new System.Drawing.Point(3, 19);
             MessageIcon.Name = "MessageIcon";
             MessageIcon.Size = new System.Drawing.Size(94, 94);
             MessageIcon.TabIndex = 0;
@@ -107,10 +108,10 @@
             MessageBlock.AutoSize = true;
             MessageBlock.Font = new System.Drawing.Font("Segoe UI", 11F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             MessageBlock.ForeColor = System.Drawing.Color.White;
-            MessageBlock.Location = new System.Drawing.Point(110, 42);
+            MessageBlock.Location = new System.Drawing.Point(110, 41);
             MessageBlock.Margin = new System.Windows.Forms.Padding(10, 0, 10, 0);
             MessageBlock.Name = "MessageBlock";
-            MessageBlock.Size = new System.Drawing.Size(460, 50);
+            MessageBlock.Size = new System.Drawing.Size(458, 50);
             MessageBlock.TabIndex = 1;
             MessageBlock.Text = "text hyper long de test pour tester le multiligne\r\net voire si ça passe";
             // 
@@ -122,9 +123,9 @@
             flowLayoutPanel1.Controls.Add(BtnOK);
             flowLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             flowLayoutPanel1.FlowDirection = System.Windows.Forms.FlowDirection.RightToLeft;
-            flowLayoutPanel1.Location = new System.Drawing.Point(3, 194);
+            flowLayoutPanel1.Location = new System.Drawing.Point(3, 192);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new System.Drawing.Size(580, 74);
+            flowLayoutPanel1.Size = new System.Drawing.Size(578, 74);
             flowLayoutPanel1.TabIndex = 2;
             // 
             // BtnNo
@@ -139,7 +140,7 @@
             BtnNo.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             BtnNo.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             BtnNo.ForeColor = System.Drawing.Color.White;
-            BtnNo.Location = new System.Drawing.Point(493, 3);
+            BtnNo.Location = new System.Drawing.Point(491, 3);
             BtnNo.MinimumSize = new System.Drawing.Size(0, 68);
             BtnNo.Name = "BtnNo";
             BtnNo.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
@@ -160,7 +161,7 @@
             BtnYes.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             BtnYes.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             BtnYes.ForeColor = System.Drawing.Color.White;
-            BtnYes.Location = new System.Drawing.Point(400, 3);
+            BtnYes.Location = new System.Drawing.Point(398, 3);
             BtnYes.MinimumSize = new System.Drawing.Size(0, 68);
             BtnYes.Name = "BtnYes";
             BtnYes.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
@@ -181,7 +182,7 @@
             BtnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             BtnCancel.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             BtnCancel.ForeColor = System.Drawing.Color.White;
-            BtnCancel.Location = new System.Drawing.Point(272, 3);
+            BtnCancel.Location = new System.Drawing.Point(270, 3);
             BtnCancel.MinimumSize = new System.Drawing.Size(0, 68);
             BtnCancel.Name = "BtnCancel";
             BtnCancel.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
@@ -202,7 +203,7 @@
             BtnOK.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             BtnOK.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             BtnOK.ForeColor = System.Drawing.Color.White;
-            BtnOK.Location = new System.Drawing.Point(182, 3);
+            BtnOK.Location = new System.Drawing.Point(180, 3);
             BtnOK.MinimumSize = new System.Drawing.Size(0, 68);
             BtnOK.Name = "BtnOK";
             BtnOK.Padding = new System.Windows.Forms.Padding(15, 0, 15, 0);
@@ -215,11 +216,12 @@
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
+            BackColor = System.Drawing.Color.White;
             ClientSize = new System.Drawing.Size(586, 271);
             Controls.Add(tableLayoutPanel1);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             Name = "DialogBox";
+            Padding = new System.Windows.Forms.Padding(1);
             Text = "DialogBox";
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();

@@ -1,0 +1,337 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary>
+
+    <!--#region Files sizes-->
+    <SizeBytesUnit><![CDATA[B]]></SizeBytesUnit>
+    <SizeBytesKilo><![CDATA[Kib]]></SizeBytesKilo>
+    <SizeBytesMega><![CDATA[Mib]]></SizeBytesMega>
+    <SizeBytesGiga><![CDATA[Gib]]></SizeBytesGiga>
+    <SizeBytesTera><![CDATA[Tib]]></SizeBytesTera>
+    <SizeBytesPeta><![CDATA[Pib]]></SizeBytesPeta>
+    <SizeBytesExa><![CDATA[Eib]]></SizeBytesExa>
+    <!--#endregion-->
+
+    <!--#region Base Window -->
+    <WindowBtnMinimize><![CDATA[Minimize]]></WindowBtnMinimize>
+    <WindowBtnMaximize><![CDATA[Maximize]]></WindowBtnMaximize>
+    <WindowBtnClose><![CDATA[Close]]></WindowBtnClose>
+    <!--#endregion-->
+
+    <!--#region DialogBox -->
+    <DialogBoxTitle><![CDATA[Dialog]]></DialogBoxTitle>
+    <DialogBoxBtnOk><![CDATA[Ok]]></DialogBoxBtnOk>
+    <DialogBoxBtnCancel><![CDATA[Cancel]]></DialogBoxBtnCancel>
+    <DialogBoxBtnYes><![CDATA[Yes]]></DialogBoxBtnYes>
+    <DialogBoxBtnNo><![CDATA[No]]></DialogBoxBtnNo>
+    <!--#endregion-->
+
+    <Title><![CDATA[Title]]></Title>
+    <Album><![CDATA[Album]]></Album>
+    <Artist><![CDATA[Artists]]></Artist>
+    <Duration><![CDATA[Duration]]></Duration>
+    <Position><![CDATA[Position]]></Position>
+    <Genre><![CDATA[Genre]]></Genre>
+    <Rating><![CDATA[Rating]]></Rating>
+    <Count><![CDATA[Played]]></Count>
+    <Lyrics><![CDATA[Lyrics]]></Lyrics>
+    <Progress><![CDATA[Progress]]></Progress>
+
+    <Title2><![CDATA[Title:]]></Title2>
+    <Album2><![CDATA[Album:]]></Album2>
+    <Artist2><![CDATA[Artists:]]></Artist2>
+    <Duration2><![CDATA[Duration:]]></Duration2>
+    <Genres2><![CDATA[Genre:]]></Genres2>
+    <Rating2><![CDATA[Rating:]]></Rating2>
+    <Lyrics2><![CDATA[Lyrics:]]></Lyrics2>
+
+    <PlaybackPositionLabel><![CDATA[Total: %X%, Position: %Y%]]></PlaybackPositionLabel>
+    <PlaybackPositionLabelRadio><![CDATA[(( Radio - %X% ))]]></PlaybackPositionLabelRadio>
+
+    <BtnOpenToolTip><![CDATA[Open Files]]></BtnOpenToolTip>
+    <BtnPreviousToolTip><![CDATA[Previous Track]]></BtnPreviousToolTip>
+    <BtnPlayPauseToolTip><![CDATA[Play / Pause]]></BtnPlayPauseToolTip>
+    <BtnNexToolTip><![CDATA[Next Track]]></BtnNexToolTip>
+    <BtnRepeatToolTip><![CDATA[Repeat Playing Queue]]></BtnRepeatToolTip>
+    <BtnShuffleToolTip><![CDATA[Shuffle Playing Queue]]></BtnShuffleToolTip>
+    <BtnClearListToolTip><![CDATA[Clear Playing Queue]]></BtnClearListToolTip>
+    
+    <BtnParamsToolTip><![CDATA[App Parametters]]></BtnParamsToolTip>
+    <BtnLibToolTip><![CDATA[App Media Base]]></BtnLibToolTip>
+    <BtnDebugToolTip><![CDATA[Debug Export Vars]]></BtnDebugToolTip>
+
+    <PlayingQueueCMPlay><![CDATA[Play Track]]></PlayingQueueCMPlay>
+    <PlayingQueueCMRemove><![CDATA[Remove from Queue]]></PlayingQueueCMRemove>
+    <PlayingQueueCMEdit><![CDATA[Edit Track]]></PlayingQueueCMEdit>
+
+    <TabPlaylist><![CDATA[Playback]]></TabPlaylist>
+    <TabLibrary><![CDATA[Library]]></TabLibrary>
+    <TabRecordedPlaylists><![CDATA[Playlists]]></TabRecordedPlaylists>
+    <TabParams><![CDATA[Settings]]></TabParams>
+
+    <!--#region SETTINGS-->
+    <ParamsLanguageLabel><![CDATA[Language]]></ParamsLanguageLabel>
+
+    <ParamsStyleLabel><![CDATA[Style]]></ParamsStyleLabel>
+
+    <ParamsConvDisclaimerLabel><![CDATA[Native audio support for the folowing formats only: aif,mp3(CBR),wma; Other formats are converted into Mp3 CBR]]></ParamsConvDisclaimerLabel>
+    
+    <ParamsConvKeepLabel><![CDATA[Convertion]]></ParamsConvKeepLabel>
+    <ParamsConvModeLabel><![CDATA[Mode]]></ParamsConvModeLabel>
+    <ParamsConvKeepVals_TEMP><![CDATA[On the Fly]]></ParamsConvKeepVals_TEMP>
+    <ParamsConvKeepVals_REPLACE><![CDATA[Replace]]></ParamsConvKeepVals_REPLACE>
+
+    <ParamsConvQualityLabel><![CDATA[Quality]]></ParamsConvQualityLabel>
+    <ParamsConvQualityVals_96><![CDATA[Low (96Kbits/s)]]></ParamsConvQualityVals_96>
+    <ParamsConvQualityVals_128><![CDATA[Normal (128Kbits/s)]]></ParamsConvQualityVals_128>
+    <ParamsConvQualityVals_192><![CDATA[Hight (192Kbits/s)]]></ParamsConvQualityVals_192>
+    <ParamsConvQualityVals_256><![CDATA[Very-Hight (256Kbits/s)]]></ParamsConvQualityVals_256>
+    <ParamsConvQualityVals_320><![CDATA[Extreme (320Kbits/s)]]></ParamsConvQualityVals_320>
+
+    <ParamsMemoryUsageLabel><![CDATA[Memory Usage]]></ParamsMemoryUsageLabel>
+    <ParamsMemoryUsage0><![CDATA[Low]]></ParamsMemoryUsage0>
+    <ParamsMemoryUsage1><![CDATA[Full]]></ParamsMemoryUsage1>
+
+    <ParamsAutoPlayLabel><![CDATA[Automatic play at startup]]></ParamsAutoPlayLabel>
+    <ParamsAutoPlay0><![CDATA[No]]></ParamsAutoPlay0>
+    <ParamsAutoPlay1><![CDATA[Yes]]></ParamsAutoPlay1>
+
+    <ParamsAlwaysOnTopLabel><![CDATA[Always On Top]]></ParamsAlwaysOnTopLabel>
+    <ParamsAlwaysOnTop0><![CDATA[No]]></ParamsAlwaysOnTop0>
+    <ParamsAlwaysOnTop1><![CDATA[Yes]]></ParamsAlwaysOnTop1>
+
+    <ParamsAutoCloseLyricsLabel><![CDATA[Auto Close Lyrics]]></ParamsAutoCloseLyricsLabel>
+    <ParamsAutoCloseLyrics0><![CDATA[No]]></ParamsAutoCloseLyrics0>
+    <ParamsAutoCloseLyrics1><![CDATA[Yes]]></ParamsAutoCloseLyrics1>
+
+    <ParamsLibHiddenFilesUnixLabel><![CDATA[Show hidden files style Unix]]></ParamsLibHiddenFilesUnixLabel>
+    <ParamsLibHiddenFilesUnix0><![CDATA[No]]></ParamsLibHiddenFilesUnix0>
+    <ParamsLibHiddenFilesUnix1><![CDATA[Yes]]></ParamsLibHiddenFilesUnix1>
+    <ParamsLibHiddenFilesWindowsLabel><![CDATA[Show hidden files style Windows]]></ParamsLibHiddenFilesWindowsLabel>
+    <ParamsLibHiddenFilesWindows0><![CDATA[No]]></ParamsLibHiddenFilesWindows0>
+    <ParamsLibHiddenFilesWindows1><![CDATA[Yes]]></ParamsLibHiddenFilesWindows1>
+
+    <ParamsLibFolderLabel><![CDATA[Music Library Folder]]></ParamsLibFolderLabel>
+    <ParamsLibFolderSelectorTitle><![CDATA[Select a Directory]]></ParamsLibFolderSelectorTitle>
+    <ParamsLibFolderSelectorBlockerType><![CDATA[this.directory]]></ParamsLibFolderSelectorBlockerType>
+    <ParamsLibFolderSelectorBlockerName><![CDATA[select]]></ParamsLibFolderSelectorBlockerName>
+    <ParamsLibFolderSelectorBlockerTitle><![CDATA[Directory]]></ParamsLibFolderSelectorBlockerTitle>
+
+    <ParamsEqualizerLabel><![CDATA[Equalizer]]></ParamsEqualizerLabel>
+    <ParamsEqualizerResetLabel><![CDATA[Reset]]></ParamsEqualizerResetLabel>
+
+    <ParamsEqualizerPresets_Perso><![CDATA[Custom]]></ParamsEqualizerPresets_Perso>
+    <ParamsEqualizerPresets_Flat><![CDATA[Flat]]></ParamsEqualizerPresets_Flat>
+    <ParamsEqualizerPresets_Classic><![CDATA[Classic]]></ParamsEqualizerPresets_Classic>
+    <ParamsEqualizerPresets_Club><![CDATA[Club]]></ParamsEqualizerPresets_Club>
+    <ParamsEqualizerPresets_Dance><![CDATA[Dance]]></ParamsEqualizerPresets_Dance>
+    <ParamsEqualizerPresets_FullBass><![CDATA[Full Bass]]></ParamsEqualizerPresets_FullBass>
+    <ParamsEqualizerPresets_FullBassTreble><![CDATA[Full Bass &amp; Treble]]></ParamsEqualizerPresets_FullBassTreble>
+    <ParamsEqualizerPresets_FullTreble><![CDATA[Full Treble]]></ParamsEqualizerPresets_FullTreble>
+    <ParamsEqualizerPresets_Headphones><![CDATA[Headphones]]></ParamsEqualizerPresets_Headphones>
+    <ParamsEqualizerPresets_LargeHall><![CDATA[Large Hall]]></ParamsEqualizerPresets_LargeHall>
+    <ParamsEqualizerPresets_Live><![CDATA[Live]]></ParamsEqualizerPresets_Live>
+    <ParamsEqualizerPresets_Party><![CDATA[Party]]></ParamsEqualizerPresets_Party>
+    <ParamsEqualizerPresets_Pop><![CDATA[Pop]]></ParamsEqualizerPresets_Pop>
+    <ParamsEqualizerPresets_Reggae><![CDATA[Reggae]]></ParamsEqualizerPresets_Reggae>
+    <ParamsEqualizerPresets_Rock><![CDATA[Rock]]></ParamsEqualizerPresets_Rock>
+    <ParamsEqualizerPresets_Ska><![CDATA[Ska]]></ParamsEqualizerPresets_Ska>
+    <ParamsEqualizerPresets_Soft><![CDATA[Soft]]></ParamsEqualizerPresets_Soft>
+    <ParamsEqualizerPresets_SoftRock><![CDATA[Soft Rock]]></ParamsEqualizerPresets_SoftRock>
+    <ParamsEqualizerPresets_Techno><![CDATA[Techno]]></ParamsEqualizerPresets_Techno>
+    <!--#endregion-->
+
+    <LibraryNavigatorItemHome><![CDATA[Home]]></LibraryNavigatorItemHome>
+    <LibraryFiltersModeLabel><![CDATA[Filter]]></LibraryFiltersModeLabel>
+
+    <LibraryFiltersMode_none><![CDATA[None]]></LibraryFiltersMode_none>
+    <LibraryFiltersMode_name><![CDATA[Name / Title]]></LibraryFiltersMode_name>
+    <LibraryFiltersMode_artist><![CDATA[Artist]]></LibraryFiltersMode_artist>
+    <LibraryFiltersMode_album><![CDATA[Album]]></LibraryFiltersMode_album>
+    <LibraryFiltersMode_genre><![CDATA[classification]]></LibraryFiltersMode_genre>
+
+    <LibraryFiltersGenreSearchBox.PlaceholderText><![CDATA[Search genre]]></LibraryFiltersGenreSearchBox.PlaceholderText>
+    <LibraryFiltersSearchBox.PlaceholderText><![CDATA[Search]]></LibraryFiltersSearchBox.PlaceholderText>
+    <LibraryFoldersLabel><![CDATA[Folders]]></LibraryFoldersLabel>
+
+    <!--#region LIBRARY CONTEXT MENU STRINGS -->
+    <LibraryContextMenuGetBack><![CDATA[Return to parent folder]]></LibraryContextMenuGetBack>
+    
+    <LibraryContextMenuAddGeneric><![CDATA[Add to Playing queue]]></LibraryContextMenuAddGeneric>
+    <LibraryContextMenuAddAlbum><![CDATA[Add Album to Playing queue]]></LibraryContextMenuAddAlbum>
+    <LibraryContextMenuAddDisk><![CDATA[Add Disk to Playing queue]]></LibraryContextMenuAddDisk>
+    <LibraryContextMenuAddFolder><![CDATA[Add Folder to Playing queue]]></LibraryContextMenuAddFolder>
+    <LibraryContextMenuAddTrack><![CDATA[Add Track to Playing queue]]></LibraryContextMenuAddTrack>
+
+    <LibraryContextMenuAddShuffleGeneric><![CDATA[Add randomly into Playing queue]]></LibraryContextMenuAddShuffleGeneric>
+    <LibraryContextMenuAddShuffleAlbum><![CDATA[Add Album randomly into Playing queue]]></LibraryContextMenuAddShuffleAlbum>
+    <LibraryContextMenuAddShuffleFolder><![CDATA[Add Folder randomly into Playing queue]]></LibraryContextMenuAddShuffleFolder>
+    <LibraryContextMenuAddShuffleDisk><![CDATA[Add Disk randomly into Playing queue]]></LibraryContextMenuAddShuffleDisk>
+    <!--<LibraryContextMenuAddShuffleTrack><![CDATA[Add Track randomly into PlayList]]></LibraryContextMenuAddShuffleTrack>-->
+
+    <LibraryContextMenuPlayGeneric><![CDATA[Play]]></LibraryContextMenuPlayGeneric>
+    <LibraryContextMenuPlayAlbum><![CDATA[Play Album]]></LibraryContextMenuPlayAlbum>
+    <LibraryContextMenuPlayDisk><![CDATA[Play Disk]]></LibraryContextMenuPlayDisk>
+    <LibraryContextMenuPlayFolder><![CDATA[Play Folder]]></LibraryContextMenuPlayFolder>
+    <LibraryContextMenuPlayTrack><![CDATA[Play Track]]></LibraryContextMenuPlayTrack>
+
+    <LibraryContextMenuPlayShuffleGeneric><![CDATA[Play randomly]]></LibraryContextMenuPlayShuffleGeneric>
+    <LibraryContextMenuPlayShuffleAlbum><![CDATA[Play Album randomly]]></LibraryContextMenuPlayShuffleAlbum>
+    <LibraryContextMenuPlayShuffleDisk><![CDATA[Play Disk randomly]]></LibraryContextMenuPlayShuffleDisk>
+    <LibraryContextMenuPlayShuffleFolder><![CDATA[Play Folder randomly]]></LibraryContextMenuPlayShuffleFolder>
+    <!--<LibraryContextMenuPlayShuffleTrack><![CDATA[Play Track randomly]]></LibraryContextMenuPlayShuffleTrack>-->
+
+    <LibraryContextMenuEditGeneric><![CDATA[EDIT]]></LibraryContextMenuEditGeneric>
+    <LibraryContextMenuEditAlbum><![CDATA[Edit Album]]></LibraryContextMenuEditAlbum>
+    <LibraryContextMenuEditFolder><![CDATA[Rename Folder]]></LibraryContextMenuEditFolder>
+    <LibraryContextMenuEditTrack><![CDATA[Edit Track]]></LibraryContextMenuEditTrack>
+    <LibraryContextMenuEditFile><![CDATA[Edit File]]></LibraryContextMenuEditFile>
+
+    <LibraryContextMenuPlayListsAddGeneric><![CDATA[Add into a Playlist]]></LibraryContextMenuPlayListsAddGeneric>
+    <LibraryContextMenuPlayListsAddAlbum><![CDATA[Add Album into a Playlist]]></LibraryContextMenuPlayListsAddAlbum>
+    <LibraryContextMenuPlayListsAddDisk><![CDATA[Add Disk into a Playlist]]></LibraryContextMenuPlayListsAddDisk>
+    <LibraryContextMenuPlayListsAddFolder><![CDATA[Add Folder into a Playlist]]></LibraryContextMenuPlayListsAddFolder>
+    <LibraryContextMenuPlayListsAddTrack><![CDATA[Add Track into a Playlist]]></LibraryContextMenuPlayListsAddTrack>
+
+    <LibraryContextMenuRadioEdit><![CDATA[Edit Radio]]></LibraryContextMenuRadioEdit>
+    <LibraryContextMenuRadioDelete><![CDATA[Delete Radio]]></LibraryContextMenuRadioDelete>
+    <!--#endregion-->
+
+    <!--#region LIBRARY SCAN-->
+    <LibraryLibraryScanning><![CDATA[LibraryScanning]]></LibraryLibraryScanning>
+    <LibraryFiles><![CDATA[Files]]></LibraryFiles>
+    <LibraryTotalSize><![CDATA[Total Size]]></LibraryTotalSize>
+    <LibraryTotalDuration><![CDATA[Total Duration]]></LibraryTotalDuration>
+    <!--#endregion-->
+
+    <!--#region LIBRARY Window Add Into Playlist -->
+    <PlaylistsWindowAddIntoPlaylistTitle><![CDATA[Add to Playlist ...]]></PlaylistsWindowAddIntoPlaylistTitle>
+    <PlaylistsWindowAddIntoPlaylistNewElement><![CDATA[New Playlist]]></PlaylistsWindowAddIntoPlaylistNewElement>
+    <PlaylistsWindowAddIntoPlaylistName><![CDATA[Name]]></PlaylistsWindowAddIntoPlaylistName>
+    <PlaylistsWindowAddIntoPlaylistDescription><![CDATA[Description]]></PlaylistsWindowAddIntoPlaylistDescription>
+    <PlaylistsWindowAddIntoPlaylistOk><![CDATA[Ok]]></PlaylistsWindowAddIntoPlaylistOk>
+    <PlaylistsWindowAddIntoPlaylistCancel><![CDATA[Cancel]]></PlaylistsWindowAddIntoPlaylistCancel>
+    <PlaylistsWindowAddIntoPlaylistWarningTitle><![CDATA[Error !]]></PlaylistsWindowAddIntoPlaylistWarningTitle>
+    <PlaylistsWindowAddIntoPlaylistWarningNameSize><![CDATA[Please give a name with a minimum 3 characters]]></PlaylistsWindowAddIntoPlaylistWarningNameSize>
+    <PlaylistsWindowAddIntoPlaylistWarningDescriptionSize><![CDATA[Please give a blank Description or with a minimum 3 characters]]></PlaylistsWindowAddIntoPlaylistWarningDescriptionSize>
+    <!--#endregion-->
+
+
+    <!--#region LIBRARY TAG EDITOR-->
+    <EditorTagWindowTitle><![CDATA[Tag Editor]]></EditorTagWindowTitle>
+    <EditorTagSeparateEntrys><![CDATA[Separate entrys with ;]]></EditorTagSeparateEntrys>
+
+    <EditorTagLabelLyrics><![CDATA[Lyrics]]></EditorTagLabelLyrics>
+    <EditorTagLabelTitle><![CDATA[Title]]></EditorTagLabelTitle>
+    <EditorTagLabelPerformers><![CDATA[Performers]]></EditorTagLabelPerformers>
+    <EditorTagLabelComposers><![CDATA[Composers]]></EditorTagLabelComposers>
+    <EditorTagLabelAlbum><![CDATA[Album]]></EditorTagLabelAlbum>
+    <EditorTagLabelGenres><![CDATA[Genres]]></EditorTagLabelGenres>
+    <EditorTagLabelAlbumArtists><![CDATA[Album Artists]]></EditorTagLabelAlbumArtists>
+    <EditorTagLabelYear><![CDATA[Year]]></EditorTagLabelYear>
+    <EditorTagLabelDisc><![CDATA[Disc]]></EditorTagLabelDisc>
+    <EditorTagLabelTrack><![CDATA[Track]]></EditorTagLabelTrack>
+    <EditorTagLabelCopyright><![CDATA[Copyright]]></EditorTagLabelCopyright>
+
+    <EditorTagSave><![CDATA[Save]]></EditorTagSave>
+    
+    <EditorTagCoverTooltip><![CDATA[Drop cover image for add/replacement\nor click right for more options]]></EditorTagCoverTooltip>
+    <EditorTagCoverCMPreview><![CDATA[Preview Image]]></EditorTagCoverCMPreview>
+    <EditorTagCoverCMClear><![CDATA[Delete Image Cover]]></EditorTagCoverCMClear>
+    <EditorTagCoverCMAdd><![CDATA[Add/Replace Image]]></EditorTagCoverCMAdd>
+    <!--#endregion-->
+
+    <!--#region LIBRARY RENAME-->
+    <RenemaWindowTitle><![CDATA[FOLDER RENAME]]></RenemaWindowTitle>
+    <RenemaWindowLabel><![CDATA[New Name]]></RenemaWindowLabel>
+    <!--#endregion-->
+
+    <!--#region PlayLists-->
+    <PlayListsHeaderCol1><![CDATA[Playlist]]></PlayListsHeaderCol1>
+    <PlayListsTabVoidLabel><![CDATA[No valid Selection]]></PlayListsTabVoidLabel>
+
+    <PlayListsAuto><![CDATA[Automatic]]></PlayListsAuto>
+    <PlayListsAuto_lastImports><![CDATA[Lasts imports]]></PlayListsAuto_lastImports>
+    <PlayListsAuto_mostPlayed><![CDATA[Most played]]></PlayListsAuto_mostPlayed>
+    <PlayListsAuto_mostRecentlyPlayed><![CDATA[Last played]]></PlayListsAuto_mostRecentlyPlayed>
+    <PlayListsAuto_bestRating><![CDATA[Best rating]]></PlayListsAuto_bestRating>
+    <PlayListsUser><![CDATA[Recorded]]></PlayListsUser>
+    <PlayListsRadio><![CDATA[Web Radio]]></PlayListsRadio>
+    <PlayListsRadioDefault><![CDATA[Miscellaneous]]></PlayListsRadioDefault>
+
+    <PlayListsContextMenuPlayListPlay><![CDATA[Play list]]></PlayListsContextMenuPlayListPlay>
+    <PlayListsContextMenuPlayListPlayShuffled><![CDATA[Play list Shuffled]]></PlayListsContextMenuPlayListPlayShuffled>
+    <PlayListsContextMenuPlayListAddCustom><![CDATA[Add a Playlist]]></PlayListsContextMenuPlayListAddCustom>
+    <PlayListsContextMenuPlayListDeleteCustom><![CDATA[Delete Playlist]]></PlayListsContextMenuPlayListDeleteCustom>
+    <PlayListsContextMenuPlayListRenameCustom><![CDATA[Rename Playlist]]></PlayListsContextMenuPlayListRenameCustom>
+    <PlayListsContextMenuPlayListPlayTrack><![CDATA[Play Track]]></PlayListsContextMenuPlayListPlayTrack>
+    <PlayListsContextMenuPlayListPlayRadio><![CDATA[Play WebRadio]]></PlayListsContextMenuPlayListPlayRadio>
+    <PlayListsContextMenuPlayListAddRadio><![CDATA[Add a WebRadio]]></PlayListsContextMenuPlayListAddRadio>
+    <PlayListsContextMenuPlayListDeleteRadio><![CDATA[Delete WebRadio]]></PlayListsContextMenuPlayListDeleteRadio>
+    <PlayListsContextMenuPlayListEditRadio><![CDATA[Edit WebRadio]]></PlayListsContextMenuPlayListEditRadio>
+    <PlayListsContextMenuPlayListAddRadioCategory><![CDATA[Add a Category]]></PlayListsContextMenuPlayListAddRadioCategory>
+    <PlayListsContextMenuPlayListDeleteRadioCategory><![CDATA[Delete Category]]></PlayListsContextMenuPlayListDeleteRadioCategory>
+    <PlayListsContextMenuPlayListRenameRadioCategory><![CDATA[Edit Category]]></PlayListsContextMenuPlayListRenameRadioCategory>
+    
+    <PlayListsContextMenuTrackDelete><![CDATA[Delete Track]]></PlayListsContextMenuTrackDelete>
+    
+    <PlayListsContextMenuPlayListDeleteConfirmTitle><![CDATA[Deleting Playlist]]></PlayListsContextMenuPlayListDeleteConfirmTitle>
+    <PlayListsContextMenuPlayListDeleteConfirmMessage><![CDATA[Do you confirm the suppression of PlayList '%X%' ?]]></PlayListsContextMenuPlayListDeleteConfirmMessage>
+
+    <PlayListsContextMenuTrackDeleteConfirmTitle><![CDATA[Deleting Selection]]></PlayListsContextMenuTrackDeleteConfirmTitle>
+    <PlayListsContextMenuTrackDeleteConfirmMessage><![CDATA[Do you confirm the suppression of Track '%X%' ?]]></PlayListsContextMenuTrackDeleteConfirmMessage>
+    <PlayListsContextMenuTrackDeleteConfirmMessage2><![CDATA[Do you confirm the suppression of the selected Tracks ?]]></PlayListsContextMenuTrackDeleteConfirmMessage2>
+
+    <PlayListsContextMenuRadioAddCategory><![CDATA[Add category]]></PlayListsContextMenuRadioAddCategory>
+    <PlayListsContextMenuRadioAddRadio><![CDATA[Add radio]]></PlayListsContextMenuRadioAddRadio>
+
+    <PlayListsContextMenuPlayListDeleteRadioCategoryConfirmTitle><![CDATA[Deleting WebRadio category]]></PlayListsContextMenuPlayListDeleteRadioCategoryConfirmTitle>
+    <PlayListsContextMenuPlayListDeleteRadioCategoryConfirmMessage><![CDATA[Do you confirm the suppression of category '%X%' and it's members ?]]></PlayListsContextMenuPlayListDeleteRadioCategoryConfirmMessage>
+
+    <PlayListsContextMenuPlayListDeleteRadioConfirmTitle><![CDATA[Deleting WebRadio]]></PlayListsContextMenuPlayListDeleteRadioConfirmTitle>
+    <PlayListsContextMenuPlayListDeleteRadioConfirmMessage><![CDATA[Do you confirm the suppression of WebRadio '%X%' ?]]></PlayListsContextMenuPlayListDeleteRadioConfirmMessage>
+    <!--#endregion-->
+
+    <!--#region PlayLists Window Add Custom Playlist -->
+    <PlaylistsWindowAddCustomPlaylistAddWindowLabel><![CDATA[New Playlist]]></PlaylistsWindowAddCustomPlaylistAddWindowLabel>
+    <PlaylistsWindowAddCustomPlaylistEditWindowLabel><![CDATA[Edit Playlist]]></PlaylistsWindowAddCustomPlaylistEditWindowLabel>
+    <PlaylistsWindowAddCustomPlaylistNameLabel><![CDATA[Name]]></PlaylistsWindowAddCustomPlaylistNameLabel>
+    <PlaylistsWindowAddCustomPlaylistDescriptionLabel><![CDATA[Description]]></PlaylistsWindowAddCustomPlaylistDescriptionLabel>
+    <PlaylistsWindowAddCustomPlaylistSaveButton><![CDATA[Save]]></PlaylistsWindowAddCustomPlaylistSaveButton>
+    <!--#endregion-->
+
+    <!--#region PlayLists Window Add Radio Category -->
+    <PlaylistsWindowEditRadioCategoryAddWindowLabel><![CDATA[New Webradio Category]]></PlaylistsWindowEditRadioCategoryAddWindowLabel>
+    <PlaylistsWindowEditRadioCategoryEditWindowLabel><![CDATA[Modify Webradio Category]]></PlaylistsWindowEditRadioCategoryEditWindowLabel>
+    <PlaylistsWindowEditRadioCategoryAddNameLabel><![CDATA[Name]]></PlaylistsWindowEditRadioCategoryAddNameLabel>
+    <PlaylistsWindowEditRadioCategoryAddDescriptionLabel><![CDATA[Description]]></PlaylistsWindowEditRadioCategoryAddDescriptionLabel>
+    <PlaylistsWindowEditRadioCategoryAddLogoLabel><![CDATA[Logo]]></PlaylistsWindowEditRadioCategoryAddLogoLabel>
+    <PlaylistsWindowEditRadioCategoryAddSaveButton><![CDATA[Save]]></PlaylistsWindowEditRadioCategoryAddSaveButton>
+    <!--#endregion-->
+
+    <!--#region PlayLists Window Add Radio -->
+    <PlaylistsWindowEditRadioAddWindowLabel><![CDATA[New Webradio]]></PlaylistsWindowEditRadioAddWindowLabel>
+    <PlaylistsWindowEditRadioEditWindowLabel><![CDATA[Edit Webradio]]></PlaylistsWindowEditRadioEditWindowLabel>
+    <PlaylistsWindowEditRadioAddCategoryLabel><![CDATA[Category]]></PlaylistsWindowEditRadioAddCategoryLabel>
+    <PlaylistsWindowEditRadioAddNameLabel><![CDATA[Name]]></PlaylistsWindowEditRadioAddNameLabel>
+    <PlaylistsWindowEditRadioAddDescriptionLabel><![CDATA[Description]]></PlaylistsWindowEditRadioAddDescriptionLabel>
+    <PlaylistsWindowEditRadioAddUrlLabel><![CDATA[Url]]></PlaylistsWindowEditRadioAddUrlLabel>
+    <PlaylistsWindowEditRadioAddUrlPrefixLabel><![CDATA[Url Prefix]]></PlaylistsWindowEditRadioAddUrlPrefixLabel>
+    <PlaylistsWindowEditRadioAddModeLabel><![CDATA[Processing Mode]]></PlaylistsWindowEditRadioAddModeLabel>
+    <PlaylistsWindowEditRadioAddSaveButton><![CDATA[Save]]></PlaylistsWindowEditRadioAddSaveButton>
+    <!--#endregion-->
+
+    <!--#region PlayLists Window Add Radio an Radio Category -->
+    <PlaylistsWindowAddRadioTitle><![CDATA[Add a web radio ...]]></PlaylistsWindowAddRadioTitle>
+    <PlaylistsWindowAddRadioCategoryTitle><![CDATA[Add a web radio category ...]]></PlaylistsWindowAddRadioCategoryTitle>
+    <PlaylistsWindowAddRadioLabelCategory><![CDATA[Category]]></PlaylistsWindowAddRadioLabelCategory>
+    <PlaylistsWindowAddRadioLabelName><![CDATA[Name]]></PlaylistsWindowAddRadioLabelName>
+    <PlaylistsWindowAddRadioLabelUrl><![CDATA[Url]]></PlaylistsWindowAddRadioLabelUrl>
+    <PlaylistsWindowAddRadioLabelUrlType><![CDATA[Url Type]]></PlaylistsWindowAddRadioLabelUrlType>
+    <PlaylistsWindowAddRadioLabelTypeStream><![CDATA[Stream]]></PlaylistsWindowAddRadioLabelTypeStream>
+    <PlaylistsWindowAddRadioLabelTypeM3u><![CDATA[M3u]]></PlaylistsWindowAddRadioLabelTypeM3u>
+    <PlaylistsWindowAddRadioLabelPrefixUrl><![CDATA[Url Prefix]]></PlaylistsWindowAddRadioLabelPrefixUrl>
+    <PlaylistsWindowAddRadioLabelDescription><![CDATA[Description]]></PlaylistsWindowAddRadioLabelDescription>
+    <PlaylistsWindowAddRadioLabelSave><![CDATA[Save]]></PlaylistsWindowAddRadioLabelSave>
+    <!--#endregion-->
+    
+</ResourceDictionary>

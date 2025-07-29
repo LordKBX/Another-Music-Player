@@ -55,6 +55,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                 // Library Tab
                 window.LibraryFiltersModeLabel.Text = App.GetTranslation("LibraryFiltersModeLabel");
+                window.LibraryFoldersLabel.Text = App.GetTranslation("LibraryFoldersLabel", "AA");
                 window.LibraryFiltersMode.Items[0] = App.GetTranslation("LibraryFiltersMode_none");
                 window.LibraryFiltersMode.Items[1] = App.GetTranslation("LibraryFiltersMode_name");
                 window.LibraryFiltersMode.Items[2] = App.GetTranslation("LibraryFiltersMode_artist");

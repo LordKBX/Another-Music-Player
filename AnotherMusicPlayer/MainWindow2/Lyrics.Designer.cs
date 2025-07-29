@@ -53,7 +53,7 @@
             GripButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             GripButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             GripButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            GripButton.Location = new System.Drawing.Point(633, 521);
+            GripButton.Location = new System.Drawing.Point(632, 520);
             GripButton.Margin = new System.Windows.Forms.Padding(0);
             GripButton.Name = "GripButton";
             GripButton.Size = new System.Drawing.Size(21, 24);
@@ -71,8 +71,9 @@
             TitleLabel.Location = new System.Drawing.Point(55, 0);
             TitleLabel.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new System.Drawing.Size(448, 51);
+            TitleLabel.Size = new System.Drawing.Size(446, 51);
             TitleLabel.TabIndex = 0;
+            TitleLabel.Tag = "Title";
             TitleLabel.Text = "Title";
             TitleLabel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -84,7 +85,7 @@
             MinimizeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             MinimizeButton.Dock = System.Windows.Forms.DockStyle.Fill;
             MinimizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            MinimizeButton.Location = new System.Drawing.Point(506, 3);
+            MinimizeButton.Location = new System.Drawing.Point(504, 3);
             MinimizeButton.Name = "MinimizeButton";
             MinimizeButton.Size = new System.Drawing.Size(44, 45);
             MinimizeButton.TabIndex = 1;
@@ -98,7 +99,7 @@
             MaximizeButton.Cursor = System.Windows.Forms.Cursors.Hand;
             MaximizeButton.Dock = System.Windows.Forms.DockStyle.Fill;
             MaximizeButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            MaximizeButton.Location = new System.Drawing.Point(556, 3);
+            MaximizeButton.Location = new System.Drawing.Point(554, 3);
             MaximizeButton.Name = "MaximizeButton";
             MaximizeButton.Size = new System.Drawing.Size(44, 45);
             MaximizeButton.TabIndex = 2;
@@ -112,7 +113,7 @@
             CloseButton.Cursor = System.Windows.Forms.Cursors.Hand;
             CloseButton.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            CloseButton.Location = new System.Drawing.Point(606, 3);
+            CloseButton.Location = new System.Drawing.Point(604, 3);
             CloseButton.Name = "CloseButton";
             CloseButton.Size = new System.Drawing.Size(44, 45);
             CloseButton.TabIndex = 3;
@@ -150,18 +151,19 @@
             MainWIndowHead.Controls.Add(CloseButton, 4, 0);
             MainWIndowHead.Controls.Add(button1, 0, 0);
             MainWIndowHead.Dock = System.Windows.Forms.DockStyle.Fill;
-            MainWIndowHead.Location = new System.Drawing.Point(1, 1);
+            MainWIndowHead.Location = new System.Drawing.Point(2, 2);
             MainWIndowHead.Margin = new System.Windows.Forms.Padding(0);
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.Size = new System.Drawing.Size(653, 51);
+            MainWIndowHead.Size = new System.Drawing.Size(651, 51);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
             // 
             // GlobalTableLayoutPanel
             // 
             GlobalTableLayoutPanel.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
+            GlobalTableLayoutPanel.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             GlobalTableLayoutPanel.ColumnCount = 1;
             GlobalTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             GlobalTableLayoutPanel.Controls.Add(MainWIndowHead, 0, 0);
@@ -186,11 +188,11 @@
             richTextBox1.DetectUrls = false;
             richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             richTextBox1.ForeColor = System.Drawing.Color.White;
-            richTextBox1.Location = new System.Drawing.Point(4, 55);
+            richTextBox1.Location = new System.Drawing.Point(5, 57);
             richTextBox1.Name = "richTextBox1";
             richTextBox1.ReadOnly = true;
             richTextBox1.ShortcutsEnabled = false;
-            richTextBox1.Size = new System.Drawing.Size(647, 457);
+            richTextBox1.Size = new System.Drawing.Size(645, 453);
             richTextBox1.TabIndex = 4;
             richTextBox1.Text = "";
             // 

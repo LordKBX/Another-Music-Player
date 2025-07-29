@@ -16,6 +16,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         public Lyrics(MediaItem data)
         {
             InitializeComponent();
+            AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
             string title = data.Name;
             string arts = data.Artists;
             if (data.Album != null && data.Album.Trim().Length > 0) { title += " - " + data.Album.Trim(); }

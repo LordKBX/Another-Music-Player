@@ -30,17 +30,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             else if (Settings.Lang == App.Languages[1]) { window.SettingsTabLangComboBox.SelectedIndex = 1; }
             else  { window.SettingsTabLangComboBox.SelectedIndex = -1; }
 
-            Type tr = typeof(Properties.Resources);
-            PropertyInfo[] props = tr.GetProperties(BindingFlags.Static | BindingFlags.Public);
             int selection = -1;
-            foreach (PropertyInfo pi in props)
+            foreach (string pi in App.Styles)
             {
-                if (pi.Name.StartsWith("Style_"))
-                {
-                    string nm = pi.Name.Replace("Style_", "");
-                    window.SettingsTabStyleComboBox.Items.Add(nm);
-                    if (nm == Settings.StyleName) { selection = window.SettingsTabStyleComboBox.Items.Count - 1;  }
-                }
+                window.SettingsTabStyleComboBox.Items.Add(pi);
+                if (pi == Settings.StyleName) { selection = window.SettingsTabStyleComboBox.Items.Count - 1; }
             }
             window.SettingsTabStyleComboBox.SelectedIndex = selection;
 

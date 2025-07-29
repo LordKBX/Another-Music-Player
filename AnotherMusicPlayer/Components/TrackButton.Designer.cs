@@ -38,12 +38,12 @@
             // 
             label1.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             label1.AutoEllipsis = true;
-            label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            label1.Font = new System.Drawing.Font("Segoe UI", 10F);
             label1.ForeColor = System.Drawing.Color.White;
             label1.Location = new System.Drawing.Point(3, 1);
             label1.MaximumSize = new System.Drawing.Size(0, 75);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(136, 23);
+            label1.Size = new System.Drawing.Size(132, 23);
             label1.TabIndex = 0;
             label1.Text = "label1";
             // 
@@ -52,7 +52,7 @@
             rating21.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             rating21.BackColor = System.Drawing.Color.Transparent;
             rating21.IsReadOnly = false;
-            rating21.Location = new System.Drawing.Point(145, 0);
+            rating21.Location = new System.Drawing.Point(141, 0);
             rating21.Margin = new System.Windows.Forms.Padding(3, 0, 3, 5);
             rating21.MaximumSize = new System.Drawing.Size(100, 20);
             rating21.MinimumSize = new System.Drawing.Size(100, 20);
@@ -66,7 +66,7 @@
             // 
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 106F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(rating21, 1, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;

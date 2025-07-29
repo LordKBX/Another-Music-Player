@@ -1,29 +1,25 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
-using Microsoft.Scripting.Utils;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
-using System.Xml;
-using TagLib.Riff;
 
 namespace AnotherMusicPlayer.Components
 {
     public partial class AlbumBlock : UserControl
     {
+        public static int MinHeight = 150;
         public AlbumBlock(KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> albumT, bool uniqueDir, Bitmap defaultCover)
         {
             InitializeComponent();
             tableLayoutPanel1.Controls.Clear();
             tableLayoutPanel1.RowStyles.Clear();
             tableLayoutPanel1.RowCount = 1;
+            int calcHeight = 30;
+
             if (uniqueDir)
             {
                 MediaItem item1 = null;
@@ -51,12 +47,19 @@ namespace AnotherMusicPlayer.Components
             {
                 DiskBlock block = new DiskBlock(disk) { Dock = DockStyle.Top };
                 if (tableLayoutPanel1.Controls.Count > 0) { tableLayoutPanel1.RowCount += 1; }
-                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.AutoSize, 50));
+                tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, block.Height));
                 tableLayoutPanel1.Controls.Add(block);
                 brList.AddRange((List<string>)block.Tag);
+                calcHeight += block.Height;
             }
             this.ContextMenuStrip = App.win1.library.MakeContextMenu(this, "album");
             this.Tag = brList.ToArray();
+            calcHeight += 10;
+            Debug.WriteLine("calcHeight: " + calcHeight + ", minHeight: " + MinHeight);
+            if (calcHeight > MinHeight) { 
+                this.MinimumSize = new Size(this.MinimumSize.Width, calcHeight);
+                this.Height = calcHeight;
+            }
         }
     }
 }

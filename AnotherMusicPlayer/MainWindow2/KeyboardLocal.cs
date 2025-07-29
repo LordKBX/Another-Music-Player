@@ -52,14 +52,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 if (!autorised.Contains(e.KeyCode)) { return; }
                 if ((PreviousKeyboardKey == Keys.LControlKey || PreviousKeyboardKey == Keys.RControlKey) && (PreviousKeyboardTime + 1 > ntime))
                 {
-                    if (e.KeyCode == Keys.Left) { Player.Stop(Player.GetCurrentFile()); Player.PlaylistPrevious(); }
-                    if (e.KeyCode == Keys.Right) { Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); }
+                    if (e.KeyCode == Keys.Left) { if (Player.Mode == Player.Modes.Radio) { return; }; Player.Stop(Player.GetCurrentFile()); Player.PlaylistPrevious(); }
+                    if (e.KeyCode == Keys.Right) { if (Player.Mode == Player.Modes.Radio) { return; }; Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); }
                 }
                 else
                 {
                     if (e.KeyCode == Keys.Space)
                     {
-                        if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); }
+                        MainWindow2.PlayPause();
                     }
 
                     if (e.KeyCode == Keys.Left) { Player.PlayTimeRewind(5); }
@@ -76,8 +76,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         }
                         else if (parent.TabControler.SelectedIndex == 1)
                         {
-                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) { parent.LibrarySearchContent.VerticalScroll.Value -= 15; }
-                            else { parent.LibraryNavigationContent.VerticalScroll.Value -= 15; }
+                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) 
+                            { parent.LibrarySearchContent.AutoScrollOffset = new System.Drawing.Point(0, parent.LibrarySearchContent.AutoScrollOffset.Y - 15); }
+                            else { 
+                                parent.LibraryNavigationContent.VerticalScroll.Value -= 15; 
+                            }
                         }
                     }
                     if (e.KeyCode == Keys.Down)
@@ -92,7 +95,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         }
                         else if (parent.TabControler.SelectedIndex == 1)
                         {
-                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) { parent.LibrarySearchContent.VerticalScroll.Value += 15; }
+                            if (parent.LibraryTabSplitContainer.Panel1Collapsed) 
+                            { parent.LibrarySearchContent.AutoScrollOffset = new System.Drawing.Point(0, parent.LibrarySearchContent.AutoScrollOffset.Y + 15); }
                             else { parent.LibraryNavigationContent.VerticalScroll.Value += 15; }
                         }
                     }

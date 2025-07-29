@@ -52,17 +52,18 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(198, 82);
+            tableLayoutPanel1.Size = new System.Drawing.Size(248, 85);
             tableLayoutPanel1.TabIndex = 0;
             // 
             // label1
             // 
+            label1.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             label1.AutoSize = true;
-            label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             label1.ForeColor = System.Drawing.Color.White;
-            label1.Location = new System.Drawing.Point(3, 0);
+            label1.Location = new System.Drawing.Point(3, 1);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(59, 23);
+            label1.Size = new System.Drawing.Size(242, 23);
             label1.TabIndex = 0;
             label1.Text = "label1";
             // 
@@ -79,9 +80,9 @@
             tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 2;
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel2.Size = new System.Drawing.Size(198, 57);
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
+            tableLayoutPanel2.Size = new System.Drawing.Size(248, 60);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // trackButton1
@@ -100,7 +101,7 @@
             // 
             trackButton2.BackColor = System.Drawing.Color.FromArgb(54, 54, 54);
             trackButton2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            trackButton2.Location = new System.Drawing.Point(0, 27);
+            trackButton2.Location = new System.Drawing.Point(0, 30);
             trackButton2.Margin = new System.Windows.Forms.Padding(0);
             trackButton2.MaximumSize = new System.Drawing.Size(0, 30);
             trackButton2.MinimumSize = new System.Drawing.Size(250, 30);
@@ -110,17 +111,16 @@
             // 
             // DiskBlock
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
-            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             AutoSize = true;
             AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             Controls.Add(tableLayoutPanel1);
             Margin = new System.Windows.Forms.Padding(0);
-            MinimumSize = new System.Drawing.Size(200, 0);
+            MinimumSize = new System.Drawing.Size(250, 50);
             Name = "DiskBlock";
-            Size = new System.Drawing.Size(198, 82);
+            Size = new System.Drawing.Size(248, 85);
             tableLayoutPanel1.ResumeLayout(false);
             tableLayoutPanel1.PerformLayout();
             tableLayoutPanel2.ResumeLayout(false);

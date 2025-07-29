@@ -18,8 +18,10 @@ using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.Xml;
 using TagLib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+using Control = System.Windows.Forms.Control;
 using ToolTip = System.Windows.Forms.ToolTip;
 
 namespace AnotherMusicPlayer
@@ -29,6 +31,7 @@ namespace AnotherMusicPlayer
         public static readonly string AppName = "AnotherMusicPlayer";
         public static Database bdd = new Database();
         public static List<string> Languages = new List<string> { "English", "Français" };
+        public static List<string> Styles = new List<string> { };
 
         private static bool _IsDebug = false;
         public static bool IsDebug { get { return App._IsDebug; } }
@@ -36,7 +39,6 @@ namespace AnotherMusicPlayer
         [Conditional("DEBUG")]
         public static void TestDebug() { App._IsDebug = true; }
 
-        public static ResourceDictionary Resources = new ResourceDictionary();
         public static AnotherMusicPlayer.MainWindow2Space.MainWindow2 win1;
         public static Styles.Style style = new Dark();
 
@@ -48,7 +50,16 @@ namespace AnotherMusicPlayer
         {
             TestDebug();
             Settings.LoadSettings();
+
             TranslationUpdate();
+
+            Assembly stylesAsm = typeof(AnotherMusicPlayer.Styles.Dark).Assembly;
+            foreach (Type type in stylesAsm.GetTypes())
+            {
+                if (type.FullName.StartsWith("AnotherMusicPlayer.Styles.") && type.Name != "Style") { Styles.Add(type.Name); }
+            }
+            if (!Styles.Contains(Settings.StyleName)) { Settings.StyleName = Styles[0]; }
+            UpdateStyle();
             Player.INIT();
 
             win1 = new AnotherMusicPlayer.MainWindow2Space.MainWindow2();
@@ -58,6 +69,17 @@ namespace AnotherMusicPlayer
             FilesTags.WaitTimersEnd();
 
             Environment.Exit(0);
+        }
+
+        public static void UpdateStyle() {
+            if (Settings.StyleName != App.style.GetType().Name)
+            {
+                Type t = Type.GetType("AnotherMusicPlayer.Styles." + Settings.StyleName);
+                if (t == null) { return; }
+                Styles.Style st = (AnotherMusicPlayer.Styles.Style)Activator.CreateInstance(t);
+                if (st == null) { return; }
+                App.style = (AnotherMusicPlayer.Styles.Style)st;
+            }
         }
 
         public static void UnsetLockScreen() { /*win1.UnsetLockScreen();*/ }
@@ -76,6 +98,7 @@ namespace AnotherMusicPlayer
             return ret + ((Minutes < 10) ? "0" : "") + Minutes + ":" + ((TotalSeconds < 10) ? "0" : "") + TotalSeconds;
         }
 
+        private static XmlDocument translationDocument = null;
         public static void TranslationUpdate()
         {
             if (win1 != null && win1.InvokeRequired) { win1.Invoke(() => { TranslationUpdate(); }); return; }
@@ -85,25 +108,24 @@ namespace AnotherMusicPlayer
                 if (Settings.Lang == null) { end = App.Languages[0]; }
                 else if (App.Languages.IndexOf(Settings.Lang) > -1) { end = Settings.Lang; }
                 else { end = App.Languages[0]; }
-                if (Resources.MergedDictionaries.Count < 1)
-                {
-                    Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Translations/" + end + ".xaml", UriKind.Absolute) });
-                }
-                else
-                {
-                    //Resources.MergedDictionaries.Clear();
-                    //Resources.MergedDictionaries.Add(new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Translations/" + end + ".xaml", UriKind.Absolute) });
-                    Resources.MergedDictionaries[0] = new ResourceDictionary { Source = new Uri("pack://application:,,,/AnotherMusicPlayer;component/Translations/" + end + ".xaml", UriKind.Absolute) };
-                }
+                Debug.WriteLine("TranslationUpdate - lang = " + end);
+
+                string data = Properties.Resources.ResourceManager.GetString("Translation_" + end);
+                if (data == null) { Debug.WriteLine("TranslationUpdate - data is null"); return; }
+                translationDocument = new XmlDocument();
+                translationDocument.LoadXml(data);
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
         /// <summary> Get string stored in traduction file </summary>
-        public static string GetTranslation(string reference)
+        public static string GetTranslation(string reference, string defaultValue = null)
         {
-            try { return (string)Resources.MergedDictionaries[0][reference]; }
-            catch { return ""; }
+            if (translationDocument == null) { return defaultValue; }
+            XmlNodeList list = translationDocument.GetElementsByTagName(reference);
+            if (list == null) { return defaultValue; }
+            if (list.Count == 0) { return defaultValue; }
+            return list[0].InnerText;
         }
 
         public static System.Windows.Media.Color DrawingColorToMediaColor(System.Drawing.Color col)
@@ -162,8 +184,8 @@ namespace AnotherMusicPlayer
             item.Performers = (string)rep["Performers"];
             item.Composers = (string)rep["Composers"];
             item.Lyrics = (string)rep["Lyrics"];
-            item.Duration = Convert.ToInt64((string)rep["Duration"]);
-            item.DurationS = displayTime(Convert.ToInt64((string)rep["Duration"]));
+            item.Duration = Convert.ToInt64("" + rep["Duration"]);
+            item.DurationS = displayTime(Convert.ToInt64("" + rep["Duration"]));
             item.Genres = (string)rep["Genres"];
             item.Copyright = (string)rep["Copyright"];
             item.Disc = Convert.ToUInt32(rep["Disc"]);

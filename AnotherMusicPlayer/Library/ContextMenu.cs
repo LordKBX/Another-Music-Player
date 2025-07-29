@@ -1,4 +1,5 @@
-﻿using AnotherMusicPlayer.MainWindow2Space;
+﻿using AnotherMusicPlayer.Components;
+using AnotherMusicPlayer.MainWindow2Space;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace AnotherMusicPlayer
@@ -22,6 +24,7 @@ namespace AnotherMusicPlayer
             if (otype == null || otype == "") { otype = "track"; }
             string type = otype = otype.ToLower();
             if (type == "file") { type = "track"; }
+            Debug.WriteLine("MakeContextMenu(), Name = " + parent.Name + ", type = " + type);
             LibraryContextMenu cm = new LibraryContextMenu();
             for (int i = 0; i < cm.Items.Count; i++)
             {
@@ -78,9 +81,15 @@ namespace AnotherMusicPlayer
                     if (type == "track") { cm.Items[i].Click += CM_EditTrack; }
                     if (type == "album") { cm.Items[i].Click += CM_EditAlbum; }
                     if (type == "folder") {
-                        if (App.win1.library.CurrentPath == Settings.LibFolder && (parent.Name == "LibraryNavigationContentFolders" || parent.Name == "LibrarySearchContent")) 
-                        { cm.Items[i].Visible = false; }
-                        else { cm.Items[i].Click += CM_EditFolder; }
+                        bool ok = true;
+                        if (parent == null) { Debug.WriteLine("A"); ok = false; }
+                        else if (App.win1 == null) { Debug.WriteLine("B"); ok = false; }
+                        else if (App.win1.library == null) { Debug.WriteLine("C"); ok = false; }
+                        //else if (App.win1.library.CurrentPath == Settings.LibFolder) { Debug.WriteLine("D"); ok = false; }
+                        else if (/*parent.Name == "LibraryNavigationContentFolders" || */parent.Name == "LibrarySearchContent") { Debug.WriteLine("E"); ok = false; }
+
+                        if(ok) { cm.Items[i].Click += CM_EditFolder; }
+                        else { cm.Items[i].Visible = false; }
                     }
                     cm.Items[i].Visible = true;
                 }
@@ -108,6 +117,7 @@ namespace AnotherMusicPlayer
 
         private void CM_FolderBack(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_FolderBack()");
             string tag = (string)((ToolStripItem)sender).Tag;
             DirectoryInfo di = new DirectoryInfo(tag);
             DisplayPath(di.Parent.FullName);
@@ -115,44 +125,90 @@ namespace AnotherMusicPlayer
 
         private void CM_AddPlaylistTrack(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddPlaylistTrack()");
             ToolStripItem item = (ToolStripItem)sender;
-            if (item.Tag.GetType().Name == "ListView")
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { Debug.WriteLine("parent is null");  return; }
+            Debug.WriteLine(parent.GetType().Name);
+            if (parent.GetType().Name == "ListView")
             {
-                ListView view = (ListView)item.Tag;
+                ListView view = (ListView)parent;
                 if (view.SelectedItems.Count > 0)
                 {
                     List<string> files = new List<string>();
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
-                    //Parent.playLists.RecordTracksIntoPlaylist(files.ToArray());
+                    InsertPlayList ip = new InsertPlayList(App.win1, files.ToArray());
+                    ip.ShowDialog();
                 }
+            }
+            else if (parent.GetType() == typeof(DataGridView))
+            {
+                Debug.WriteLine("Merde2");
+                //ListView view = (ListView)parent;
+                //if (view.SelectedItems.Count > 0)
+                //{
+                //    List<string> files = new List<string>();
+                //    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                //    InsertPlayList ip = new InsertPlayList(App.win1, files.ToArray());
+                //    ip.ShowDialog();
+                //}
             }
             else
             {
-                string track = (string)((Control)item.Tag).Tag;
-                //Parent.playLists.RecordTracksIntoPlaylist(new string[] { track });
+                string track = (string)parent.Tag;
+                InsertPlayList ip = new InsertPlayList(App.win1, new string[] { track });
+                ip.ShowDialog();
             }
         }
 
         private void CM_AddPlaylistAlbum(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddPlaylistAlbum()");
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Control)item.Tag).Tag;
-            //Parent.playLists.RecordTracksIntoPlaylist(tracks);
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            string[] tracks = (string[])parent.Tag;
+            InsertPlayList ip = new InsertPlayList(App.win1, tracks);
+            ip.ShowDialog();
         }
 
         private void CM_AddPlaylistFolder(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddPlaylistFolder()");
             try
             {
                 ToolStripItem item = (ToolStripItem)sender;
-                string folder = null;
 
-                if (item.Tag == null) { return; }
-                else { folder = ((Control)item.Tag).Tag as string; }
+                Control parent = null;
+                if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+                else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+                if (parent == null) { Debug.WriteLine("parent is null"); return; }
 
-                if (folder == null) { return; }
-                string[] tracks = getDirectoryMediaFIles(folder, true);
-                //Parent.playLists.RecordTracksIntoPlaylist(tracks);
+                if (parent.GetType() == typeof(DataGridView))
+                {
+                    Debug.WriteLine("Merde2");
+                    if (((DataGridView)parent).SelectedRows.Count > 0)
+                    {
+                        List<string> files = new List<string>();
+                        foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                        {
+                            if (row.DataBoundItem is LibraryFolderObjets itm)
+                            {
+                                string[] rfiles = getDirectoryMediaFIles(itm.Path);
+                                files.AddRange(rfiles);
+                            }
+                        }
+
+                        InsertPlayList ip = new InsertPlayList(App.win1, files.ToArray());
+                        ip.ShowDialog();
+                    }
+                }
+
             }
             catch(Exception ex) { Debug.WriteLine(ex.Message); Debug.WriteLine(ex.StackTrace); }
         }
@@ -160,10 +216,17 @@ namespace AnotherMusicPlayer
         #region ContextMenu Add PlayBacklist functions
         private void CM_AddTrack(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddTrack()");
             ToolStripItem item = (ToolStripItem)sender;
-            if (item.Tag.GetType().Name == "ListView")
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            if (parent.GetType().Name == "ListView")
             {
-                ListView view = (ListView)item.Tag;
+                ListView view = (ListView)parent.Tag;
                 if (view.SelectedItems.Count > 0)
                 {
                     List<string> files = new List<string>();
@@ -173,55 +236,108 @@ namespace AnotherMusicPlayer
             }
             else
             {
-                string track = (string)((Control)item.Tag).Tag;
+                string track = (string)parent.Tag;
                 Player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
             }
         }
 
         private void CM_AddAlbum(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddAlbum()");
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Control)item.Tag).Tag;
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            string[] tracks = (string[])parent.Tag;
             Player.PlaylistEnqueue(tracks, false, 0, 0, true);
         }
 
         private void CM_AddFolder(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddFolder()");
             ToolStripItem item = (ToolStripItem)sender;
-            string folder = null;
-            if (item.Tag == null) { return; }
-            else { folder = ((Control)item.Tag).Tag as string; }
-            if (folder == null) { return; }
-            Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { Debug.WriteLine("parent is null"); return; }
+
+            if (parent.GetType() == typeof(DataGridView))
+            {
+                Debug.WriteLine("Merde2");
+                if(((DataGridView)parent).SelectedRows.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                    {
+                        if (row.DataBoundItem is LibraryFolderObjets itm)
+                        {
+                            string[] rfiles = Directory.GetFiles(itm.Path);
+                            files.AddRange(rfiles); 
+                        }
+                    }
+                        
+                    Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+                }
+            }
+            else
+            {
+                string folder = folder = parent.Tag as string;
+                if (folder == null) { return; }
+                Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
+            }
         }
         #endregion
 
         #region ContextMenu Add Shuffle PlayBacklist functions
         private void CM_AddShuffledAlbum(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddShuffledAlbum()");
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Control)item.Tag).Tag;
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            string[] tracks = (string[])parent.Tag;
             Player.PlaylistEnqueue(tracks, true, 0, 0, true);
         }
 
         private void CM_AddShuffledFolder(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_AddShuffledFolder()");
             ToolStripItem item = (ToolStripItem)sender;
-            if (item.Tag.GetType().Name == "ListView")
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { Debug.WriteLine("parent is null"); return; }
+
+            if (parent.GetType() == typeof(DataGridView))
             {
-                ListView view = (ListView)item.Tag;
-                if (view.SelectedItems.Count > 0)
+                Debug.WriteLine("Merde2");
+                if (((DataGridView)parent).SelectedRows.Count > 0)
                 {
                     List<string> files = new List<string>();
-                    foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                    foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                    {
+                        if (row.DataBoundItem is LibraryFolderObjets itm)
+                        {
+                            string[] rfiles = getDirectoryMediaFIles(itm.Path);
+                            files.AddRange(rfiles);
+                        }
+                    }
+
                     Player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
                 }
             }
             else
             {
-                string folder = null;
-                if (item.Tag == null) { return; }
-                else { folder = ((Control)item.Tag).Tag as string; }
+                string folder = folder = parent.Tag as string;
                 if (folder == null) { return; }
                 Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
             }
@@ -231,10 +347,17 @@ namespace AnotherMusicPlayer
         #region ContextMenu PlayBack functions
         private void CM_PlayTrack(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_PlayTrack()");
             ToolStripItem item = (ToolStripItem)sender;
-            if (item.Tag.GetType().Name == "ListView")
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            if (parent.GetType().Name == "ListView")
             {
-                ListView view = (ListView)item.Tag;
+                ListView view = (ListView)parent;
                 if (view.SelectedItems.Count > 0)
                 {
                     List<string> files = new List<string>();
@@ -245,7 +368,7 @@ namespace AnotherMusicPlayer
             }
             else
             {
-                string track = (string)((Control)item.Tag).Tag;
+                string track = (string)parent.Tag;
                 Player.PlaylistClear();
                 Player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
             }
@@ -253,56 +376,111 @@ namespace AnotherMusicPlayer
 
         private void CM_PlayAlbum(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_PlayAlbum()");
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Control)item.Tag).Tag;
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            string[] tracks = (string[])parent.Tag;
             Player.PlaylistClear();
             Player.PlaylistEnqueue(tracks, false, 0, 0, true);
         }
 
         private void CM_PlayFolder(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_PlayFolder()");
             ToolStripItem item = (ToolStripItem)sender;
-            string folder = null;
-            if (item.Tag == null) { return; }
-            else { folder = ((Control)item.Tag).Tag as string; }
-            if (folder == null) { return; }
-            Player.PlaylistClear();
-            Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { Debug.WriteLine("parent is null"); return; }
+
+            if (parent.GetType() == typeof(DataGridView))
+            {
+                if (((DataGridView)parent).SelectedRows.Count > 0)
+                {
+                    List<string> files = new List<string>();
+                    foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                    {
+                        if (row.DataBoundItem is LibraryFolderObjets itm)
+                        {
+                            string[] rfiles = getDirectoryMediaFIles(itm.Path);
+                            files.AddRange(rfiles);
+                        }
+                    }
+
+                    Player.StopAll();
+                    Player.PlaylistClear();
+                    Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+                }
+            }
+            else
+            {
+                string folder = folder = parent.Tag as string;
+                if (folder == null) { return; }
+                Player.StopAll();
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), false, 0, 0, true);
+            }
         }
         #endregion
 
         #region ContextMenu PlayBack Shuffled functions
         private void CM_PlayShuffledAlbum(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_PlayShuffledAlbum()");
             ToolStripItem item = (ToolStripItem)sender;
-            string[] tracks = (string[])((Control)item.Tag).Tag;
+
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { return; }
+
+            string[] tracks = (string[])parent.Tag;
             Player.PlaylistClear();
             Player.PlaylistEnqueue(tracks, true, 0, 0, true);
         }
 
         private void CM_PlayShuffledFolder(object sender, EventArgs e)
         {
+            Debug.WriteLine("CM_PlayShuffledFolder()");
             try
             {
-                ToolStripItem item = (ToolStripItem)sender; 
-                if (item.Tag.GetType().Name == "ListView")
+                ToolStripItem item = (ToolStripItem)sender;
+
+                Control parent = null;
+                if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+                else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+                if (parent == null) { Debug.WriteLine("parent is null"); return; }
+
+                if (parent.GetType() == typeof(DataGridView))
                 {
-                    ListView view = (ListView)item.Tag;
-                    if (view.SelectedItems.Count > 0)
+                    if (((DataGridView)parent).SelectedRows.Count > 0)
                     {
                         List<string> files = new List<string>();
-                        foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
+                        foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                        {
+                            if (row.DataBoundItem is LibraryFolderObjets itm)
+                            {
+                                string[] rfiles = getDirectoryMediaFIles(itm.Path);
+                                files.AddRange(rfiles);
+                            }
+                        }
+
+                        Player.StopAll();
                         Player.PlaylistClear();
                         Player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
                     }
                 }
                 else
                 {
-                    string folder = null;
-                    if (item.Tag == null) { return; }
-                    else { folder = ((Control)item.Tag).Tag as string; }
-
+                    string folder = folder = parent.Tag as string;
                     if (folder == null) { return; }
+                    Player.StopAll();
                     Player.PlaylistClear();
                     Player.PlaylistEnqueue(getDirectoryMediaFIles(folder, true), true, 0, 0, true);
                 }
@@ -314,15 +492,13 @@ namespace AnotherMusicPlayer
         #region ContextMenu Edit functions
         private void CM_EditTrack(object sender, EventArgs e)
         {
-            /*
+            Debug.WriteLine("CM_EditTrack()");
             ToolStripItem item = (ToolStripItem)sender;
-            Button btn = (Button)item.Tag;
-            string track = (string)btn.Tag;
+            AnotherMusicPlayer.Components.TrackButton btn = (AnotherMusicPlayer.Components.TrackButton)item.Tag;
+            string track = "" + ((btn.item!=null)?btn.item.Path:"");
             TagsEditor tags = new TagsEditor(Parent, "track", new string[] { track });
-            e.Handled = true;
-            bool? ret = tags.ShowDialog2(Parent);
 
-            if (tags.Saved)
+            if (tags.ShowDialog() == DialogResult.OK)
             {
                 if (tags.CoverChanged == true) { Bdd.DatabaseClearCover(track); }
                 Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
@@ -331,20 +507,17 @@ namespace AnotherMusicPlayer
                     DisplayPath(CurrentPath);
                 }));
             }
-            */
         }
 
         private void CM_EditAlbum(object sender, EventArgs e)
         {
-            /*
+            Debug.WriteLine("CM_EditAlbum()");
             ToolStripItem item = (ToolStripItem)sender;
-            Button btn = (Button)item.Tag;
+            AlbumBlock btn = (AlbumBlock)item.Tag;
             string[] tracks = (string[])btn.Tag;
             TagsEditor tags = new TagsEditor(Parent, "album", tracks);
-            e.Handled = true;
-            bool? ret = tags.ShowDialog2(Parent);
 
-            if (tags.Saved)
+            if (tags.ShowDialog() == DialogResult.OK)
             {
                 if (tags.CoverChanged == true)
                 {
@@ -356,33 +529,57 @@ namespace AnotherMusicPlayer
                     DisplayPath(CurrentPath);
                 }));
             }
-            */
+
         }
 
         private void CM_EditFolder(object sender, EventArgs e)
         {
-            /*
+            Debug.WriteLine("CM_EditFolder()");
             ToolStripItem item = (ToolStripItem)sender;
-            if (item.Tag == null) { return; }
-            else if (item.Tag.GetType().Name == "Button")
-            {
-                Button btn = (Button)item.Tag;
-                string folderPath = ((string)btn.Tag).Trim().TrimEnd(MainWindow.SeparatorChar);
-                Debug.WriteLine("--> CM_EditFolder, folderPath='" + folderPath + "'");
-                string[] pathTab = folderPath.Split(MainWindow.SeparatorChar);
-                Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
 
-                RenameWindow win = new RenameWindow(Parent, folderPath, pathTab);
-                win.ShowDialog();
-                if (win.renamed == true)
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { Debug.WriteLine("parent is null"); return; }
+
+            if (parent.GetType() == typeof(DataGridView))
+            {
+                if (((DataGridView)parent).SelectedRows.Count > 0)
                 {
-                    DisplayPath(CurrentPath);
+                    List<string> files = new List<string>();
+                    DataGridViewRow row = ((DataGridView)parent).SelectedRows[0];
+                    if (row.DataBoundItem is LibraryFolderObjets itm)
+                    {
+                        string folderPath = (itm.Path).Trim().TrimEnd(MainWindow2.SeparatorChar);
+                        Debug.WriteLine("--> CM_EditFolder, folderPath='" + folderPath + "'");
+                        string[] pathTab = folderPath.Split(MainWindow2.SeparatorChar);
+                        Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
+
+                        RenameWindow win = new RenameWindow(Parent, folderPath, pathTab);
+                        if (win.ShowDialog() == DialogResult.OK) { DisplayPath(CurrentPath); }
+                    }
                 }
             }
-            else if (item.Tag.GetType().Name == "AlignablePanel") { return; }
-            */
+            else
+            {
+                if (item.Tag == null) { return; }
+                else if (item.Tag.GetType().Name == "Button")
+                {
+                    Button btn = (Button)item.Tag;
+                    string folderPath = ((string)btn.Tag).Trim().TrimEnd(MainWindow2.SeparatorChar);
+                    Debug.WriteLine("--> CM_EditFolder, folderPath='" + folderPath + "'");
+                    string[] pathTab = folderPath.Split(MainWindow2.SeparatorChar);
+                    Debug.WriteLine("--> CM_EditFolder, pathTab.Length='" + pathTab.Length + "'");
+
+                    RenameWindow win = new RenameWindow(Parent, folderPath, pathTab);
+                    if (win.ShowDialog() == DialogResult.OK) { DisplayPath(CurrentPath); }
+                }
+                else if (item.Tag.GetType().Name == "AlignablePanel") { return; }
+            }
+
+
         }
-            #endregion
+        #endregion
     }
 
     /// <summary>

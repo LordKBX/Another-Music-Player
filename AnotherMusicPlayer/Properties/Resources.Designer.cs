@@ -63,6 +63,16 @@ namespace AnotherMusicPlayer.Properties {
         /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap add_white {
+            get {
+                object obj = ResourceManager.GetObject("add_white", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap album_large {
             get {
                 object obj = ResourceManager.GetObject("album_large", resourceCulture);
@@ -106,6 +116,16 @@ namespace AnotherMusicPlayer.Properties {
         public static System.Drawing.Bitmap dialog_warning {
             get {
                 object obj = ResourceManager.GetObject("dialog_warning", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap dot {
+            get {
+                object obj = ResourceManager.GetObject("dot", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -176,6 +196,16 @@ namespace AnotherMusicPlayer.Properties {
         public static System.Drawing.Bitmap previous_24 {
             get {
                 object obj = ResourceManager.GetObject("previous_24", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
+        /// </summary>
+        public static System.Drawing.Bitmap radio_icon {
+            get {
+                object obj = ResourceManager.GetObject("radio_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -311,36 +341,46 @@ namespace AnotherMusicPlayer.Properties {
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
-        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
-        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-        ///    xmlns:materialDesign=&quot;http://materialdesigninxaml.net/winfx/xaml/themes&quot;
-        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
-        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
+        ///   Recherche une chaîne localisée semblable à &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;ResourceDictionary&gt;
         ///
-        ///    &lt;ResourceDictionary.MergedDictionaries&gt;
-        ///        &lt;ResourceDictionary Source=&quot;pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignThem [le reste de la chaîne a été tronqué]&quot;;.
+        ///    &lt;!--#region Files sizes--&gt;
+        ///    &lt;SizeBytesUnit&gt;&lt;![CDATA[B]]&gt;&lt;/SizeBytesUnit&gt;
+        ///    &lt;SizeBytesKilo&gt;&lt;![CDATA[Kib]]&gt;&lt;/SizeBytesKilo&gt;
+        ///    &lt;SizeBytesMega&gt;&lt;![CDATA[Mib]]&gt;&lt;/SizeBytesMega&gt;
+        ///    &lt;SizeBytesGiga&gt;&lt;![CDATA[Gib]]&gt;&lt;/SizeBytesGiga&gt;
+        ///    &lt;SizeBytesTera&gt;&lt;![CDATA[Tib]]&gt;&lt;/SizeBytesTera&gt;
+        ///    &lt;SizeBytesPeta&gt;&lt;![CDATA[Pib]]&gt;&lt;/SizeBytesPeta&gt;
+        ///    &lt;SizeBytesExa&gt;&lt;![CDATA[Eib]]&gt;&lt;/SizeBytesExa&gt;
+        ///    &lt;!--#endregion--&gt;
+        ///
+        ///    &lt;!--#region Base Window --&gt; [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
-        public static string Style_Dark {
+        public static string Translation_English {
             get {
-                return ResourceManager.GetString("Style_Dark", resourceCulture);
+                return ResourceManager.GetString("Translation_English", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Recherche une chaîne localisée semblable à &lt;ResourceDictionary 
-        ///    xmlns=&quot;http://schemas.microsoft.com/winfx/2006/xaml/presentation&quot;
-        ///    xmlns:x=&quot;http://schemas.microsoft.com/winfx/2006/xaml&quot;
-        ///    xmlns:materialDesign=&quot;http://materialdesigninxaml.net/winfx/xaml/themes&quot;
-        ///    xmlns:local=&quot;clr-namespace:AnotherMusicPlayer&quot;
-        ///    xmlns:sys=&quot;clr-namespace:System;assembly=System.Runtime&quot;&gt;
+        ///   Recherche une chaîne localisée semblable à &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;ResourceDictionary&gt;
         ///
-        ///    &lt;ResourceDictionary.MergedDictionaries&gt;
-        ///        &lt;ResourceDictionary Source=&quot;pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignThem [le reste de la chaîne a été tronqué]&quot;;.
+        ///    &lt;!--#region Files sizes--&gt;
+        ///    &lt;SizeBytesUnit&gt;&lt;![CDATA[B]]&gt;&lt;/SizeBytesUnit&gt;
+        ///    &lt;SizeBytesKilo&gt;&lt;![CDATA[Kib]]&gt;&lt;/SizeBytesKilo&gt;
+        ///    &lt;SizeBytesMega&gt;&lt;![CDATA[Mib]]&gt;&lt;/SizeBytesMega&gt;
+        ///    &lt;SizeBytesGiga&gt;&lt;![CDATA[Gib]]&gt;&lt;/SizeBytesGiga&gt;
+        ///    &lt;SizeBytesTera&gt;&lt;![CDATA[Tib]]&gt;&lt;/SizeBytesTera&gt;
+        ///    &lt;SizeBytesPeta&gt;&lt;![CDATA[Pib]]&gt;&lt;/SizeBytesPeta&gt;
+        ///    &lt;SizeBytesExa&gt;&lt;![CDATA[Eib]]&gt;&lt;/SizeBytesExa&gt;
+        ///    &lt;!--#endregion--&gt;
+        ///
+        ///    &lt;!--#region Base Window --&gt; [le reste de la chaîne a été tronqué]&quot;;.
         /// </summary>
-        public static string Style_Red {
+        public static string Translation_Français {
             get {
-                return ResourceManager.GetString("Style_Red", resourceCulture);
+                return ResourceManager.GetString("Translation_Français", resourceCulture);
             }
         }
         

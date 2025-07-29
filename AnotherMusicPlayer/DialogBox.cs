@@ -1,5 +1,4 @@
 ﻿using AnotherMusicPlayer.Properties;
-using MaterialDesignThemes.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -47,7 +46,7 @@ namespace AnotherMusicPlayer
 
         public static bool ShowDialog(string title, string message, DialogBoxButtons buttons = DialogBoxButtons.Ok, DialogBoxIcons icon = DialogBoxIcons.Info, Form owner = null)
         {
-            DialogBox dialog = new DialogBox(owner);
+            DialogBox dialog = new DialogBox(owner) { StartPosition = (owner == null) ? FormStartPosition.CenterScreen: FormStartPosition.CenterParent };
 
             dialog.returnState = false;
             dialog.TitleLabel.Text = title;

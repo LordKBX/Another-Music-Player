@@ -12,6 +12,7 @@ using m3uParser.Model;
 using ByteDev.M3u;
 using System.Net;
 using System.Windows.Threading;
+using static AnotherMusicPlayer.Player;
 
 namespace AnotherMusicPlayer
 {
@@ -30,16 +31,26 @@ namespace AnotherMusicPlayer
         private static int radioChunkSize = 0;
 
         private static string Name = "";
+        public static string GetName() { return Name; }
         public static string PathStream = "";
         private static RadioType PathType = RadioType.Stream;
 
         private static System.Timers.Timer aTimer = null;
+        private static System.Timers.Timer timeTimer = null;
+        private static long startTime = 0;
 
         public enum RadioType
         {
             Stream = 0,
             M3u = 1
         };
+
+        public static event PlayerNotify StatusUpdated = null;
+
+        /// <summary> Delegate OnPlaylistPositionChanged </summary>
+        public delegate void OnRadioPlayerPositionChanged(PlayerPositionChangedEventParams e);
+        /// <summary> Define Event OnPlaylistPositionChanged </summary>
+        public static event OnRadioPlayerPositionChanged RadioPlayerPositionChanged;
 
         private static void SetTitle(string title)
         { Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() => { /*App0.win1.SetTitle(title);*/ })); }
@@ -69,6 +80,15 @@ namespace AnotherMusicPlayer
                 aTimer.Dispose();
                 aTimer = null;
             }
+            if (timeTimer != null)
+            {
+                timeTimer.Stop();
+                timeTimer.Dispose();
+                timeTimer = null;
+            }
+            timeTimer = new System.Timers.Timer();
+            timeTimer.Interval = 1000;
+            timeTimer.Elapsed += TimeTimer_Elapsed;
 
             Player.Mode = Player.Modes.Radio;
             Player.PlaylistClear();
@@ -83,6 +103,13 @@ namespace AnotherMusicPlayer
             {
                 if (prefix != null) { radioPrefix = prefix.Trim(); } else { radioPrefix = prefix; }
             }
+            StatusUpdated?.Invoke();
+            RadioPlayerPositionChanged?.Invoke(new PlayerPositionChangedEventParams() { Position = 0 });
+        }
+
+        private static void TimeTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            RadioPlayerPositionChanged?.Invoke(new PlayerPositionChangedEventParams() { Position = Convert.ToInt64(Math.Truncate((DateTime.Now.Ticks - startTime) / 10000F)) });
         }
 
         private static async Task<bool> LoadChunks(int skip = 0)
@@ -168,6 +195,7 @@ namespace AnotherMusicPlayer
         {
             try
             {
+                Mode = Modes.Radio;
                 radioManualStop = false;
                 if (PathType == RadioType.M3u)
                 {
@@ -190,6 +218,7 @@ namespace AnotherMusicPlayer
 
                         wavePlayer.Play();
                         _IsPlaying = true;
+                        StatusUpdated?.Invoke();
                     }
                     else { return false; }
                 }
@@ -205,7 +234,10 @@ namespace AnotherMusicPlayer
                     wavePlayer.Init(new MediaFoundationReader(PathStream));
                     wavePlayer.PlaybackStopped += WavePlayer_PlaybackStopped1_Stream;
                     wavePlayer.Play(); _IsPlaying = true;
+                    StatusUpdated?.Invoke();
                 }
+                startTime = DateTime.Now.Ticks;
+                if (timeTimer != null) { timeTimer.Start(); }
                 return true;
             }
             catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); return false; }
@@ -231,6 +263,9 @@ namespace AnotherMusicPlayer
                 while (wavePlayerQueue.Count > 0) { WaveOutEvent t = wavePlayerQueue.Dequeue(); t.Dispose(); t = null; }
             }
             catch { }
+
+            if (timeTimer != null) { timeTimer.Stop(); }
+            StatusUpdated?.Invoke();
         }
 
         private static async void WavePlayer_PlaybackStopped(object sender, StoppedEventArgs e)

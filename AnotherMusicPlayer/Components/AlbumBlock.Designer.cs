@@ -100,7 +100,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.Size = new System.Drawing.Size(142, 84);
+            tableLayoutPanel1.Size = new System.Drawing.Size(142, 87);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // diskBlock1
@@ -113,7 +113,7 @@
             diskBlock1.Margin = new System.Windows.Forms.Padding(0);
             diskBlock1.MinimumSize = new System.Drawing.Size(200, 0);
             diskBlock1.Name = "diskBlock1";
-            diskBlock1.Size = new System.Drawing.Size(200, 84);
+            diskBlock1.Size = new System.Drawing.Size(200, 87);
             diskBlock1.TabIndex = 0;
             // 
             // AlbumBlock

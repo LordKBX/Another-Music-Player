@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Diagnostics;
 using System.Linq;
-using MaterialDesignColors.ColorManipulation;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -117,14 +116,22 @@ namespace AnotherMusicPlayer
 
         static public System.Drawing.Color LightenDrawingColor(System.Drawing.Color input, int quantity)
         {
-            System.Windows.Media.Color ncolor = System.Windows.Media.Color.FromArgb(input.A, input.R, input.G, input.B).Lighten(quantity);
+            System.Windows.Media.Color ncolor = System.Windows.Media.Color.FromArgb(input.A, input.R, input.G, input.B) + System.Windows.Media.Color.FromScRgb(quantity, quantity, quantity, quantity);
             return System.Drawing.Color.FromArgb(ncolor.A, ncolor.R, ncolor.G, ncolor.B);
         }
 
         static public System.Drawing.Color DarkenDrawingColor(System.Drawing.Color input, int quantity)
         {
-            System.Windows.Media.Color ncolor = System.Windows.Media.Color.FromArgb(input.A, input.R, input.G, input.B).Darken(quantity);
+            System.Windows.Media.Color ncolor = System.Windows.Media.Color.FromArgb(input.A, input.R, input.G, input.B) - System.Windows.Media.Color.FromScRgb(quantity, quantity, quantity, quantity);
             return System.Drawing.Color.FromArgb(ncolor.A, ncolor.R, ncolor.G, ncolor.B);
+        }
+
+        static public void PurgeMemory() 
+        {
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
         }
     }
 
