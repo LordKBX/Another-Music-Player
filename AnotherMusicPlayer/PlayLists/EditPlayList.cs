@@ -23,7 +23,7 @@ namespace AnotherMusicPlayer
             Text = TitleLabel.Text = App.GetTranslation((item == null)? "PlaylistsWindowAddCustomPlaylistAddWindowLabel" : "PlaylistsWindowAddCustomPlaylistEditWindowLabel");
 
             NameLabel.Text = App.GetTranslation("PlaylistsWindowAddCustomPlaylistNameLabel");
-            DescriptionLabel.Text = App.GetTranslation("PlaylistsWindowAddCustomPlaylistNameLabel");
+            DescriptionLabel.Text = App.GetTranslation("PlaylistsWindowAddCustomPlaylistDescriptionLabel");
             ValidateButton.Text = App.GetTranslation("PlaylistsWindowAddCustomPlaylistSaveButton");
 
             NameTextBox.Text = (item != null) ? item.Name : "";

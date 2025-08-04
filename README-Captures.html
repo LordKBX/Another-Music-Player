@@ -2,12 +2,15 @@
 <html>
 	<head></head>
 	<body>
-		<iframe id="githubFrame" src="https://github.com/LordKBX/Another-Music-Player/tree/master/Captures"></iframe>
+		<iframe id="githubFrame" src="https://github.com/LordKBX/Another-Music-Player/tree/master/Captures/V2"></iframe>
 		<script>
 			document.querySelector('div[data-hpc="true"]').querySelectorAll('a[class="Link--primary"][aria-label$="(File)"]')
 				.forEach((element) => { 
 					if(element.offsetParent == null){ return;}; 
-					console.log(element);
+					//console.log(element);
+					console.log('<a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/'+element.title+'?raw=true" target="_blank" title="Capture 01">
+	<img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/'+element.title+'?raw=true" />
+</a>');
 				})
 		</script>
 	</body>

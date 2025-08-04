@@ -71,7 +71,7 @@
             ValidateButton.Cursor = System.Windows.Forms.Cursors.Hand;
             ValidateButton.Dock = System.Windows.Forms.DockStyle.Right;
             ValidateButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            ValidateButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            ValidateButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             ValidateButton.ForeColor = System.Drawing.Color.White;
             ValidateButton.Location = new System.Drawing.Point(444, 240);
             ValidateButton.MinimumSize = new System.Drawing.Size(200, 0);
@@ -107,7 +107,7 @@
             TitleLabel.AutoSize = true;
             TitleLabel.BackColor = System.Drawing.Color.Transparent;
             TitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            TitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            TitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             TitleLabel.ForeColor = System.Drawing.Color.White;
             TitleLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             TitleLabel.Location = new System.Drawing.Point(5, 0);
@@ -159,7 +159,7 @@
             // 
             NameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             NameLabel.AutoSize = true;
-            NameLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            NameLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             NameLabel.ForeColor = System.Drawing.Color.White;
             NameLabel.Location = new System.Drawing.Point(6, 12);
             NameLabel.Name = "NameLabel";
@@ -173,7 +173,7 @@
             NameTextBox.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             NameTextBox.BackColor = System.Drawing.Color.DarkGray;
             NameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            NameTextBox.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            NameTextBox.Font = new System.Drawing.Font("Segoe UI", 14F);
             NameTextBox.Location = new System.Drawing.Point(206, 12);
             NameTextBox.Name = "NameTextBox";
             NameTextBox.Size = new System.Drawing.Size(434, 32);
@@ -183,7 +183,7 @@
             // 
             DescriptionLabel.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             DescriptionLabel.AutoSize = true;
-            DescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            DescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             DescriptionLabel.ForeColor = System.Drawing.Color.White;
             DescriptionLabel.Location = new System.Drawing.Point(6, 100);
             DescriptionLabel.Name = "DescriptionLabel";
