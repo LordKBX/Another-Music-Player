@@ -1,4 +1,4 @@
-# Another Music Player
+# Another Music Player, Captures V2
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/01.png?raw=true" target="_blank" title="Capture 01"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/01.png?raw=true" /></a>
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/02.png?raw=true" target="_blank" title="Capture 02"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/02.png?raw=true" /></a>
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/03.png?raw=true" target="_blank" title="Capture 03"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/03.png?raw=true" /></a>
@@ -28,52 +28,3 @@
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/27.png?raw=true" target="_blank" title="Capture 27"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/27.png?raw=true" /></a>
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/28.png?raw=true" target="_blank" title="Capture 28"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/28.png?raw=true" /></a>
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/29.png?raw=true" target="_blank" title="Capture 29"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/29.png?raw=true" /></a>
-
-
----
-## English Documentation
-
-### Abstract:
-This is a personal project to create a Music player written with C# SDK .Net 8.0 (originaly 6.0)
-
-**Functions:**
-* Playing Queue
-* Library sorted by folder with auto scan for update
-* Conversion for audio files not in the supported formats(mp3;wma;aiff) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s)
-* Interception of Multimedia shortcuts (Play/Pause, Previous Track, Next Track) on windows
-* Multiple automatic PlayList & Custom PlayLists
-* WebRadios Support
-
-**Supported Language:** *(If your system language is French auto select french à first starup)*
-* English
-* French
-
-#### Dependencies
-
-|Name|SDK|Runtime|
-|:---:|:---:|:---:|
-|![.Net 8.0](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/net_logo.png?raw=true)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x86-installer)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x86-installer)|
-
----
-## Documentation Française
-
-### Abstract:
-Ceci est un projet personnel de création d'un lecteur de musique écrit en C# SDK .Net Core 8.0 (originellement 6.0)
-
-**Fonctions:**
-* Liste de lecture courrante
-* Médiatèque triée par dossier avec auto-scan dossier pour mise à jour
-* Conversion des fichiers audio des formats non supportés(mp3;wma;aiff) vers mp3(via ffmpeg) avec choix de la qualité dans les paramèttres(par défaut 128Kbits/s)
-* Interception des raccourcis Multimédia (Play/Pause, Previous Track, Next Track) spécifiques à windows
-* Listes de lecture généré automatiquement & Liste de lecture personalisées
-* Support WebRadios
-
-**Langues Supportées:** *(Si votre système d'exploitation et configuré en français, au premier démarrage l'application va se configurer en Français)*
-* Anglais
-* Français
-
-#### Dépendances
-
-|Nom|SDK|Runtime|
-|:---:|:---:|:---:|
-|![.Net 8.0](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/net_logo.png?raw=true)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x86-installer)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x86-installer)|
