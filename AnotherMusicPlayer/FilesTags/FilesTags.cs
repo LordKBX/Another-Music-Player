@@ -1,19 +1,20 @@
-﻿using System;
-using System.IO;
+﻿using AnotherMusicPlayer.MainWindow2Space;
 using NAudio;
 using NAudio.Wave;
-using TagLib;
-using System.Windows.Media.Imaging;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Diagnostics;
-using Newtonsoft.Json;
-using System.Threading;
-using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Timers;
-using AnotherMusicPlayer.MainWindow2Space;
+using System.Windows.Forms;
+using System.Windows.Media.Imaging;
+using TagLib;
 
 namespace AnotherMusicPlayer
 {
@@ -118,14 +119,16 @@ namespace AnotherMusicPlayer
                     TagLib.Tag tag = tags.GetTag(TagLib.TagTypes.Id3v2);
                     byte rate1 = 0;
 
-                    try { rate1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true).Rating; } catch { }
+                    try { rate1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true).Rating; } 
+                    catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
 
                     if (TableRatePlayer.ContainsKey(rate1)) { item.Rating = TableRatePlayer[rate1]; }
                     else
                     {
                         byte min = 255;
-                        foreach (byte i in TableRatePlayer.Keys) { if (i >= rate1) { min = i; break; } }
-                        if (min == 255) { item.Rating = 0; } else { item.Rating = (double)(TableRatePlayer[min] + 0.5); }
+                        foreach (byte i in TableRatePlayer.Keys) { if (rate1 - i >= 0) { min = i; } }
+                        if (min == 255) { item.Rating = 5; }
+                        else { item.Rating = (double)(TableRatePlayer[min] + 0.5); }
                     }
                     tags.Dispose();
 
@@ -257,79 +260,93 @@ namespace AnotherMusicPlayer
             return null;
         }
 
-        private static List<System.Timers.Timer> SaveRattingTimers = new List<System.Timers.Timer>();
-        private static Dictionary<System.Timers.Timer, (string, double)> SaveRattingTimersValues = new Dictionary<System.Timers.Timer, (string, double)>();
-        public static bool SaveRating(string FilePath, double RatingValue) { return SaveRating(FilePath, RatingValue, false); }
-        private static bool SaveRating(string FilePath, double RatingValue, bool loop = false)
+        private static List<SaveRatingObejct> saveRatingObejcts = new List<SaveRatingObejct>();
+        private static Thread? saveRatingThread = null;
+        private static bool saveRatingThreadRun = true;
+        public static bool SaveRating(string FilePath, double RatingValue)
         {
             if (!System.IO.File.Exists(FilePath)) { return false; }
-            if (RatingValue < 0 || RatingValue > 5.0) { return false; }
-            if (Common.IsFileLocked(FilePath)) {
-                if (!loop)
-                {
-                    System.Timers.Timer timer = new System.Timers.Timer();
-                    timer.Elapsed += Timer_Elapsed;
-                    timer.Interval = 1000;
-                    SaveRattingTimers.Add(timer);
-                    SaveRattingTimersValues.Add(timer, (FilePath, RatingValue));
-                    timer.Start();
-                }
-                return false;
+            if (RatingValue < 0) { RatingValue = 0; }
+            if (RatingValue > 5.0) { RatingValue = 5.0; }
+            bool found = false;
+            foreach (SaveRatingObejct obj in saveRatingObejcts) {
+                if (obj.Path == FilePath) { obj.Rate = RatingValue; found = true; break; }
             }
-
-            try
-            {
-                TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
-
-                TagLib.File fi = TagLib.File.Create(FilePath, ReadStyle.Average);
-                TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
-                TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
-                if (ReverseTableRateWindows.ContainsKey(RatingValue)) { frame1.Rating = ReverseTableRatePlayer[RatingValue]; }
-                else
-                {
-                    frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(RatingValue)] + 1);
-                }
-                if (Player.GetCurrentFile() == FilePath)
-                {
-                    Player.Suspend();
-                    Thread.Sleep(200);
-                    fi.Save();
-                    Player.Resume();
-                }
-                else { fi.Save(); }
-                return true;
+            if (!found) { saveRatingObejcts.Add(new SaveRatingObejct() { Count = 0, Path = FilePath, Rate = RatingValue }); }
+            
+            if (saveRatingThread == null) {
+                Thread objThread = new Thread(new ThreadStart(SaveRatingLoop));
+                objThread.IsBackground = true;
+                objThread.Priority = ThreadPriority.AboveNormal;
+                objThread.Start();
             }
-            catch (IOException) {
-                if (!loop)
-                {
-                    System.Timers.Timer timer = new System.Timers.Timer();
-                    timer.Elapsed += Timer_Elapsed;
-                    timer.Interval = 1000;
-                    SaveRattingTimers.Add(timer);
-                    SaveRattingTimersValues.Add(timer, (FilePath, RatingValue));
-                    timer.Start();
-                }
-                return false; 
-            }
-            catch (Exception) { return false; }
+            return true;
         }
-
-        private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
+        public static void SaveRatingLoop()
         {
-            //if (sender == null) { return; }
-            //if (sender.GetType() != typeof(System.Timers.Timer)) { return; }
-            System.Timers.Timer timer = sender as System.Timers.Timer;
-            (string, double) data = SaveRattingTimersValues[timer];
-            bool ret = SaveRating(data.Item1, data.Item2, true);
-            if (ret) { timer.Stop(); SaveRattingTimers.Remove(timer); SaveRattingTimersValues.Remove(timer); timer.Dispose(); }
+            List<SaveRatingObejct> rmList = new List<SaveRatingObejct>();
+            while (saveRatingThreadRun)
+            {
+                try
+                {
+                    foreach (SaveRatingObejct obj in saveRatingObejcts)
+                    {
+                        bool passed = false;
+                        try
+                        {
+                            if (Player.GetCurrentFile() == obj.Path) { obj.Count += 1; continue; }
+
+                            TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
+
+                            TagLib.File fi = TagLib.File.Create(obj.Path, ReadStyle.Average);
+                            TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
+                            TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
+                            if (ReverseTableRateWindows.ContainsKey(obj.Rate)) { frame1.Rating = ReverseTableRatePlayer[obj.Rate]; }
+                            else { frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(obj.Rate)] + 1); }
+                            fi.Save();
+                            Debug.WriteLine("Ratting for '" + obj.Path + "' saved !");
+                            rmList.Add(obj);
+                            passed = true;
+                        }
+                        catch (IOException)
+                        {
+                            Debug.WriteLine("IOException for '" + obj.Path + "', Count = " + obj.Count);
+                            obj.Count += 1;
+                        }
+                        catch (Exception)
+                        {
+                            Debug.WriteLine("Generic Exception for '" + obj.Path + "', Count = " + obj.Count);
+                            obj.Count += 1;
+                        }
+                        if (obj.Count >= 800 && !passed)
+                        {
+                            rmList.Add(obj);
+                            Debug.WriteLine("Failed to save rating for file: " + obj.Path);
+                            //MessageBox.Show(
+                            //    "Failed to save rating for file: " + obj.Path,
+                            //    "Error",
+                            //    MessageBoxButtons.OK,
+                            //    MessageBoxIcon.Error
+                            //);
+                        }
+                    }
+
+                    if (rmList.Count > 0)
+                    {
+                        foreach (SaveRatingObejct obj in rmList) { saveRatingObejcts.Remove(obj); }
+                        rmList.Clear();
+                    }
+
+                    Thread.Sleep(500);
+                }
+                catch (Exception) { }
+            }
         }
 
-        public static void WaitTimersEnd() {
-            if (SaveRattingTimers.Count > 0)
-            { 
-                Thread.Sleep(2000);
-                foreach (System.Timers.Timer timer in SaveRattingTimers) { timer.Dispose(); }
-            }
+        public static void WaitTimersEnd()
+        {
+            saveRatingThreadRun = false;
+            Thread.Sleep(500);
         }
     }
 }

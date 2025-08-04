@@ -2546,7 +2546,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MinimumSize = new Size(629, 600);
             Name = "MainWindow2";
             Padding = new Padding(1);
-            StartPosition = FormStartPosition.CenterScreen;
+            StartPosition = FormStartPosition.Manual;
             Text = "MainWindow";
             SizeChanged += MainWindow2_SizeChanged;
             GlobalTableLayoutPanel.ResumeLayout(false);

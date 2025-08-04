@@ -414,13 +414,17 @@ namespace AnotherMusicPlayer
         /// <summary> Get/Set position for FilePath or CurrentFile if FilePath is null </summary>
         public static long Position(string FilePath = null, long position = -1)
         {
-            if (TestFile(FilePath))
+            try
             {
-                if (FilePath == null) { FilePath = CurrentFile; }
-                if (!PlayStatus.ContainsKey(FilePath)) { return -1; }
-                if (position != -1) { PlayNewPositions[FilePath] = position; return position; }
-                else { return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds; }
+                if (TestFile(FilePath))
+                {
+                    if (FilePath == null) { FilePath = CurrentFile; }
+                    if (!PlayStatus.ContainsKey(FilePath)) { return -1; }
+                    if (position != -1) { PlayNewPositions[FilePath] = position; return position; }
+                    else { return (long)((AudioFileReader)AudioList[FilePath]).CurrentTime.TotalMilliseconds; }
+                }
             }
+            catch (Exception) { }
             return -1;
         }
 

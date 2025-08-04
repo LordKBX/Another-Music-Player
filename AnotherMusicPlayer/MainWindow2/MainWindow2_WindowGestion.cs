@@ -31,6 +31,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
     {
         private void MainWindow2_SizeChanged(object sender, EventArgs e)
         {
+            Settings.LastWindowWidth = this.Width;
+            Settings.LastWindowHeight = this.Height;
+            Settings.SaveSettingsAsync();
+
             TabControler.TabSize = new System.Drawing.Size((TabControler.Width) / TabControler.Tabs.Count, 50);
             if (Width > 800 && Height > 700)
             { 
@@ -59,12 +63,18 @@ namespace AnotherMusicPlayer.MainWindow2Space
             if (title != null && title.Trim() != "")
             {
                 this.Text = title;
-                try { customThumbnail.Title = title; } catch { }
+                if (customThumbnail != null)
+                {
+                    try { customThumbnail.Title = title; } catch { }
+                }
                 this.TitleLabel.Text = title;
             }
             else
             {
-                try { customThumbnail.Title = App.AppName; } catch { }
+                if (customThumbnail != null)
+                {
+                    try { customThumbnail.Title = App.AppName; } catch { }
+                }
                 this.TitleLabel.Text = App.AppName;
             }
             App.SetToolTip(this.TitleLabel, this.TitleLabel.Text);
@@ -86,6 +96,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 this.MaximumSize = screen.WorkingArea.Size;
                 WindowState = FormWindowState.Maximized;
             }
+            Settings.LastWindowState = this.WindowState;
         }
         public void CloseButton_Click(object? sender, EventArgs? e) { Close(); }
         #endregion
@@ -150,6 +161,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             while (sender.GetType().Name != "TableLayoutPanel") { sender = ((Control)sender).Parent; }
             string label = ((TableLayoutPanel)sender).Tag as string;
             draggings[label] = false;
+
+            Settings.LastWindowTop = this.Top;
+            Settings.LastWindowLeft = this.Left;
+            Settings.SaveSettingsAsync();
         }
 
         public void FormDragable_Clear(string id)

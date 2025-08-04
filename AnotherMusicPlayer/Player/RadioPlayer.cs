@@ -256,12 +256,16 @@ namespace AnotherMusicPlayer
             {
                 if (aTimer != null) { aTimer.Stop(); }
                 radioManualStop = true;
-                wavePlayer.PlaybackStopped -= WavePlayer_PlaybackStopped1_Stream;
-                wavePlayer.Stop();
-                wavePlayer.Dispose();
-                wavePlayer = null;
-                while (wavePlayerQueue.Count > 0) { WaveOutEvent t = wavePlayerQueue.Dequeue(); t.Dispose(); t = null; }
+                if (wavePlayer != null)
+                {
+                    wavePlayer.PlaybackStopped -= WavePlayer_PlaybackStopped1_Stream;
+                    wavePlayer.Stop();
+                    wavePlayer.Dispose();
+                    wavePlayer = null;
+                    while (wavePlayerQueue.Count > 0) { WaveOutEvent t = wavePlayerQueue.Dequeue(); t.Dispose(); t = null; }
+                }
             }
+            catch(NullReferenceException) { }
             catch { }
 
             if (timeTimer != null) { timeTimer.Stop(); }

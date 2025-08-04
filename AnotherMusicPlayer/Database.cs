@@ -61,6 +61,7 @@ namespace AnotherMusicPlayer
         public void DatabaseTansactionEnd()
         {
             if (!inTransaction) { return; }
+            if (Transaction == null) { return; }
             try
             {
                 Transaction.Commit();

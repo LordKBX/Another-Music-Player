@@ -25,6 +25,7 @@ using System.Runtime.InteropServices;
 using System.Reflection;
 using System.Windows.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AnotherMusicPlayer
 {
@@ -78,6 +79,7 @@ namespace AnotherMusicPlayer
         // WindowSize section
         public static double LastWindowWidth { get; set; } = 550;
         public static double LastWindowHeight { get; set; } = 400;
+        public static FormWindowState LastWindowState { get; set; } = FormWindowState.Normal;
 
         // WindowPosition section
         public static double LastWindowLeft { get; set; } = 100;
@@ -145,6 +147,9 @@ namespace AnotherMusicPlayer
 
             LastWindowWidth = Convert.ToDouble(App.bdd.DatabaseGetParam("LastWindowWidth", "550"));
             LastWindowHeight = Convert.ToDouble(App.bdd.DatabaseGetParam("LastWindowHeight", "400"));
+            FormWindowState? v = EnumHelper<FormWindowState>.Parse2(App.bdd.DatabaseGetParam("LastWindowState", "Normal"));
+            if (v == null) { v = FormWindowState.Normal; }
+            LastWindowState = (FormWindowState)v;
 
             LastWindowLeft = Convert.ToDouble(App.bdd.DatabaseGetParam("LastWindowLeft", "100"));
             LastWindowTop = Convert.ToDouble(App.bdd.DatabaseGetParam("LastWindowTop", "100"));
@@ -190,6 +195,7 @@ namespace AnotherMusicPlayer
 
                 App.bdd.DatabaseSaveParam("LastWindowWidth", "" + LastWindowWidth, "INT");
                 App.bdd.DatabaseSaveParam("LastWindowHeight", "" + LastWindowHeight, "INT");
+                App.bdd.DatabaseSaveParam("LastWindowState", EnumHelper<FormWindowState>.GetDisplayValue(LastWindowState), "TEXT");
 
                 App.bdd.DatabaseSaveParam("LastWindowLeft", "" + LastWindowLeft, "INT");
                 App.bdd.DatabaseSaveParam("LastWindowTop", "" + LastWindowTop, "INT");

@@ -165,6 +165,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLangComboBox.Items.AddRange(App.Languages.ToArray());
             playBackContextMenu = MakePlayBackContextMenu();
 
+            this.Width = Convert.ToInt32(Math.Floor(Settings.LastWindowWidth));
+            this.Height = Convert.ToInt32(Math.Floor(Settings.LastWindowHeight));
+            this.Top = Convert.ToInt32(Math.Floor(Settings.LastWindowTop));
+            this.Left = Convert.ToInt32(Math.Floor(Settings.LastWindowLeft));
+            if (Settings.LastWindowState != FormWindowState.Minimized) { this.WindowState = Settings.LastWindowState; }
+
             library = new Library(this);
             playLists = new PlayLists(this);
 
@@ -281,7 +287,15 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 Debug.WriteLine("RadioPlayer.IsPlaying = " + ((RadioPlayer.IsPlaying)?"True":"False"));
                 if (RadioPlayer.IsPlaying) { RadioPlayer.Stop(); } else { Task<bool> a = RadioPlayer.Start(); } 
             }
-            else { if (Player.IsPlaying()) { Player.Pause(); } else { Player.Play(); } }
+            else { 
+                if (Player.IsPlaying()) { 
+                    Settings.LastPlaylistIndex = Player.Index;
+                    Settings.LastPlaylistDuration = Player.Position(null);
+                    Settings.SaveSettingsAsync();
+                    Player.Pause(); 
+                } 
+                else { Player.Play(); } 
+            }
         }
 
         private void PlaybackTabDataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
@@ -317,11 +331,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
-        private void MainWindow2_Resize(object sender, EventArgs e)
-        {
-        }
+        private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) {
+            if (Player.Mode == Modes.File) {
+                if (Player.LatestPlayerStatus != PlayerStatus.Stop)
+                {
+                    Settings.LastPlaylistIndex = Player.Index;
+                    Settings.LastPlaylistDuration = Player.Position(null);
+                }
+            }
 
-        private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) { KeyboardGlobal.Kill(); }
+            Settings.LastWindowWidth = this.Width;
+            Settings.LastWindowHeight = this.Height;
+            Settings.LastWindowState = (this.WindowState == FormWindowState.Minimized) ? FormWindowState.Normal : this.WindowState;
+
+            Settings.LastWindowTop = this.Top;
+            Settings.LastWindowLeft = this.Left;
+
+            Settings.SaveSettings();
+            KeyboardGlobal.Kill(); 
+        }
 
         private void Player_StatusChange()
         {
@@ -370,7 +398,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryLoadOldPlaylist();
             library.DisplayPath();
             library.InvokeScan();
-            this.Resize += MainWindow2_Resize;
         }
 
         private void PlaybackTabRatting_RateChanged(Rating2 sender, double value)
@@ -461,7 +488,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     DisplayPlaybackSize.Text = App.displayTime(duration);
                     playbackProgressBar.Value = Convert.ToInt32(Math.Round(Convert.ToDouble(position) * playbackProgressBar.MaxValue / duration, 0, MidpointRounding.ToEven));
                     Settings.LastPlaylistDuration = position;
-                    Settings.SaveSettings();
+                    Settings.SaveSettingsAsync();
                     if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
                 }
                 else
@@ -512,7 +539,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 }
 
                 Settings.LastPlaylistIndex = pos;
-                Settings.LastPlaylistDuration = 0;
                 Settings.SaveSettings();
                 if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
             }
@@ -525,6 +551,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {
             ChangeDisplayPlaybackPosition(e.Position, e.duration);
             BtnPlayPause.BackgroundImage = (Player.LatestPlayerStatus == PlayerStatus.Play) ? IconPlay : IconPause;
+            //Settings.LastPlaylistIndex = Player.Index;
+            //Settings.LastPlaylistDuration = Player.Position(null);
         }
         private void Player_PositionChanged(PlayerPositionChangedEventParams e) { ChangeDisplayPlaybackPosition(e.Position, e.duration); }
         private void Player_LengthChanged(PlayerLengthChangedEventParams e) { ChangeDisplayPlaybackPosition(-1, e.duration); }
@@ -541,6 +569,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 if (this.InvokeRequired) { this.Invoke(() => { Player_PlaylistChanged(e); }); return; }
 
                 PlayListItems.Clear();
+                //Settings.LastPlaylistIndex = 0;
+                //Settings.LastPlaylistDuration = 0;
                 if (Player.Mode == Modes.Radio)
                 { ChangeDisplayPlaybackPosition(0, 0); }
                 else if (Player.Mode == Modes.File)

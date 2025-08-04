@@ -18,8 +18,8 @@ using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace AnotherMusicPlayer
 {
-    public delegate void Ratting2RateChangedNotify(Rating2 sender, double value);
-    public delegate void Ratting2ZoomChangedNotify(Rating2 sender, double value);
+    public delegate void Rating2RateChangedNotify(Rating2 sender, double value);
+    public delegate void Rating2ZoomChangedNotify(Rating2 sender, double value);
 
     public partial class Rating2 : UserControl
     {
@@ -42,7 +42,7 @@ namespace AnotherMusicPlayer
             get { return _Zoom; }
             set { setZoom(value); }
         }
-        public event Ratting2ZoomChangedNotify ZoomChanged;
+        public event Rating2ZoomChangedNotify ZoomChanged;
 
         public void setZoom(double multiply)
         {
@@ -63,7 +63,7 @@ namespace AnotherMusicPlayer
             get { return _Rate; }
             set { setRate(value); }
         }
-        public event Ratting2RateChangedNotify RateChanged;
+        public event Rating2RateChangedNotify RateChanged;
         #endregion
 
 
@@ -110,5 +110,11 @@ namespace AnotherMusicPlayer
         }
 
         public void reDraw() { SecondLayer.Width = Convert.ToInt32(Math.Truncate(StarCaseWidth * _Zoom * _Rate)); }
+    }
+
+    public class SaveRatingObejct {
+        public uint Count { get; set; }
+        public double Rate { get; set; }
+        public string Path { get; set; }
     }
 }
