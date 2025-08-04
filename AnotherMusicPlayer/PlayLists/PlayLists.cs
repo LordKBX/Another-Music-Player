@@ -1,12 +1,13 @@
-﻿using System;
+﻿using AnotherMusicPlayer.MainWindow2Space;
+using System;
 using System.Collections.Generic;
-using AnotherMusicPlayer.MainWindow2Space;
-using System.Windows.Forms;
-using System.Linq;
-using Button = System.Windows.Forms.Button;
-using System.Drawing;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using System.Diagnostics;
+using System.Drawing;
+using System.Linq;
+using System.Security.AccessControl;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
+using Button = System.Windows.Forms.Button;
 
 namespace AnotherMusicPlayer
 {
@@ -14,7 +15,23 @@ namespace AnotherMusicPlayer
     {
         private MainWindow2 Parent;
         private bool isBuild = false; 
-        private List<string> autoList = new List<string>() { "lastImports", "mostPlayed", "mostRecentlyPlayed", "bestRating" };
+        private List<string> autoList = new List<string>() { 
+            "lastImports", 
+            "mostPlayed", 
+            "mostRecentlyPlayed", 
+            "bestRating",
+            "Stars5",
+            "Stars4-5",
+            "Stars4",
+            "Stars3-5",
+            "Stars3",
+            "Stars2-5",
+            "Stars2",
+            "Stars1-5",
+            "Stars1",
+            "Stars0-5",
+            "Stars0",
+        };
         bool IsAuto = false;
         bool IsCustom = false;
         bool IsRadio = false;
@@ -129,6 +146,11 @@ namespace AnotherMusicPlayer
                     Tag = "auto_" + archetype,
                     Name = "auto_" + archetype
                 };
+                if (archetype == "lastImports") { item.ImageKey = "new_icon.png"; }
+                else if (archetype == "mostPlayed") { item.ImageKey = "chart_line_icon.png"; }
+                else if (archetype == "mostRecentlyPlayed") { item.ImageKey = "history_recent_icon.png"; }
+                else if (archetype == "bestRating") { item.ImageKey = "star_up.png"; }
+                else if (archetype.StartsWith("Stars")){ item.ImageKey = "star_white.png"; }
                 item.ContextMenuStrip = MakeNodeContextMenu(item, PlayListsNodeContextMenuType.Auto);
                 Parent.PlaylistsTree.Nodes[0].Nodes.Add(item);
             }
@@ -235,6 +257,9 @@ namespace AnotherMusicPlayer
                         else if (e.Node.Index == 1) { OpenAutoPlaylist(AutoPlaylistTypes.MostPlayed); }
                         else if (e.Node.Index == 2) { OpenAutoPlaylist(AutoPlaylistTypes.MostRecentlyPlayed); }
                         else if (e.Node.Index == 3) { OpenAutoPlaylist(AutoPlaylistTypes.BestRating); }
+                        else if (e.Node.Name.StartsWith("auto_Stars")) { 
+                            OpenAutoPlaylist(AutoPlaylistTypes.StarValue, false, double.Parse(e.Node.Name.Replace("auto_Stars", "").Replace("-", ","))); 
+                        }
                         else { DisplayVoidPanel(); }
                     }
                     else if (parent.Index == 1)
@@ -260,7 +285,10 @@ namespace AnotherMusicPlayer
                 if (e.Node.Index == 1) { playlistType = AutoPlaylistTypes.MostPlayed; }
                 if (e.Node.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
                 if (e.Node.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
-                List<PlayListsLineItem> files = autolistData(playlistType, 100);
+                else { playlistType = AutoPlaylistTypes.StarValue; }
+                List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+                if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, double.Parse(e.Node.Name.Replace("auto_Stars", "").Replace("-", ","))); }
+                else { files = autolistData(playlistType, 100); }
                 List<string> paths = new List<string>();
                 foreach (PlayListsLineItem item in files) { paths.Add(item.Path); }
                 Player.StopAll();
@@ -283,14 +311,21 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private List<PlayListsLineItem> autolistData(AutoPlaylistTypes playlistType, int maxLimit = 50)
+        private List<PlayListsLineItem> autolistData(AutoPlaylistTypes playlistType, double maxLimit = 50)
         {
             string query = "";
-            if (playlistType == AutoPlaylistTypes.LastImports) { query = "SELECT * FROM files ORDER BY InsertionDate DESC, LastUpdate DESC LIMIT " + maxLimit; }
-            else if (playlistType == AutoPlaylistTypes.MostPlayed) { query = "SELECT files.*,playCounts.Cpt FROM files JOIN playCounts ON(playCounts.Path = files.Path) WHERE files.Path in (SELECT Path FROM playCounts ORDER BY Cpt DESC, LastPlay DESC LIMIT "+ maxLimit + ") ORDER BY playCounts.Cpt DESC, playCounts.LastPlay DESC"; }
-            else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { query = "SELECT files.*,playCounts.Cpt FROM files JOIN playCounts ON(playCounts.Path = files.Path) WHERE files.Path in (SELECT Path FROM playCounts ORDER BY LastPlay DESC LIMIT " + maxLimit + ") ORDER BY playCounts.LastPlay DESC"; }
-            if (playlistType == AutoPlaylistTypes.BestRating) { query = "SELECT * FROM files ORDER BY REPLACE(Rating, '.', ',') DESC LIMIT " + maxLimit; }
-
+            int maxint = Convert.ToInt32(Math.Floor(maxLimit));
+            if (playlistType == AutoPlaylistTypes.LastImports) { query = "SELECT * FROM files ORDER BY InsertionDate DESC, LastUpdate DESC LIMIT " + maxint; }
+            else if (playlistType == AutoPlaylistTypes.MostPlayed) { query = "SELECT files.*,playCounts.Cpt FROM files JOIN playCounts ON(playCounts.Path = files.Path) WHERE files.Path in (SELECT Path FROM playCounts ORDER BY Cpt DESC, LastPlay DESC LIMIT "+ maxint + ") ORDER BY playCounts.Cpt DESC, playCounts.LastPlay DESC"; }
+            else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { query = "SELECT files.*,playCounts.Cpt FROM files JOIN playCounts ON(playCounts.Path = files.Path) WHERE files.Path in (SELECT Path FROM playCounts ORDER BY LastPlay DESC LIMIT " + maxint + ") ORDER BY playCounts.LastPlay DESC"; }
+            else if (playlistType == AutoPlaylistTypes.BestRating) { 
+                List<string> acceptedRatings = new List<string>() { "4", "4.0", "4,0", "4.5", "4,5", "5", "5.0", "5,0" };
+                query = "SELECT * FROM files WHERE Rating IN('" + string.Join("','", acceptedRatings) + "') ORDER BY REPLACE(Rating, '.', ',') DESC, Name ASC"; 
+            }
+            if (playlistType == AutoPlaylistTypes.StarValue) { 
+                query = "SELECT * FROM files WHERE Rating = '"+maxLimit+"' OR Rating = "+(("" + maxLimit).Replace(",", "."))+" ORDER BY Name ASC";
+            }
+            Debug.WriteLine(query);
             List<PlayListsLineItem> files = new List<PlayListsLineItem>();
             Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery(query, "Path");
             return ParseFilesQueryDate(rez, (playlistType == AutoPlaylistTypes.MostPlayed || playlistType == AutoPlaylistTypes.MostRecentlyPlayed));
@@ -344,7 +379,7 @@ namespace AnotherMusicPlayer
 
         }
 
-        private void OpenAutoPlaylist(AutoPlaylistTypes playlistType, bool startPlay = false)
+        private void OpenAutoPlaylist(AutoPlaylistTypes playlistType, bool startPlay = false, double starValue = 0)
         {
             DisplayListPanel();
             IsAuto = true; IsCustom = false;
@@ -352,11 +387,14 @@ namespace AnotherMusicPlayer
             Parent.PlayListsTabDataGridView.ReadOnly = false;
             Parent.PlayListsTabDataGridView.DataSource = null;
             Parent.PlayListsTabDataGridView.Invalidate();
-            List<PlayListsLineItem> files = autolistData(playlistType, 100);
+            List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+            if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, starValue); }
+            else { files = autolistData(playlistType, 100); }
             if (playlistType == AutoPlaylistTypes.LastImports) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
             else if (playlistType == AutoPlaylistTypes.MostPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = true; }
             else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = true; }
             else if (playlistType == AutoPlaylistTypes.BestRating) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
+            else if (playlistType == AutoPlaylistTypes.StarValue) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
 
             if (files == null) { return; }
             if (files.Count > 0) { Parent.PlayListsTabDataGridView.DataSource = files; }

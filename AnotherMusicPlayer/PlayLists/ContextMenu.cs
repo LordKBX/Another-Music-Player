@@ -6,10 +6,12 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Security.AccessControl;
 using System.Windows.Forms;
 using System.Windows.Markup;
 using System.Windows.Media;
 using System.Xml.Linq;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace AnotherMusicPlayer
 {
@@ -73,7 +75,11 @@ namespace AnotherMusicPlayer
                 if (data.Item1.Index == 1) { playlistType = AutoPlaylistTypes.MostPlayed; }
                 if (data.Item1.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
                 if (data.Item1.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
-                List<PlayListsLineItem> files = autolistData(playlistType, 100);
+                if (data.Item1.Name.StartsWith("auto_Stars")) { playlistType = AutoPlaylistTypes.StarValue; }
+                List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+                if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, double.Parse(data.Item1.Name.Replace("auto_Stars", "").Replace("-", ","))); }
+                else { files = autolistData(playlistType, 100); }
+                    
                 List<string> paths = new List<string>();
                 foreach (PlayListsLineItem pitem in files) { paths.Add(pitem.Path); }
                 Player.StopAll();
@@ -109,7 +115,10 @@ namespace AnotherMusicPlayer
                 if (data.Item1.Index == 1) { playlistType = AutoPlaylistTypes.MostPlayed; }
                 if (data.Item1.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
                 if (data.Item1.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
-                List<PlayListsLineItem> files = autolistData(playlistType, 100);
+                if (data.Item1.Name.StartsWith("auto_Stars")) { playlistType = AutoPlaylistTypes.StarValue; }
+                List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+                if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, double.Parse(data.Item1.Name.Replace("auto_Stars", "").Replace("-", ","))); }
+                else { files = autolistData(playlistType, 100); }
                 List<string> paths = new List<string>();
                 foreach (PlayListsLineItem pitem in files) { paths.Add(pitem.Path); }
                 Player.StopAll();

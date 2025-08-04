@@ -253,6 +253,17 @@
     <PlayListsAuto_mostPlayed><![CDATA[Les plus joués]]></PlayListsAuto_mostPlayed>
     <PlayListsAuto_mostRecentlyPlayed><![CDATA[Reçament joué]]></PlayListsAuto_mostRecentlyPlayed>
     <PlayListsAuto_bestRating><![CDATA[Les mieux notées]]></PlayListsAuto_bestRating>
+    <PlayListsAuto_Stars5><![CDATA[5 étoiles]]></PlayListsAuto_Stars5>
+    <PlayListsAuto_Stars4-5><![CDATA[4,5 étoiles]]></PlayListsAuto_Stars4-5>
+    <PlayListsAuto_Stars4><![CDATA[4 étoiles]]></PlayListsAuto_Stars4>
+    <PlayListsAuto_Stars3-5><![CDATA[3,5 étoiles]]></PlayListsAuto_Stars3-5>
+    <PlayListsAuto_Stars3><![CDATA[3 étoiles]]></PlayListsAuto_Stars3>
+    <PlayListsAuto_Stars2-5><![CDATA[2,5 étoiles]]></PlayListsAuto_Stars2-5>
+    <PlayListsAuto_Stars2><![CDATA[2 étoiles]]></PlayListsAuto_Stars2>
+    <PlayListsAuto_Stars1-5><![CDATA[1,5 étoiles]]></PlayListsAuto_Stars1-5>
+    <PlayListsAuto_Stars1><![CDATA[1 étoile]]></PlayListsAuto_Stars1>
+    <PlayListsAuto_Stars0-5><![CDATA[0,5 étoiles]]></PlayListsAuto_Stars0-5>
+    <PlayListsAuto_Stars0><![CDATA[0 étoiles]]></PlayListsAuto_Stars0>
     <PlayListsUser><![CDATA[Enregistré]]></PlayListsUser>
     <PlayListsRadio><![CDATA[Web Radio]]></PlayListsRadio>
     <PlayListsRadioDefault><![CDATA[Divers]]></PlayListsRadioDefault>

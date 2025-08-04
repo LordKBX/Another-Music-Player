@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 
 namespace AnotherMusicPlayer
 {
-    public enum AutoPlaylistTypes { LastImports, MostPlayed, MostRecentlyPlayed, BestRating }
+    public enum AutoPlaylistTypes { LastImports, MostPlayed, MostRecentlyPlayed, BestRating, StarValue }
 
     internal class PlayListsLineItem{
         public int PlayCount { get; set; } = 0;

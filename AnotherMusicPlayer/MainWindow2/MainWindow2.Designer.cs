@@ -1224,6 +1224,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabTreeImageList.Images.SetKeyName(2, "floppy_icon.png");
             PlayListsTabTreeImageList.Images.SetKeyName(3, "radio_icon.png");
             PlayListsTabTreeImageList.Images.SetKeyName(4, "folder_open_trimed.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(5, "new_icon.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(6, "chart_line_icon.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(7, "star_white.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(8, "star_up.png");
+            PlayListsTabTreeImageList.Images.SetKeyName(9, "history_recent_icon.png");
             // 
             // PlayListsTabSplitContainer1
             // 
