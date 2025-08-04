@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+	<head></head>
+	<body>
+		<iframe id="githubFrame" src="https://github.com/LordKBX/Another-Music-Player/tree/master/Captures"></iframe>
+		<script>
+			document.querySelector('div[data-hpc="true"]').querySelectorAll('a[class="Link--primary"][aria-label$="(File)"]')
+				.forEach((element) => { 
+					if(element.offsetParent == null){ return;}; 
+					console.log(element);
+				})
+		</script>
+	</body>
+</html>

@@ -21,8 +21,8 @@
     <Configurations>Debug;Release</Configurations>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <NeutralLanguage>en</NeutralLanguage>
-    <SignAssembly>false</SignAssembly>
-    <DelaySign>false</DelaySign>
+    <SignAssembly>False</SignAssembly>
+    <DelaySign>False</DelaySign>
     <UseWindowsForms>True</UseWindowsForms>
     <UseWPF>False</UseWPF>
     <IncludeSourceRevisionInInformationalVersion>false</IncludeSourceRevisionInInformationalVersion>
@@ -32,6 +32,7 @@
     <SupportedOSPlatformVersion>7.0</SupportedOSPlatformVersion>
     <AssemblyVersion>$(Version)</AssemblyVersion>
     <FileVersion>$(Version)</FileVersion>
+    <AssemblyOriginatorKeyFile></AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="Libs\**" />
