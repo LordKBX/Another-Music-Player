@@ -68,33 +68,39 @@ namespace AnotherMusicPlayer
             string tag = "";
             if (Parent.LibraryFiltersMode.SelectedItem.GetType() == typeof(string)) { tag = (string)Parent.LibraryFiltersMode.SelectedItem; }
             else if (Parent.LibraryFiltersMode.SelectedItem.GetType() == typeof(DropDownItem)) { tag = (string)((DropDownItem)Parent.LibraryFiltersMode.SelectedItem).Data; }
-            //Debug.WriteLine(tag);
+            Debug.WriteLine("tag = " + tag);
             if (tag == "")
             {
                 Parent.LibraryFiltersSearchBox.Visible = false;
                 Parent.LibraryFiltersSearchBox.Text = "";
 
-                Parent.LibraryFiltersGenreSearchBox.Visible = false;
-                Parent.LibraryFiltersGenreSearchBox.Text = "";
-
                 Parent.LibraryFiltersGenreList.SelectedIndex = 0;
                 Parent.LibraryFiltersGenreList.Visible = false;
-
+                if (CurrentPath != RootPath) { DisplayPath(RootPath); }
             }
-            else if (tag == "Name" || tag == "Artist" || tag == "Album")
+            else
             {
-                Parent.LibraryFiltersGenreList.Visible = false;
-                Parent.LibraryFiltersGenreList.SelectedIndex = 0;
+                Parent.LibraryTabSplitContainer.Panel1Collapsed = true;
+                Parent.LibraryTabSplitContainer.Panel2Collapsed = false;
+                Parent.LibraryTabSplitContainer2.Panel1Collapsed = false;
+                Parent.LibraryTabSplitContainer2.Panel2Collapsed = true;
 
-                Parent.LibraryFiltersSearchBox.Visible = true;
-                Parent.LibraryFiltersSearchBox.Text = "";
-            }
-            else if (tag == "Genre")
-            {
-                Parent.LibraryFiltersGenreList.Visible = true;
-                Parent.LibraryFiltersGenreSearchBox.Visible = true;
-                Parent.LibraryFiltersSearchBox.Visible = false;
-                Parent.LibraryFiltersGenreList.SelectedIndex = 0;
+                if (tag == "Name" || tag == "Artist" || tag == "Album"
+                    || tag == App.GetTranslation("LibraryFiltersMode_name") 
+                    || tag == App.GetTranslation("LibraryFiltersMode_artist") 
+                    || tag == App.GetTranslation("LibraryFiltersMode_album"))
+                {
+                    Parent.LibraryFiltersGenreList.Visible = false;
+
+                    Parent.LibraryFiltersSearchBox.Visible = true;
+                    Parent.LibraryFiltersSearchBox.Text = "";
+                }
+                else if (tag == "Genre")
+                {
+                    Parent.LibraryFiltersGenreList.Visible = true;
+                    Parent.LibraryFiltersSearchBox.Visible = false;
+                    Parent.LibraryFiltersGenreList.SelectedIndex = 0;
+                }
             }
         }
 
@@ -139,7 +145,7 @@ namespace AnotherMusicPlayer
                             }
                         }
                     }
-                    //Parent.LibrarySearchContent.ItemsSource = list;
+                    Parent.LibrarySearchContent.DataSource = list;
                     Parent.LibraryNavigationPathContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
                 }
                 Parent.setLoadingState(false);
@@ -149,15 +155,16 @@ namespace AnotherMusicPlayer
         /// <summary> Callback key down on search input for text search </summary>
         private void LibraryFiltersSearchBox_KeyDown(object sender, KeyEventArgs e)
         {
-            /*
             //Debug.WriteLine(e.Key.ToString());
-            if (e.Key.ToString() == "Return")
+            if (e.KeyData == Keys.Return)
             {
-                Parent.LibrarySearchContentGridRow2.Height = new GridLength(0);
-
-                string tag = (string)((ComboBoxItem)Parent.LibraryFiltersMode.SelectedItem).Tag;
+                string tag = "" + Parent.LibraryFiltersMode.SelectedItem;
                 string var = Parent.LibraryFiltersSearchBox.Text.ToLower();
                 Dictionary<string, Dictionary<string, object>> files = null;
+                if (tag == App.GetTranslation("LibraryFiltersMode_name")) { tag = "Name"; }
+                else if (tag == App.GetTranslation("LibraryFiltersMode_artist")) { tag = "Artist"; }
+                else if (tag == App.GetTranslation("LibraryFiltersMode_album")) { tag = "Album"; }
+
                 if (tag == "Artist")
                 {
                     files = Bdd.DatabaseQuery("SELECT * FROM files WHERE LOWER(Performers) LIKE '%" + Database.EscapeString(var) + "%' OR LOWER(Composers) LIKE '%" + Database.EscapeString(var) + "%' ORDER BY Album, Disc, Track, Name, Path ASC", "Path");
@@ -183,12 +190,11 @@ namespace AnotherMusicPlayer
                             }
                         }
                     }
-                    SearchResultsContener.ItemsSource = list;
-                    SearchResultsContener.ScrollIntoView(list[0]);
+                    Parent.LibrarySearchContent.DataSource = list;
+                    Parent.LibraryNavigationPathContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
                 }
                 Parent.setLoadingState(false);
             }
-            */
         }
 
         private Dictionary<string, Dictionary<uint, Dictionary<string, MediaItem>>> getSearchSlice(uint start, uint end)

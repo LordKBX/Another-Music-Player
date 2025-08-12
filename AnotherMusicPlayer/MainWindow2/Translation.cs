@@ -61,8 +61,21 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 window.LibraryFiltersMode.Items[2] = App.GetTranslation("LibraryFiltersMode_artist");
                 window.LibraryFiltersMode.Items[3] = App.GetTranslation("LibraryFiltersMode_album");
                 window.LibraryFiltersMode.Items[4] = App.GetTranslation("LibraryFiltersMode_genre");
-                window.LibraryFiltersGenreSearchBox.PlaceholderText = " " + App.GetTranslation("LibraryFiltersGenreSearchBox.PlaceholderText");
                 window.LibraryFiltersSearchBox.PlaceholderText = " " + App.GetTranslation("LibraryFiltersSearchBox.PlaceholderText");
+
+                Type colType = typeof(DataGridViewTextBoxColumn);
+                foreach (DataGridViewColumn ctl in window.LibrarySearchContent.Columns) 
+                {
+                    if (ctl.GetType() == colType)
+                    {
+                        if (ctl.Name == "LibrarySearchContent_Duration") { ((DataGridViewTextBoxColumn)ctl).HeaderText = App.GetTranslation("Duration"); }
+                        if (ctl.Name == "LibrarySearchContent_Rating") { ((DataGridViewTextBoxColumn)ctl).HeaderText = App.GetTranslation("Rating"); }
+                        if (ctl.Name == "LibrarySearchContent_Name") { ((DataGridViewTextBoxColumn)ctl).HeaderText = App.GetTranslation("Title"); }
+                        if (ctl.Name == "LibrarySearchContent_Album") { ((DataGridViewTextBoxColumn)ctl).HeaderText = App.GetTranslation("Album"); }
+                        if (ctl.Name == "LibrarySearchContent_Artists") { ((DataGridViewTextBoxColumn)ctl).HeaderText = App.GetTranslation("Artist"); }
+                        if (ctl.Name == "LibrarySearchContent_Year") { ((DataGridViewTextBoxColumn)ctl).HeaderText = App.GetTranslation("Year"); }
+                    }
+                }
 
                 // Playlists Tab
                 window.PlaylistsTree.Nodes[0].Text = App.GetTranslation("PlayListsAuto");

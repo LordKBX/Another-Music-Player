@@ -51,6 +51,7 @@ namespace AnotherMusicPlayer
         public uint TrackCount { get; set; }
         public uint Year { get; set; }
         public double Rating { get; set; }
+        public Bitmap RatingDisplay { get { return Rating2.DrawImage(Rating); } }
         public uint PlayCount { get; set; }
 
         public string InnerUID { get; set; }

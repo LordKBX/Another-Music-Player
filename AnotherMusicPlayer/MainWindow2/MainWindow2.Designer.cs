@@ -82,11 +82,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTab = new Manina.Windows.Forms.Tab();
             LibraryTabTableLayoutPanel = new TableLayoutPanel();
             LibraryNavigationPathContener = new FlowLayoutPanel();
-            LibraryFiltersGrid = new TableLayoutPanel();
+            LibraryFiltersGrid = new FlowLayoutPanel();
             LibraryFiltersModeLabel = new Label();
             LibraryFiltersMode = new ComboBox();
             LibraryFiltersGenreList = new ComboBox();
-            LibraryFiltersGenreSearchBox = new TextBox();
             LibraryFiltersSearchBox = new TextBox();
             LibraryTabSplitContainer = new SplitContainer();
             LibraryNavigationContent = new TableLayoutPanel();
@@ -928,32 +927,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             // LibraryFiltersGrid
             // 
-            LibraryFiltersGrid.ColumnCount = 7;
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.ColumnStyles.Add(new ColumnStyle());
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersModeLabel, 0, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersMode, 1, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreList, 2, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreSearchBox, 3, 0);
-            LibraryFiltersGrid.Controls.Add(LibraryFiltersSearchBox, 4, 0);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersModeLabel);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersMode);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreList);
+            LibraryFiltersGrid.Controls.Add(LibraryFiltersSearchBox);
             LibraryFiltersGrid.Dock = DockStyle.Fill;
             LibraryFiltersGrid.Location = new Point(4, 45);
             LibraryFiltersGrid.Name = "LibraryFiltersGrid";
-            LibraryFiltersGrid.RowCount = 1;
-            LibraryFiltersGrid.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             LibraryFiltersGrid.Size = new Size(849, 34);
             LibraryFiltersGrid.TabIndex = 1;
+            LibraryFiltersGrid.WrapContents = false;
             // 
             // LibraryFiltersModeLabel
             // 
-            LibraryFiltersModeLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersModeLabel.Anchor = AnchorStyles.Left;
             LibraryFiltersModeLabel.AutoSize = true;
-            LibraryFiltersModeLabel.Location = new Point(3, 7);
+            LibraryFiltersModeLabel.Location = new Point(3, 9);
             LibraryFiltersModeLabel.Margin = new Padding(3, 0, 10, 0);
             LibraryFiltersModeLabel.Name = "LibraryFiltersModeLabel";
             LibraryFiltersModeLabel.Size = new Size(42, 20);
@@ -962,57 +951,42 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             // LibraryFiltersMode
             // 
-            LibraryFiltersMode.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersMode.Anchor = AnchorStyles.Left;
             LibraryFiltersMode.BackColor = Color.DimGray;
             LibraryFiltersMode.DropDownStyle = ComboBoxStyle.DropDownList;
             LibraryFiltersMode.FlatStyle = FlatStyle.Flat;
             LibraryFiltersMode.ForeColor = Color.White;
             LibraryFiltersMode.FormattingEnabled = true;
             LibraryFiltersMode.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
-            LibraryFiltersMode.Location = new Point(58, 3);
+            LibraryFiltersMode.Location = new Point(58, 5);
             LibraryFiltersMode.Name = "LibraryFiltersMode";
             LibraryFiltersMode.Size = new Size(144, 28);
             LibraryFiltersMode.TabIndex = 1;
             // 
             // LibraryFiltersGenreList
             // 
-            LibraryFiltersGenreList.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersGenreList.Anchor = AnchorStyles.Left;
             LibraryFiltersGenreList.BackColor = Color.DimGray;
             LibraryFiltersGenreList.DropDownStyle = ComboBoxStyle.DropDownList;
             LibraryFiltersGenreList.FlatStyle = FlatStyle.Flat;
             LibraryFiltersGenreList.ForeColor = Color.White;
             LibraryFiltersGenreList.FormattingEnabled = true;
             LibraryFiltersGenreList.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
-            LibraryFiltersGenreList.Location = new Point(208, 3);
+            LibraryFiltersGenreList.Location = new Point(208, 5);
+            LibraryFiltersGenreList.MinimumSize = new Size(200, 0);
             LibraryFiltersGenreList.Name = "LibraryFiltersGenreList";
-            LibraryFiltersGenreList.Size = new Size(144, 28);
+            LibraryFiltersGenreList.Size = new Size(200, 28);
             LibraryFiltersGenreList.TabIndex = 1;
-            // 
-            // LibraryFiltersGenreSearchBox
-            // 
-            LibraryFiltersGenreSearchBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            LibraryFiltersGenreSearchBox.BackColor = Color.DimGray;
-            LibraryFiltersGenreSearchBox.BorderStyle = BorderStyle.FixedSingle;
-            LibraryFiltersGenreSearchBox.CharacterCasing = CharacterCasing.Lower;
-            LibraryFiltersGenreSearchBox.Font = new Font("Segoe UI", 10F);
-            LibraryFiltersGenreSearchBox.ForeColor = Color.White;
-            LibraryFiltersGenreSearchBox.Location = new Point(355, 2);
-            LibraryFiltersGenreSearchBox.Margin = new Padding(0, 2, 0, 7);
-            LibraryFiltersGenreSearchBox.Name = "LibraryFiltersGenreSearchBox";
-            LibraryFiltersGenreSearchBox.PlaceholderText = " Search Genre";
-            LibraryFiltersGenreSearchBox.Size = new Size(125, 30);
-            LibraryFiltersGenreSearchBox.TabIndex = 3;
-            LibraryFiltersGenreSearchBox.Text = " search genre";
             // 
             // LibraryFiltersSearchBox
             // 
-            LibraryFiltersSearchBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            LibraryFiltersSearchBox.Anchor = AnchorStyles.Left;
             LibraryFiltersSearchBox.BackColor = Color.DimGray;
             LibraryFiltersSearchBox.BorderStyle = BorderStyle.FixedSingle;
             LibraryFiltersSearchBox.CharacterCasing = CharacterCasing.Lower;
             LibraryFiltersSearchBox.Font = new Font("Segoe UI", 10F);
             LibraryFiltersSearchBox.ForeColor = Color.White;
-            LibraryFiltersSearchBox.Location = new Point(483, 2);
+            LibraryFiltersSearchBox.Location = new Point(414, 2);
             LibraryFiltersSearchBox.Margin = new Padding(3, 2, 0, 7);
             LibraryFiltersSearchBox.Name = "LibraryFiltersSearchBox";
             LibraryFiltersSearchBox.PlaceholderText = " Search";
@@ -2744,12 +2718,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal GroupBox SettingsTabAutoCloseLyricsGroupBox;
         internal ComboBox SettingsTabAutoCloseLyricsComboBox;
         internal Label PlaybackPositionLabel;
-        private TableLayoutPanel LibraryFiltersGrid;
+        private FlowLayoutPanel LibraryFiltersGrid;
         private Panel LibraryNavigationContentScroll;
         internal Label LibraryFiltersModeLabel;
         internal ComboBox LibraryFiltersMode;
         internal ComboBox LibraryFiltersGenreList;
-        internal TextBox LibraryFiltersGenreSearchBox;
         internal TextBox LibraryFiltersSearchBox;
         internal Label PlaybackTabGenresLabelInfo;
         private Label PlaybackTabGenresLabelValue;

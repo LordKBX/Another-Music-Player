@@ -10,6 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -18,6 +19,7 @@ using System.Xml.Linq;
 using static System.Runtime.InteropServices.Marshalling.IIUnknownCacheStrategy;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using MainWindow2 = AnotherMusicPlayer.MainWindow2Space.MainWindow2;
+using Size = System.Drawing.Size;
 
 namespace AnotherMusicPlayer
 {
@@ -115,15 +117,56 @@ namespace AnotherMusicPlayer
             Parent.LibrarySearchContent.DataSource = null;
 
             Parent.LibraryFiltersGenreList.Visible = false;
-            Parent.LibraryFiltersGenreSearchBox.Visible = false;
             Parent.LibraryFiltersSearchBox.Visible = false;
-            Parent.LibraryFiltersGenreSearchBox.Text = "";
             Parent.LibraryFiltersSearchBox.Text = "";
 
             Parent.LibraryFiltersMode.SelectedIndexChanged += LibraryFiltersMode_SelectionChanged;
             Parent.LibraryFiltersGenreList.SelectedIndexChanged += LibraryFiltersGenreList_SelectionChanged;
-            Parent.LibraryFiltersGenreSearchBox.KeyDown += LibraryFiltersSearchBox_KeyDown;
             Parent.LibraryFiltersSearchBox.KeyDown += LibraryFiltersSearchBox_KeyDown;
+
+            Parent.LibrarySearchContent.AutoGenerateColumns = false;
+            Parent.LibrarySearchContent.MultiSelect = false;
+            Parent.LibrarySearchContent.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            Parent.LibrarySearchContent.CellDoubleClick += LibrarySearchContent_CellDoubleClick;
+            foreach (string col in new List<string>() { "Name", "Album", "Artists", "Year", "DurationS", "RatingDisplay" })
+            {
+                if (col == "DurationS") {
+                    string lcol = col.Substring(0, col.Length - 1);
+                    Parent.LibrarySearchContent.Columns.Add(new DataGridViewTextBoxColumn()
+                    {
+                        Name = "LibrarySearchContent_Duration",
+                        HeaderText = lcol,
+                        DataPropertyName = col,
+                        Width = 100,
+                        ReadOnly = true,
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                    });
+                }
+                else if (col == "RatingDisplay")
+                {
+                    Parent.LibrarySearchContent.Columns.Add(new DataGridViewImageColumn()
+                    {
+                        Name = "LibrarySearchContent_Rating",
+                        HeaderText = "Rating",
+                        DataPropertyName = col,
+                        Width = 100,
+                        ReadOnly = true,
+                        AutoSizeMode = DataGridViewAutoSizeColumnMode.None
+                    });
+                }
+                else
+                {
+                    Parent.LibrarySearchContent.Columns.Add(new DataGridViewTextBoxColumn()
+                    {
+                        Name = "LibrarySearchContent_" + col,
+                        HeaderText = col,
+                        DataPropertyName = col,
+                        Width = (col == "Year")?100:200,
+                        ReadOnly = true,
+                        AutoSizeMode = (col == "Year") ? DataGridViewAutoSizeColumnMode.None : DataGridViewAutoSizeColumnMode.Fill
+                    });
+                }
+            }
 
             Parent.LibraryNavigationContentFolders.AutoGenerateColumns = false;
             Parent.LibraryNavigationContentFolders.ColumnHeadersVisible = false;
@@ -144,6 +187,15 @@ namespace AnotherMusicPlayer
             CreateWatcher();
             //InvokeScan();
             //ActualizeColors();
+        }
+
+        private void LibrarySearchContent_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0) 
+            {
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(new string[] { ((MediaItem)Parent.LibrarySearchContent.Rows[e.RowIndex].DataBoundItem).Path }, autoplay:true);
+            }
         }
 
         //public void ActualizeColors()

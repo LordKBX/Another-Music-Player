@@ -94,7 +94,7 @@ namespace AnotherMusicPlayer
                 if (Contener.Controls.Count > 0)
                     Contener.Controls.Clear();
 
-                Label tb = new Label();
+                Label tb = new Label() { Margin = new Padding(3, 7, 3, 7), AutoSize = true };
                 //tb.Style = Parent.Parent.FindResource("LibraryNavigationPathItem") as Style;
                 tb.Text = App.GetTranslation("LibraryNavigatorItemHome");
                 tb.Tag = RootPath;
@@ -102,12 +102,12 @@ namespace AnotherMusicPlayer
                 tb.ContextMenuStrip = MakeContextMenu(tb, RootPath);
                 Contener.Controls.Add(tb);
 
-                Label tb2 = new Label();
+                Label tb2 = new Label() { Margin = new Padding(3, 5, 3, 5), AutoSize = true };
                 //tb2.Style = Parent.Parent.FindResource("LibraryNavigationPathItemAlt") as Style;
                 tb2.Text = ">>";
                 Contener.Controls.Add(tb2);
 
-                Label tb3 = new Label();
+                Label tb3 = new Label() { Margin = new Padding(3, 7, 3, 7), AutoSize = true };
                 //tb3.Style = Parent.Parent.FindResource("LibraryNavigationPathItemAlt") as Style;
                 tb3.Text = content;
                 Contener.Controls.Add(tb3);

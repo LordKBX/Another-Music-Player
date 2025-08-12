@@ -246,7 +246,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 #region Initialisation Library Filters
                 LibraryFiltersMode.SelectedIndex = 0;
                 LibraryFiltersGenreList.Visible = false;
-                LibraryFiltersGenreSearchBox.Visible = false;
                 LibraryFiltersSearchBox.Visible = false;
                 #endregion
 

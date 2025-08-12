@@ -66,6 +66,22 @@ namespace AnotherMusicPlayer
         public event Rating2RateChangedNotify RateChanged;
         #endregion
 
+        static public Bitmap DrawImage(double value) {
+            double val = value;
+            if (val < 0) { val = 0.0; }
+            if (val > 5.0) { val = 5.0; }
+            if (val == 0.5) { return Properties.Resources.stars_0_5; }
+            else if (val == 1.0) { return Properties.Resources.stars_1_0; }
+            else if (val == 1.5) { return Properties.Resources.stars_1_5; }
+            else if (val == 2.0) { return Properties.Resources.stars_2_0; }
+            else if (val == 2.5) { return Properties.Resources.stars_2_5; }
+            else if (val == 3.0) { return Properties.Resources.stars_3_0; }
+            else if (val == 3.5) { return Properties.Resources.stars_3_5; }
+            else if (val == 4.0) { return Properties.Resources.stars_4_0; }
+            else if (val == 4.5) { return Properties.Resources.stars_4_5; }
+            else if (val >= 5) { return Properties.Resources.stars_5_0; }
+            return Properties.Resources.stars_0_0;
+        }
 
         public Rating2()
         {
