@@ -76,6 +76,7 @@
             // 
             // Cover
             // 
+            Cover.AllowDrop = true;
             Cover.BackColor = System.Drawing.Color.Black;
             Cover.BackgroundImage = Properties.Resources.CoverImg;
             Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;

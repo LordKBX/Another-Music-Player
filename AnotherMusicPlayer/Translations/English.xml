@@ -55,6 +55,7 @@
     <BtnRepeatToolTip><![CDATA[Repeat Playing Queue]]></BtnRepeatToolTip>
     <BtnShuffleToolTip><![CDATA[Shuffle Playing Queue]]></BtnShuffleToolTip>
     <BtnClearListToolTip><![CDATA[Clear Playing Queue]]></BtnClearListToolTip>
+    <BtnSchedullerToolTip><![CDATA[Backlog tasks]]></BtnSchedullerToolTip>
     
     <BtnParamsToolTip><![CDATA[App Parametters]]></BtnParamsToolTip>
     <BtnLibToolTip><![CDATA[App Media Base]]></BtnLibToolTip>

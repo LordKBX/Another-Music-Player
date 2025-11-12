@@ -40,6 +40,7 @@ namespace AnotherMusicPlayer
         public static void TestDebug() { App._IsDebug = true; }
 
         public static AnotherMusicPlayer.MainWindow2Space.MainWindow2 win1;
+        public static Scheduller scheduller;
         public static Styles.Style style = new Dark();
 
         /// <summary>
@@ -63,10 +64,13 @@ namespace AnotherMusicPlayer
             Player.INIT();
 
             win1 = new AnotherMusicPlayer.MainWindow2Space.MainWindow2();
+            scheduller = new Scheduller() { Owner = win1 };
+            FilesTags.InjectSchedullerFunction();
             win1.ShowDialog();
+            scheduller.Stop();
+            scheduller.Dispose();
             win1.Dispose();
             Player.StopAll(true);
-            FilesTags.WaitTimersEnd();
 
             Environment.Exit(0);
         }

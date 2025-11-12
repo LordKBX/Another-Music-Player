@@ -10,11 +10,13 @@ using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Timers;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 using TagLib;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace AnotherMusicPlayer
 {
@@ -79,10 +81,10 @@ namespace AnotherMusicPlayer
 
     public partial class FilesTags
     {
-        private static Dictionary<byte, double> TableRateWindows = new Dictionary<byte, double>() { { 0, 0.0 }, { 1, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
-        private static Dictionary<double, byte> ReverseTableRateWindows = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 1 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
-        private static Dictionary<byte, double> TableRatePlayer = new Dictionary<byte, double>() { { 0, 0.0 }, { 2, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
-        private static Dictionary<double, byte> ReverseTableRatePlayer = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 2 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
+        public static Dictionary<byte, double> TableRateWindows = new Dictionary<byte, double>() { { 0, 0.0 }, { 1, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
+        public static Dictionary<double, byte> ReverseTableRateWindows = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 1 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
+        public static Dictionary<byte, double> TableRatePlayer = new Dictionary<byte, double>() { { 0, 0.0 }, { 2, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
+        public static Dictionary<double, byte> ReverseTableRatePlayer = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 2 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
 
         /// <summary> Recuperate Media MetaData(cover excluded) </summary>
         public static MediaItem MediaInfo(string FilePath, bool Selected, string OriginPath = null)
@@ -269,85 +271,59 @@ namespace AnotherMusicPlayer
             if (!System.IO.File.Exists(FilePath)) { return false; }
             if (RatingValue < 0) { RatingValue = 0; }
             if (RatingValue > 5.0) { RatingValue = 5.0; }
-            bool found = false;
-            foreach (SaveRatingObejct obj in saveRatingObejcts) {
-                if (obj.Path == FilePath) { obj.Rate = RatingValue; found = true; break; }
-            }
-            if (!found) { saveRatingObejcts.Add(new SaveRatingObejct() { Count = 0, Path = FilePath, Rate = RatingValue }); }
-            
-            if (saveRatingThread == null) {
-                Thread objThread = new Thread(new ThreadStart(SaveRatingLoop));
-                objThread.IsBackground = true;
-                objThread.Priority = ThreadPriority.AboveNormal;
-                objThread.Start();
+
+            SchedullerTaskItem item = App.scheduller.SearchTask("SaveRating", null, FilePath);
+            if (item != null) { item.Details = "" + RatingValue; }
+            else 
+            {
+                App.scheduller.AddTask(new SchedullerTaskItem(){ 
+                    Action = "SaveRating",
+                    ActionResume = "Save Rating " + RatingValue + " to " + FilePath,
+                    Details = "" + RatingValue,
+                    File = FilePath,
+                    Time = DateTime.Now,
+                    _Status = SchedullerTaskItemStatus.Pending
+                });
             }
             return true;
         }
-        public static void SaveRatingLoop()
+
+        public static void InjectSchedullerFunction() 
         {
-            List<SaveRatingObejct> rmList = new List<SaveRatingObejct>();
-            while (saveRatingThreadRun)
-            {
-                try
-                {
-                    foreach (SaveRatingObejct obj in saveRatingObejcts)
-                    {
-                        bool passed = false;
-                        try
-                        {
-                            if (Player.GetCurrentFile() == obj.Path) { obj.Count += 1; continue; }
-
-                            TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
-
-                            TagLib.File fi = TagLib.File.Create(obj.Path, ReadStyle.Average);
-                            TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
-                            TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
-                            if (ReverseTableRateWindows.ContainsKey(obj.Rate)) { frame1.Rating = ReverseTableRatePlayer[obj.Rate]; }
-                            else { frame1.Rating = (byte)(ReverseTableRatePlayer[Math.Truncate(obj.Rate)] + 1); }
-                            fi.Save();
-                            Debug.WriteLine("Ratting for '" + obj.Path + "' saved !");
-                            rmList.Add(obj);
-                            passed = true;
-                        }
-                        catch (IOException)
-                        {
-                            Debug.WriteLine("IOException for '" + obj.Path + "', Count = " + obj.Count);
-                            obj.Count += 1;
-                        }
-                        catch (Exception)
-                        {
-                            Debug.WriteLine("Generic Exception for '" + obj.Path + "', Count = " + obj.Count);
-                            obj.Count += 1;
-                        }
-                        if (obj.Count >= 800 && !passed)
-                        {
-                            rmList.Add(obj);
-                            Debug.WriteLine("Failed to save rating for file: " + obj.Path);
-                            //MessageBox.Show(
-                            //    "Failed to save rating for file: " + obj.Path,
-                            //    "Error",
-                            //    MessageBoxButtons.OK,
-                            //    MessageBoxIcon.Error
-                            //);
-                        }
-                    }
-
-                    if (rmList.Count > 0)
-                    {
-                        foreach (SaveRatingObejct obj in rmList) { saveRatingObejcts.Remove(obj); }
-                        rmList.Clear();
-                    }
-
-                    Thread.Sleep(500);
-                }
-                catch (Exception) { }
-            }
+            App.scheduller.AddFunctionality("SaveRating", (Func<SchedullerTaskItem, (bool, string)>)SaveRatting);
         }
 
-        public static void WaitTimersEnd()
+        private static Regex doubleRegex = new Regex(@"^[0-9]*,?[0-9]+$");
+        public static (bool, string) SaveRatting(SchedullerTaskItem item)
         {
-            saveRatingThreadRun = false;
-            Thread.Sleep(500);
+            string filePath = item.File;
+            double ratting = 0;
+            string d = item.Details.Replace(".", ",").Trim();
+            if (doubleRegex.Match(d).Success) { ratting = double.Parse(d); }
+
+            try
+            {
+                if (Player.GetCurrentFile() == filePath && Player.LatestPlayerStatus == PlayerStatus.Play) { return (false, "Current played file"); }
+
+                TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
+
+                TagLib.File fi = TagLib.File.Create(filePath, ReadStyle.Average);
+                TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
+                TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
+                if (FilesTags.ReverseTableRateWindows.ContainsKey(ratting)) { frame1.Rating = FilesTags.ReverseTableRatePlayer[ratting]; }
+                else { frame1.Rating = (byte)(FilesTags.ReverseTableRatePlayer[Math.Truncate(ratting)] + 1); }
+                fi.Save();
+                return (true, "");
+            }
+            catch (IOException)
+            {
+                return (false, "IOException for '" + filePath + "'");
+            }
+            catch (Exception)
+            {
+                return (false, "Generic Exception for '" + filePath + "'");
+            }
+            return (false, "Unknow error");
         }
     }
 }

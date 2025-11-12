@@ -59,17 +59,21 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         string trackPath = Player.PlayList[id];
 
                         if (Player.Index == id) { Player.Stop(); }
-                        Player.PlaylistRemoveIndex(id);
 
                         TagsEditor tags = new TagsEditor(this, "track", new string[] { trackPath });
 
                         if (tags.ShowDialog() == DialogResult.OK)
                         {
                             if (tags.CoverChanged == true) { App.bdd.DatabaseClearCover(trackPath); }
-                            Dispatcher.CurrentDispatcher.BeginInvoke(new Action(() =>
+                            PlaybackTabDataGridView.BeginInvoke(new Action(() =>
                             {
-                                Thread.Sleep(200);
-                                this.library.DisplayPath(this.library.CurrentPath);
+                                PlayListViewItem item = App.win1.PlayListItems[id];
+                                item.Name = tags.tTitle;
+                                item.Album = tags.tAlbum;
+                                item.Composers = tags.tComposers;
+                                item.Performers = tags.tPerformers;
+                                item.AlbumArtists = tags.tAlbumArtists;
+                                PlaybackTabDataGridView.Refresh();
                             }));
                         }
 

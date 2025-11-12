@@ -1,5 +1,9 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
+using App;
 using ByteDev.Strings;
+using m3uParser;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -22,11 +26,17 @@ namespace AnotherMusicPlayer
         private TagLib.IPicture[] pictures;
         Bitmap BitmapCover;
         List<string> AutorizedCoverFileExtention = new List<string> { ".bmp", ".jpg", ".jpeg", ".png" };
-        string DefaultCover;
+        static string DefaultCover = null;
         public bool CoverChanged = false;
         public bool Saved = false;
         private List<string> Files;
         private new bool IsInitialized = false;
+
+        public string tTitle = "";
+        public string tAlbum = "";
+        public string tPerformers = "";
+        public string tComposers = "";
+        public string tAlbumArtists = "";
 
         private ToolStripMenuItem CoverCMPreview = new ToolStripMenuItem() { Text = "Preview Cover" };
         private ToolStripMenuItem CoverCMClear = new ToolStripMenuItem() { Text = "Clear Cover" };
@@ -66,7 +76,7 @@ namespace AnotherMusicPlayer
             Owner = Parent = parent;
             Mode = mode;
 
-            DefaultCover = MainWindow2.BaseDir + "icons" + MainWindow2.SeparatorChar + "album_small.png";
+            if (DefaultCover == null) { DefaultCover = MainWindow2.BaseDir + "icons" + MainWindow2.SeparatorChar + "album_small.png"; }
 
 
             if (mode == "album")
@@ -138,6 +148,7 @@ namespace AnotherMusicPlayer
             SaveButton.Enabled = false;
             Cover.DragDrop += Cover_Drop;
 
+            Cover.ContextMenuStrip = CoverContextMenu;
             CoverCMPreview.Click += CoverCMPreview_Click;
             CoverCMClear.Click += CoverCMClear_Click;
             CoverCMAdd.Click += CoverCMAdd_Click;
@@ -156,6 +167,9 @@ namespace AnotherMusicPlayer
             TitleLabel.MouseUp += FormDragable_MouseUp;
             #endregion
             DialogResult = DialogResult.Cancel;
+
+            if (!App.scheduller.HasFunctionality("SaveTags")) 
+            { App.scheduller.AddFunctionality("SaveTags", (Func<SchedullerTaskItem, (bool, string)>)SaveTags); }
         }
 
         #region Window displasment gestion
@@ -266,7 +280,7 @@ namespace AnotherMusicPlayer
 
             AlbumLabel.Text = App.GetTranslation("EditorTagLabelAlbum");
 
-            ComposersLabel.Text = App.GetTranslation("EditorTagLabelGenres");
+            ComposersLabel.Text = App.GetTranslation("EditorTagLabelComposers");
             App.SetToolTip(ComposersLabel, App.GetTranslation("EditorTagSeparateEntrys"));
             App.SetToolTip(ComposersInput, App.GetTranslation("EditorTagSeparateEntrys"));
 
@@ -417,62 +431,41 @@ namespace AnotherMusicPlayer
             if (DiscCountInput.Enabled && !DiscCountInput.Text.IsDigits()) { MessageBox.Show("Invalid Disc total number value", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             if (TrackInput.Enabled && !TrackInput.Text.IsDigits()) { MessageBox.Show("Invalid Track number value", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
             if (TrackCountInput.Enabled && !TrackCountInput.Text.IsDigits()) { MessageBox.Show("Invalid Tracks total number value", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error); }
-            if (Mode == "track")
+
+            tTitle = TitleInput.Text.Trim();
+            tAlbum = AlbumInput.Text.Trim();
+            tPerformers = PerformersInput.Text.Trim();
+            tComposers = ComposersInput.Text.Trim();
+            tAlbumArtists = AlbumArtistsInput.Text.Trim();
+
+            MJObject details = new MJObject();
+            details["Mode"] = Mode;
+            details["Lyrics"] = LyricsInput.Text.Trim();
+            details["Title"] = tTitle;
+            details["Performers"] = tPerformers;
+            details["Composers"] = tComposers;
+            details["Album"] = tAlbum;
+            details["Genres"] = GenresInput.Text.Trim();
+            details["AlbumArtists"] = tAlbumArtists;
+            details["Year"] = YearInput.Text.Trim();
+            details["Disc"] = DiscInput.Text.Trim();
+            details["DiscCount"] = DiscCountInput.Text.Trim();
+            details["Track"] = TrackInput.Text.Trim();
+            details["TrackCount"] = TrackCountInput.Text.Trim();
+            details["Copyright"] = CopyrightInput.Text.Trim();
+            details["CoverChanged"] = CoverChanged;
+
+            App.scheduller.AddTask(new SchedullerTaskItem()
             {
-                using (Tags = TagLib.File.Create(Files[0]))
-                {
-                    Tags.RemoveTags(TagTypes.AllTags);
-                    Tags.Save();
-                    Tags.Dispose();
-                }
+                Action = "SaveTags",
+                ActionResume = "Save Tags for " + Files.ToArray(),
+                ExtraData = details,
+                File = string.Join(';', Files),
+                Time = DateTime.Now,
+                _Status = SchedullerTaskItemStatus.Pending,
+                ExtraObject = (CoverChanged)?pictures:null
+            });
 
-                using (Tags = TagLib.File.Create(Files[0]))
-                {
-                    Tags.Tag.Lyrics = LyricsInput.Text;
-                    Tags.Tag.Title = TitleInput.Text;
-                    Tags.Tag.Performers = PerformersInput.Text.Split(';');
-                    Tags.Tag.Composers = ComposersInput.Text.Split(';');
-                    Tags.Tag.Album = AlbumInput.Text;
-                    Tags.Tag.Genres = GenresInput.Text.Split(';');
-                    Tags.Tag.AlbumArtists = AlbumArtistsInput.Text.Split(';');
-                    Tags.Tag.Year = Convert.ToUInt32(YearInput.Text);
-                    Tags.Tag.Disc = Convert.ToUInt32(DiscInput.Text);
-                    Tags.Tag.DiscCount = Convert.ToUInt32(DiscCountInput.Text);
-                    Tags.Tag.Track = Convert.ToUInt32(TrackInput.Text);
-                    Tags.Tag.TrackCount = Convert.ToUInt32(TrackCountInput.Text);
-                    Tags.Tag.Copyright = CopyrightInput.Text;
-
-                    if ((string)Cover.Tag != DefaultCover && CoverChanged == true)
-                    {
-                        Tags.Tag.Pictures = pictures;
-                    }
-                    Tags.Save();
-                    Tags.Dispose();
-                }
-            }
-            else if (Mode == "album")
-            {
-                foreach (string file in Files)
-                {
-                    using (Tags = TagLib.File.Create(file))
-                    {
-                        Tags.Tag.Album = AlbumInput.Text;
-                        Tags.Tag.Genres = GenresInput.Text.Split(';');
-                        Tags.Tag.AlbumArtists = AlbumArtistsInput.Text.Split(';');
-                        Tags.Tag.Year = Convert.ToUInt32(YearInput.Text);
-                        Tags.Tag.Copyright = CopyrightInput.Text;
-
-                        if ((string)Cover.Tag != DefaultCover && CoverChanged == true)
-                        {
-                            Tags.Tag.Pictures = pictures;
-                        }
-                        Tags.Save();
-                        Tags.Dispose();
-                    }
-                }
-            }
-
-            Saved = true;
             DialogResult = DialogResult.OK;
             this.Close();
         }
@@ -490,6 +483,100 @@ namespace AnotherMusicPlayer
             return null;
         }
 
+        public static (bool, string) SaveTags(SchedullerTaskItem item)
+        {
+            string[] Files = item.File.Split(';');
+            TagLib.File Tags;
+            MJObject details = item.ExtraData;
+            string Mode = details.GetValueStrict<string>("Mode", "track");
+            bool CoverChanged = details.GetValueStrict<bool>("CoverChanged", false);
+
+            try
+            {
+                if (Mode == "track")
+                {
+                    if (!System.IO.File.Exists(Files[0])) { return (false, "File not found"); }
+                    using (Tags = TagLib.File.Create(Files[0]))
+                    {
+                        Tags.RemoveTags(TagTypes.AllTags);
+                        Tags.Save();
+                        Tags.Dispose();
+                    }
+
+                    using (Tags = TagLib.File.Create(Files[0]))
+                    {
+                        Tags.Tag.Lyrics = details.GetValueStrict<string>("Lyrics", "");
+                        Tags.Tag.Title = details.GetValueStrict<string>("Title", "");
+                        Tags.Tag.Performers = details.GetValueStrict<string>("Performers", "").Split(';');
+                        Tags.Tag.Composers = details.GetValueStrict<string>("Composers", "").Split(';');
+                        Tags.Tag.Album = details.GetValueStrict<string>("Album", "");
+                        Tags.Tag.Genres = details.GetValueStrict<string>("Genres", "").Split(';');
+                        Tags.Tag.AlbumArtists = details.GetValueStrict<string>("AlbumArtists", "").Split(';');
+                        Tags.Tag.Year = Convert.ToUInt32(details.GetValueStrict<string>("Year", "0"));
+                        Tags.Tag.Disc = Convert.ToUInt32(details.GetValueStrict<string>("Disc", "0"));
+                        Tags.Tag.DiscCount = Convert.ToUInt32(details.GetValueStrict<string>("DiscCount", "0"));
+                        Tags.Tag.Track = Convert.ToUInt32(details.GetValueStrict<string>("Track", "0"));
+                        Tags.Tag.TrackCount = Convert.ToUInt32(details.GetValueStrict<string>("TrackCount", "0"));
+                        Tags.Tag.Copyright = details.GetValueStrict<string>("Copyright", "");
+
+                        if (CoverChanged == true)
+                        {
+                            Tags.Tag.Pictures = (IPicture[])item.ExtraObject;
+                        }
+                        Tags.Save();
+                        Tags.Dispose();
+                    }
+                    return (true, "");
+                }
+                else if (Mode == "album")
+                {
+                    foreach (string file in Files)
+                    {
+                        string tf = file.Trim();
+                        if (tf.Length == 0) { continue; }
+                        if (item.ParsedFiles.Contains(tf)) { continue; }
+                        if (!System.IO.File.Exists(tf)) { item.ParsedFiles.Add(tf); item.Errors += 1; continue; }
+
+                        try
+                        {
+                            using (Tags = TagLib.File.Create(file))
+                            {
+                                Tags.Tag.Album = details.GetValueStrict<string>("Album", "");
+                                Tags.Tag.Genres = details.GetValueStrict<string>("Genres", "").Split(';');
+                                Tags.Tag.AlbumArtists = details.GetValueStrict<string>("AlbumArtists", "").Split(';');
+                                Tags.Tag.Year = Convert.ToUInt32(details.GetValueStrict<string>("Year", "0"));
+                                Tags.Tag.Copyright = details.GetValueStrict<string>("Copyright", "");
+
+                                if (CoverChanged == true)
+                                {
+                                    Tags.Tag.Pictures = (IPicture[])item.ExtraObject;
+                                }
+                                Tags.Save();
+                                Tags.Dispose();
+                                item.ParsedFiles.Add(tf);
+                            }
+                        }
+                        catch (IOException) { }
+                        catch (Exception)  { }
+                    }
+
+                    if (item.ParsedFiles.Count == Files.Length)
+                    {
+                        if (item.Errors > 0) { item.ActionResume = " - "+ item.Errors + " Errors"; }
+                        return (true, "");
+                    }
+                }
+            }
+            catch (IOException ex)
+            {
+                return (false, ex.Message + "\r\n" + ex.StackTrace);
+            }
+            catch (Exception ex)
+            {
+                return (false, ex.Message + "\r\n" + ex.StackTrace);
+            }
+            return (false, "Unknow error");
+        }
 
     }
 }

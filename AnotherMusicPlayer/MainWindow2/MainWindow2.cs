@@ -43,8 +43,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static Bitmap IconRepeatOff;
         private static Bitmap IconShuffle;
         private static Bitmap IconClearList;
+        private static Bitmap IconScheduller;
 
-        private ObservableCollection<PlayListViewItem> PlayListItems = new ObservableCollection<PlayListViewItem>();
+        public ObservableCollection<PlayListViewItem> PlayListItems = new ObservableCollection<PlayListViewItem>();
         private int PlaylistIndexAtLoading = 0;
 
         private TabbedThumbnail customThumbnail;
@@ -52,9 +53,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private System.Drawing.Icon ThumbnailIconPlay = null;
         private System.Drawing.Icon ThumbnailIconPause = null;
         private System.Drawing.Icon ThumbnailIconNext = null;
-        private ThumbnailToolBarButton buttonPrev = null;
-        private ThumbnailToolBarButton buttonPlay = null;
-        private ThumbnailToolBarButton buttonNext = null;
+        public ThumbnailToolBarButton buttonPrev = null;
+        public ThumbnailToolBarButton buttonPlay = null;
+        public ThumbnailToolBarButton buttonNext = null;
 
         /// <summary> Char used in first collumn of PlayListView for displaying current played/selected media </summary>
         public static string PlayListSelectionChar = "▶";
@@ -130,6 +131,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             IconRepeatOff = Icons.FromIconKind(IconKind.RepeatOff, PlaybackButtonIconSize, PlaybackIconDefaultBrush);
             IconShuffle = Icons.FromIconKind(IconKind.Shuffle, PlaybackButtonIconSize, PlaybackIconDefaultBrush);
             IconClearList = Icons.FromIconKind(IconKind.PlaylistRemove, PlaybackButtonIconSize, PlaybackIconDefaultBrush);
+            IconScheduller = Icons.FromIconKind(IconKind.ClipboardListOutline, PlaybackButtonIconSize, PlaybackIconDefaultBrush);
 
             BtnOpen.BackgroundImage = IconOpen;
             BtnPrevious.BackgroundImage = IconPrevious;
@@ -138,6 +140,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnRepeat.BackgroundImage = (Player.IsRepeat()) ? IconRepeatOnce : (Player.IsLoop()) ? IconRepeat : IconRepeatOff;
             BtnShuffle.BackgroundImage = IconShuffle;
             BtnClearList.BackgroundImage = IconClearList;
+            BtnScheduller.BackgroundImage = IconScheduller;
 
             ThumbnailIconPrev = Icon.FromHandle(IconPrevious.GetHicon());
             ThumbnailIconPlay = Icon.FromHandle(IconPlay.GetHicon());
@@ -211,6 +214,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 BtnNext.Click += (object sender, EventArgs e) => { Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); };
                 BtnShuffle.Click += (object sender, EventArgs e) => { Player.PlaylistRandomize(); };
                 BtnClearList.Click += (object sender, EventArgs e) => { Player.PlaylistClear(); UpdateLeftPannelMediaInfo(null); PlaybackPositionLabel.Text = "--"; };
+                BtnScheduller.Click += (object sender, EventArgs e) => { App.scheduller.ShowDialog(); };
                 BtnRepeat.Click += (object sender, EventArgs e) =>
                 {
                     if (Player.IsLoop()) { Player.Repeat(true); Player.Loop(false); }

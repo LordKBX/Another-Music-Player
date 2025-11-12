@@ -55,6 +55,7 @@
     <BtnRepeatToolTip><![CDATA[Bouton d'état répétion: rien, unique, playlist]]></BtnRepeatToolTip>
     <BtnShuffleToolTip><![CDATA[Retier-Trier Playlist au hazard]]></BtnShuffleToolTip>
     <BtnClearListToolTip><![CDATA[Vider Liste de lecture]]></BtnClearListToolTip>
+    <BtnSchedullerToolTip><![CDATA[Liste de tâches]]></BtnSchedullerToolTip>
     
     <BtnParamsToolTip><![CDATA[Paramettres de l'application]]></BtnParamsToolTip>
     <BtnLibToolTip><![CDATA[Médiathèque]]></BtnLibToolTip>

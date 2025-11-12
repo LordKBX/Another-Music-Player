@@ -38,6 +38,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 App.SetToolTip(window.BtnRepeat, App.GetTranslation("BtnRepeatToolTip"));
                 App.SetToolTip(window.BtnShuffle, App.GetTranslation("BtnShuffleToolTip"));
                 App.SetToolTip(window.BtnClearList, App.GetTranslation("BtnClearListToolTip"));
+                App.SetToolTip(window.BtnScheduller, App.GetTranslation("BtnSchedullerToolTip"));
+                // Thumbnail buttons
+                window.buttonPrev.Tooltip = App.GetTranslation("BtnPreviousToolTip");
+                window.buttonPlay.Tooltip = App.GetTranslation("BtnPlayPauseToolTip");
+                window.buttonNext.Tooltip = App.GetTranslation("BtnNexToolTip");
                 // Playback status
                 App.SetToolTip(window.DisplayPlaybackPosition, App.GetTranslation("Position"));
                 App.SetToolTip(window.DisplayPlaybackSize, App.GetTranslation("Duration"));
