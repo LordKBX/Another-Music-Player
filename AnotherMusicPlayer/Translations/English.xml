@@ -105,6 +105,10 @@
     <ParamsAutoCloseLyrics0><![CDATA[No]]></ParamsAutoCloseLyrics0>
     <ParamsAutoCloseLyrics1><![CDATA[Yes]]></ParamsAutoCloseLyrics1>
 
+    <ParamsDisplayLiveLyricsLabel><![CDATA[Display Live Lyrics]]></ParamsDisplayLiveLyricsLabel>
+    <ParamsDisplayLiveLyrics0><![CDATA[No]]></ParamsDisplayLiveLyrics0>
+    <ParamsDisplayLiveLyrics1><![CDATA[Yes]]></ParamsDisplayLiveLyrics1>
+
     <ParamsLibHiddenFilesUnixLabel><![CDATA[Show hidden files style Unix]]></ParamsLibHiddenFilesUnixLabel>
     <ParamsLibHiddenFilesUnix0><![CDATA[No]]></ParamsLibHiddenFilesUnix0>
     <ParamsLibHiddenFilesUnix1><![CDATA[Yes]]></ParamsLibHiddenFilesUnix1>

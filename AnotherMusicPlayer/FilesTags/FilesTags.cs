@@ -77,6 +77,51 @@ namespace AnotherMusicPlayer
 
             InnerUID = Guid.NewGuid().ToString();
         }
+
+        public bool IsLyricsTimed(){
+            if (Lyrics == null) { return false; }
+            string lyrics = Lyrics.Trim();
+            if (lyrics.Length == 0) { return false; }
+            if (!lyrics.StartsWith("[ti:")) { return false; }
+
+            Regex timeRegex = new Regex(@"\[(\d{2}):(\d{2})(\.(\d{2,3}))?\]");
+            if(timeRegex.IsMatch(lyrics)){ return true; }
+            return false;
+        }
+
+        public Dictionary<long, string> GetTimedLyrics(){
+            if (!IsLyricsTimed()) { return null; }
+
+            Dictionary<long, string> result = new Dictionary<long, string>();
+            string lyrics = Lyrics.Trim();
+            string[] lines = lyrics.Replace("\r", "").Split('\n', StringSplitOptions.None);
+            Regex timeRegex = new Regex(@"\[(\d{2}):(\d{2})(\.(\d{2,3}))?\]");
+            foreach(string line in lines){
+                MatchCollection matches = timeRegex.Matches(line);
+                if(matches.Count == 0){
+                    continue;
+                }
+                string lyricText = timeRegex.Replace(line, "").Trim();
+                foreach(Match match in matches){
+                    int minutes = int.Parse(match.Groups[1].Value);
+                    int seconds = int.Parse(match.Groups[2].Value);
+                    int milliseconds = 0;
+                    if(match.Groups[4].Success){
+                        string msStr = match.Groups[4].Value;
+                        if(msStr.Length == 2){
+                            milliseconds = int.Parse(msStr) * 10;
+                        } else {
+                            milliseconds = int.Parse(msStr);
+                        }
+                    }
+                    long totalTime = (minutes * 60 + seconds) * 1000 + milliseconds;
+                    if(!result.ContainsKey(totalTime)){
+                        result.Add(totalTime, lyricText);
+                    }
+                }
+            }
+            return result;
+        }
     }
 
     public partial class FilesTags
@@ -275,7 +320,10 @@ namespace AnotherMusicPlayer
             if (RatingValue > 5.0) { RatingValue = 5.0; }
 
             SchedullerTaskItem item = App.scheduller.SearchTask("SaveRating", null, FilePath);
-            if (item != null) { item.Details = "" + RatingValue; }
+            if (item != null) { 
+                item.Details = "" + RatingValue;
+                item.ActionResume = "Save Rating " + RatingValue + " to " + FilePath;
+            }
             else 
             {
                 App.scheduller.AddTask(new SchedullerTaskItem(){ 

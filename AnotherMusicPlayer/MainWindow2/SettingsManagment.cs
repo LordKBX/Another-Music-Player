@@ -41,6 +41,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             window.SettingsTabAutoPlayComboBox.SelectedIndex = (Settings.StartUpPlay) ? 1 : 0;
             window.SettingsTabAlwaysOnTopComboBox.SelectedIndex = (Settings.AlwaysOnTop) ? 1 : 0;
             window.SettingsTabAutoCloseLyricsComboBox.SelectedIndex = (Settings.AutoCloseLyrics) ? 1 : 0;
+            window.SettingsTabDisplayLiveLyricsComboBox.SelectedIndex = (Settings.DisplayLiveLyrics) ? 1 : 0;
 
             window.SettingsTabConvModeComboBox.SelectedIndex = (Settings.ConversionMode - 1 >= 0) ? Settings.ConversionMode - 1 : 0;
 
@@ -86,6 +87,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 window.SettingsTabAutoPlayComboBox.SelectedIndexChanged += SettingsTabAutoPlayComboBox_SelectedIndexChanged;
                 window.SettingsTabAlwaysOnTopComboBox.SelectedIndexChanged += SettingsTabAlwaysOnTopComboBox_SelectedIndexChanged;
                 window.SettingsTabAutoCloseLyricsComboBox.SelectedIndexChanged += SettingsTabAutoCloseLyricsComboBox_SelectedIndexChanged;
+                window.SettingsTabDisplayLiveLyricsComboBox.SelectedIndexChanged += SettingsTabDisplayLiveLyricsComboBox_SelectedIndexChanged;
 
                 window.SettingsTabConvModeComboBox.SelectedIndexChanged += SettingsTabConvModeComboBox_SelectedIndexChanged;
                 window.SettingsTabConvQualityComboBox.SelectedIndexChanged += SettingsTabConvQualityComboBox_SelectedIndexChanged;
@@ -157,6 +159,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static void SettingsTabAutoCloseLyricsComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.AutoCloseLyrics = (window.SettingsTabAutoCloseLyricsComboBox.SelectedIndex == 1);
+            Settings.SaveSettings();
+        }
+
+        private static void SettingsTabDisplayLiveLyricsComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.DisplayLiveLyrics = (window.SettingsTabDisplayLiveLyricsComboBox.SelectedIndex == 1);
             Settings.SaveSettings();
         }
 

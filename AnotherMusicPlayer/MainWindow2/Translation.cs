@@ -106,6 +106,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 window.SettingsTabAutoCloseLyricsComboBox.Items[0] = App.GetTranslation("ParamsAutoCloseLyrics0");
                 window.SettingsTabAutoCloseLyricsComboBox.Items[1] = App.GetTranslation("ParamsAutoCloseLyrics1");
 
+                window.SettingsTabDisplayLiveLyricsGroupBox.Text = App.GetTranslation("ParamsDisplayLiveLyricsLabel");
+                window.SettingsTabDisplayLiveLyricsComboBox.Items[0] = App.GetTranslation("ParamsDisplayLiveLyrics0");
+                window.SettingsTabDisplayLiveLyricsComboBox.Items[1] = App.GetTranslation("ParamsDisplayLiveLyrics1");
+
                 window.SettingsTabConvGroupBox.Text = App.GetTranslation("ParamsConvKeepLabel");
                 window.SettingsTabConvModeLabel.Text = App.GetTranslation("ParamsConvModeLabel");
                 window.SettingsTabConvModeComboBox.Items[0] = App.GetTranslation("ParamsConvKeepVals_TEMP");

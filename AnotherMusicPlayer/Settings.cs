@@ -101,6 +101,9 @@ namespace AnotherMusicPlayer
         // RepeatButton Section
         public static bool AutoCloseLyrics { get; set; } = true;
 
+        // RepeatButton Section
+        public static bool DisplayLiveLyrics { get; set; } = true;
+
         //private static MainWindow window = null;
 
         public static bool LoadSettings()
@@ -120,11 +123,13 @@ namespace AnotherMusicPlayer
             string v3 = App.bdd.DatabaseGetParam("StartUpPlay", "1");
             string v4 = App.bdd.DatabaseGetParam("AlwaysOnTop", "0");
             string v5 = App.bdd.DatabaseGetParam("AutoCloseLyrics", "0");
+            string v6 = App.bdd.DatabaseGetParam("DisplayLiveLyrics", "1");
             LibFolderShowHiden = (Convert.ToInt32(v1) == 0) ? false : true;
             LibFolderShowUnixHiden = (Convert.ToInt32(v2) == 0) ? false : true;
             StartUpPlay = (Convert.ToInt32(v3) == 0) ? false : true;
             AlwaysOnTop = (Convert.ToInt32(v4) == 0) ? false : true;
             AutoCloseLyrics = (Convert.ToInt32(v5) == 0) ? false : true;
+            DisplayLiveLyrics = (Convert.ToInt32(v6) == 0) ? false : true;
 
             StyleName = App.bdd.DatabaseGetParam("StyleName", "Dark");
 
@@ -178,6 +183,7 @@ namespace AnotherMusicPlayer
                 App.bdd.DatabaseSaveParam("StartUpPlay", "" + ((StartUpPlay) ? 1 : 0), "INT");
                 App.bdd.DatabaseSaveParam("AlwaysOnTop", "" + ((AlwaysOnTop) ? 1 : 0), "INT");
                 App.bdd.DatabaseSaveParam("AutoCloseLyrics", "" + ((AutoCloseLyrics) ? 1 : 0), "INT");
+                App.bdd.DatabaseSaveParam("DisplayLiveLyrics", "" + ((DisplayLiveLyrics) ? 1 : 0), "INT");
 
                 App.bdd.DatabaseSaveParam("StyleName", StyleName, "TEXT");
 

@@ -1,23 +1,25 @@
-﻿using System;
+﻿using Microsoft.WindowsAPICodePack.Taskbar;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 using System.Windows.Media;
-using Control = System.Windows.Forms.Control;
+using System.Windows.Media.Imaging;
+using static AnotherMusicPlayer.Player;
 using Button = System.Windows.Forms.Button;
 using Color = System.Drawing.Color;
+using Control = System.Windows.Forms.Control;
 using Pen = System.Drawing.Pen;
 using Timer = System.Windows.Forms.Timer;
-using Newtonsoft.Json;
-using System.Threading;
-using System.Collections.ObjectModel;
-using Microsoft.WindowsAPICodePack.Taskbar;
-using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
-using System.IO;
-using static AnotherMusicPlayer.Player;
-using System.Threading.Tasks;
 
 namespace AnotherMusicPlayer.MainWindow2Space
 {
@@ -182,6 +184,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             else if (Settings.LastRepeatStatus == 1) { Player.Repeat(true); Player.Loop(false); }
             else { Player.Repeat(false); Player.Loop(true); }
             Debug.WriteLine("PlaylistIndexAtLoading = " + PlaylistIndexAtLoading);
+            GlobalTableLayoutPanel.RowStyles[2].Height = 0;
 
             #region Window displasment gestion
             MainWIndowHead.MouseDown += FormDragable_MouseDown;
@@ -493,6 +496,18 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     Settings.LastPlaylistDuration = position;
                     Settings.SaveSettingsAsync();
                     if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
+
+                    if (LyricsTimedLines != null && Settings.DisplayLiveLyrics)
+                    {
+                        List<long> times = LyricsTimedLines.Keys.ToList();
+                        var index = times.BinarySearch(position);
+
+                        LyricsTextBox.Text = LyricsTimedLines[times[~index - 1]];
+                    }
+                    else 
+                    {
+                        GlobalTableLayoutPanel.RowStyles[2].Height = 0;
+                    }
                 }
                 else
                 {
@@ -761,8 +776,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 else { PlaybackTabDurationLabelInfo.Visible = true; PlaybackTabDurationLabelValue.Visible = true; ReplaceElementDualText(PlaybackTabDurationLabelValue, item2.DurationS); }
 
                 if (!path.StartsWith("Radio|") && item2.Lyrics != null && item2.Lyrics.Trim().Length > 0)
-                { PlaybackTabLyricsButton.Visible = true; PlaybackTabLyricsButton.Tag = item2; }
-                else { PlaybackTabLyricsButton.Visible = false; }
+                { PlaybackTabLyricsButton.Visible = true; PlaybackTabLyricsButton.Tag = item2; ShowLyricsLine(item2); }
+                else { PlaybackTabLyricsButton.Visible = false; ShowLyricsLine(null); }
 
                 if (!path.StartsWith("Radio|"))
                 {
@@ -775,6 +790,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 else { PlaybackTabRatting.Visible = false; }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+        }
+
+        public bool IsLyricsVisible() { return (GlobalTableLayoutPanel.RowStyles[2].Height > 0); }
+        public Dictionary<long, string> LyricsTimedLines = null;
+
+        private void ShowLyricsLine(MediaItem item) {
+            LyricsTimedLines = null;
+            if (!Settings.DisplayLiveLyrics || item == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
+            if(item.Lyrics == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
+            string lyrics = item.Lyrics.Trim();
+            if (lyrics.Length == 0) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
+            GlobalTableLayoutPanel.RowStyles[2].Height = 50;
+
+            LyricsTextBox.Text = "";
+            LyricsTextBox.BackColor = App.style.GetColor("GlobalBackColor");
+            LyricsTextBox.ForeColor = App.style.GetColor("ContextMenuForeColor");
+            LyricsTextBox.Font = App.style.GetValue<Font>("GlobalFontTitle", this.Font);
+            LyricsTextBox.TextAlign = ContentAlignment.MiddleCenter;
+            LyricsTimedLines = item.GetTimedLyrics();
         }
     }
 }

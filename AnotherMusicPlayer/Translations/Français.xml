@@ -105,6 +105,10 @@
     <ParamsAutoCloseLyrics0><![CDATA[Non]]></ParamsAutoCloseLyrics0>
     <ParamsAutoCloseLyrics1><![CDATA[Oui]]></ParamsAutoCloseLyrics1>
 
+    <ParamsDisplayLiveLyricsLabel><![CDATA[Affichage ligne Karaoke]]></ParamsDisplayLiveLyricsLabel>
+    <ParamsDisplayLiveLyrics0><![CDATA[Non]]></ParamsDisplayLiveLyrics0>
+    <ParamsDisplayLiveLyrics1><![CDATA[Oui]]></ParamsDisplayLiveLyrics1>
+
     <ParamsLibHiddenFilesUnixLabel><![CDATA[Afficher fichier caché style Unix]]></ParamsLibHiddenFilesUnixLabel>
     <ParamsLibHiddenFilesUnix0><![CDATA[Non]]></ParamsLibHiddenFilesUnix0>
     <ParamsLibHiddenFilesUnix1><![CDATA[Oui]]></ParamsLibHiddenFilesUnix1>
@@ -346,4 +350,5 @@
     <PlaylistsWindowAddRadioLabelSave><![CDATA[Sauvegarder]]></PlaylistsWindowAddRadioLabelSave>
     <!--#endregion-->
     
+
 </ResourceDictionary>
