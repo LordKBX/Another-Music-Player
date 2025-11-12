@@ -269,6 +269,8 @@ namespace AnotherMusicPlayer
         public static bool SaveRating(string FilePath, double RatingValue)
         {
             if (!System.IO.File.Exists(FilePath)) { return false; }
+            if(App.scheduller.HasFunctionality("SaveRating") == false) 
+                { App.scheduller.AddFunctionality("SaveRating", (Func<SchedullerTaskItem, (bool, string)>)SaveRatting); }
             if (RatingValue < 0) { RatingValue = 0; }
             if (RatingValue > 5.0) { RatingValue = 5.0; }
 
@@ -286,11 +288,6 @@ namespace AnotherMusicPlayer
                 });
             }
             return true;
-        }
-
-        public static void InjectSchedullerFunction() 
-        {
-            App.scheduller.AddFunctionality("SaveRating", (Func<SchedullerTaskItem, (bool, string)>)SaveRatting);
         }
 
         private static Regex doubleRegex = new Regex(@"^[0-9]*,?[0-9]+$");

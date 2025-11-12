@@ -2798,6 +2798,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal SplitContainer LibraryTabSplitContainer2;
         internal Panel LibraryNavigationContentFilesParent;
         internal TableLayoutPanel LibraryNavigationContentFiles;
-        internal Button BtnScheduller;
+        public Button BtnScheduller;
     }
 }

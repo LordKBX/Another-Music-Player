@@ -65,7 +65,6 @@ namespace AnotherMusicPlayer
 
             win1 = new AnotherMusicPlayer.MainWindow2Space.MainWindow2();
             scheduller = new Scheduller() { Owner = win1 };
-            FilesTags.InjectSchedullerFunction();
             win1.ShowDialog();
             scheduller.Stop();
             scheduller.Dispose();

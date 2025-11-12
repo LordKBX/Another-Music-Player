@@ -235,4 +235,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="MainWindow2\Nouveau dossier\" />
+  </ItemGroup>
 </Project>
