@@ -232,7 +232,7 @@
     <None Update="Translations\English.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Update="Translations\FranÃ§ais.xml">
+    <None Update="Translations\Français.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>

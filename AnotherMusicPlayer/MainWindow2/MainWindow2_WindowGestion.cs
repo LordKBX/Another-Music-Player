@@ -83,8 +83,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void TitleLabel_DoubleClick(object sender, EventArgs e) { MaximizeButton_Click(null, null); }
 
         #region Generic Window Button
-        public void MinimizeButton_Click(object? sender, EventArgs? e) { WindowState = FormWindowState.Minimized; }
-        public void MaximizeButton_Click(object? sender, EventArgs? e)
+        public void MinimizeButton_Click(object sender, EventArgs e) { WindowState = FormWindowState.Minimized; }
+        public void MaximizeButton_Click(object sender, EventArgs e)
         {
             if (WindowState == FormWindowState.Maximized) { this.MaximumSize = new System.Drawing.Size(0, 0); WindowState = FormWindowState.Normal; }
             else
@@ -98,7 +98,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
             Settings.LastWindowState = this.WindowState;
         }
-        public void CloseButton_Click(object? sender, EventArgs? e) { Close(); }
+        public void CloseButton_Click(object sender, EventArgs e) {Close(); }
         #endregion
 
         #region Window displasment gestion

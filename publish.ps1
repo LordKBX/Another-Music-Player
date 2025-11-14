@@ -1,5 +1,6 @@
 # load XML file into local variable and cast as XML type.
-$doc = [xml](Get-Content "D:\\CODES\\VS\\MusicPlayer2\\AnotherMusicPlayer\\AnotherMusicPlayer.csproj")
+$ct = Get-Content "D:\\CODES\\VS\\MusicPlayer2\\AnotherMusicPlayer\\AnotherMusicPlayer.csproj" -encoding utf8
+$doc = [xml]($ct)
 
 $v = [version]$doc.Project.PropertyGroup.Version
 $v = [version]::New($v.Major,$v.Minor,$v.Build,$v.Revision+1)
@@ -17,8 +18,9 @@ else{
 $doc.Project.PropertyGroup.Version = $AppVersion
 #$doc.Project.PropertyGroup.AssemblyVersion = $AppVersion
 #$doc.Project.PropertyGroup.FileVersion = $AppVersion
-$doc.save("D:\\CODES\\VS\\MusicPlayer2\\AnotherMusicPlayer\\AnotherMusicPlayer.csproj")
-
+$Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
+[System.IO.File]::WriteAllLines("D:\\CODES\\VS\\MusicPlayer2\\AnotherMusicPlayer\\AnotherMusicPlayer.csproj", $doc.OuterXml, $Utf8NoBomEncoding)
+exit
 
 
 $confirmation = Read-Host "Installer version(default:" $InstallerVersion ", n=abort compiling)"

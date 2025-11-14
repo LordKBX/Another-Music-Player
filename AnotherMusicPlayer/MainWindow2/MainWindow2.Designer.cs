@@ -640,6 +640,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabTitleLabelValue.Size = new Size(140, 20);
             PlaybackTabTitleLabelValue.TabIndex = 1;
             PlaybackTabTitleLabelValue.Text = "Track Name";
+            PlaybackTabTitleLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabAlbumLabelInfo
             // 
@@ -666,6 +667,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabAlbumLabelValue.Padding = new Padding(11, 0, 0, 0);
             PlaybackTabAlbumLabelValue.Size = new Size(140, 20);
             PlaybackTabAlbumLabelValue.TabIndex = 1;
+            PlaybackTabAlbumLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabArtistsLabelInfo
             // 
@@ -691,6 +693,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabArtistsLabelValue.Padding = new Padding(11, 0, 0, 0);
             PlaybackTabArtistsLabelValue.Size = new Size(140, 20);
             PlaybackTabArtistsLabelValue.TabIndex = 1;
+            PlaybackTabArtistsLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabGenresLabelInfo
             // 
@@ -717,6 +720,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabGenresLabelValue.Padding = new Padding(11, 0, 0, 0);
             PlaybackTabGenresLabelValue.Size = new Size(140, 22);
             PlaybackTabGenresLabelValue.TabIndex = 1;
+            PlaybackTabGenresLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabDurationLabelInfo
             // 
@@ -742,6 +746,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabDurationLabelValue.Padding = new Padding(11, 0, 0, 0);
             PlaybackTabDurationLabelValue.Size = new Size(140, 22);
             PlaybackTabDurationLabelValue.TabIndex = 1;
+            PlaybackTabDurationLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabRatting
             // 
@@ -812,6 +817,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackPositionLabel.Size = new Size(765, 20);
             PlaybackPositionLabel.TabIndex = 2;
             PlaybackPositionLabel.Text = "label1";
+            PlaybackPositionLabel.UseMnemonic = false;
             // 
             // PlaybackTabDataGridView
             // 

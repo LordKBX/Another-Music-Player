@@ -353,7 +353,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             Settings.LastWindowTop = this.Top;
             Settings.LastWindowLeft = this.Left;
 
-            Settings.SaveSettings();
+            Settings.SaveSettings().Wait(500);
             KeyboardGlobal.Kill(); 
         }
 
