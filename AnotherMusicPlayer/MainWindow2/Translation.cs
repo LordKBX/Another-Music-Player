@@ -98,6 +98,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 window.SettingsTabAutoPlayComboBox.Items[0] = App.GetTranslation("ParamsAutoPlay0");
                 window.SettingsTabAutoPlayComboBox.Items[1] = App.GetTranslation("ParamsAutoPlay1");
 
+                window.SettingsNormalizeVolumeComboBox.Text = App.GetTranslation("ParamsNormalizeVolumeLabel");
+                window.SettingsNormalizeVolumeComboBox.Items[0] = App.GetTranslation("ParamsNormalizeVolume0");
+                window.SettingsNormalizeVolumeComboBox.Items[1] = App.GetTranslation("ParamsNormalizeVolume1");
+
                 window.SettingsTabAlwaysOnTopGroupBox.Text = App.GetTranslation("ParamsAlwaysOnTopLabel");
                 window.SettingsTabAlwaysOnTopComboBox.Items[0] = App.GetTranslation("ParamsAlwaysOnTop0");
                 window.SettingsTabAlwaysOnTopComboBox.Items[1] = App.GetTranslation("ParamsAlwaysOnTop1");

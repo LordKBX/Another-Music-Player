@@ -93,6 +93,10 @@
     <ParamsMemoryUsage0><![CDATA[Réduit]]></ParamsMemoryUsage0>
     <ParamsMemoryUsage1><![CDATA[Complet]]></ParamsMemoryUsage1>
 
+    <ParamsNormalizeVolumeLabel><![CDATA[Égalization Volume]]></ParamsNormalizeVolumeLabel>
+    <ParamsNormalizeVolume0><![CDATA[Non]]></ParamsNormalizeVolume0>
+    <ParamsNormalizeVolume1><![CDATA[Oui]]></ParamsNormalizeVolume1>
+
     <ParamsAutoPlayLabel><![CDATA[Lecture auto au démarage]]></ParamsAutoPlayLabel>
     <ParamsAutoPlay0><![CDATA[Non]]></ParamsAutoPlay0>
     <ParamsAutoPlay1><![CDATA[Oui]]></ParamsAutoPlay1>

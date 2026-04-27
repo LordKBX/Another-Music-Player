@@ -157,6 +157,7 @@ namespace AnotherMusicPlayer
                     + "Rating REAL NOT NULL DEFAULT 0, "
                     + "Duration INTEGER, "
                     + "Size INTEGER, "
+                    + "AverageVolume REAL NOT NULL DEFAULT -100, "
                     + "InsertionDate BIGINT, "
                     + "LastUpdate BIGINT,  PRIMARY KEY(\"Path\")"
                     + ")");

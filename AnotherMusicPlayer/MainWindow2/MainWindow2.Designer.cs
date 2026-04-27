@@ -128,6 +128,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabStyleComboBox = new ComboBox();
             SettingsTabAutoPlayGroupBox = new GroupBox();
             SettingsTabAutoPlayComboBox = new ComboBox();
+            SettingsNormalizeVolumeGroupBox = new GroupBox();
+            SettingsNormalizeVolumeComboBox = new ComboBox();
             SettingsTabAlwaysOnTopGroupBox = new GroupBox();
             SettingsTabAlwaysOnTopComboBox = new ComboBox();
             SettingsTabAutoCloseLyricsGroupBox = new GroupBox();
@@ -240,6 +242,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLangGroupBox.SuspendLayout();
             SettingsTabStyleGroupBox.SuspendLayout();
             SettingsTabAutoPlayGroupBox.SuspendLayout();
+            SettingsNormalizeVolumeGroupBox.SuspendLayout();
             SettingsTabAlwaysOnTopGroupBox.SuspendLayout();
             SettingsTabAutoCloseLyricsGroupBox.SuspendLayout();
             SettingsTabDisplayLiveLyricsGroupBox.SuspendLayout();
@@ -1517,6 +1520,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             flowLayoutPanel1.Controls.Add(SettingsTabLangGroupBox);
             flowLayoutPanel1.Controls.Add(SettingsTabStyleGroupBox);
             flowLayoutPanel1.Controls.Add(SettingsTabAutoPlayGroupBox);
+            flowLayoutPanel1.Controls.Add(SettingsNormalizeVolumeGroupBox);
             flowLayoutPanel1.Controls.Add(SettingsTabAlwaysOnTopGroupBox);
             flowLayoutPanel1.Controls.Add(SettingsTabAutoCloseLyricsGroupBox);
             flowLayoutPanel1.Controls.Add(SettingsTabDisplayLiveLyricsGroupBox);
@@ -1631,13 +1635,47 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAutoPlayComboBox.TabIndex = 0;
             SettingsTabAutoPlayComboBox.ValueMember = "English";
             // 
+            // SettingsNormalizeVolumeGroupBox
+            // 
+            SettingsNormalizeVolumeGroupBox.AutoSize = true;
+            SettingsNormalizeVolumeGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            SettingsNormalizeVolumeGroupBox.Controls.Add(SettingsNormalizeVolumeComboBox);
+            SettingsNormalizeVolumeGroupBox.ForeColor = Color.White;
+            SettingsNormalizeVolumeGroupBox.Location = new Point(583, 4);
+            SettingsNormalizeVolumeGroupBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsNormalizeVolumeGroupBox.MinimumSize = new Size(220, 67);
+            SettingsNormalizeVolumeGroupBox.Name = "SettingsNormalizeVolumeGroupBox";
+            SettingsNormalizeVolumeGroupBox.Padding = new Padding(6, 7, 6, 7);
+            SettingsNormalizeVolumeGroupBox.Size = new Size(220, 67);
+            SettingsNormalizeVolumeGroupBox.TabIndex = 3;
+            SettingsNormalizeVolumeGroupBox.TabStop = false;
+            SettingsNormalizeVolumeGroupBox.Text = "Normalize Volume";
+            // 
+            // SettingsNormalizeVolumeComboBox
+            // 
+            SettingsNormalizeVolumeComboBox.BackColor = Color.Gray;
+            SettingsNormalizeVolumeComboBox.DisplayMember = "English";
+            SettingsNormalizeVolumeComboBox.Dock = DockStyle.Fill;
+            SettingsNormalizeVolumeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+            SettingsNormalizeVolumeComboBox.FlatStyle = FlatStyle.Flat;
+            SettingsNormalizeVolumeComboBox.ForeColor = Color.Black;
+            SettingsNormalizeVolumeComboBox.FormattingEnabled = true;
+            SettingsNormalizeVolumeComboBox.Items.AddRange(new object[] { "No", "Yes" });
+            SettingsNormalizeVolumeComboBox.Location = new Point(6, 27);
+            SettingsNormalizeVolumeComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsNormalizeVolumeComboBox.MaxDropDownItems = 2;
+            SettingsNormalizeVolumeComboBox.Name = "SettingsNormalizeVolumeComboBox";
+            SettingsNormalizeVolumeComboBox.Size = new Size(208, 28);
+            SettingsNormalizeVolumeComboBox.TabIndex = 0;
+            SettingsNormalizeVolumeComboBox.ValueMember = "English";
+            // 
             // SettingsTabAlwaysOnTopGroupBox
             // 
             SettingsTabAlwaysOnTopGroupBox.AutoSize = true;
             SettingsTabAlwaysOnTopGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabAlwaysOnTopGroupBox.Controls.Add(SettingsTabAlwaysOnTopComboBox);
             SettingsTabAlwaysOnTopGroupBox.ForeColor = Color.White;
-            SettingsTabAlwaysOnTopGroupBox.Location = new Point(583, 4);
+            SettingsTabAlwaysOnTopGroupBox.Location = new Point(3, 79);
             SettingsTabAlwaysOnTopGroupBox.Margin = new Padding(3, 4, 3, 4);
             SettingsTabAlwaysOnTopGroupBox.MinimumSize = new Size(171, 67);
             SettingsTabAlwaysOnTopGroupBox.Name = "SettingsTabAlwaysOnTopGroupBox";
@@ -1671,7 +1709,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAutoCloseLyricsGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabAutoCloseLyricsGroupBox.Controls.Add(SettingsTabAutoCloseLyricsComboBox);
             SettingsTabAutoCloseLyricsGroupBox.ForeColor = Color.White;
-            SettingsTabAutoCloseLyricsGroupBox.Location = new Point(3, 79);
+            SettingsTabAutoCloseLyricsGroupBox.Location = new Point(180, 79);
             SettingsTabAutoCloseLyricsGroupBox.Margin = new Padding(3, 4, 3, 4);
             SettingsTabAutoCloseLyricsGroupBox.MinimumSize = new Size(190, 67);
             SettingsTabAutoCloseLyricsGroupBox.Name = "SettingsTabAutoCloseLyricsGroupBox";
@@ -1705,7 +1743,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabDisplayLiveLyricsGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabDisplayLiveLyricsGroupBox.Controls.Add(SettingsTabDisplayLiveLyricsComboBox);
             SettingsTabDisplayLiveLyricsGroupBox.ForeColor = Color.White;
-            SettingsTabDisplayLiveLyricsGroupBox.Location = new Point(199, 79);
+            SettingsTabDisplayLiveLyricsGroupBox.Location = new Point(376, 79);
             SettingsTabDisplayLiveLyricsGroupBox.Margin = new Padding(3, 4, 3, 4);
             SettingsTabDisplayLiveLyricsGroupBox.MinimumSize = new Size(190, 67);
             SettingsTabDisplayLiveLyricsGroupBox.Name = "SettingsTabDisplayLiveLyricsGroupBox";
@@ -1739,7 +1777,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabConvGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabConvGroupBox.Controls.Add(SettingsTabConvTableLayoutPanel);
             SettingsTabConvGroupBox.ForeColor = Color.White;
-            SettingsTabConvGroupBox.Location = new Point(395, 79);
+            SettingsTabConvGroupBox.Location = new Point(572, 79);
             SettingsTabConvGroupBox.Margin = new Padding(3, 4, 3, 4);
             SettingsTabConvGroupBox.MinimumSize = new Size(300, 100);
             SettingsTabConvGroupBox.Name = "SettingsTabConvGroupBox";
@@ -2675,6 +2713,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLangGroupBox.ResumeLayout(false);
             SettingsTabStyleGroupBox.ResumeLayout(false);
             SettingsTabAutoPlayGroupBox.ResumeLayout(false);
+            SettingsNormalizeVolumeGroupBox.ResumeLayout(false);
             SettingsTabAlwaysOnTopGroupBox.ResumeLayout(false);
             SettingsTabAutoCloseLyricsGroupBox.ResumeLayout(false);
             SettingsTabDisplayLiveLyricsGroupBox.ResumeLayout(false);
@@ -2862,5 +2901,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private Label LyricsTextBox;
         internal GroupBox SettingsTabDisplayLiveLyricsGroupBox;
         internal ComboBox SettingsTabDisplayLiveLyricsComboBox;
+        internal GroupBox SettingsNormalizeVolumeGroupBox;
+        internal ComboBox SettingsNormalizeVolumeComboBox;
     }
 }

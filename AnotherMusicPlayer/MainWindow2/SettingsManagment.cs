@@ -40,6 +40,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             window.SettingsTabAutoPlayComboBox.SelectedIndex = (Settings.StartUpPlay) ? 1 : 0;
             window.SettingsTabAlwaysOnTopComboBox.SelectedIndex = (Settings.AlwaysOnTop) ? 1 : 0;
+            window.SettingsNormalizeVolumeComboBox.SelectedIndex = (Settings.NormalizeVolume) ? 1 : 0;
             window.SettingsTabAutoCloseLyricsComboBox.SelectedIndex = (Settings.AutoCloseLyrics) ? 1 : 0;
             window.SettingsTabDisplayLiveLyricsComboBox.SelectedIndex = (Settings.DisplayLiveLyrics) ? 1 : 0;
 
@@ -85,6 +86,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 window.SettingsTabLangComboBox.SelectedIndexChanged += SettingsTabLangComboBox_SelectedIndexChanged;
                 window.SettingsTabStyleComboBox.SelectedIndexChanged += SettingsTabStyleComboBox_SelectedIndexChanged;
                 window.SettingsTabAutoPlayComboBox.SelectedIndexChanged += SettingsTabAutoPlayComboBox_SelectedIndexChanged;
+                window.SettingsNormalizeVolumeComboBox.SelectedIndexChanged += SettingsNormalizeVolumeComboBox_SelectedIndexChanged; ;
                 window.SettingsTabAlwaysOnTopComboBox.SelectedIndexChanged += SettingsTabAlwaysOnTopComboBox_SelectedIndexChanged;
                 window.SettingsTabAutoCloseLyricsComboBox.SelectedIndexChanged += SettingsTabAutoCloseLyricsComboBox_SelectedIndexChanged;
                 window.SettingsTabDisplayLiveLyricsComboBox.SelectedIndexChanged += SettingsTabDisplayLiveLyricsComboBox_SelectedIndexChanged;
@@ -146,6 +148,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static void SettingsTabAutoPlayComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             Settings.StartUpPlay = (window.SettingsTabAutoPlayComboBox.SelectedIndex == 1);
+            Settings.SaveSettings();
+        }
+
+        private static void SettingsNormalizeVolumeComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            Settings.NormalizeVolume = (window.SettingsNormalizeVolumeComboBox.SelectedIndex == 1);
             Settings.SaveSettings();
         }
 

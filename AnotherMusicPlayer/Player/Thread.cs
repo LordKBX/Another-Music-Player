@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Threading;
+using TagLib.Mpeg;
 
 namespace AnotherMusicPlayer
 {
@@ -14,6 +15,36 @@ namespace AnotherMusicPlayer
     {
         private static PowerModes LatestPowerMode = PowerModes.StatusChange;
         private static bool DoResume = false;
+
+        private static Dictionary<string, float> averageVolumes = new Dictionary<string, float>();
+
+        private static float GetAverageVolumePlaylist() 
+        {
+            double tot = 0;
+            int ncout = 0;
+            foreach (KeyValuePair<string,float> kvp in averageVolumes) 
+            {
+                if (kvp.Value == -100.0f) { ncout += 1; }
+                else { tot += kvp.Value; }
+            }
+            if(averageVolumes.Count - ncout == 0) { return -100.0f; }
+            tot /= (averageVolumes.Count - ncout);
+            return float.Parse(tot.ToString());
+
+        }
+
+        private static float GetAverageVolumeFile(string FilePath, bool forced = false) 
+        {
+            if (FilePath == null || !System.IO.File.Exists(FilePath)) { return -100.0f; }
+            if(!forced && averageVolumes.ContainsKey(FilePath)) { return averageVolumes[FilePath]; }
+            Dictionary<string, object> infodata = App.bdd.DatabaseFileInfo(FilePath);
+            if(infodata == null) { return -100.0f; }
+            if (infodata.ContainsKey("AverageVolume") && GetAverageVolumePlaylist() > -100)
+            {
+                return float.Parse(("" + infodata["AverageVolume"]).Replace(".", ","));
+            }
+            return -100.0f;
+        }
 
         /// <summary> Playing thread </summary>
         private static async void PlaySoundAsync(object file)
@@ -26,8 +57,14 @@ namespace AnotherMusicPlayer
                 Equalizer equalizer = null;
                 WaveOutEvent outputDevice = null;
                 long msval = 0;
-                try { 
+                float averagevol = 0;
+
+                int ret = -1; long ret2 = -1;
+
+                try
+                {
                     audioFile = new AudioFileReader(FilePath);
+
                     msval = audioFile.WaveFormat.AverageBytesPerSecond / 1000;
                     if (PlayNewPositions.ContainsKey(FilePath) && PlayNewPositions[FilePath] > -1) { audioFile.Position = PlayNewPositions[FilePath] * msval; }
                 }
@@ -70,8 +107,6 @@ namespace AnotherMusicPlayer
                 outputDevice.Init(equalizer);
                 if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
 
-                int ret = -1; long ret2 = -1;
-
                 //while (outputDevice.PlaybackState == PlaybackState.Playing)
                 while (true)
                 {
@@ -108,11 +143,40 @@ namespace AnotherMusicPlayer
                     if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); _LatestPlayerStatus = PlayerStatus.Pause; }
                     if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
                     {
+                        if (Settings.NormalizeVolume)
+                        {
+                            averagevol = GetAverageVolumeFile(FilePath);
+                            if (averagevol <= -100.0f)
+                            {
+                                averagevol = Library.GetAverageVolume(FilePath);
+                                string query = "UPDATE files SET AverageVolume = '" + (""+averagevol).Replace(".", ",") + "' WHERE Path = '" + FilePath.Replace("'", "''") + "'";
+                                App.bdd.DatabaseTansactionEnd();
+                                App.bdd.DatabaseQuery(query, null, true);
+                                if (averageVolumes.ContainsKey(FilePath)) { averageVolumes[FilePath] = averagevol; }
+                                else { averageVolumes.Add(FilePath, averagevol); }
+                            }
+                            if (averagevol > -100.0f)
+                            {
+                                Debug.WriteLine("Audio average volume : " + averagevol + "dB");
+                                float ava = GetAverageVolumePlaylist();
+                                Debug.WriteLine("Playlist average volume : " + ava + "dB");
+                                float avc = 1.0f - ((1.0f + (averagevol * 0.1f)) * 0.1f);
+
+                                float calc = 1.0f - ((1.0f + (averagevol * 0.1f)) * 0.1f) - (avc * Math.Abs(ava) * 0.012f);
+                                if (calc > 1.0) { calc = 1.0f; }
+
+                                audioFile.Volume = calc;
+                                Debug.WriteLine("Audio vol : " + (audioFile.Volume * 100) + "%");
+                            }
+                        }
+
                         outputDevice.Play(); CurrentFile = FilePath;
                         PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
                         evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
                         LengthChanged(evtp);
-                        if (started == false) { App.bdd.playCountUpdate(FilePath); }
+                        if (started == false) { 
+                            App.bdd.playCountUpdate(FilePath);
+                        }
                         started = true; 
                         _LatestPlayerStatus = PlayerStatus.Play;
                     }

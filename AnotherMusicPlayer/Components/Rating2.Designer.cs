@@ -50,11 +50,11 @@
             // 
             FirstLayer.AutoSize = true;
             FirstLayer.ColumnCount = 5;
-            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            FirstLayer.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             FirstLayer.Controls.Add(button5, 4, 0);
             FirstLayer.Controls.Add(button4, 3, 0);
             FirstLayer.Controls.Add(button3, 2, 0);
@@ -63,12 +63,12 @@
             FirstLayer.Enabled = false;
             FirstLayer.Location = new System.Drawing.Point(0, 0);
             FirstLayer.Margin = new System.Windows.Forms.Padding(0);
-            FirstLayer.MaximumSize = new System.Drawing.Size(100, 20);
-            FirstLayer.MinimumSize = new System.Drawing.Size(100, 20);
+            FirstLayer.MaximumSize = new System.Drawing.Size(125, 25);
+            FirstLayer.MinimumSize = new System.Drawing.Size(125, 25);
             FirstLayer.Name = "FirstLayer";
             FirstLayer.RowCount = 1;
             FirstLayer.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            FirstLayer.Size = new System.Drawing.Size(100, 20);
+            FirstLayer.Size = new System.Drawing.Size(125, 25);
             FirstLayer.TabIndex = 0;
             // 
             // button5
@@ -82,10 +82,10 @@
             button5.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button5.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button5.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button5.Location = new System.Drawing.Point(80, 0);
+            button5.Location = new System.Drawing.Point(100, 0);
             button5.Margin = new System.Windows.Forms.Padding(0);
             button5.Name = "button5";
-            button5.Size = new System.Drawing.Size(20, 20);
+            button5.Size = new System.Drawing.Size(25, 25);
             button5.TabIndex = 4;
             button5.UseVisualStyleBackColor = false;
             // 
@@ -100,10 +100,10 @@
             button4.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button4.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button4.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button4.Location = new System.Drawing.Point(60, 0);
+            button4.Location = new System.Drawing.Point(75, 0);
             button4.Margin = new System.Windows.Forms.Padding(0);
             button4.Name = "button4";
-            button4.Size = new System.Drawing.Size(20, 20);
+            button4.Size = new System.Drawing.Size(25, 25);
             button4.TabIndex = 3;
             button4.UseVisualStyleBackColor = false;
             // 
@@ -118,10 +118,10 @@
             button3.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button3.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button3.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button3.Location = new System.Drawing.Point(40, 0);
+            button3.Location = new System.Drawing.Point(50, 0);
             button3.Margin = new System.Windows.Forms.Padding(0);
             button3.Name = "button3";
-            button3.Size = new System.Drawing.Size(20, 20);
+            button3.Size = new System.Drawing.Size(25, 25);
             button3.TabIndex = 2;
             button3.UseVisualStyleBackColor = false;
             // 
@@ -136,10 +136,10 @@
             button2.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button2.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button2.Location = new System.Drawing.Point(20, 0);
+            button2.Location = new System.Drawing.Point(25, 0);
             button2.Margin = new System.Windows.Forms.Padding(0);
             button2.Name = "button2";
-            button2.Size = new System.Drawing.Size(20, 20);
+            button2.Size = new System.Drawing.Size(25, 25);
             button2.TabIndex = 1;
             button2.UseVisualStyleBackColor = false;
             // 
@@ -157,7 +157,7 @@
             button1.Location = new System.Drawing.Point(0, 0);
             button1.Margin = new System.Windows.Forms.Padding(0);
             button1.Name = "button1";
-            button1.Size = new System.Drawing.Size(20, 20);
+            button1.Size = new System.Drawing.Size(25, 25);
             button1.TabIndex = 0;
             button1.UseVisualStyleBackColor = false;
             // 
@@ -165,11 +165,11 @@
             // 
             tableLayoutPanel2.AutoSize = true;
             tableLayoutPanel2.ColumnCount = 6;
-            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             tableLayoutPanel2.Controls.Add(button6, 4, 0);
             tableLayoutPanel2.Controls.Add(button7, 3, 0);
@@ -179,12 +179,12 @@
             tableLayoutPanel2.Enabled = false;
             tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
-            tableLayoutPanel2.MaximumSize = new System.Drawing.Size(100, 20);
-            tableLayoutPanel2.MinimumSize = new System.Drawing.Size(100, 20);
+            tableLayoutPanel2.MaximumSize = new System.Drawing.Size(125, 25);
+            tableLayoutPanel2.MinimumSize = new System.Drawing.Size(125, 25);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new System.Drawing.Size(100, 20);
+            tableLayoutPanel2.Size = new System.Drawing.Size(125, 25);
             tableLayoutPanel2.TabIndex = 1;
             // 
             // button6
@@ -200,10 +200,10 @@
             button6.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button6.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button6.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button6.Location = new System.Drawing.Point(80, 0);
+            button6.Location = new System.Drawing.Point(100, 0);
             button6.Margin = new System.Windows.Forms.Padding(0);
             button6.Name = "button6";
-            button6.Size = new System.Drawing.Size(20, 20);
+            button6.Size = new System.Drawing.Size(25, 25);
             button6.TabIndex = 4;
             button6.UseVisualStyleBackColor = false;
             // 
@@ -220,10 +220,10 @@
             button7.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button7.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button7.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button7.Location = new System.Drawing.Point(60, 0);
+            button7.Location = new System.Drawing.Point(75, 0);
             button7.Margin = new System.Windows.Forms.Padding(0);
             button7.Name = "button7";
-            button7.Size = new System.Drawing.Size(20, 20);
+            button7.Size = new System.Drawing.Size(25, 25);
             button7.TabIndex = 3;
             button7.UseVisualStyleBackColor = false;
             // 
@@ -240,10 +240,10 @@
             button8.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button8.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button8.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button8.Location = new System.Drawing.Point(40, 0);
+            button8.Location = new System.Drawing.Point(50, 0);
             button8.Margin = new System.Windows.Forms.Padding(0);
             button8.Name = "button8";
-            button8.Size = new System.Drawing.Size(20, 20);
+            button8.Size = new System.Drawing.Size(25, 25);
             button8.TabIndex = 2;
             button8.UseVisualStyleBackColor = false;
             // 
@@ -260,10 +260,10 @@
             button9.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
             button9.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
             button9.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            button9.Location = new System.Drawing.Point(20, 0);
+            button9.Location = new System.Drawing.Point(25, 0);
             button9.Margin = new System.Windows.Forms.Padding(0);
             button9.Name = "button9";
-            button9.Size = new System.Drawing.Size(20, 20);
+            button9.Size = new System.Drawing.Size(25, 25);
             button9.TabIndex = 1;
             button9.UseVisualStyleBackColor = false;
             // 
@@ -283,7 +283,7 @@
             button10.Location = new System.Drawing.Point(0, 0);
             button10.Margin = new System.Windows.Forms.Padding(0);
             button10.Name = "button10";
-            button10.Size = new System.Drawing.Size(20, 20);
+            button10.Size = new System.Drawing.Size(25, 25);
             button10.TabIndex = 0;
             button10.UseVisualStyleBackColor = false;
             // 
@@ -292,22 +292,24 @@
             SecondLayer.Controls.Add(tableLayoutPanel2);
             SecondLayer.Enabled = false;
             SecondLayer.Location = new System.Drawing.Point(0, 0);
-            SecondLayer.MinimumSize = new System.Drawing.Size(0, 20);
+            SecondLayer.Margin = new System.Windows.Forms.Padding(0);
+            SecondLayer.MinimumSize = new System.Drawing.Size(0, 25);
             SecondLayer.Name = "SecondLayer";
-            SecondLayer.Size = new System.Drawing.Size(100, 20);
+            SecondLayer.Size = new System.Drawing.Size(125, 25);
             SecondLayer.TabIndex = 4;
             // 
-            // Ratting2
+            // Rating2
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.Transparent;
             Controls.Add(SecondLayer);
             Controls.Add(FirstLayer);
-            MaximumSize = new System.Drawing.Size(100, 20);
-            MinimumSize = new System.Drawing.Size(100, 20);
-            Name = "Ratting2";
-            Size = new System.Drawing.Size(100, 20);
+            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            MaximumSize = new System.Drawing.Size(125, 25);
+            MinimumSize = new System.Drawing.Size(125, 25);
+            Name = "Rating2";
+            Size = new System.Drawing.Size(125, 25);
             FirstLayer.ResumeLayout(false);
             tableLayoutPanel2.ResumeLayout(false);
             SecondLayer.ResumeLayout(false);
