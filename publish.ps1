@@ -20,7 +20,7 @@ $doc.Project.PropertyGroup.Version = $AppVersion
 #$doc.Project.PropertyGroup.FileVersion = $AppVersion
 $Utf8NoBomEncoding = New-Object System.Text.UTF8Encoding $False
 [System.IO.File]::WriteAllLines("D:\\CODES\\VS\\MusicPlayer2\\AnotherMusicPlayer\\AnotherMusicPlayer.csproj", $doc.OuterXml, $Utf8NoBomEncoding)
-exit
+#exit
 
 
 $confirmation = Read-Host "Installer version(default:" $InstallerVersion ", n=abort compiling)"
