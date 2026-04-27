@@ -16,6 +16,7 @@
     <PackageId>$(AssemblyName).NET6</PackageId>
     <PackageIcon>logo.png</PackageIcon>
     <PackageReadmeFile>index.md</PackageReadmeFile>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

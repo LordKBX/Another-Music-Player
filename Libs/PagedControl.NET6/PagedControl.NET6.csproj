@@ -8,6 +8,7 @@
     <UseWindowsForms>True</UseWindowsForms>
     <RootNamespace>Manina.Windows.Forms</RootNamespace>
     <AssemblyName>PagedControl</AssemblyName>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>

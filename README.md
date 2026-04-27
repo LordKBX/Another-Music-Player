@@ -40,6 +40,8 @@
 ### Abstract:
 This is a personal project to create a Music player written with C# SDK .Net 8.0 (originaly 6.0)
 
+The binary is in X64 version only (since V0.2.3.1)
+
 **Functions:**
 * Playing Queue
 * Library sorted by folder with auto scan for update
@@ -56,16 +58,18 @@ This is a personal project to create a Music player written with C# SDK .Net 8.0
 
 |Name|SDK|Runtime|
 |:---:|:---:|:---:|
-|![.Net 8.0](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/net_logo.png?raw=true)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x86-installer)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x86-installer)|
+|![.Net 8.0](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/net_logo.png?raw=true)  8.0|[SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.420-windows-x64-installer)|[Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.26-windows-x64-installer)|
 
 |Name|Version|link|
 |:---:|:---:|:---:|
 |ByteDev.M3u|1.0.0|[link](https://github.com/ByteDev/ByteDev.M3u)|
 |Microsoft-WindowsAPICodePack-Core|1.1.5|[link](https://github.com/contre/Windows-API-Code-Pack-1.1)|
 |Microsoft-WindowsAPICodePack-Shell|1.1.5|[link](https://github.com/contre/Windows-API-Code-Pack-1.1)|
-|NAudio|2.2.1|[link](https://github.com/naudio/NAudio)|
-|Newtonsoft.Json|13.0.3|[link](https://www.newtonsoft.com/json)|
-|System.Data.SQLite|1.0.119|[link](https://www.nuget.org/packages/System.Data.SQLite)|
+|NAudio|2.3.0|[link](https://github.com/naudio/NAudio)|
+|Newtonsoft.Json|13.0.4|[link](https://www.newtonsoft.com/json)|
+|System.Data.SQLite|2.0.3|[link](https://www.nuget.org/packages/System.Data.SQLite)|
+|SourceGear.sqlite3|3.50.4.5|[link](https://www.nuget.org/packages/System.Data.SQLite)|
+|SourceGear.sqlite3.ext|3.50.4.5|[link](https://www.nuget.org/packages/System.Data.SQLite)|
 |System.Drawing.Common|8.0.18|[link](https://www.nuget.org/packages/System.Drawing.Common/8.0.18)|
 |taglib-sharp-netstandard2.0|2.1.0|[link](https://github.com/mono/taglib-sharp)|
 
@@ -74,6 +78,8 @@ This is a personal project to create a Music player written with C# SDK .Net 8.0
 
 ### Abstract:
 Ceci est un projet personnel de création d'un lecteur de musique écrit en C# SDK .Net Core 8.0 (originellement 6.0)
+
+L'executable est en verion X64 uniquement (à partir V0.2.3.1)
 
 **Fonctions:**
 * Liste de lecture courrante
@@ -91,15 +97,17 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C# S
 
 |Nom|SDK|Runtime|
 |:---:|:---:|:---:|
-|![.Net 8.0](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/net_logo.png?raw=true)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.412-windows-x86-installer)|[[X64]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x64-installer) - [[X86]](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.18-windows-x86-installer)|
+|![.Net 8.0](https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/net_logo.png?raw=true)  8.0|[SDK](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/sdk-8.0.420-windows-x64-installer)|[Runtime](https://dotnet.microsoft.com/en-us/download/dotnet/thank-you/runtime-desktop-8.0.26-windows-x64-installer)|
 
 |Name|Version|link|
 |:---:|:---:|:---:|
 |ByteDev.M3u|1.0.0|[link](https://github.com/ByteDev/ByteDev.M3u)|
 |Microsoft-WindowsAPICodePack-Core|1.1.5|[link](https://github.com/contre/Windows-API-Code-Pack-1.1)|
 |Microsoft-WindowsAPICodePack-Shell|1.1.5|[link](https://github.com/contre/Windows-API-Code-Pack-1.1)|
-|NAudio|2.2.1|[link](https://github.com/naudio/NAudio)|
-|Newtonsoft.Json|13.0.3|[link](https://www.newtonsoft.com/json)|
-|System.Data.SQLite|1.0.119|[link](https://www.nuget.org/packages/System.Data.SQLite)|
+|NAudio|2.3.0|[link](https://github.com/naudio/NAudio)|
+|Newtonsoft.Json|13.0.4|[link](https://www.newtonsoft.com/json)|
+|System.Data.SQLite|2.0.3|[link](https://www.nuget.org/packages/System.Data.SQLite)|
+|SourceGear.sqlite3|3.50.4.5|[link](https://www.nuget.org/packages/System.Data.SQLite)|
+|SourceGear.sqlite3.ext|3.50.4.5|[link](https://www.nuget.org/packages/System.Data.SQLite)|
 |System.Drawing.Common|8.0.18|[link](https://www.nuget.org/packages/System.Drawing.Common/8.0.18)|
 |taglib-sharp-netstandard2.0|2.1.0|[link](https://github.com/mono/taglib-sharp)|

@@ -122,6 +122,7 @@ namespace AnotherMusicPlayer
             {
                 DatabaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName;
                 if (!System.IO.Directory.Exists(DatabaseFolder)) { System.IO.Directory.CreateDirectory(DatabaseFolder); }
+                Debug.WriteLine("--> Database() : DatabasePath = " + DatabaseFolder + SeparatorChar + "base.db");
                 DatabaseConnection = new SQLiteConnection("Data Source=" + DatabaseFolder + SeparatorChar + "base.db; Version = 3; New = True; Compress = True; ");
                 DatabaseConnection.Open();
                 DatabaseTansactionStart();
@@ -184,7 +185,11 @@ namespace AnotherMusicPlayer
                     + "PRIMARY KEY(\"CRID\" AUTOINCREMENT))");
                 DatabaseTansactionEnd();
             }
-            catch { Debug.WriteLine("--> Database() : Catch ERROR <--"); }
+            catch(Exception e) { 
+                Debug.WriteLine("--> Database() : Catch ERROR <--");
+                Debug.WriteLine(e.Message + "\r\n" + e.StackTrace);
+                throw e;
+            }
         }
 
         private bool DatabaseDetectOrCreateTable(string TableName, string QueryCreation)

@@ -6,7 +6,6 @@ using System.Reflection;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using System.Windows.Markup;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace AnotherMusicPlayer
 {

@@ -1,5 +1,5 @@
-#define BuildVersion "AnyCPU" ; Define Compiled version 
-#define MyAppVersion GetFileVersion('.\Release\AnyCPU\AnotherMusicPlayer.exe'); Warning: build version defined in path
+#define BuildVersion "x64" ; Define Compiled version 
+#define MyAppVersion GetFileVersion('.\Release\x64\AnotherMusicPlayer.exe'); Warning: build version defined in path
 
 #define MyAppName "Another Music Player"
 #define MyAppPublisher "LordKBX WorkShop"
@@ -23,14 +23,15 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={commonpf}\{#MyAppName}
 DisableProgramGroupPage=yes
 DisableWelcomePage=no
 ; The [Icons] "quicklaunchicon" entry uses {userappdata} but its [Tasks] entry has a proper IsAdminInstallMode Check.
 ;UsedUserAreasWarning=no
 LicenseFile=D:\CODES\VS\MusicPlayer2\LICENSE
-; Uncomment the following line to run in non administrative install mode (install for current user only.)
-PrivilegesRequired=admin
+; Comment the following line to run in non administrative install mode (install for current user only.)
+;PrivilegesRequired=admin
+PrivilegesRequired=lowest
 OutputDir=D:\CODES\VS\MusicPlayer2\Installers
 OutputBaseFilename={#MyAppExeName}-{#MyAppVersion}-{#BuildVersion}-ib({#MyInstallerVersion})
 Compression=lzma                                              
@@ -47,7 +48,10 @@ Name: "quicklaunchicon"; Description: "{cm:CreateQuickLaunchIcon}"; GroupDescrip
 
 [Files]
 Source: ".\Release\{#BuildVersion}\AnotherMusicPlayer.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: ".\Release\{#BuildVersion}\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\Release\{#BuildVersion}\*"; DestDir: "{app}"; Flags: ignoreversion
+Source: ".\Release\{#BuildVersion}\icons\*"; DestDir: "{app}\icons"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\Release\{#BuildVersion}\Translations\*"; DestDir: "{app}\Translations"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: ".\Release\{#BuildVersion}\runtimes\win-x64\*"; DestDir: "{app}\runtimes\win-x64"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

@@ -9,7 +9,6 @@ using System.Drawing;
 using System.IO;
 using System.Drawing.Imaging;
 using System.Security.Policy;
-using System.Data.Entity.Core.Common.CommandTrees.ExpressionBuilder;
 
 namespace AnotherMusicPlayer
 {

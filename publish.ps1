@@ -34,6 +34,6 @@ else {
 		$InstallerVersion = $confirmation.ToString().Trim()
 		}
     "Compiling"
-    dotnet publish D:\CODES\VS\MusicPlayer2 -p:PublishProfile=AnyCPU
-    cmd /C "D:\Program Files (x86)\Inno Setup 6\ISCC.exe" D:\CODES\VS\MusicPlayer2\Installer-AnyCPU.iss /DMyInstallerVersion=$InstallerVersion
+    dotnet publish D:\CODES\VS\MusicPlayer2 -p:PublishProfile=x64
+    cmd /C "D:\Program Files (x86)\Inno Setup 6\ISCC.exe" D:\CODES\VS\MusicPlayer2\Installer-x64.iss /DMyInstallerVersion=$InstallerVersion
 }

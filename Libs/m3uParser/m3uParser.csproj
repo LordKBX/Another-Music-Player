@@ -13,6 +13,7 @@
     <RepositoryUrl>https://github.com/jefersonsv/m3uParser</RepositoryUrl>
     <RepositoryType>GIT</RepositoryType>
     <Product>m3uParser.NET</Product>
+    <Platforms>x64</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
