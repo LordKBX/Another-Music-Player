@@ -32,10 +32,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            TreeNode treeNode1 = new TreeNode("Automatic");
-            TreeNode treeNode2 = new TreeNode("Recorded");
-            TreeNode treeNode3 = new TreeNode("Web Radio");
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            TreeNode treeNode4 = new TreeNode("Automatic");
+            TreeNode treeNode5 = new TreeNode("Recorded");
+            TreeNode treeNode6 = new TreeNode("Web Radio");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow2));
             GlobalTableLayoutPanel = new TableLayoutPanel();
             MainWIndowHead = new TableLayoutPanel();
@@ -284,22 +284,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GlobalTableLayoutPanel.Name = "GlobalTableLayoutPanel";
             GlobalTableLayoutPanel.Padding = new Padding(1);
             GlobalTableLayoutPanel.RowCount = 4;
-            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 51F));
+            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
-            GlobalTableLayoutPanel.Size = new Size(988, 688);
+            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 62F));
+            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 75F));
+            GlobalTableLayoutPanel.Size = new Size(1236, 860);
             GlobalTableLayoutPanel.TabIndex = 0;
             // 
             // MainWIndowHead
             // 
             MainWIndowHead.BackColor = Color.FromArgb(30, 30, 30);
             MainWIndowHead.ColumnCount = 5;
-            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
+            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
-            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
-            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 50F));
+            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
+            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
+            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             MainWIndowHead.Controls.Add(TitleLabel, 1, 0);
             MainWIndowHead.Controls.Add(MinimizeButton, 2, 0);
             MainWIndowHead.Controls.Add(MaximizeButton, 3, 0);
@@ -311,8 +311,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            MainWIndowHead.Size = new Size(986, 51);
+            MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
+            MainWIndowHead.Size = new Size(1234, 64);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
             // 
@@ -325,10 +325,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             TitleLabel.Font = new Font("Segoe UI", 12F);
             TitleLabel.ForeColor = Color.White;
             TitleLabel.ImageAlign = ContentAlignment.MiddleLeft;
-            TitleLabel.Location = new Point(55, 0);
-            TitleLabel.Margin = new Padding(5, 0, 0, 0);
+            TitleLabel.Location = new Point(68, 0);
+            TitleLabel.Margin = new Padding(6, 0, 0, 0);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new Size(781, 51);
+            TitleLabel.Size = new Size(980, 64);
             TitleLabel.TabIndex = 0;
             TitleLabel.Tag = "Title";
             TitleLabel.Text = "Title";
@@ -343,9 +343,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MinimizeButton.Cursor = Cursors.Hand;
             MinimizeButton.Dock = DockStyle.Fill;
             MinimizeButton.FlatStyle = FlatStyle.Popup;
-            MinimizeButton.Location = new Point(839, 3);
+            MinimizeButton.Location = new Point(1052, 4);
+            MinimizeButton.Margin = new Padding(4, 4, 4, 4);
             MinimizeButton.Name = "MinimizeButton";
-            MinimizeButton.Size = new Size(44, 45);
+            MinimizeButton.Size = new Size(54, 56);
             MinimizeButton.TabIndex = 1;
             MinimizeButton.Tag = "WindowButton";
             MinimizeButton.UseVisualStyleBackColor = false;
@@ -359,9 +360,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MaximizeButton.Cursor = Cursors.Hand;
             MaximizeButton.Dock = DockStyle.Fill;
             MaximizeButton.FlatStyle = FlatStyle.Popup;
-            MaximizeButton.Location = new Point(889, 3);
+            MaximizeButton.Location = new Point(1114, 4);
+            MaximizeButton.Margin = new Padding(4, 4, 4, 4);
             MaximizeButton.Name = "MaximizeButton";
-            MaximizeButton.Size = new Size(44, 45);
+            MaximizeButton.Size = new Size(54, 56);
             MaximizeButton.TabIndex = 2;
             MaximizeButton.Tag = "WindowButton";
             MaximizeButton.UseVisualStyleBackColor = false;
@@ -375,9 +377,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             CloseButton.Cursor = Cursors.Hand;
             CloseButton.Dock = DockStyle.Fill;
             CloseButton.FlatStyle = FlatStyle.Popup;
-            CloseButton.Location = new Point(939, 3);
+            CloseButton.Location = new Point(1176, 4);
+            CloseButton.Margin = new Padding(4, 4, 4, 4);
             CloseButton.Name = "CloseButton";
-            CloseButton.Size = new Size(44, 45);
+            CloseButton.Size = new Size(54, 56);
             CloseButton.TabIndex = 3;
             CloseButton.Tag = "WindowButton";
             CloseButton.UseVisualStyleBackColor = false;
@@ -396,26 +399,26 @@ namespace AnotherMusicPlayer.MainWindow2Space
             button1.Location = new Point(0, 0);
             button1.Margin = new Padding(0);
             button1.Name = "button1";
-            button1.Size = new Size(50, 51);
+            button1.Size = new Size(62, 64);
             button1.TabIndex = 4;
             button1.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
             tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120F));
+            tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
             tableLayoutPanel1.Controls.Add(DisplayPlaybackPosition, 0, 0);
             tableLayoutPanel1.Controls.Add(panel1, 2, 0);
             tableLayoutPanel1.Controls.Add(playbackProgressBar, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(1, 627);
+            tableLayoutPanel1.Location = new Point(1, 784);
             tableLayoutPanel1.Margin = new Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(986, 60);
+            tableLayoutPanel1.Size = new Size(1234, 75);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // DisplayPlaybackPosition
@@ -424,9 +427,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             DisplayPlaybackPosition.AutoSize = true;
             DisplayPlaybackPosition.Font = new Font("Segoe UI", 12F);
             DisplayPlaybackPosition.ForeColor = Color.White;
-            DisplayPlaybackPosition.Location = new Point(3, 16);
+            DisplayPlaybackPosition.Location = new Point(4, 23);
+            DisplayPlaybackPosition.Margin = new Padding(4, 0, 4, 0);
             DisplayPlaybackPosition.Name = "DisplayPlaybackPosition";
-            DisplayPlaybackPosition.Size = new Size(114, 28);
+            DisplayPlaybackPosition.Size = new Size(142, 28);
             DisplayPlaybackPosition.TabIndex = 0;
             DisplayPlaybackPosition.Text = "00:00";
             DisplayPlaybackPosition.TextAlign = ContentAlignment.MiddleCenter;
@@ -435,10 +439,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             panel1.Controls.Add(GripButton);
             panel1.Controls.Add(DisplayPlaybackSize);
-            panel1.Location = new Point(866, 0);
+            panel1.Location = new Point(1084, 0);
             panel1.Margin = new Padding(0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(120, 60);
+            panel1.Size = new Size(150, 75);
             panel1.TabIndex = 0;
             // 
             // GripButton
@@ -451,10 +455,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GripButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 30, 30);
             GripButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
             GripButton.FlatStyle = FlatStyle.Flat;
-            GripButton.Location = new Point(99, 39);
+            GripButton.Location = new Point(124, 49);
             GripButton.Margin = new Padding(0);
             GripButton.Name = "GripButton";
-            GripButton.Size = new Size(21, 24);
+            GripButton.Size = new Size(26, 30);
             GripButton.TabIndex = 1;
             GripButton.Tag = "GripButton";
             // 
@@ -465,8 +469,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             DisplayPlaybackSize.Font = new Font("Segoe UI", 12F);
             DisplayPlaybackSize.ForeColor = Color.White;
             DisplayPlaybackSize.Location = new Point(0, 0);
+            DisplayPlaybackSize.Margin = new Padding(4, 0, 4, 0);
             DisplayPlaybackSize.Name = "DisplayPlaybackSize";
-            DisplayPlaybackSize.Size = new Size(120, 60);
+            DisplayPlaybackSize.Size = new Size(150, 75);
             DisplayPlaybackSize.TabIndex = 0;
             DisplayPlaybackSize.Text = "00:00";
             DisplayPlaybackSize.TextAlign = ContentAlignment.MiddleCenter;
@@ -475,13 +480,13 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             playbackProgressBar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             playbackProgressBar.ForeColor = Color.White;
-            playbackProgressBar.Location = new Point(120, 17);
+            playbackProgressBar.Location = new Point(150, 22);
             playbackProgressBar.Margin = new Padding(0);
             playbackProgressBar.MaxValue = 100000;
-            playbackProgressBar.MinimumSize = new Size(0, 25);
+            playbackProgressBar.MinimumSize = new Size(0, 31);
             playbackProgressBar.MinValue = 0;
             playbackProgressBar.Name = "playbackProgressBar";
-            playbackProgressBar.Size = new Size(746, 25);
+            playbackProgressBar.Size = new Size(934, 31);
             playbackProgressBar.TabIndex = 1;
             playbackProgressBar.Value = 10000;
             // 
@@ -489,17 +494,17 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             tableLayoutPanel2.ColumnCount = 2;
             tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 60F));
+            tableLayoutPanel2.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 75F));
             tableLayoutPanel2.Controls.Add(panel3, 0, 0);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 0);
             tableLayoutPanel2.Dock = DockStyle.Fill;
-            tableLayoutPanel2.Location = new Point(1, 52);
+            tableLayoutPanel2.Location = new Point(1, 65);
             tableLayoutPanel2.Margin = new Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            tableLayoutPanel2.Size = new Size(986, 525);
+            tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 656F));
+            tableLayoutPanel2.Size = new Size(1234, 657);
             tableLayoutPanel2.TabIndex = 6;
             // 
             // panel3
@@ -507,10 +512,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             panel3.BorderStyle = BorderStyle.FixedSingle;
             panel3.Controls.Add(TabControler);
             panel3.Dock = DockStyle.Fill;
-            panel3.Location = new Point(0, 3);
-            panel3.Margin = new Padding(0, 3, 0, 0);
+            panel3.Location = new Point(0, 4);
+            panel3.Margin = new Padding(0, 4, 0, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(926, 522);
+            panel3.Size = new Size(1159, 653);
             panel3.TabIndex = 1;
             // 
             // TabControler
@@ -527,7 +532,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             TabControler.Location = new Point(0, 0);
             TabControler.Margin = new Padding(0);
             TabControler.Name = "TabControler";
-            TabControler.Size = new Size(924, 520);
+            TabControler.Size = new Size(1157, 651);
             TabControler.TabIndex = 7;
             TabControler.TabPadding = new Padding(0);
             TabControler.TabSize = new Size(100, 50);
@@ -543,7 +548,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTab.Location = new Point(0, 50);
             PlaybackTab.Name = "PlaybackTab";
             PlaybackTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            PlaybackTab.Size = new Size(924, 471);
+            PlaybackTab.Size = new Size(1157, 602);
             PlaybackTab.Text = " Playback";
             // 
             // PlaybackTabMainTableLayoutPanel
@@ -551,7 +556,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabMainTableLayoutPanel.BackColor = Color.FromArgb(30, 30, 30);
             PlaybackTabMainTableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             PlaybackTabMainTableLayoutPanel.ColumnCount = 2;
-            PlaybackTabMainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
+            PlaybackTabMainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 188F));
             PlaybackTabMainTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             PlaybackTabMainTableLayoutPanel.Controls.Add(PlaybackTabLeftTableLayoutPanel, 0, 0);
             PlaybackTabMainTableLayoutPanel.Controls.Add(tableLayoutPanel4, 1, 0);
@@ -561,7 +566,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabMainTableLayoutPanel.Name = "PlaybackTabMainTableLayoutPanel";
             PlaybackTabMainTableLayoutPanel.RowCount = 1;
             PlaybackTabMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlaybackTabMainTableLayoutPanel.Size = new Size(924, 471);
+            PlaybackTabMainTableLayoutPanel.Size = new Size(1157, 602);
             PlaybackTabMainTableLayoutPanel.TabIndex = 0;
             // 
             // PlaybackTabLeftTableLayoutPanel
@@ -575,9 +580,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLeftTableLayoutPanel.Margin = new Padding(0);
             PlaybackTabLeftTableLayoutPanel.Name = "PlaybackTabLeftTableLayoutPanel";
             PlaybackTabLeftTableLayoutPanel.RowCount = 2;
-            PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
+            PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 188F));
             PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlaybackTabLeftTableLayoutPanel.Size = new Size(150, 469);
+            PlaybackTabLeftTableLayoutPanel.Size = new Size(188, 600);
             PlaybackTabLeftTableLayoutPanel.TabIndex = 1;
             // 
             // PlaybackTabLeftBottomPanel
@@ -585,10 +590,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLeftBottomPanel.AutoScroll = true;
             PlaybackTabLeftBottomPanel.Controls.Add(PlaybackTabLeftBottomFlowLayoutPanel);
             PlaybackTabLeftBottomPanel.Dock = DockStyle.Fill;
-            PlaybackTabLeftBottomPanel.Location = new Point(0, 150);
+            PlaybackTabLeftBottomPanel.Location = new Point(0, 188);
             PlaybackTabLeftBottomPanel.Margin = new Padding(0);
             PlaybackTabLeftBottomPanel.Name = "PlaybackTabLeftBottomPanel";
-            PlaybackTabLeftBottomPanel.Size = new Size(150, 319);
+            PlaybackTabLeftBottomPanel.Size = new Size(188, 412);
             PlaybackTabLeftBottomPanel.TabIndex = 0;
             // 
             // PlaybackTabLeftBottomFlowLayoutPanel
@@ -610,10 +615,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLeftBottomFlowLayoutPanel.Dock = DockStyle.Top;
             PlaybackTabLeftBottomFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             PlaybackTabLeftBottomFlowLayoutPanel.Location = new Point(0, 0);
-            PlaybackTabLeftBottomFlowLayoutPanel.Margin = new Padding(3, 4, 3, 4);
-            PlaybackTabLeftBottomFlowLayoutPanel.MinimumSize = new Size(150, 249);
+            PlaybackTabLeftBottomFlowLayoutPanel.Margin = new Padding(4, 5, 4, 5);
+            PlaybackTabLeftBottomFlowLayoutPanel.MinimumSize = new Size(188, 311);
             PlaybackTabLeftBottomFlowLayoutPanel.Name = "PlaybackTabLeftBottomFlowLayoutPanel";
-            PlaybackTabLeftBottomFlowLayoutPanel.Size = new Size(150, 288);
+            PlaybackTabLeftBottomFlowLayoutPanel.Size = new Size(188, 364);
             PlaybackTabLeftBottomFlowLayoutPanel.TabIndex = 0;
             PlaybackTabLeftBottomFlowLayoutPanel.WrapContents = false;
             // 
@@ -621,11 +626,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabTitleLabelInfo.Dock = DockStyle.Fill;
             PlaybackTabTitleLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            PlaybackTabTitleLabelInfo.Location = new Point(0, 3);
-            PlaybackTabTitleLabelInfo.Margin = new Padding(0, 3, 0, 0);
+            PlaybackTabTitleLabelInfo.Location = new Point(0, 4);
+            PlaybackTabTitleLabelInfo.Margin = new Padding(0, 4, 0, 0);
             PlaybackTabTitleLabelInfo.Name = "PlaybackTabTitleLabelInfo";
             PlaybackTabTitleLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabTitleLabelInfo.Size = new Size(140, 24);
+            PlaybackTabTitleLabelInfo.Size = new Size(175, 30);
             PlaybackTabTitleLabelInfo.TabIndex = 1;
             PlaybackTabTitleLabelInfo.Tag = "Title";
             PlaybackTabTitleLabelInfo.Text = "Title:";
@@ -635,12 +640,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabTitleLabelValue.AutoEllipsis = true;
             PlaybackTabTitleLabelValue.Dock = DockStyle.Fill;
             PlaybackTabTitleLabelValue.Font = new Font("Segoe UI", 9F);
-            PlaybackTabTitleLabelValue.Location = new Point(0, 27);
+            PlaybackTabTitleLabelValue.Location = new Point(0, 34);
             PlaybackTabTitleLabelValue.Margin = new Padding(0);
-            PlaybackTabTitleLabelValue.MinimumSize = new Size(140, 20);
+            PlaybackTabTitleLabelValue.MinimumSize = new Size(175, 25);
             PlaybackTabTitleLabelValue.Name = "PlaybackTabTitleLabelValue";
-            PlaybackTabTitleLabelValue.Padding = new Padding(11, 0, 0, 0);
-            PlaybackTabTitleLabelValue.Size = new Size(140, 20);
+            PlaybackTabTitleLabelValue.Padding = new Padding(14, 0, 0, 0);
+            PlaybackTabTitleLabelValue.Size = new Size(175, 25);
             PlaybackTabTitleLabelValue.TabIndex = 1;
             PlaybackTabTitleLabelValue.Text = "Track Name";
             PlaybackTabTitleLabelValue.UseMnemonic = false;
@@ -649,11 +654,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabAlbumLabelInfo.Dock = DockStyle.Fill;
             PlaybackTabAlbumLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            PlaybackTabAlbumLabelInfo.Location = new Point(0, 47);
+            PlaybackTabAlbumLabelInfo.Location = new Point(0, 59);
             PlaybackTabAlbumLabelInfo.Margin = new Padding(0);
             PlaybackTabAlbumLabelInfo.Name = "PlaybackTabAlbumLabelInfo";
             PlaybackTabAlbumLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabAlbumLabelInfo.Size = new Size(140, 24);
+            PlaybackTabAlbumLabelInfo.Size = new Size(175, 30);
             PlaybackTabAlbumLabelInfo.TabIndex = 1;
             PlaybackTabAlbumLabelInfo.Tag = "Title";
             PlaybackTabAlbumLabelInfo.Text = "Album:";
@@ -663,12 +668,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabAlbumLabelValue.AutoEllipsis = true;
             PlaybackTabAlbumLabelValue.Dock = DockStyle.Fill;
             PlaybackTabAlbumLabelValue.Font = new Font("Segoe UI", 9F);
-            PlaybackTabAlbumLabelValue.Location = new Point(0, 71);
+            PlaybackTabAlbumLabelValue.Location = new Point(0, 89);
             PlaybackTabAlbumLabelValue.Margin = new Padding(0);
-            PlaybackTabAlbumLabelValue.MinimumSize = new Size(140, 20);
+            PlaybackTabAlbumLabelValue.MinimumSize = new Size(175, 25);
             PlaybackTabAlbumLabelValue.Name = "PlaybackTabAlbumLabelValue";
-            PlaybackTabAlbumLabelValue.Padding = new Padding(11, 0, 0, 0);
-            PlaybackTabAlbumLabelValue.Size = new Size(140, 20);
+            PlaybackTabAlbumLabelValue.Padding = new Padding(14, 0, 0, 0);
+            PlaybackTabAlbumLabelValue.Size = new Size(175, 25);
             PlaybackTabAlbumLabelValue.TabIndex = 1;
             PlaybackTabAlbumLabelValue.UseMnemonic = false;
             // 
@@ -676,11 +681,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabArtistsLabelInfo.Dock = DockStyle.Fill;
             PlaybackTabArtistsLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            PlaybackTabArtistsLabelInfo.Location = new Point(0, 91);
+            PlaybackTabArtistsLabelInfo.Location = new Point(0, 114);
             PlaybackTabArtistsLabelInfo.Margin = new Padding(0);
             PlaybackTabArtistsLabelInfo.Name = "PlaybackTabArtistsLabelInfo";
             PlaybackTabArtistsLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabArtistsLabelInfo.Size = new Size(140, 24);
+            PlaybackTabArtistsLabelInfo.Size = new Size(175, 30);
             PlaybackTabArtistsLabelInfo.TabIndex = 1;
             PlaybackTabArtistsLabelInfo.Tag = "Title";
             PlaybackTabArtistsLabelInfo.Text = "Artists:";
@@ -689,12 +694,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabArtistsLabelValue.AutoEllipsis = true;
             PlaybackTabArtistsLabelValue.Font = new Font("Segoe UI", 9F);
-            PlaybackTabArtistsLabelValue.Location = new Point(0, 115);
+            PlaybackTabArtistsLabelValue.Location = new Point(0, 144);
             PlaybackTabArtistsLabelValue.Margin = new Padding(0);
-            PlaybackTabArtistsLabelValue.MinimumSize = new Size(140, 20);
+            PlaybackTabArtistsLabelValue.MinimumSize = new Size(175, 25);
             PlaybackTabArtistsLabelValue.Name = "PlaybackTabArtistsLabelValue";
-            PlaybackTabArtistsLabelValue.Padding = new Padding(11, 0, 0, 0);
-            PlaybackTabArtistsLabelValue.Size = new Size(140, 20);
+            PlaybackTabArtistsLabelValue.Padding = new Padding(14, 0, 0, 0);
+            PlaybackTabArtistsLabelValue.Size = new Size(175, 25);
             PlaybackTabArtistsLabelValue.TabIndex = 1;
             PlaybackTabArtistsLabelValue.UseMnemonic = false;
             // 
@@ -702,11 +707,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabGenresLabelInfo.Dock = DockStyle.Fill;
             PlaybackTabGenresLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            PlaybackTabGenresLabelInfo.Location = new Point(0, 135);
+            PlaybackTabGenresLabelInfo.Location = new Point(0, 169);
             PlaybackTabGenresLabelInfo.Margin = new Padding(0);
             PlaybackTabGenresLabelInfo.Name = "PlaybackTabGenresLabelInfo";
             PlaybackTabGenresLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabGenresLabelInfo.Size = new Size(140, 24);
+            PlaybackTabGenresLabelInfo.Size = new Size(175, 30);
             PlaybackTabGenresLabelInfo.TabIndex = 1;
             PlaybackTabGenresLabelInfo.Tag = "Title";
             PlaybackTabGenresLabelInfo.Text = "Genre:";
@@ -716,12 +721,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabGenresLabelValue.AutoEllipsis = true;
             PlaybackTabGenresLabelValue.Dock = DockStyle.Fill;
             PlaybackTabGenresLabelValue.Font = new Font("Segoe UI", 9F);
-            PlaybackTabGenresLabelValue.Location = new Point(0, 159);
+            PlaybackTabGenresLabelValue.Location = new Point(0, 199);
             PlaybackTabGenresLabelValue.Margin = new Padding(0);
-            PlaybackTabGenresLabelValue.MinimumSize = new Size(140, 20);
+            PlaybackTabGenresLabelValue.MinimumSize = new Size(175, 25);
             PlaybackTabGenresLabelValue.Name = "PlaybackTabGenresLabelValue";
-            PlaybackTabGenresLabelValue.Padding = new Padding(11, 0, 0, 0);
-            PlaybackTabGenresLabelValue.Size = new Size(140, 22);
+            PlaybackTabGenresLabelValue.Padding = new Padding(14, 0, 0, 0);
+            PlaybackTabGenresLabelValue.Size = new Size(175, 28);
             PlaybackTabGenresLabelValue.TabIndex = 1;
             PlaybackTabGenresLabelValue.UseMnemonic = false;
             // 
@@ -729,11 +734,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabDurationLabelInfo.Dock = DockStyle.Fill;
             PlaybackTabDurationLabelInfo.Font = new Font("Segoe UI", 10F, FontStyle.Bold);
-            PlaybackTabDurationLabelInfo.Location = new Point(0, 181);
+            PlaybackTabDurationLabelInfo.Location = new Point(0, 227);
             PlaybackTabDurationLabelInfo.Margin = new Padding(0);
             PlaybackTabDurationLabelInfo.Name = "PlaybackTabDurationLabelInfo";
             PlaybackTabDurationLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabDurationLabelInfo.Size = new Size(140, 24);
+            PlaybackTabDurationLabelInfo.Size = new Size(175, 30);
             PlaybackTabDurationLabelInfo.TabIndex = 1;
             PlaybackTabDurationLabelInfo.Tag = "Title";
             PlaybackTabDurationLabelInfo.Text = "Duration:";
@@ -742,12 +747,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabDurationLabelValue.Dock = DockStyle.Fill;
             PlaybackTabDurationLabelValue.Font = new Font("Segoe UI", 9F);
-            PlaybackTabDurationLabelValue.Location = new Point(0, 205);
+            PlaybackTabDurationLabelValue.Location = new Point(0, 257);
             PlaybackTabDurationLabelValue.Margin = new Padding(0);
-            PlaybackTabDurationLabelValue.MinimumSize = new Size(140, 20);
+            PlaybackTabDurationLabelValue.MinimumSize = new Size(175, 25);
             PlaybackTabDurationLabelValue.Name = "PlaybackTabDurationLabelValue";
-            PlaybackTabDurationLabelValue.Padding = new Padding(11, 0, 0, 0);
-            PlaybackTabDurationLabelValue.Size = new Size(140, 22);
+            PlaybackTabDurationLabelValue.Padding = new Padding(14, 0, 0, 0);
+            PlaybackTabDurationLabelValue.Size = new Size(175, 28);
             PlaybackTabDurationLabelValue.TabIndex = 1;
             PlaybackTabDurationLabelValue.UseMnemonic = false;
             // 
@@ -755,12 +760,13 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlaybackTabRatting.BackColor = Color.Transparent;
             PlaybackTabRatting.IsReadOnly = false;
-            PlaybackTabRatting.Location = new Point(3, 230);
-            PlaybackTabRatting.MaximumSize = new Size(100, 20);
-            PlaybackTabRatting.MinimumSize = new Size(100, 20);
+            PlaybackTabRatting.Location = new Point(5, 290);
+            PlaybackTabRatting.Margin = new Padding(5, 5, 5, 5);
+            PlaybackTabRatting.MaximumSize = new Size(125, 25);
+            PlaybackTabRatting.MinimumSize = new Size(125, 25);
             PlaybackTabRatting.Name = "PlaybackTabRatting";
             PlaybackTabRatting.Rate = 0D;
-            PlaybackTabRatting.Size = new Size(100, 20);
+            PlaybackTabRatting.Size = new Size(125, 25);
             PlaybackTabRatting.TabIndex = 3;
             PlaybackTabRatting.Zoom = 1D;
             // 
@@ -770,9 +776,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLyricsButton.FlatAppearance.MouseDownBackColor = Color.Gray;
             PlaybackTabLyricsButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(64, 64, 64);
             PlaybackTabLyricsButton.FlatStyle = FlatStyle.Flat;
-            PlaybackTabLyricsButton.Location = new Point(3, 256);
+            PlaybackTabLyricsButton.Location = new Point(4, 324);
+            PlaybackTabLyricsButton.Margin = new Padding(4, 4, 4, 4);
             PlaybackTabLyricsButton.Name = "PlaybackTabLyricsButton";
-            PlaybackTabLyricsButton.Size = new Size(94, 29);
+            PlaybackTabLyricsButton.Size = new Size(118, 36);
             PlaybackTabLyricsButton.TabIndex = 2;
             PlaybackTabLyricsButton.Text = "Lyrics";
             PlaybackTabLyricsButton.UseVisualStyleBackColor = true;
@@ -791,7 +798,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             FileCover.Location = new Point(0, 0);
             FileCover.Margin = new Padding(0);
             FileCover.Name = "FileCover";
-            FileCover.Size = new Size(150, 150);
+            FileCover.Size = new Size(188, 188);
             FileCover.TabIndex = 1;
             FileCover.UseVisualStyleBackColor = false;
             // 
@@ -802,22 +809,23 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel4.Controls.Add(PlaybackPositionLabel, 0, 0);
             tableLayoutPanel4.Controls.Add(PlaybackTabDataGridView, 0, 1);
             tableLayoutPanel4.Dock = DockStyle.Fill;
-            tableLayoutPanel4.Location = new Point(152, 1);
+            tableLayoutPanel4.Location = new Point(190, 1);
             tableLayoutPanel4.Margin = new Padding(0);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 2;
-            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(771, 469);
+            tableLayoutPanel4.Size = new Size(966, 600);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // PlaybackPositionLabel
             // 
             PlaybackPositionLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             PlaybackPositionLabel.AutoSize = true;
-            PlaybackPositionLabel.Location = new Point(3, 10);
+            PlaybackPositionLabel.Location = new Point(4, 12);
+            PlaybackPositionLabel.Margin = new Padding(4, 0, 4, 0);
             PlaybackPositionLabel.Name = "PlaybackPositionLabel";
-            PlaybackPositionLabel.Size = new Size(765, 20);
+            PlaybackPositionLabel.Size = new Size(958, 25);
             PlaybackPositionLabel.TabIndex = 2;
             PlaybackPositionLabel.Text = "label1";
             PlaybackPositionLabel.UseMnemonic = false;
@@ -833,7 +841,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabDataGridView.Columns.AddRange(new DataGridViewColumn[] { SelectedColumn, NameColumn, DurationColumn, ArtistsColumn, AlbumColumn });
             PlaybackTabDataGridView.Dock = DockStyle.Fill;
             PlaybackTabDataGridView.EnableHeadersVisualStyles = false;
-            PlaybackTabDataGridView.Location = new Point(3, 43);
+            PlaybackTabDataGridView.Location = new Point(4, 54);
+            PlaybackTabDataGridView.Margin = new Padding(4, 4, 4, 4);
             PlaybackTabDataGridView.MultiSelect = false;
             PlaybackTabDataGridView.Name = "PlaybackTabDataGridView";
             PlaybackTabDataGridView.ReadOnly = true;
@@ -845,15 +854,15 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabDataGridView.ShowCellErrors = false;
             PlaybackTabDataGridView.ShowEditingIcon = false;
             PlaybackTabDataGridView.ShowRowErrors = false;
-            PlaybackTabDataGridView.Size = new Size(765, 423);
+            PlaybackTabDataGridView.Size = new Size(958, 542);
             PlaybackTabDataGridView.TabIndex = 3;
             // 
             // SelectedColumn
             // 
             SelectedColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             SelectedColumn.DataPropertyName = "Selected";
-            dataGridViewCellStyle1.Font = new Font("Wingdings", 9F);
-            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Wingdings", 9F);
+            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle2;
             SelectedColumn.HeaderText = "";
             SelectedColumn.MinimumWidth = 30;
             SelectedColumn.Name = "SelectedColumn";
@@ -904,10 +913,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTab.ForeColor = Color.White;
             LibraryTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
             LibraryTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
-            LibraryTab.Location = new Point(0, 50);
+            LibraryTab.Location = new Point(0, 62);
             LibraryTab.Name = "LibraryTab";
             LibraryTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            LibraryTab.Size = new Size(857, 512);
+            LibraryTab.Size = new Size(1071, 640);
             LibraryTab.Text = " Library";
             // 
             // LibraryTabTableLayoutPanel
@@ -924,11 +933,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTabTableLayoutPanel.Margin = new Padding(0);
             LibraryTabTableLayoutPanel.Name = "LibraryTabTableLayoutPanel";
             LibraryTabTableLayoutPanel.RowCount = 3;
-            LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            LibraryTabTableLayoutPanel.Size = new Size(857, 512);
+            LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
+            LibraryTabTableLayoutPanel.Size = new Size(1071, 640);
             LibraryTabTableLayoutPanel.TabIndex = 1;
             // 
             // LibraryNavigationPathContener
@@ -937,7 +946,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationPathContener.Location = new Point(1, 1);
             LibraryNavigationPathContener.Margin = new Padding(0);
             LibraryNavigationPathContener.Name = "LibraryNavigationPathContener";
-            LibraryNavigationPathContener.Size = new Size(855, 40);
+            LibraryNavigationPathContener.Size = new Size(1069, 50);
             LibraryNavigationPathContener.TabIndex = 0;
             // 
             // LibraryFiltersGrid
@@ -947,9 +956,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersGrid.Controls.Add(LibraryFiltersGenreList);
             LibraryFiltersGrid.Controls.Add(LibraryFiltersSearchBox);
             LibraryFiltersGrid.Dock = DockStyle.Fill;
-            LibraryFiltersGrid.Location = new Point(4, 45);
+            LibraryFiltersGrid.Location = new Point(5, 56);
+            LibraryFiltersGrid.Margin = new Padding(4, 4, 4, 4);
             LibraryFiltersGrid.Name = "LibraryFiltersGrid";
-            LibraryFiltersGrid.Size = new Size(849, 34);
+            LibraryFiltersGrid.Size = new Size(1061, 42);
             LibraryFiltersGrid.TabIndex = 1;
             LibraryFiltersGrid.WrapContents = false;
             // 
@@ -957,10 +967,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             LibraryFiltersModeLabel.Anchor = AnchorStyles.Left;
             LibraryFiltersModeLabel.AutoSize = true;
-            LibraryFiltersModeLabel.Location = new Point(3, 9);
-            LibraryFiltersModeLabel.Margin = new Padding(3, 0, 10, 0);
+            LibraryFiltersModeLabel.Location = new Point(4, 8);
+            LibraryFiltersModeLabel.Margin = new Padding(4, 0, 12, 0);
             LibraryFiltersModeLabel.Name = "LibraryFiltersModeLabel";
-            LibraryFiltersModeLabel.Size = new Size(42, 20);
+            LibraryFiltersModeLabel.Size = new Size(50, 25);
             LibraryFiltersModeLabel.TabIndex = 0;
             LibraryFiltersModeLabel.Text = "Filter";
             // 
@@ -973,9 +983,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersMode.ForeColor = Color.White;
             LibraryFiltersMode.FormattingEnabled = true;
             LibraryFiltersMode.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
-            LibraryFiltersMode.Location = new Point(58, 5);
+            LibraryFiltersMode.Location = new Point(70, 4);
+            LibraryFiltersMode.Margin = new Padding(4, 4, 4, 4);
             LibraryFiltersMode.Name = "LibraryFiltersMode";
-            LibraryFiltersMode.Size = new Size(144, 28);
+            LibraryFiltersMode.Size = new Size(179, 33);
             LibraryFiltersMode.TabIndex = 1;
             // 
             // LibraryFiltersGenreList
@@ -987,10 +998,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersGenreList.ForeColor = Color.White;
             LibraryFiltersGenreList.FormattingEnabled = true;
             LibraryFiltersGenreList.Items.AddRange(new object[] { "Nothing", "Title", "Artist", "Album", "Genre" });
-            LibraryFiltersGenreList.Location = new Point(208, 5);
-            LibraryFiltersGenreList.MinimumSize = new Size(200, 0);
+            LibraryFiltersGenreList.Location = new Point(257, 4);
+            LibraryFiltersGenreList.Margin = new Padding(4, 4, 4, 4);
+            LibraryFiltersGenreList.MinimumSize = new Size(249, 0);
             LibraryFiltersGenreList.Name = "LibraryFiltersGenreList";
-            LibraryFiltersGenreList.Size = new Size(200, 28);
+            LibraryFiltersGenreList.Size = new Size(249, 33);
             LibraryFiltersGenreList.TabIndex = 1;
             // 
             // LibraryFiltersSearchBox
@@ -1001,18 +1013,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersSearchBox.CharacterCasing = CharacterCasing.Lower;
             LibraryFiltersSearchBox.Font = new Font("Segoe UI", 10F);
             LibraryFiltersSearchBox.ForeColor = Color.White;
-            LibraryFiltersSearchBox.Location = new Point(414, 2);
-            LibraryFiltersSearchBox.Margin = new Padding(3, 2, 0, 7);
+            LibraryFiltersSearchBox.Location = new Point(514, 2);
+            LibraryFiltersSearchBox.Margin = new Padding(4, 2, 0, 9);
             LibraryFiltersSearchBox.Name = "LibraryFiltersSearchBox";
             LibraryFiltersSearchBox.PlaceholderText = " Search";
-            LibraryFiltersSearchBox.Size = new Size(125, 30);
+            LibraryFiltersSearchBox.Size = new Size(156, 30);
             LibraryFiltersSearchBox.TabIndex = 3;
             LibraryFiltersSearchBox.Text = " search";
             // 
             // LibraryTabSplitContainer
             // 
             LibraryTabSplitContainer.Dock = DockStyle.Fill;
-            LibraryTabSplitContainer.Location = new Point(4, 86);
+            LibraryTabSplitContainer.Location = new Point(5, 107);
+            LibraryTabSplitContainer.Margin = new Padding(4, 4, 4, 4);
             LibraryTabSplitContainer.Name = "LibraryTabSplitContainer";
             LibraryTabSplitContainer.Orientation = Orientation.Horizontal;
             // 
@@ -1027,8 +1040,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             LibraryTabSplitContainer.Panel2.Controls.Add(LibraryTabSplitContainer2);
             LibraryTabSplitContainer.Panel2MinSize = 100;
-            LibraryTabSplitContainer.Size = new Size(849, 422);
-            LibraryTabSplitContainer.SplitterDistance = 219;
+            LibraryTabSplitContainer.Size = new Size(1061, 528);
+            LibraryTabSplitContainer.SplitterDistance = 274;
             LibraryTabSplitContainer.SplitterWidth = 1;
             LibraryTabSplitContainer.TabIndex = 3;
             // 
@@ -1043,12 +1056,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContent.Dock = DockStyle.Fill;
             LibraryNavigationContent.Location = new Point(0, 0);
             LibraryNavigationContent.Margin = new Padding(0);
-            LibraryNavigationContent.MinimumSize = new Size(0, 150);
+            LibraryNavigationContent.MinimumSize = new Size(0, 188);
             LibraryNavigationContent.Name = "LibraryNavigationContent";
             LibraryNavigationContent.RowCount = 2;
-            LibraryNavigationContent.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            LibraryNavigationContent.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
             LibraryNavigationContent.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            LibraryNavigationContent.Size = new Size(849, 219);
+            LibraryNavigationContent.Size = new Size(1061, 274);
             LibraryNavigationContent.TabIndex = 0;
             // 
             // LibraryFoldersLabel
@@ -1058,8 +1071,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFoldersLabel.Location = new Point(0, 0);
             LibraryFoldersLabel.Margin = new Padding(0);
             LibraryFoldersLabel.Name = "LibraryFoldersLabel";
-            LibraryFoldersLabel.Padding = new Padding(3, 0, 3, 0);
-            LibraryFoldersLabel.Size = new Size(849, 30);
+            LibraryFoldersLabel.Padding = new Padding(4, 0, 4, 0);
+            LibraryFoldersLabel.Size = new Size(1061, 38);
             LibraryFoldersLabel.TabIndex = 0;
             LibraryFoldersLabel.Tag = "Bold";
             LibraryFoldersLabel.Text = "Folders";
@@ -1072,12 +1085,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFolders.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             LibraryNavigationContentFolders.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             LibraryNavigationContentFolders.Dock = DockStyle.Fill;
-            LibraryNavigationContentFolders.Location = new Point(0, 30);
+            LibraryNavigationContentFolders.Location = new Point(0, 38);
             LibraryNavigationContentFolders.Margin = new Padding(0);
             LibraryNavigationContentFolders.Name = "LibraryNavigationContentFolders";
             LibraryNavigationContentFolders.ReadOnly = true;
             LibraryNavigationContentFolders.RowHeadersWidth = 51;
-            LibraryNavigationContentFolders.Size = new Size(849, 189);
+            LibraryNavigationContentFolders.Size = new Size(1061, 236);
             LibraryNavigationContentFolders.TabIndex = 1;
             // 
             // LibraryTabSplitContainer2
@@ -1094,8 +1107,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // LibraryTabSplitContainer2.Panel2
             // 
             LibraryTabSplitContainer2.Panel2.Controls.Add(LibraryNavigationContentFilesParent);
-            LibraryTabSplitContainer2.Size = new Size(849, 202);
-            LibraryTabSplitContainer2.SplitterDistance = 283;
+            LibraryTabSplitContainer2.Size = new Size(1061, 253);
+            LibraryTabSplitContainer2.SplitterDistance = 353;
             LibraryTabSplitContainer2.SplitterWidth = 1;
             LibraryTabSplitContainer2.TabIndex = 0;
             // 
@@ -1106,10 +1119,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibrarySearchContent.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             LibrarySearchContent.Dock = DockStyle.Fill;
             LibrarySearchContent.Location = new Point(0, 0);
+            LibrarySearchContent.Margin = new Padding(4, 4, 4, 4);
             LibrarySearchContent.Name = "LibrarySearchContent";
             LibrarySearchContent.ReadOnly = true;
             LibrarySearchContent.RowHeadersWidth = 51;
-            LibrarySearchContent.Size = new Size(283, 202);
+            LibrarySearchContent.Size = new Size(353, 253);
             LibrarySearchContent.TabIndex = 1;
             // 
             // LibraryNavigationContentFilesParent
@@ -1120,7 +1134,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFilesParent.Location = new Point(0, 0);
             LibraryNavigationContentFilesParent.Margin = new Padding(0);
             LibraryNavigationContentFilesParent.Name = "LibraryNavigationContentFilesParent";
-            LibraryNavigationContentFilesParent.Size = new Size(565, 202);
+            LibraryNavigationContentFilesParent.Size = new Size(707, 253);
             LibraryNavigationContentFilesParent.TabIndex = 0;
             // 
             // LibraryNavigationContentFiles
@@ -1134,8 +1148,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFiles.Name = "LibraryNavigationContentFiles";
             LibraryNavigationContentFiles.RowCount = 1;
             LibraryNavigationContentFiles.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            LibraryNavigationContentFiles.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-            LibraryNavigationContentFiles.Size = new Size(565, 10);
+            LibraryNavigationContentFiles.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F));
+            LibraryNavigationContentFiles.Size = new Size(707, 12);
             LibraryNavigationContentFiles.TabIndex = 1;
             // 
             // PlayListsTab
@@ -1145,10 +1159,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTab.ForeColor = Color.White;
             PlayListsTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
             PlayListsTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
-            PlayListsTab.Location = new Point(0, 50);
+            PlayListsTab.Location = new Point(0, 62);
             PlayListsTab.Name = "PlayListsTab";
             PlayListsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            PlayListsTab.Size = new Size(857, 512);
+            PlayListsTab.Size = new Size(1071, 640);
             PlayListsTab.Text = " PlayLists";
             // 
             // PlayListsTabTableLayoutPanel
@@ -1156,7 +1170,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabTableLayoutPanel.BackColor = Color.FromArgb(30, 30, 30);
             PlayListsTabTableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.Single;
             PlayListsTabTableLayoutPanel.ColumnCount = 2;
-            PlayListsTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            PlayListsTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
             PlayListsTabTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             PlayListsTabTableLayoutPanel.Controls.Add(PlaylistsTree, 0, 0);
             PlayListsTabTableLayoutPanel.Controls.Add(PlayListsTabSplitContainer1, 1, 0);
@@ -1166,7 +1180,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabTableLayoutPanel.Name = "PlayListsTabTableLayoutPanel";
             PlayListsTabTableLayoutPanel.RowCount = 1;
             PlayListsTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlayListsTabTableLayoutPanel.Size = new Size(857, 512);
+            PlayListsTabTableLayoutPanel.Size = new Size(1071, 640);
             PlayListsTabTableLayoutPanel.TabIndex = 1;
             // 
             // PlaylistsTree
@@ -1183,24 +1197,24 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaylistsTree.Location = new Point(1, 1);
             PlaylistsTree.Margin = new Padding(0);
             PlaylistsTree.Name = "PlaylistsTree";
-            treeNode1.Checked = true;
-            treeNode1.ImageKey = "filter_icon.png";
-            treeNode1.Name = "PlayListsTabTreeNodeAutomatic";
-            treeNode1.SelectedImageKey = "filter_icon.png";
-            treeNode1.Text = "Automatic";
-            treeNode2.Checked = true;
-            treeNode2.ImageKey = "floppy_icon.png";
-            treeNode2.Name = "PlayListsTabTreeNodeRecorded";
-            treeNode2.SelectedImageKey = "floppy_icon.png";
-            treeNode2.Text = "Recorded";
-            treeNode3.Checked = true;
-            treeNode3.ImageKey = "radio_icon.png";
-            treeNode3.Name = "PlayListsTabTreeNodeWebRario";
-            treeNode3.SelectedImageKey = "radio_icon.png";
-            treeNode3.Text = "Web Radio";
-            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
+            treeNode4.Checked = true;
+            treeNode4.ImageKey = "filter_icon.png";
+            treeNode4.Name = "PlayListsTabTreeNodeAutomatic";
+            treeNode4.SelectedImageKey = "filter_icon.png";
+            treeNode4.Text = "Automatic";
+            treeNode5.Checked = true;
+            treeNode5.ImageKey = "floppy_icon.png";
+            treeNode5.Name = "PlayListsTabTreeNodeRecorded";
+            treeNode5.SelectedImageKey = "floppy_icon.png";
+            treeNode5.Text = "Recorded";
+            treeNode6.Checked = true;
+            treeNode6.ImageKey = "radio_icon.png";
+            treeNode6.Name = "PlayListsTabTreeNodeWebRario";
+            treeNode6.SelectedImageKey = "radio_icon.png";
+            treeNode6.Text = "Web Radio";
+            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode5, treeNode6 });
             PlaylistsTree.SelectedImageIndex = 0;
-            PlaylistsTree.Size = new Size(200, 510);
+            PlaylistsTree.Size = new Size(250, 638);
             PlaylistsTree.TabIndex = 0;
             // 
             // PlayListsTabTreeImageList
@@ -1222,7 +1236,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // PlayListsTabSplitContainer1
             // 
             PlayListsTabSplitContainer1.Dock = DockStyle.Fill;
-            PlayListsTabSplitContainer1.Location = new Point(202, 1);
+            PlayListsTabSplitContainer1.Location = new Point(252, 1);
             PlayListsTabSplitContainer1.Margin = new Padding(0);
             PlayListsTabSplitContainer1.Name = "PlayListsTabSplitContainer1";
             PlayListsTabSplitContainer1.Orientation = Orientation.Horizontal;
@@ -1234,8 +1248,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // PlayListsTabSplitContainer1.Panel2
             // 
             PlayListsTabSplitContainer1.Panel2.Controls.Add(PlayListsTabSplitContainer2);
-            PlayListsTabSplitContainer1.Size = new Size(654, 510);
-            PlayListsTabSplitContainer1.SplitterDistance = 96;
+            PlayListsTabSplitContainer1.Size = new Size(818, 638);
+            PlayListsTabSplitContainer1.SplitterDistance = 120;
             PlayListsTabSplitContainer1.SplitterWidth = 1;
             PlayListsTabSplitContainer1.TabIndex = 1;
             // 
@@ -1250,7 +1264,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(654, 96);
+            tableLayoutPanel5.Size = new Size(818, 120);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // PlayListsTabVoidLabel
@@ -1258,9 +1272,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabVoidLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             PlayListsTabVoidLabel.AutoSize = true;
             PlayListsTabVoidLabel.Font = new Font("Segoe UI", 14F);
-            PlayListsTabVoidLabel.Location = new Point(3, 32);
+            PlayListsTabVoidLabel.Location = new Point(4, 44);
+            PlayListsTabVoidLabel.Margin = new Padding(4, 0, 4, 0);
             PlayListsTabVoidLabel.Name = "PlayListsTabVoidLabel";
-            PlayListsTabVoidLabel.Size = new Size(648, 32);
+            PlayListsTabVoidLabel.Size = new Size(810, 32);
             PlayListsTabVoidLabel.TabIndex = 0;
             PlayListsTabVoidLabel.Text = "VOID";
             PlayListsTabVoidLabel.TextAlign = ContentAlignment.MiddleCenter;
@@ -1281,8 +1296,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlayListsTabSplitContainer2.Panel2.AutoScroll = true;
             PlayListsTabSplitContainer2.Panel2.Controls.Add(PlayListsTabRadioPanel);
-            PlayListsTabSplitContainer2.Size = new Size(654, 413);
-            PlayListsTabSplitContainer2.SplitterDistance = 124;
+            PlayListsTabSplitContainer2.Size = new Size(818, 517);
+            PlayListsTabSplitContainer2.SplitterDistance = 155;
             PlayListsTabSplitContainer2.SplitterWidth = 1;
             PlayListsTabSplitContainer2.TabIndex = 2;
             // 
@@ -1297,6 +1312,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabDataGridView.Columns.AddRange(new DataGridViewColumn[] { ColumnPlayCount, PlayListsColumnName, PlayListsColumnArtists, PlayListsColumnAlbum, PlayListsColumnDuration, PlayListsColumnRating });
             PlayListsTabDataGridView.Dock = DockStyle.Fill;
             PlayListsTabDataGridView.Location = new Point(0, 0);
+            PlayListsTabDataGridView.Margin = new Padding(4, 4, 4, 4);
             PlayListsTabDataGridView.MultiSelect = false;
             PlayListsTabDataGridView.Name = "PlayListsTabDataGridView";
             PlayListsTabDataGridView.RowHeadersVisible = false;
@@ -1305,7 +1321,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabDataGridView.ShowCellErrors = false;
             PlayListsTabDataGridView.ShowEditingIcon = false;
             PlayListsTabDataGridView.ShowRowErrors = false;
-            PlayListsTabDataGridView.Size = new Size(654, 124);
+            PlayListsTabDataGridView.Size = new Size(818, 155);
             PlayListsTabDataGridView.TabIndex = 0;
             // 
             // ColumnPlayCount
@@ -1363,7 +1379,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabRadioPanel.AutoSize = true;
             PlayListsTabRadioPanel.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             PlayListsTabRadioPanel.ColumnCount = 2;
-            PlayListsTabRadioPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 150F));
+            PlayListsTabRadioPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 188F));
             PlayListsTabRadioPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             PlayListsTabRadioPanel.Controls.Add(PlayListsTabRadioPanelLeft, 0, 0);
             PlayListsTabRadioPanel.Controls.Add(PlayListsTabRadioPanelFlowLayoutPanel, 0, 1);
@@ -1371,12 +1387,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabRadioPanel.Dock = DockStyle.Top;
             PlayListsTabRadioPanel.Location = new Point(0, 0);
             PlayListsTabRadioPanel.Margin = new Padding(0);
-            PlayListsTabRadioPanel.MinimumSize = new Size(0, 200);
+            PlayListsTabRadioPanel.MinimumSize = new Size(0, 250);
             PlayListsTabRadioPanel.Name = "PlayListsTabRadioPanel";
             PlayListsTabRadioPanel.RowCount = 2;
-            PlayListsTabRadioPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 200F));
+            PlayListsTabRadioPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 250F));
             PlayListsTabRadioPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlayListsTabRadioPanel.Size = new Size(654, 241);
+            PlayListsTabRadioPanel.Size = new Size(818, 302);
             PlayListsTabRadioPanel.TabIndex = 0;
             // 
             // PlayListsTabRadioPanelLeft
@@ -1388,13 +1404,13 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabRadioPanelLeft.Controls.Add(PlayListsTabRadioButton, 0, 1);
             PlayListsTabRadioPanelLeft.Location = new Point(0, 0);
             PlayListsTabRadioPanelLeft.Margin = new Padding(0);
-            PlayListsTabRadioPanelLeft.MaximumSize = new Size(150, 200);
-            PlayListsTabRadioPanelLeft.MinimumSize = new Size(150, 200);
+            PlayListsTabRadioPanelLeft.MaximumSize = new Size(188, 250);
+            PlayListsTabRadioPanelLeft.MinimumSize = new Size(188, 250);
             PlayListsTabRadioPanelLeft.Name = "PlayListsTabRadioPanelLeft";
             PlayListsTabRadioPanelLeft.RowCount = 2;
-            PlayListsTabRadioPanelLeft.RowStyles.Add(new RowStyle(SizeType.Absolute, 150F));
-            PlayListsTabRadioPanelLeft.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
-            PlayListsTabRadioPanelLeft.Size = new Size(150, 200);
+            PlayListsTabRadioPanelLeft.RowStyles.Add(new RowStyle(SizeType.Absolute, 188F));
+            PlayListsTabRadioPanelLeft.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
+            PlayListsTabRadioPanelLeft.Size = new Size(188, 250);
             PlayListsTabRadioPanelLeft.TabIndex = 0;
             // 
             // PlayListsTabRadioPanelIcon
@@ -1410,9 +1426,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabRadioPanelIcon.FlatStyle = FlatStyle.Flat;
             PlayListsTabRadioPanelIcon.Location = new Point(0, 0);
             PlayListsTabRadioPanelIcon.Margin = new Padding(0);
-            PlayListsTabRadioPanelIcon.MinimumSize = new Size(150, 150);
+            PlayListsTabRadioPanelIcon.MinimumSize = new Size(188, 188);
             PlayListsTabRadioPanelIcon.Name = "PlayListsTabRadioPanelIcon";
-            PlayListsTabRadioPanelIcon.Size = new Size(150, 150);
+            PlayListsTabRadioPanelIcon.Size = new Size(188, 188);
             PlayListsTabRadioPanelIcon.TabIndex = 0;
             PlayListsTabRadioPanelIcon.UseVisualStyleBackColor = false;
             // 
@@ -1420,9 +1436,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlayListsTabRadioButton.Dock = DockStyle.Fill;
             PlayListsTabRadioButton.ForeColor = Color.Black;
-            PlayListsTabRadioButton.Location = new Point(3, 153);
+            PlayListsTabRadioButton.Location = new Point(4, 192);
+            PlayListsTabRadioButton.Margin = new Padding(4, 4, 4, 4);
             PlayListsTabRadioButton.Name = "PlayListsTabRadioButton";
-            PlayListsTabRadioButton.Size = new Size(144, 44);
+            PlayListsTabRadioButton.Size = new Size(180, 54);
             PlayListsTabRadioButton.TabIndex = 1;
             PlayListsTabRadioButton.Text = "Play";
             PlayListsTabRadioButton.UseVisualStyleBackColor = true;
@@ -1434,17 +1451,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabRadioPanel.SetColumnSpan(PlayListsTabRadioPanelFlowLayoutPanel, 2);
             PlayListsTabRadioPanelFlowLayoutPanel.Controls.Add(button2);
             PlayListsTabRadioPanelFlowLayoutPanel.Dock = DockStyle.Top;
-            PlayListsTabRadioPanelFlowLayoutPanel.Location = new Point(3, 203);
+            PlayListsTabRadioPanelFlowLayoutPanel.Location = new Point(4, 254);
+            PlayListsTabRadioPanelFlowLayoutPanel.Margin = new Padding(4, 4, 4, 4);
             PlayListsTabRadioPanelFlowLayoutPanel.Name = "PlayListsTabRadioPanelFlowLayoutPanel";
-            PlayListsTabRadioPanelFlowLayoutPanel.Size = new Size(648, 35);
+            PlayListsTabRadioPanelFlowLayoutPanel.Size = new Size(810, 44);
             PlayListsTabRadioPanelFlowLayoutPanel.TabIndex = 1;
             // 
             // button2
             // 
             button2.ForeColor = Color.Black;
-            button2.Location = new Point(3, 3);
+            button2.Location = new Point(4, 4);
+            button2.Margin = new Padding(4, 4, 4, 4);
             button2.Name = "button2";
-            button2.Size = new Size(94, 29);
+            button2.Size = new Size(118, 36);
             button2.TabIndex = 0;
             button2.Text = "button2";
             button2.UseVisualStyleBackColor = true;
@@ -1457,22 +1476,23 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabRadioPanelRight.Controls.Add(PlayListsTabRadioPanelTitleLabel, 0, 0);
             PlayListsTabRadioPanelRight.Controls.Add(PlayListsTabRadioPanelRightPanelDescriptionLabel, 0, 1);
             PlayListsTabRadioPanelRight.Dock = DockStyle.Fill;
-            PlayListsTabRadioPanelRight.Location = new Point(150, 0);
+            PlayListsTabRadioPanelRight.Location = new Point(188, 0);
             PlayListsTabRadioPanelRight.Margin = new Padding(0);
             PlayListsTabRadioPanelRight.Name = "PlayListsTabRadioPanelRight";
-            PlayListsTabRadioPanelRight.Padding = new Padding(3);
+            PlayListsTabRadioPanelRight.Padding = new Padding(4, 4, 4, 4);
             PlayListsTabRadioPanelRight.RowCount = 2;
-            PlayListsTabRadioPanelRight.RowStyles.Add(new RowStyle(SizeType.Absolute, 30F));
+            PlayListsTabRadioPanelRight.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
             PlayListsTabRadioPanelRight.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlayListsTabRadioPanelRight.Size = new Size(504, 200);
+            PlayListsTabRadioPanelRight.Size = new Size(630, 250);
             PlayListsTabRadioPanelRight.TabIndex = 2;
             // 
             // PlayListsTabRadioPanelTitleLabel
             // 
             PlayListsTabRadioPanelTitleLabel.AutoSize = true;
-            PlayListsTabRadioPanelTitleLabel.Location = new Point(6, 3);
+            PlayListsTabRadioPanelTitleLabel.Location = new Point(8, 4);
+            PlayListsTabRadioPanelTitleLabel.Margin = new Padding(4, 0, 4, 0);
             PlayListsTabRadioPanelTitleLabel.Name = "PlayListsTabRadioPanelTitleLabel";
-            PlayListsTabRadioPanelTitleLabel.Size = new Size(50, 20);
+            PlayListsTabRadioPanelTitleLabel.Size = new Size(59, 25);
             PlayListsTabRadioPanelTitleLabel.TabIndex = 0;
             PlayListsTabRadioPanelTitleLabel.Tag = "TitleBold";
             PlayListsTabRadioPanelTitleLabel.Text = "label1";
@@ -1481,9 +1501,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlayListsTabRadioPanelRightPanelDescriptionLabel.AutoSize = true;
             PlayListsTabRadioPanelRightPanelDescriptionLabel.Dock = DockStyle.Top;
-            PlayListsTabRadioPanelRightPanelDescriptionLabel.Location = new Point(6, 33);
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Location = new Point(8, 42);
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Margin = new Padding(4, 0, 4, 0);
             PlayListsTabRadioPanelRightPanelDescriptionLabel.Name = "PlayListsTabRadioPanelRightPanelDescriptionLabel";
-            PlayListsTabRadioPanelRightPanelDescriptionLabel.Size = new Size(492, 20);
+            PlayListsTabRadioPanelRightPanelDescriptionLabel.Size = new Size(614, 25);
             PlayListsTabRadioPanelRightPanelDescriptionLabel.TabIndex = 1;
             PlayListsTabRadioPanelRightPanelDescriptionLabel.Text = "label2";
             // 
@@ -1494,10 +1515,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTab.ForeColor = Color.White;
             SettingsTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
             SettingsTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
-            SettingsTab.Location = new Point(0, 50);
+            SettingsTab.Location = new Point(0, 62);
             SettingsTab.Name = "SettingsTab";
             SettingsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            SettingsTab.Size = new Size(924, 471);
+            SettingsTab.Size = new Size(1155, 589);
             SettingsTab.Text = " Settings";
             // 
             // panel2
@@ -1510,7 +1531,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             panel2.Location = new Point(0, 0);
             panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(924, 471);
+            panel2.Size = new Size(1155, 589);
             panel2.TabIndex = 0;
             // 
             // flowLayoutPanel1
@@ -1529,9 +1550,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             flowLayoutPanel1.Controls.Add(SettingsTabEqualizerGroupBox);
             flowLayoutPanel1.Dock = DockStyle.Top;
             flowLayoutPanel1.Location = new Point(0, 0);
-            flowLayoutPanel1.Margin = new Padding(3, 4, 3, 4);
+            flowLayoutPanel1.Margin = new Padding(4, 5, 4, 5);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(901, 617);
+            flowLayoutPanel1.Size = new Size(1132, 770);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // SettingsTabLangGroupBox
@@ -1540,12 +1561,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLangGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabLangGroupBox.Controls.Add(SettingsTabLangComboBox);
             SettingsTabLangGroupBox.ForeColor = Color.White;
-            SettingsTabLangGroupBox.Location = new Point(3, 4);
-            SettingsTabLangGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabLangGroupBox.MinimumSize = new Size(171, 67);
+            SettingsTabLangGroupBox.Location = new Point(4, 5);
+            SettingsTabLangGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabLangGroupBox.MinimumSize = new Size(214, 84);
             SettingsTabLangGroupBox.Name = "SettingsTabLangGroupBox";
-            SettingsTabLangGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabLangGroupBox.Size = new Size(171, 67);
+            SettingsTabLangGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabLangGroupBox.Size = new Size(214, 84);
             SettingsTabLangGroupBox.TabIndex = 1;
             SettingsTabLangGroupBox.TabStop = false;
             SettingsTabLangGroupBox.Text = "Lang";
@@ -1559,11 +1580,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLangComboBox.FlatStyle = FlatStyle.Flat;
             SettingsTabLangComboBox.ForeColor = Color.Black;
             SettingsTabLangComboBox.FormattingEnabled = true;
-            SettingsTabLangComboBox.Location = new Point(6, 27);
-            SettingsTabLangComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabLangComboBox.Location = new Point(8, 33);
+            SettingsTabLangComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabLangComboBox.MaxDropDownItems = 2;
             SettingsTabLangComboBox.Name = "SettingsTabLangComboBox";
-            SettingsTabLangComboBox.Size = new Size(159, 28);
+            SettingsTabLangComboBox.Size = new Size(198, 33);
             SettingsTabLangComboBox.TabIndex = 0;
             SettingsTabLangComboBox.ValueMember = "English";
             // 
@@ -1573,12 +1594,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabStyleGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabStyleGroupBox.Controls.Add(SettingsTabStyleComboBox);
             SettingsTabStyleGroupBox.ForeColor = Color.White;
-            SettingsTabStyleGroupBox.Location = new Point(180, 4);
-            SettingsTabStyleGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabStyleGroupBox.MinimumSize = new Size(171, 67);
+            SettingsTabStyleGroupBox.Location = new Point(226, 5);
+            SettingsTabStyleGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabStyleGroupBox.MinimumSize = new Size(214, 84);
             SettingsTabStyleGroupBox.Name = "SettingsTabStyleGroupBox";
-            SettingsTabStyleGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabStyleGroupBox.Size = new Size(171, 67);
+            SettingsTabStyleGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabStyleGroupBox.Size = new Size(214, 84);
             SettingsTabStyleGroupBox.TabIndex = 1;
             SettingsTabStyleGroupBox.TabStop = false;
             SettingsTabStyleGroupBox.Text = "Style";
@@ -1593,11 +1614,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabStyleComboBox.ForeColor = Color.Black;
             SettingsTabStyleComboBox.FormattingEnabled = true;
             SettingsTabStyleComboBox.Items.AddRange(new object[] { "Dark", "Red" });
-            SettingsTabStyleComboBox.Location = new Point(6, 27);
-            SettingsTabStyleComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabStyleComboBox.Location = new Point(8, 33);
+            SettingsTabStyleComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabStyleComboBox.MaxDropDownItems = 2;
             SettingsTabStyleComboBox.Name = "SettingsTabStyleComboBox";
-            SettingsTabStyleComboBox.Size = new Size(159, 28);
+            SettingsTabStyleComboBox.Size = new Size(198, 33);
             SettingsTabStyleComboBox.TabIndex = 0;
             SettingsTabStyleComboBox.ValueMember = "English";
             // 
@@ -1607,12 +1628,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAutoPlayGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabAutoPlayGroupBox.Controls.Add(SettingsTabAutoPlayComboBox);
             SettingsTabAutoPlayGroupBox.ForeColor = Color.White;
-            SettingsTabAutoPlayGroupBox.Location = new Point(357, 4);
-            SettingsTabAutoPlayGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabAutoPlayGroupBox.MinimumSize = new Size(220, 67);
+            SettingsTabAutoPlayGroupBox.Location = new Point(448, 5);
+            SettingsTabAutoPlayGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabAutoPlayGroupBox.MinimumSize = new Size(275, 84);
             SettingsTabAutoPlayGroupBox.Name = "SettingsTabAutoPlayGroupBox";
-            SettingsTabAutoPlayGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabAutoPlayGroupBox.Size = new Size(220, 67);
+            SettingsTabAutoPlayGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabAutoPlayGroupBox.Size = new Size(275, 84);
             SettingsTabAutoPlayGroupBox.TabIndex = 1;
             SettingsTabAutoPlayGroupBox.TabStop = false;
             SettingsTabAutoPlayGroupBox.Text = "Auto Play";
@@ -1627,11 +1648,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAutoPlayComboBox.ForeColor = Color.Black;
             SettingsTabAutoPlayComboBox.FormattingEnabled = true;
             SettingsTabAutoPlayComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabAutoPlayComboBox.Location = new Point(6, 27);
-            SettingsTabAutoPlayComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabAutoPlayComboBox.Location = new Point(8, 33);
+            SettingsTabAutoPlayComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabAutoPlayComboBox.MaxDropDownItems = 2;
             SettingsTabAutoPlayComboBox.Name = "SettingsTabAutoPlayComboBox";
-            SettingsTabAutoPlayComboBox.Size = new Size(208, 28);
+            SettingsTabAutoPlayComboBox.Size = new Size(259, 33);
             SettingsTabAutoPlayComboBox.TabIndex = 0;
             SettingsTabAutoPlayComboBox.ValueMember = "English";
             // 
@@ -1641,12 +1662,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsNormalizeVolumeGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsNormalizeVolumeGroupBox.Controls.Add(SettingsNormalizeVolumeComboBox);
             SettingsNormalizeVolumeGroupBox.ForeColor = Color.White;
-            SettingsNormalizeVolumeGroupBox.Location = new Point(583, 4);
-            SettingsNormalizeVolumeGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsNormalizeVolumeGroupBox.MinimumSize = new Size(220, 67);
+            SettingsNormalizeVolumeGroupBox.Location = new Point(731, 5);
+            SettingsNormalizeVolumeGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsNormalizeVolumeGroupBox.MinimumSize = new Size(275, 84);
             SettingsNormalizeVolumeGroupBox.Name = "SettingsNormalizeVolumeGroupBox";
-            SettingsNormalizeVolumeGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsNormalizeVolumeGroupBox.Size = new Size(220, 67);
+            SettingsNormalizeVolumeGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsNormalizeVolumeGroupBox.Size = new Size(275, 84);
             SettingsNormalizeVolumeGroupBox.TabIndex = 3;
             SettingsNormalizeVolumeGroupBox.TabStop = false;
             SettingsNormalizeVolumeGroupBox.Text = "Normalize Volume";
@@ -1661,11 +1682,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsNormalizeVolumeComboBox.ForeColor = Color.Black;
             SettingsNormalizeVolumeComboBox.FormattingEnabled = true;
             SettingsNormalizeVolumeComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsNormalizeVolumeComboBox.Location = new Point(6, 27);
-            SettingsNormalizeVolumeComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsNormalizeVolumeComboBox.Location = new Point(8, 33);
+            SettingsNormalizeVolumeComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsNormalizeVolumeComboBox.MaxDropDownItems = 2;
             SettingsNormalizeVolumeComboBox.Name = "SettingsNormalizeVolumeComboBox";
-            SettingsNormalizeVolumeComboBox.Size = new Size(208, 28);
+            SettingsNormalizeVolumeComboBox.Size = new Size(259, 33);
             SettingsNormalizeVolumeComboBox.TabIndex = 0;
             SettingsNormalizeVolumeComboBox.ValueMember = "English";
             // 
@@ -1675,12 +1696,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAlwaysOnTopGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabAlwaysOnTopGroupBox.Controls.Add(SettingsTabAlwaysOnTopComboBox);
             SettingsTabAlwaysOnTopGroupBox.ForeColor = Color.White;
-            SettingsTabAlwaysOnTopGroupBox.Location = new Point(3, 79);
-            SettingsTabAlwaysOnTopGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabAlwaysOnTopGroupBox.MinimumSize = new Size(171, 67);
+            SettingsTabAlwaysOnTopGroupBox.Location = new Point(4, 99);
+            SettingsTabAlwaysOnTopGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabAlwaysOnTopGroupBox.MinimumSize = new Size(214, 84);
             SettingsTabAlwaysOnTopGroupBox.Name = "SettingsTabAlwaysOnTopGroupBox";
-            SettingsTabAlwaysOnTopGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabAlwaysOnTopGroupBox.Size = new Size(171, 67);
+            SettingsTabAlwaysOnTopGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabAlwaysOnTopGroupBox.Size = new Size(214, 84);
             SettingsTabAlwaysOnTopGroupBox.TabIndex = 1;
             SettingsTabAlwaysOnTopGroupBox.TabStop = false;
             SettingsTabAlwaysOnTopGroupBox.Text = "Always On Top";
@@ -1695,11 +1716,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAlwaysOnTopComboBox.ForeColor = Color.Black;
             SettingsTabAlwaysOnTopComboBox.FormattingEnabled = true;
             SettingsTabAlwaysOnTopComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabAlwaysOnTopComboBox.Location = new Point(6, 27);
-            SettingsTabAlwaysOnTopComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabAlwaysOnTopComboBox.Location = new Point(8, 33);
+            SettingsTabAlwaysOnTopComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabAlwaysOnTopComboBox.MaxDropDownItems = 2;
             SettingsTabAlwaysOnTopComboBox.Name = "SettingsTabAlwaysOnTopComboBox";
-            SettingsTabAlwaysOnTopComboBox.Size = new Size(159, 28);
+            SettingsTabAlwaysOnTopComboBox.Size = new Size(198, 33);
             SettingsTabAlwaysOnTopComboBox.TabIndex = 0;
             SettingsTabAlwaysOnTopComboBox.ValueMember = "English";
             // 
@@ -1709,12 +1730,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAutoCloseLyricsGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabAutoCloseLyricsGroupBox.Controls.Add(SettingsTabAutoCloseLyricsComboBox);
             SettingsTabAutoCloseLyricsGroupBox.ForeColor = Color.White;
-            SettingsTabAutoCloseLyricsGroupBox.Location = new Point(180, 79);
-            SettingsTabAutoCloseLyricsGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabAutoCloseLyricsGroupBox.MinimumSize = new Size(190, 67);
+            SettingsTabAutoCloseLyricsGroupBox.Location = new Point(226, 99);
+            SettingsTabAutoCloseLyricsGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabAutoCloseLyricsGroupBox.MinimumSize = new Size(238, 84);
             SettingsTabAutoCloseLyricsGroupBox.Name = "SettingsTabAutoCloseLyricsGroupBox";
-            SettingsTabAutoCloseLyricsGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabAutoCloseLyricsGroupBox.Size = new Size(190, 67);
+            SettingsTabAutoCloseLyricsGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabAutoCloseLyricsGroupBox.Size = new Size(238, 84);
             SettingsTabAutoCloseLyricsGroupBox.TabIndex = 1;
             SettingsTabAutoCloseLyricsGroupBox.TabStop = false;
             SettingsTabAutoCloseLyricsGroupBox.Text = "Auto Close Lyrics";
@@ -1729,11 +1750,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabAutoCloseLyricsComboBox.ForeColor = Color.Black;
             SettingsTabAutoCloseLyricsComboBox.FormattingEnabled = true;
             SettingsTabAutoCloseLyricsComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabAutoCloseLyricsComboBox.Location = new Point(6, 27);
-            SettingsTabAutoCloseLyricsComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabAutoCloseLyricsComboBox.Location = new Point(8, 33);
+            SettingsTabAutoCloseLyricsComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabAutoCloseLyricsComboBox.MaxDropDownItems = 2;
             SettingsTabAutoCloseLyricsComboBox.Name = "SettingsTabAutoCloseLyricsComboBox";
-            SettingsTabAutoCloseLyricsComboBox.Size = new Size(178, 28);
+            SettingsTabAutoCloseLyricsComboBox.Size = new Size(222, 33);
             SettingsTabAutoCloseLyricsComboBox.TabIndex = 0;
             SettingsTabAutoCloseLyricsComboBox.ValueMember = "English";
             // 
@@ -1743,12 +1764,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabDisplayLiveLyricsGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabDisplayLiveLyricsGroupBox.Controls.Add(SettingsTabDisplayLiveLyricsComboBox);
             SettingsTabDisplayLiveLyricsGroupBox.ForeColor = Color.White;
-            SettingsTabDisplayLiveLyricsGroupBox.Location = new Point(376, 79);
-            SettingsTabDisplayLiveLyricsGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabDisplayLiveLyricsGroupBox.MinimumSize = new Size(190, 67);
+            SettingsTabDisplayLiveLyricsGroupBox.Location = new Point(472, 99);
+            SettingsTabDisplayLiveLyricsGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabDisplayLiveLyricsGroupBox.MinimumSize = new Size(238, 84);
             SettingsTabDisplayLiveLyricsGroupBox.Name = "SettingsTabDisplayLiveLyricsGroupBox";
-            SettingsTabDisplayLiveLyricsGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabDisplayLiveLyricsGroupBox.Size = new Size(190, 67);
+            SettingsTabDisplayLiveLyricsGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabDisplayLiveLyricsGroupBox.Size = new Size(238, 84);
             SettingsTabDisplayLiveLyricsGroupBox.TabIndex = 2;
             SettingsTabDisplayLiveLyricsGroupBox.TabStop = false;
             SettingsTabDisplayLiveLyricsGroupBox.Text = "Display Live Lyrics";
@@ -1763,11 +1784,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabDisplayLiveLyricsComboBox.ForeColor = Color.Black;
             SettingsTabDisplayLiveLyricsComboBox.FormattingEnabled = true;
             SettingsTabDisplayLiveLyricsComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabDisplayLiveLyricsComboBox.Location = new Point(6, 27);
-            SettingsTabDisplayLiveLyricsComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabDisplayLiveLyricsComboBox.Location = new Point(8, 33);
+            SettingsTabDisplayLiveLyricsComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabDisplayLiveLyricsComboBox.MaxDropDownItems = 2;
             SettingsTabDisplayLiveLyricsComboBox.Name = "SettingsTabDisplayLiveLyricsComboBox";
-            SettingsTabDisplayLiveLyricsComboBox.Size = new Size(178, 28);
+            SettingsTabDisplayLiveLyricsComboBox.Size = new Size(222, 33);
             SettingsTabDisplayLiveLyricsComboBox.TabIndex = 0;
             SettingsTabDisplayLiveLyricsComboBox.ValueMember = "English";
             // 
@@ -1777,12 +1798,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabConvGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabConvGroupBox.Controls.Add(SettingsTabConvTableLayoutPanel);
             SettingsTabConvGroupBox.ForeColor = Color.White;
-            SettingsTabConvGroupBox.Location = new Point(572, 79);
-            SettingsTabConvGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabConvGroupBox.MinimumSize = new Size(300, 100);
+            SettingsTabConvGroupBox.Location = new Point(718, 99);
+            SettingsTabConvGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabConvGroupBox.MinimumSize = new Size(375, 125);
             SettingsTabConvGroupBox.Name = "SettingsTabConvGroupBox";
-            SettingsTabConvGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabConvGroupBox.Size = new Size(300, 100);
+            SettingsTabConvGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabConvGroupBox.Size = new Size(375, 125);
             SettingsTabConvGroupBox.TabIndex = 1;
             SettingsTabConvGroupBox.TabStop = false;
             SettingsTabConvGroupBox.Text = "Convertion";
@@ -1790,28 +1811,30 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // SettingsTabConvTableLayoutPanel
             // 
             SettingsTabConvTableLayoutPanel.ColumnCount = 2;
-            SettingsTabConvTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+            SettingsTabConvTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 125F));
             SettingsTabConvTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             SettingsTabConvTableLayoutPanel.Controls.Add(SettingsTabConvModeLabel, 0, 0);
             SettingsTabConvTableLayoutPanel.Controls.Add(SettingsTabConvModeComboBox, 1, 0);
             SettingsTabConvTableLayoutPanel.Controls.Add(SettingsTabConvQualityLabel, 0, 1);
             SettingsTabConvTableLayoutPanel.Controls.Add(SettingsTabConvQualityComboBox, 1, 1);
             SettingsTabConvTableLayoutPanel.Dock = DockStyle.Fill;
-            SettingsTabConvTableLayoutPanel.Location = new Point(6, 27);
+            SettingsTabConvTableLayoutPanel.Location = new Point(8, 33);
+            SettingsTabConvTableLayoutPanel.Margin = new Padding(4, 4, 4, 4);
             SettingsTabConvTableLayoutPanel.Name = "SettingsTabConvTableLayoutPanel";
             SettingsTabConvTableLayoutPanel.RowCount = 2;
             SettingsTabConvTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
             SettingsTabConvTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            SettingsTabConvTableLayoutPanel.Size = new Size(288, 66);
+            SettingsTabConvTableLayoutPanel.Size = new Size(359, 83);
             SettingsTabConvTableLayoutPanel.TabIndex = 0;
             // 
             // SettingsTabConvModeLabel
             // 
             SettingsTabConvModeLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabConvModeLabel.AutoSize = true;
-            SettingsTabConvModeLabel.Location = new Point(3, 6);
+            SettingsTabConvModeLabel.Location = new Point(4, 8);
+            SettingsTabConvModeLabel.Margin = new Padding(4, 0, 4, 0);
             SettingsTabConvModeLabel.Name = "SettingsTabConvModeLabel";
-            SettingsTabConvModeLabel.Size = new Size(94, 20);
+            SettingsTabConvModeLabel.Size = new Size(117, 25);
             SettingsTabConvModeLabel.TabIndex = 0;
             SettingsTabConvModeLabel.Text = "Convertion";
             // 
@@ -1825,11 +1848,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabConvModeComboBox.ForeColor = Color.Black;
             SettingsTabConvModeComboBox.FormattingEnabled = true;
             SettingsTabConvModeComboBox.Items.AddRange(new object[] { "On the Fly", "Replace" });
-            SettingsTabConvModeComboBox.Location = new Point(103, 4);
-            SettingsTabConvModeComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabConvModeComboBox.Location = new Point(129, 5);
+            SettingsTabConvModeComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabConvModeComboBox.MaxDropDownItems = 2;
             SettingsTabConvModeComboBox.Name = "SettingsTabConvModeComboBox";
-            SettingsTabConvModeComboBox.Size = new Size(182, 28);
+            SettingsTabConvModeComboBox.Size = new Size(226, 33);
             SettingsTabConvModeComboBox.TabIndex = 1;
             SettingsTabConvModeComboBox.ValueMember = "English";
             // 
@@ -1837,9 +1860,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SettingsTabConvQualityLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabConvQualityLabel.AutoSize = true;
-            SettingsTabConvQualityLabel.Location = new Point(3, 39);
+            SettingsTabConvQualityLabel.Location = new Point(4, 49);
+            SettingsTabConvQualityLabel.Margin = new Padding(4, 0, 4, 0);
             SettingsTabConvQualityLabel.Name = "SettingsTabConvQualityLabel";
-            SettingsTabConvQualityLabel.Size = new Size(94, 20);
+            SettingsTabConvQualityLabel.Size = new Size(117, 25);
             SettingsTabConvQualityLabel.TabIndex = 0;
             SettingsTabConvQualityLabel.Text = "Quality";
             // 
@@ -1853,11 +1877,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabConvQualityComboBox.ForeColor = Color.Black;
             SettingsTabConvQualityComboBox.FormattingEnabled = true;
             SettingsTabConvQualityComboBox.Items.AddRange(new object[] { "96 Kbits/s", "128 Kbits/s", "192 Kbits/s", "256 Kbits/s", "320 Kbits/s" });
-            SettingsTabConvQualityComboBox.Location = new Point(103, 37);
-            SettingsTabConvQualityComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabConvQualityComboBox.Location = new Point(129, 46);
+            SettingsTabConvQualityComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabConvQualityComboBox.MaxDropDownItems = 5;
             SettingsTabConvQualityComboBox.Name = "SettingsTabConvQualityComboBox";
-            SettingsTabConvQualityComboBox.Size = new Size(182, 28);
+            SettingsTabConvQualityComboBox.Size = new Size(226, 33);
             SettingsTabConvQualityComboBox.TabIndex = 2;
             SettingsTabConvQualityComboBox.ValueMember = "English";
             // 
@@ -1867,12 +1891,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabLibraryGroupBox.Controls.Add(SettingsTabLibraryTableLayoutPanel);
             SettingsTabLibraryGroupBox.ForeColor = Color.White;
-            SettingsTabLibraryGroupBox.Location = new Point(3, 187);
-            SettingsTabLibraryGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabLibraryGroupBox.MinimumSize = new Size(380, 100);
+            SettingsTabLibraryGroupBox.Location = new Point(4, 234);
+            SettingsTabLibraryGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabLibraryGroupBox.MinimumSize = new Size(475, 125);
             SettingsTabLibraryGroupBox.Name = "SettingsTabLibraryGroupBox";
-            SettingsTabLibraryGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabLibraryGroupBox.Size = new Size(380, 134);
+            SettingsTabLibraryGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabLibraryGroupBox.Size = new Size(475, 167);
             SettingsTabLibraryGroupBox.TabIndex = 1;
             SettingsTabLibraryGroupBox.TabStop = false;
             SettingsTabLibraryGroupBox.Text = "Library";
@@ -1881,7 +1905,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SettingsTabLibraryTableLayoutPanel.ColumnCount = 2;
             SettingsTabLibraryTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            SettingsTabLibraryTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
+            SettingsTabLibraryTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 125F));
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryFolderTextBox, 0, 0);
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryFolderButton, 1, 0);
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryUnixHiddenFileLabel, 0, 1);
@@ -1889,14 +1913,15 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryWindowsHiddenFileLabel, 0, 2);
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryWindowsHiddenFileComboBox, 1, 2);
             SettingsTabLibraryTableLayoutPanel.Dock = DockStyle.Top;
-            SettingsTabLibraryTableLayoutPanel.Location = new Point(6, 27);
+            SettingsTabLibraryTableLayoutPanel.Location = new Point(8, 33);
+            SettingsTabLibraryTableLayoutPanel.Margin = new Padding(4, 4, 4, 4);
             SettingsTabLibraryTableLayoutPanel.Name = "SettingsTabLibraryTableLayoutPanel";
             SettingsTabLibraryTableLayoutPanel.RowCount = 4;
-            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
-            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
-            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle());
-            SettingsTabLibraryTableLayoutPanel.Size = new Size(368, 100);
+            SettingsTabLibraryTableLayoutPanel.Size = new Size(459, 125);
             SettingsTabLibraryTableLayoutPanel.TabIndex = 0;
             // 
             // SettingsTabLibraryFolderTextBox
@@ -1905,10 +1930,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryFolderTextBox.BackColor = Color.Gray;
             SettingsTabLibraryFolderTextBox.BorderStyle = BorderStyle.FixedSingle;
             SettingsTabLibraryFolderTextBox.ForeColor = Color.White;
-            SettingsTabLibraryFolderTextBox.Location = new Point(3, 3);
+            SettingsTabLibraryFolderTextBox.Location = new Point(4, 4);
+            SettingsTabLibraryFolderTextBox.Margin = new Padding(4, 4, 4, 4);
             SettingsTabLibraryFolderTextBox.Name = "SettingsTabLibraryFolderTextBox";
             SettingsTabLibraryFolderTextBox.ReadOnly = true;
-            SettingsTabLibraryFolderTextBox.Size = new Size(262, 27);
+            SettingsTabLibraryFolderTextBox.Size = new Size(326, 31);
             SettingsTabLibraryFolderTextBox.TabIndex = 4;
             // 
             // SettingsTabLibraryFolderButton
@@ -1919,9 +1945,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryFolderButton.FlatAppearance.MouseDownBackColor = Color.Silver;
             SettingsTabLibraryFolderButton.FlatAppearance.MouseOverBackColor = Color.Gray;
             SettingsTabLibraryFolderButton.FlatStyle = FlatStyle.Flat;
-            SettingsTabLibraryFolderButton.Location = new Point(298, 3);
+            SettingsTabLibraryFolderButton.Location = new Point(371, 4);
+            SettingsTabLibraryFolderButton.Margin = new Padding(4, 4, 4, 4);
             SettingsTabLibraryFolderButton.Name = "SettingsTabLibraryFolderButton";
-            SettingsTabLibraryFolderButton.Size = new Size(40, 26);
+            SettingsTabLibraryFolderButton.Size = new Size(50, 32);
             SettingsTabLibraryFolderButton.TabIndex = 3;
             SettingsTabLibraryFolderButton.Text = ". . .";
             SettingsTabLibraryFolderButton.UseVisualStyleBackColor = false;
@@ -1930,9 +1957,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SettingsTabLibraryUnixHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabLibraryUnixHiddenFileLabel.AutoSize = true;
-            SettingsTabLibraryUnixHiddenFileLabel.Location = new Point(3, 38);
+            SettingsTabLibraryUnixHiddenFileLabel.Location = new Point(4, 47);
+            SettingsTabLibraryUnixHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
             SettingsTabLibraryUnixHiddenFileLabel.Name = "SettingsTabLibraryUnixHiddenFileLabel";
-            SettingsTabLibraryUnixHiddenFileLabel.Size = new Size(262, 20);
+            SettingsTabLibraryUnixHiddenFileLabel.Size = new Size(326, 25);
             SettingsTabLibraryUnixHiddenFileLabel.TabIndex = 0;
             SettingsTabLibraryUnixHiddenFileLabel.Text = "Show hidden files style Unix";
             // 
@@ -1946,11 +1974,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryUnixHiddenFileComboBox.ForeColor = Color.Black;
             SettingsTabLibraryUnixHiddenFileComboBox.FormattingEnabled = true;
             SettingsTabLibraryUnixHiddenFileComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabLibraryUnixHiddenFileComboBox.Location = new Point(271, 36);
-            SettingsTabLibraryUnixHiddenFileComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabLibraryUnixHiddenFileComboBox.Location = new Point(338, 45);
+            SettingsTabLibraryUnixHiddenFileComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabLibraryUnixHiddenFileComboBox.MaxDropDownItems = 2;
             SettingsTabLibraryUnixHiddenFileComboBox.Name = "SettingsTabLibraryUnixHiddenFileComboBox";
-            SettingsTabLibraryUnixHiddenFileComboBox.Size = new Size(94, 28);
+            SettingsTabLibraryUnixHiddenFileComboBox.Size = new Size(117, 33);
             SettingsTabLibraryUnixHiddenFileComboBox.TabIndex = 1;
             SettingsTabLibraryUnixHiddenFileComboBox.ValueMember = "English";
             // 
@@ -1958,9 +1986,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SettingsTabLibraryWindowsHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabLibraryWindowsHiddenFileLabel.AutoSize = true;
-            SettingsTabLibraryWindowsHiddenFileLabel.Location = new Point(3, 70);
+            SettingsTabLibraryWindowsHiddenFileLabel.Location = new Point(4, 87);
+            SettingsTabLibraryWindowsHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
             SettingsTabLibraryWindowsHiddenFileLabel.Name = "SettingsTabLibraryWindowsHiddenFileLabel";
-            SettingsTabLibraryWindowsHiddenFileLabel.Size = new Size(262, 20);
+            SettingsTabLibraryWindowsHiddenFileLabel.Size = new Size(326, 25);
             SettingsTabLibraryWindowsHiddenFileLabel.TabIndex = 0;
             SettingsTabLibraryWindowsHiddenFileLabel.Text = "Show hidden files style Windows";
             // 
@@ -1974,11 +2003,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryWindowsHiddenFileComboBox.ForeColor = Color.Black;
             SettingsTabLibraryWindowsHiddenFileComboBox.FormattingEnabled = true;
             SettingsTabLibraryWindowsHiddenFileComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabLibraryWindowsHiddenFileComboBox.Location = new Point(271, 68);
-            SettingsTabLibraryWindowsHiddenFileComboBox.Margin = new Padding(3, 4, 3, 4);
+            SettingsTabLibraryWindowsHiddenFileComboBox.Location = new Point(338, 85);
+            SettingsTabLibraryWindowsHiddenFileComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabLibraryWindowsHiddenFileComboBox.MaxDropDownItems = 2;
             SettingsTabLibraryWindowsHiddenFileComboBox.Name = "SettingsTabLibraryWindowsHiddenFileComboBox";
-            SettingsTabLibraryWindowsHiddenFileComboBox.Size = new Size(94, 28);
+            SettingsTabLibraryWindowsHiddenFileComboBox.Size = new Size(117, 33);
             SettingsTabLibraryWindowsHiddenFileComboBox.TabIndex = 2;
             SettingsTabLibraryWindowsHiddenFileComboBox.ValueMember = "English";
             // 
@@ -1988,12 +2017,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabEqualizerGroupBox.Controls.Add(SettingsTabEqualizerTableLayoutPanel);
             SettingsTabEqualizerGroupBox.ForeColor = Color.White;
-            SettingsTabEqualizerGroupBox.Location = new Point(3, 329);
-            SettingsTabEqualizerGroupBox.Margin = new Padding(3, 4, 3, 4);
-            SettingsTabEqualizerGroupBox.MinimumSize = new Size(600, 100);
+            SettingsTabEqualizerGroupBox.Location = new Point(4, 411);
+            SettingsTabEqualizerGroupBox.Margin = new Padding(4, 5, 4, 5);
+            SettingsTabEqualizerGroupBox.MinimumSize = new Size(750, 125);
             SettingsTabEqualizerGroupBox.Name = "SettingsTabEqualizerGroupBox";
-            SettingsTabEqualizerGroupBox.Padding = new Padding(6, 7, 6, 7);
-            SettingsTabEqualizerGroupBox.Size = new Size(600, 284);
+            SettingsTabEqualizerGroupBox.Padding = new Padding(8, 9, 8, 9);
+            SettingsTabEqualizerGroupBox.Size = new Size(750, 354);
             SettingsTabEqualizerGroupBox.TabIndex = 1;
             SettingsTabEqualizerGroupBox.TabStop = false;
             SettingsTabEqualizerGroupBox.Text = "Library";
@@ -2001,18 +2030,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // SettingsTabEqualizerTableLayoutPanel
             // 
             SettingsTabEqualizerTableLayoutPanel.ColumnCount = 2;
-            SettingsTabEqualizerTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 200F));
+            SettingsTabEqualizerTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 250F));
             SettingsTabEqualizerTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             SettingsTabEqualizerTableLayoutPanel.Controls.Add(SettingsTabEqualizerComboBox, 0, 0);
             SettingsTabEqualizerTableLayoutPanel.Controls.Add(SettingsTabEqualizerButton, 1, 0);
             SettingsTabEqualizerTableLayoutPanel.Controls.Add(SettingsTabEqualizerTableLayoutPanel2, 0, 1);
             SettingsTabEqualizerTableLayoutPanel.Dock = DockStyle.Top;
-            SettingsTabEqualizerTableLayoutPanel.Location = new Point(6, 27);
+            SettingsTabEqualizerTableLayoutPanel.Location = new Point(8, 33);
+            SettingsTabEqualizerTableLayoutPanel.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTableLayoutPanel.Name = "SettingsTabEqualizerTableLayoutPanel";
             SettingsTabEqualizerTableLayoutPanel.RowCount = 2;
-            SettingsTabEqualizerTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 32F));
+            SettingsTabEqualizerTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             SettingsTabEqualizerTableLayoutPanel.RowStyles.Add(new RowStyle());
-            SettingsTabEqualizerTableLayoutPanel.Size = new Size(588, 250);
+            SettingsTabEqualizerTableLayoutPanel.Size = new Size(734, 312);
             SettingsTabEqualizerTableLayoutPanel.TabIndex = 0;
             // 
             // SettingsTabEqualizerComboBox
@@ -2024,11 +2054,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerComboBox.FlatStyle = FlatStyle.Flat;
             SettingsTabEqualizerComboBox.ForeColor = Color.Black;
             SettingsTabEqualizerComboBox.FormattingEnabled = true;
-            SettingsTabEqualizerComboBox.Location = new Point(3, 2);
-            SettingsTabEqualizerComboBox.Margin = new Padding(3, 2, 3, 3);
+            SettingsTabEqualizerComboBox.Location = new Point(4, 2);
+            SettingsTabEqualizerComboBox.Margin = new Padding(4, 2, 4, 4);
             SettingsTabEqualizerComboBox.MaxDropDownItems = 10;
             SettingsTabEqualizerComboBox.Name = "SettingsTabEqualizerComboBox";
-            SettingsTabEqualizerComboBox.Size = new Size(194, 28);
+            SettingsTabEqualizerComboBox.Size = new Size(242, 33);
             SettingsTabEqualizerComboBox.TabIndex = 4;
             SettingsTabEqualizerComboBox.ValueMember = "English";
             // 
@@ -2041,11 +2071,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerButton.FlatAppearance.MouseDownBackColor = Color.Silver;
             SettingsTabEqualizerButton.FlatAppearance.MouseOverBackColor = Color.Gray;
             SettingsTabEqualizerButton.FlatStyle = FlatStyle.Flat;
-            SettingsTabEqualizerButton.Location = new Point(200, 0);
+            SettingsTabEqualizerButton.Location = new Point(250, 0);
             SettingsTabEqualizerButton.Margin = new Padding(0);
-            SettingsTabEqualizerButton.MinimumSize = new Size(150, 0);
+            SettingsTabEqualizerButton.MinimumSize = new Size(188, 0);
             SettingsTabEqualizerButton.Name = "SettingsTabEqualizerButton";
-            SettingsTabEqualizerButton.Size = new Size(150, 32);
+            SettingsTabEqualizerButton.Size = new Size(188, 37);
             SettingsTabEqualizerButton.TabIndex = 3;
             SettingsTabEqualizerButton.Text = "Renitialise";
             SettingsTabEqualizerButton.UseVisualStyleBackColor = false;
@@ -2085,140 +2115,151 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerTableLayoutPanel2.Controls.Add(SettingsTabEqualizerLabel09, 8, 1);
             SettingsTabEqualizerTableLayoutPanel2.Controls.Add(SettingsTabEqualizerLabel10, 9, 1);
             SettingsTabEqualizerTableLayoutPanel2.Dock = DockStyle.Fill;
-            SettingsTabEqualizerTableLayoutPanel2.Location = new Point(3, 35);
+            SettingsTabEqualizerTableLayoutPanel2.Location = new Point(4, 44);
+            SettingsTabEqualizerTableLayoutPanel2.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTableLayoutPanel2.Name = "SettingsTabEqualizerTableLayoutPanel2";
             SettingsTabEqualizerTableLayoutPanel2.RowCount = 2;
             SettingsTabEqualizerTableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            SettingsTabEqualizerTableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
-            SettingsTabEqualizerTableLayoutPanel2.Size = new Size(582, 212);
+            SettingsTabEqualizerTableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
+            SettingsTabEqualizerTableLayoutPanel2.Size = new Size(726, 265);
             SettingsTabEqualizerTableLayoutPanel2.TabIndex = 5;
             // 
             // SettingsTabEqualizerTrackBar01
             // 
-            SettingsTabEqualizerTrackBar01.Location = new Point(3, 3);
+            SettingsTabEqualizerTrackBar01.Location = new Point(4, 4);
+            SettingsTabEqualizerTrackBar01.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar01.Maximum = 600;
             SettingsTabEqualizerTrackBar01.Minimum = -600;
             SettingsTabEqualizerTrackBar01.Name = "SettingsTabEqualizerTrackBar01";
             SettingsTabEqualizerTrackBar01.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar01.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar01.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar01.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar01.TabIndex = 0;
             SettingsTabEqualizerTrackBar01.TickFrequency = 100;
             SettingsTabEqualizerTrackBar01.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar02
             // 
-            SettingsTabEqualizerTrackBar02.Location = new Point(61, 3);
+            SettingsTabEqualizerTrackBar02.Location = new Point(76, 4);
+            SettingsTabEqualizerTrackBar02.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar02.Maximum = 600;
             SettingsTabEqualizerTrackBar02.Minimum = -600;
             SettingsTabEqualizerTrackBar02.Name = "SettingsTabEqualizerTrackBar02";
             SettingsTabEqualizerTrackBar02.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar02.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar02.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar02.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar02.TabIndex = 0;
             SettingsTabEqualizerTrackBar02.TickFrequency = 100;
             SettingsTabEqualizerTrackBar02.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar03
             // 
-            SettingsTabEqualizerTrackBar03.Location = new Point(119, 3);
+            SettingsTabEqualizerTrackBar03.Location = new Point(148, 4);
+            SettingsTabEqualizerTrackBar03.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar03.Maximum = 600;
             SettingsTabEqualizerTrackBar03.Minimum = -600;
             SettingsTabEqualizerTrackBar03.Name = "SettingsTabEqualizerTrackBar03";
             SettingsTabEqualizerTrackBar03.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar03.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar03.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar03.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar03.TabIndex = 0;
             SettingsTabEqualizerTrackBar03.TickFrequency = 100;
             SettingsTabEqualizerTrackBar03.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar04
             // 
-            SettingsTabEqualizerTrackBar04.Location = new Point(177, 3);
+            SettingsTabEqualizerTrackBar04.Location = new Point(220, 4);
+            SettingsTabEqualizerTrackBar04.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar04.Maximum = 600;
             SettingsTabEqualizerTrackBar04.Minimum = -600;
             SettingsTabEqualizerTrackBar04.Name = "SettingsTabEqualizerTrackBar04";
             SettingsTabEqualizerTrackBar04.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar04.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar04.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar04.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar04.TabIndex = 0;
             SettingsTabEqualizerTrackBar04.TickFrequency = 100;
             SettingsTabEqualizerTrackBar04.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar05
             // 
-            SettingsTabEqualizerTrackBar05.Location = new Point(235, 3);
+            SettingsTabEqualizerTrackBar05.Location = new Point(292, 4);
+            SettingsTabEqualizerTrackBar05.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar05.Maximum = 600;
             SettingsTabEqualizerTrackBar05.Minimum = -600;
             SettingsTabEqualizerTrackBar05.Name = "SettingsTabEqualizerTrackBar05";
             SettingsTabEqualizerTrackBar05.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar05.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar05.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar05.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar05.TabIndex = 0;
             SettingsTabEqualizerTrackBar05.TickFrequency = 100;
             SettingsTabEqualizerTrackBar05.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar06
             // 
-            SettingsTabEqualizerTrackBar06.Location = new Point(293, 3);
+            SettingsTabEqualizerTrackBar06.Location = new Point(364, 4);
+            SettingsTabEqualizerTrackBar06.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar06.Maximum = 600;
             SettingsTabEqualizerTrackBar06.Minimum = -600;
             SettingsTabEqualizerTrackBar06.Name = "SettingsTabEqualizerTrackBar06";
             SettingsTabEqualizerTrackBar06.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar06.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar06.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar06.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar06.TabIndex = 0;
             SettingsTabEqualizerTrackBar06.TickFrequency = 100;
             SettingsTabEqualizerTrackBar06.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar07
             // 
-            SettingsTabEqualizerTrackBar07.Location = new Point(351, 3);
+            SettingsTabEqualizerTrackBar07.Location = new Point(436, 4);
+            SettingsTabEqualizerTrackBar07.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar07.Maximum = 600;
             SettingsTabEqualizerTrackBar07.Minimum = -600;
             SettingsTabEqualizerTrackBar07.Name = "SettingsTabEqualizerTrackBar07";
             SettingsTabEqualizerTrackBar07.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar07.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar07.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar07.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar07.TabIndex = 0;
             SettingsTabEqualizerTrackBar07.TickFrequency = 100;
             SettingsTabEqualizerTrackBar07.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar08
             // 
-            SettingsTabEqualizerTrackBar08.Location = new Point(409, 3);
+            SettingsTabEqualizerTrackBar08.Location = new Point(508, 4);
+            SettingsTabEqualizerTrackBar08.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar08.Maximum = 600;
             SettingsTabEqualizerTrackBar08.Minimum = -600;
             SettingsTabEqualizerTrackBar08.Name = "SettingsTabEqualizerTrackBar08";
             SettingsTabEqualizerTrackBar08.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar08.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar08.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar08.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar08.TabIndex = 0;
             SettingsTabEqualizerTrackBar08.TickFrequency = 100;
             SettingsTabEqualizerTrackBar08.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar09
             // 
-            SettingsTabEqualizerTrackBar09.Location = new Point(467, 3);
+            SettingsTabEqualizerTrackBar09.Location = new Point(580, 4);
+            SettingsTabEqualizerTrackBar09.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar09.Maximum = 600;
             SettingsTabEqualizerTrackBar09.Minimum = -600;
             SettingsTabEqualizerTrackBar09.Name = "SettingsTabEqualizerTrackBar09";
             SettingsTabEqualizerTrackBar09.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar09.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar09.Size = new Size(52, 166);
+            SettingsTabEqualizerTrackBar09.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar09.TabIndex = 0;
             SettingsTabEqualizerTrackBar09.TickFrequency = 100;
             SettingsTabEqualizerTrackBar09.TickStyle = TickStyle.TopLeft;
             // 
             // SettingsTabEqualizerTrackBar10
             // 
-            SettingsTabEqualizerTrackBar10.Location = new Point(525, 3);
+            SettingsTabEqualizerTrackBar10.Location = new Point(652, 4);
+            SettingsTabEqualizerTrackBar10.Margin = new Padding(4, 4, 4, 4);
             SettingsTabEqualizerTrackBar10.Maximum = 600;
             SettingsTabEqualizerTrackBar10.Minimum = -600;
             SettingsTabEqualizerTrackBar10.Name = "SettingsTabEqualizerTrackBar10";
             SettingsTabEqualizerTrackBar10.Orientation = Orientation.Vertical;
             SettingsTabEqualizerTrackBar10.RightToLeft = RightToLeft.No;
-            SettingsTabEqualizerTrackBar10.Size = new Size(54, 166);
+            SettingsTabEqualizerTrackBar10.Size = new Size(56, 207);
             SettingsTabEqualizerTrackBar10.TabIndex = 0;
             SettingsTabEqualizerTrackBar10.TickFrequency = 100;
             SettingsTabEqualizerTrackBar10.TickStyle = TickStyle.TopLeft;
@@ -2228,9 +2269,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel01.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel01.AutoSize = true;
             SettingsTabEqualizerLabel01.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel01.Location = new Point(3, 182);
+            SettingsTabEqualizerLabel01.Location = new Point(4, 230);
+            SettingsTabEqualizerLabel01.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel01.Name = "SettingsTabEqualizerLabel01";
-            SettingsTabEqualizerLabel01.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel01.Size = new Size(64, 20);
             SettingsTabEqualizerLabel01.TabIndex = 1;
             SettingsTabEqualizerLabel01.Text = "-00.00";
             SettingsTabEqualizerLabel01.TextAlign = ContentAlignment.MiddleCenter;
@@ -2240,9 +2282,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel02.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel02.AutoSize = true;
             SettingsTabEqualizerLabel02.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel02.Location = new Point(61, 182);
+            SettingsTabEqualizerLabel02.Location = new Point(76, 230);
+            SettingsTabEqualizerLabel02.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel02.Name = "SettingsTabEqualizerLabel02";
-            SettingsTabEqualizerLabel02.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel02.Size = new Size(64, 20);
             SettingsTabEqualizerLabel02.TabIndex = 1;
             SettingsTabEqualizerLabel02.Text = "-00.00";
             SettingsTabEqualizerLabel02.TextAlign = ContentAlignment.MiddleCenter;
@@ -2252,9 +2295,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel03.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel03.AutoSize = true;
             SettingsTabEqualizerLabel03.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel03.Location = new Point(119, 182);
+            SettingsTabEqualizerLabel03.Location = new Point(148, 230);
+            SettingsTabEqualizerLabel03.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel03.Name = "SettingsTabEqualizerLabel03";
-            SettingsTabEqualizerLabel03.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel03.Size = new Size(64, 20);
             SettingsTabEqualizerLabel03.TabIndex = 1;
             SettingsTabEqualizerLabel03.Text = "-00.00";
             SettingsTabEqualizerLabel03.TextAlign = ContentAlignment.MiddleCenter;
@@ -2264,9 +2308,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel04.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel04.AutoSize = true;
             SettingsTabEqualizerLabel04.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel04.Location = new Point(177, 182);
+            SettingsTabEqualizerLabel04.Location = new Point(220, 230);
+            SettingsTabEqualizerLabel04.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel04.Name = "SettingsTabEqualizerLabel04";
-            SettingsTabEqualizerLabel04.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel04.Size = new Size(64, 20);
             SettingsTabEqualizerLabel04.TabIndex = 1;
             SettingsTabEqualizerLabel04.Text = "-00.00";
             SettingsTabEqualizerLabel04.TextAlign = ContentAlignment.MiddleCenter;
@@ -2276,9 +2321,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel05.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel05.AutoSize = true;
             SettingsTabEqualizerLabel05.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel05.Location = new Point(235, 182);
+            SettingsTabEqualizerLabel05.Location = new Point(292, 230);
+            SettingsTabEqualizerLabel05.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel05.Name = "SettingsTabEqualizerLabel05";
-            SettingsTabEqualizerLabel05.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel05.Size = new Size(64, 20);
             SettingsTabEqualizerLabel05.TabIndex = 1;
             SettingsTabEqualizerLabel05.Text = "-00.00";
             SettingsTabEqualizerLabel05.TextAlign = ContentAlignment.MiddleCenter;
@@ -2288,9 +2334,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel06.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel06.AutoSize = true;
             SettingsTabEqualizerLabel06.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel06.Location = new Point(293, 182);
+            SettingsTabEqualizerLabel06.Location = new Point(364, 230);
+            SettingsTabEqualizerLabel06.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel06.Name = "SettingsTabEqualizerLabel06";
-            SettingsTabEqualizerLabel06.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel06.Size = new Size(64, 20);
             SettingsTabEqualizerLabel06.TabIndex = 1;
             SettingsTabEqualizerLabel06.Text = "-00.00";
             SettingsTabEqualizerLabel06.TextAlign = ContentAlignment.MiddleCenter;
@@ -2300,9 +2347,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel07.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel07.AutoSize = true;
             SettingsTabEqualizerLabel07.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel07.Location = new Point(351, 182);
+            SettingsTabEqualizerLabel07.Location = new Point(436, 230);
+            SettingsTabEqualizerLabel07.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel07.Name = "SettingsTabEqualizerLabel07";
-            SettingsTabEqualizerLabel07.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel07.Size = new Size(64, 20);
             SettingsTabEqualizerLabel07.TabIndex = 1;
             SettingsTabEqualizerLabel07.Text = "-00.00";
             SettingsTabEqualizerLabel07.TextAlign = ContentAlignment.MiddleCenter;
@@ -2312,9 +2360,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel08.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel08.AutoSize = true;
             SettingsTabEqualizerLabel08.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel08.Location = new Point(409, 182);
+            SettingsTabEqualizerLabel08.Location = new Point(508, 230);
+            SettingsTabEqualizerLabel08.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel08.Name = "SettingsTabEqualizerLabel08";
-            SettingsTabEqualizerLabel08.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel08.Size = new Size(64, 20);
             SettingsTabEqualizerLabel08.TabIndex = 1;
             SettingsTabEqualizerLabel08.Text = "-00.00";
             SettingsTabEqualizerLabel08.TextAlign = ContentAlignment.MiddleCenter;
@@ -2324,9 +2373,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel09.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel09.AutoSize = true;
             SettingsTabEqualizerLabel09.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel09.Location = new Point(467, 182);
+            SettingsTabEqualizerLabel09.Location = new Point(580, 230);
+            SettingsTabEqualizerLabel09.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel09.Name = "SettingsTabEqualizerLabel09";
-            SettingsTabEqualizerLabel09.Size = new Size(52, 20);
+            SettingsTabEqualizerLabel09.Size = new Size(64, 20);
             SettingsTabEqualizerLabel09.TabIndex = 1;
             SettingsTabEqualizerLabel09.Text = "-00.00";
             SettingsTabEqualizerLabel09.TextAlign = ContentAlignment.MiddleCenter;
@@ -2336,9 +2386,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel10.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             SettingsTabEqualizerLabel10.AutoSize = true;
             SettingsTabEqualizerLabel10.Font = new Font("Segoe UI", 9F);
-            SettingsTabEqualizerLabel10.Location = new Point(525, 182);
+            SettingsTabEqualizerLabel10.Location = new Point(652, 230);
+            SettingsTabEqualizerLabel10.Margin = new Padding(4, 0, 4, 0);
             SettingsTabEqualizerLabel10.Name = "SettingsTabEqualizerLabel10";
-            SettingsTabEqualizerLabel10.Size = new Size(54, 20);
+            SettingsTabEqualizerLabel10.Size = new Size(70, 20);
             SettingsTabEqualizerLabel10.TabIndex = 1;
             SettingsTabEqualizerLabel10.Text = "-00.00";
             SettingsTabEqualizerLabel10.TextAlign = ContentAlignment.MiddleCenter;
@@ -2357,20 +2408,20 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel3.Controls.Add(BtnClearList, 0, 6);
             tableLayoutPanel3.Controls.Add(GridScanMetadata, 0, 8);
             tableLayoutPanel3.Dock = DockStyle.Fill;
-            tableLayoutPanel3.Location = new Point(926, 0);
+            tableLayoutPanel3.Location = new Point(1159, 0);
             tableLayoutPanel3.Margin = new Padding(0);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 9;
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
-            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 47F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
+            tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(60, 525);
+            tableLayoutPanel3.Size = new Size(75, 657);
             tableLayoutPanel3.TabIndex = 6;
             // 
             // BtnScheduller
@@ -2387,10 +2438,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnScheduller.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnScheduller.FlatStyle = FlatStyle.Flat;
             BtnScheduller.ForeColor = Color.White;
-            BtnScheduller.Location = new Point(9, 332);
-            BtnScheduller.Margin = new Padding(2, 3, 2, 3);
+            BtnScheduller.Location = new Point(12, 417);
+            BtnScheduller.Margin = new Padding(2, 4, 2, 4);
             BtnScheduller.Name = "BtnScheduller";
-            BtnScheduller.Size = new Size(41, 41);
+            BtnScheduller.Size = new Size(51, 51);
             BtnScheduller.TabIndex = 2;
             BtnScheduller.UseVisualStyleBackColor = false;
             // 
@@ -2407,10 +2458,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnOpen.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
             BtnOpen.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnOpen.FlatStyle = FlatStyle.Flat;
-            BtnOpen.Location = new Point(9, 3);
-            BtnOpen.Margin = new Padding(2, 3, 2, 3);
+            BtnOpen.Location = new Point(12, 4);
+            BtnOpen.Margin = new Padding(2, 4, 2, 4);
             BtnOpen.Name = "BtnOpen";
-            BtnOpen.Size = new Size(41, 41);
+            BtnOpen.Size = new Size(51, 51);
             BtnOpen.TabIndex = 0;
             BtnOpen.UseVisualStyleBackColor = false;
             // 
@@ -2428,10 +2479,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnPrevious.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnPrevious.FlatStyle = FlatStyle.Flat;
             BtnPrevious.ImageAlign = ContentAlignment.TopLeft;
-            BtnPrevious.Location = new Point(9, 50);
-            BtnPrevious.Margin = new Padding(2, 3, 2, 3);
+            BtnPrevious.Location = new Point(12, 63);
+            BtnPrevious.Margin = new Padding(2, 4, 2, 4);
             BtnPrevious.Name = "BtnPrevious";
-            BtnPrevious.Size = new Size(41, 41);
+            BtnPrevious.Size = new Size(51, 51);
             BtnPrevious.TabIndex = 0;
             BtnPrevious.UseVisualStyleBackColor = false;
             // 
@@ -2448,10 +2499,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnPlayPause.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
             BtnPlayPause.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnPlayPause.FlatStyle = FlatStyle.Flat;
-            BtnPlayPause.Location = new Point(9, 97);
-            BtnPlayPause.Margin = new Padding(2, 3, 2, 3);
+            BtnPlayPause.Location = new Point(12, 122);
+            BtnPlayPause.Margin = new Padding(2, 4, 2, 4);
             BtnPlayPause.Name = "BtnPlayPause";
-            BtnPlayPause.Size = new Size(41, 41);
+            BtnPlayPause.Size = new Size(51, 51);
             BtnPlayPause.TabIndex = 0;
             BtnPlayPause.UseVisualStyleBackColor = false;
             // 
@@ -2468,10 +2519,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnNext.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
             BtnNext.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnNext.FlatStyle = FlatStyle.Flat;
-            BtnNext.Location = new Point(9, 144);
-            BtnNext.Margin = new Padding(2, 3, 2, 3);
+            BtnNext.Location = new Point(12, 181);
+            BtnNext.Margin = new Padding(2, 4, 2, 4);
             BtnNext.Name = "BtnNext";
-            BtnNext.Size = new Size(41, 41);
+            BtnNext.Size = new Size(51, 51);
             BtnNext.TabIndex = 0;
             BtnNext.UseVisualStyleBackColor = false;
             // 
@@ -2488,10 +2539,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnRepeat.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
             BtnRepeat.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnRepeat.FlatStyle = FlatStyle.Flat;
-            BtnRepeat.Location = new Point(9, 191);
-            BtnRepeat.Margin = new Padding(2, 3, 2, 3);
+            BtnRepeat.Location = new Point(12, 240);
+            BtnRepeat.Margin = new Padding(2, 4, 2, 4);
             BtnRepeat.Name = "BtnRepeat";
-            BtnRepeat.Size = new Size(41, 41);
+            BtnRepeat.Size = new Size(51, 51);
             BtnRepeat.TabIndex = 0;
             BtnRepeat.UseVisualStyleBackColor = false;
             // 
@@ -2508,10 +2559,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnShuffle.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
             BtnShuffle.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnShuffle.FlatStyle = FlatStyle.Flat;
-            BtnShuffle.Location = new Point(9, 238);
-            BtnShuffle.Margin = new Padding(2, 3, 2, 3);
+            BtnShuffle.Location = new Point(12, 299);
+            BtnShuffle.Margin = new Padding(2, 4, 2, 4);
             BtnShuffle.Name = "BtnShuffle";
-            BtnShuffle.Size = new Size(41, 41);
+            BtnShuffle.Size = new Size(51, 51);
             BtnShuffle.TabIndex = 0;
             BtnShuffle.UseVisualStyleBackColor = false;
             // 
@@ -2529,10 +2580,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnClearList.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
             BtnClearList.FlatStyle = FlatStyle.Flat;
             BtnClearList.ForeColor = Color.White;
-            BtnClearList.Location = new Point(9, 285);
-            BtnClearList.Margin = new Padding(2, 3, 2, 3);
+            BtnClearList.Location = new Point(12, 358);
+            BtnClearList.Margin = new Padding(2, 4, 2, 4);
             BtnClearList.Name = "BtnClearList";
-            BtnClearList.Size = new Size(41, 41);
+            BtnClearList.Size = new Size(51, 51);
             BtnClearList.TabIndex = 0;
             BtnClearList.UseVisualStyleBackColor = false;
             // 
@@ -2544,14 +2595,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadata.Controls.Add(pictureBox1, 0, 1);
             GridScanMetadata.Controls.Add(GridScanMetadataNb, 0, 2);
             GridScanMetadata.Dock = DockStyle.Bottom;
-            GridScanMetadata.Location = new Point(0, 406);
+            GridScanMetadata.Location = new Point(0, 508);
             GridScanMetadata.Margin = new Padding(0);
             GridScanMetadata.Name = "GridScanMetadata";
             GridScanMetadata.RowCount = 3;
-            GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
-            GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 60F));
+            GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 62F));
+            GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 75F));
             GridScanMetadata.RowStyles.Add(new RowStyle());
-            GridScanMetadata.Size = new Size(60, 119);
+            GridScanMetadata.Size = new Size(75, 149);
             GridScanMetadata.TabIndex = 1;
             // 
             // textBox1
@@ -2560,10 +2611,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             textBox1.BorderStyle = BorderStyle.None;
             textBox1.Dock = DockStyle.Fill;
             textBox1.ForeColor = Color.White;
-            textBox1.Location = new Point(3, 3);
+            textBox1.Location = new Point(4, 4);
+            textBox1.Margin = new Padding(4, 4, 4, 4);
             textBox1.Multiline = true;
             textBox1.Name = "textBox1";
-            textBox1.Size = new Size(54, 44);
+            textBox1.Size = new Size(67, 54);
             textBox1.TabIndex = 0;
             textBox1.Text = "Scan Tags";
             textBox1.TextAlign = HorizontalAlignment.Center;
@@ -2572,10 +2624,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             pictureBox1.Dock = DockStyle.Fill;
             pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
-            pictureBox1.Location = new Point(0, 50);
+            pictureBox1.Location = new Point(0, 62);
             pictureBox1.Margin = new Padding(0);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(60, 60);
+            pictureBox1.Size = new Size(75, 75);
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
@@ -2585,9 +2637,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadataNb.AutoSize = true;
             GridScanMetadataNb.BackColor = Color.Transparent;
             GridScanMetadataNb.ForeColor = Color.White;
-            GridScanMetadataNb.Location = new Point(3, 110);
+            GridScanMetadataNb.Location = new Point(4, 137);
+            GridScanMetadataNb.Margin = new Padding(4, 0, 4, 0);
             GridScanMetadataNb.Name = "GridScanMetadataNb";
-            GridScanMetadataNb.Size = new Size(54, 20);
+            GridScanMetadataNb.Size = new Size(67, 25);
             GridScanMetadataNb.TabIndex = 2;
             GridScanMetadataNb.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -2597,9 +2650,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LyricsTextBox.AutoSize = true;
             LyricsTextBox.BackColor = Color.DimGray;
             LyricsTextBox.ForeColor = Color.White;
-            LyricsTextBox.Location = new Point(4, 592);
+            LyricsTextBox.Location = new Point(5, 740);
+            LyricsTextBox.Margin = new Padding(4, 0, 4, 0);
             LyricsTextBox.Name = "LyricsTextBox";
-            LyricsTextBox.Size = new Size(980, 20);
+            LyricsTextBox.Size = new Size(1226, 25);
             LyricsTextBox.TabIndex = 7;
             LyricsTextBox.TextAlign = ContentAlignment.MiddleCenter;
             // 
@@ -2609,8 +2663,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
             OverPanel.Controls.Add(OverPanelLabel);
             OverPanel.Dock = DockStyle.Top;
             OverPanel.Location = new Point(1, 1);
+            OverPanel.Margin = new Padding(4, 4, 4, 4);
             OverPanel.Name = "OverPanel";
-            OverPanel.Size = new Size(988, 0);
+            OverPanel.Size = new Size(1236, 0);
             OverPanel.TabIndex = 0;
             // 
             // OverPanelLabel
@@ -2620,7 +2675,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             OverPanelLabel.BackColor = Color.Transparent;
             OverPanelLabel.Font = new Font("Segoe UI", 14F);
             OverPanelLabel.ForeColor = Color.White;
-            OverPanelLabel.Location = new Point(422, -43);
+            OverPanelLabel.Location = new Point(528, -54);
+            OverPanelLabel.Margin = new Padding(4, 0, 4, 0);
             OverPanelLabel.Name = "OverPanelLabel";
             OverPanelLabel.Size = new Size(43, 32);
             OverPanelLabel.TabIndex = 0;
@@ -2629,20 +2685,21 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             // MainWindow2
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(10F, 25F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoSizeMode = AutoSizeMode.GrowAndShrink;
             BackColor = Color.White;
-            ClientSize = new Size(990, 690);
+            ClientSize = new Size(1238, 862);
             ControlBox = false;
             Controls.Add(OverPanel);
             Controls.Add(GlobalTableLayoutPanel);
             FormBorderStyle = FormBorderStyle.None;
             Icon = (Icon)resources.GetObject("$this.Icon");
+            Margin = new Padding(4, 4, 4, 4);
             MaximizeBox = false;
             MdiChildrenMinimizedAnchorBottom = false;
             MinimizeBox = false;
-            MinimumSize = new Size(629, 690);
+            MinimumSize = new Size(786, 862);
             Name = "MainWindow2";
             Padding = new Padding(1);
             StartPosition = FormStartPosition.Manual;

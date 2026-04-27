@@ -57,6 +57,7 @@ namespace AnotherMusicPlayer
             //foreach (Polygon star in Grid1.Children) { star.Width = caseSize; star.Points = StarMatrix; }
             //foreach (Polygon star in Grid2.Children) { star.Width = caseSize; star.Points = StarMatrix; }
             //_Zoom = multiply; ZoomChanged?.Invoke(this, _Zoom);
+            CalculatePositions();
             reDraw();
         }
         #endregion
@@ -97,17 +98,60 @@ namespace AnotherMusicPlayer
             this.MouseUp += StarGrid_MouseUp;
             this.MouseDown += Ratting2_MouseDown;
             this.Resize += Rating2_Resize;
+            this.BackColorChanged += Rating2_BackColorChanged;
             CalculatePositions();
+        }
+
+        private void Rating2_BackColorChanged(object sender, EventArgs e)
+        {
+            try
+            {
+                Debug.WriteLine("Rating2_BackColorChanged => " + this.BackColor.ToString());
+                this.FirstLayer.BackColor = this.BackColor;
+                this.SecondLayer.BackColor = this.BackColor;
+                this.tableLayoutPanel2.BackColor = this.BackColor;
+                this.button1.BackColor = this.BackColor;
+                this.button2.BackColor = this.BackColor;
+                this.button3.BackColor = this.BackColor;
+                this.button4.BackColor = this.BackColor;
+                this.button5.BackColor = this.BackColor;
+                this.button6.BackColor = this.BackColor;
+                this.button7.BackColor = this.BackColor;
+                this.button8.BackColor = this.BackColor;
+                this.button9.BackColor = this.BackColor;
+                this.button10.BackColor = this.BackColor;
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace);
+            }
         }
 
         private void CalculatePositions()
         {
-            double caseSize = StarCaseWidth * _Zoom;
+            int caseSize = Convert.ToInt32(StarCaseWidth * _Zoom);
+            adjustStartButtons(button1, caseSize);
+            adjustStartButtons(button2, caseSize);
+            adjustStartButtons(button3, caseSize);
+            adjustStartButtons(button4, caseSize);
+            adjustStartButtons(button5, caseSize);
+            adjustStartButtons(button6, caseSize);
+            adjustStartButtons(button7, caseSize);
+            adjustStartButtons(button8, caseSize);
+            adjustStartButtons(button9, caseSize);
+            adjustStartButtons(button10, caseSize);
+
+
             Stars[0] = new Rectangle(button1.Location.X, button1.Location.Y, button1.Width, button1.Height);
             Stars[1] = new Rectangle(button2.Location.X, button2.Location.Y, button2.Width, button2.Height);
             Stars[2] = new Rectangle(button3.Location.X, button3.Location.Y, button3.Width, button3.Height);
             Stars[3] = new Rectangle(button4.Location.X, button4.Location.Y, button4.Width, button4.Height);
             Stars[4] = new Rectangle(button5.Location.X, button5.Location.Y, button5.Width, button5.Height);
+        }
+        private void adjustStartButtons(Button btn, int size)
+        {
+            btn.Width = size; btn.Height = size;
+
         }
 
         private int getStarIndex(System.Drawing.Point pos)
@@ -147,7 +191,9 @@ namespace AnotherMusicPlayer
         }
 
         private void Rating2_Resize(object sender, EventArgs e)
-        { CalculatePositions(); }
+        { 
+            CalculatePositions(); 
+        }
 
         private bool IsDown = false;
         private void Ratting2_MouseDown(object sender, MouseEventArgs e)
@@ -189,13 +235,19 @@ namespace AnotherMusicPlayer
         }
 
         public void reDraw() {
-            int id = Convert.ToInt32(Math.Truncate(_Rate));
-            bool offset = _Rate - id >= 0.5;
-            int val_min = Stars[id].X;
-            int val_max = Stars[id].X + Stars[id].Width;
-            double val_moy = val_min + (Stars[id].Width / 2.0);
-            double val = (offset ? val_moy: val_min);
-            if (_Rate == 5) { val = val_max; }
+            double val = 0;
+            if (_Rate == 5) { val = Stars[4].X + Stars[4].Width; }
+            else if (_Rate == 0) { val = Stars[0].X; }
+            else
+            {
+                int id = Convert.ToInt32(Math.Truncate(_Rate));
+                bool offset = _Rate - id >= 0.5;
+                int val_min = Stars[id].X;
+                int val_max = Stars[id].X + Stars[id].Width;
+                double val_moy = val_min + (Stars[id].Width / 2.0);
+                val = (offset ? val_moy : val_min);
+            }
+
 
             SecondLayer.Width = Convert.ToInt32(val); 
         }

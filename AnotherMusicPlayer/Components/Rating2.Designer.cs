@@ -305,7 +305,7 @@
             BackColor = System.Drawing.Color.Transparent;
             Controls.Add(SecondLayer);
             Controls.Add(FirstLayer);
-            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Margin = new System.Windows.Forms.Padding(4);
             MaximumSize = new System.Drawing.Size(125, 25);
             MinimumSize = new System.Drawing.Size(125, 25);
             Name = "Rating2";

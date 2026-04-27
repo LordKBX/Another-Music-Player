@@ -26,6 +26,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static Type typeRichTextBox = typeof(RichTextBox);
         private static Type typeLabel = typeof(Label);
         private static Type typeString = typeof(string);
+        private static Type typeRating2 = typeof(Rating2);
 
         public static void SetGlobalColor(Control parent, int lv = 0)
         {
@@ -178,6 +179,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     ((CheckBox)parent).FlatAppearance.CheckedBackColor = App.style.GetColor("CheckBoxFlatAppearanceCheckedBackColor");
                     ((CheckBox)parent).FlatAppearance.MouseDownBackColor = App.style.GetColor("CheckBoxFlatAppearanceMouseDownBackColor");
                     ((CheckBox)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("CheckBoxFlatAppearanceMouseOverBackColor");
+                }
+                else if (type == typeRating2)
+                {
+                    parent.BackColor = Color.Transparent;
+                    return;
                 }
                 else
                 {

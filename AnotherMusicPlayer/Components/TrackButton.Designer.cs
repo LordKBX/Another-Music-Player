@@ -40,10 +40,10 @@
             label1.AutoEllipsis = true;
             label1.Font = new System.Drawing.Font("Segoe UI", 10F);
             label1.ForeColor = System.Drawing.Color.White;
-            label1.Location = new System.Drawing.Point(3, 1);
+            label1.Location = new System.Drawing.Point(3, 5);
             label1.MaximumSize = new System.Drawing.Size(0, 75);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(132, 23);
+            label1.Size = new System.Drawing.Size(112, 23);
             label1.TabIndex = 0;
             label1.Text = "label1";
             // 
@@ -52,13 +52,13 @@
             rating21.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             rating21.BackColor = System.Drawing.Color.Transparent;
             rating21.IsReadOnly = false;
-            rating21.Location = new System.Drawing.Point(141, 0);
-            rating21.Margin = new System.Windows.Forms.Padding(3, 0, 3, 5);
-            rating21.MaximumSize = new System.Drawing.Size(100, 20);
-            rating21.MinimumSize = new System.Drawing.Size(100, 20);
+            rating21.Location = new System.Drawing.Point(118, 4);
+            rating21.Margin = new System.Windows.Forms.Padding(0);
+            rating21.MaximumSize = new System.Drawing.Size(130, 25);
+            rating21.MinimumSize = new System.Drawing.Size(130, 25);
             rating21.Name = "rating21";
             rating21.Rate = 0D;
-            rating21.Size = new System.Drawing.Size(100, 20);
+            rating21.Size = new System.Drawing.Size(130, 25);
             rating21.TabIndex = 1;
             rating21.Zoom = 1D;
             // 
@@ -66,7 +66,7 @@
             // 
             tableLayoutPanel1.ColumnCount = 2;
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 110F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
             tableLayoutPanel1.Controls.Add(label1, 0, 0);
             tableLayoutPanel1.Controls.Add(rating21, 1, 0);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -75,7 +75,7 @@
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(248, 25);
+            tableLayoutPanel1.Size = new System.Drawing.Size(248, 33);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // TrackButton
@@ -87,9 +87,9 @@
             Controls.Add(tableLayoutPanel1);
             Margin = new System.Windows.Forms.Padding(0);
             MaximumSize = new System.Drawing.Size(0, 27);
-            MinimumSize = new System.Drawing.Size(250, 27);
+            MinimumSize = new System.Drawing.Size(250, 35);
             Name = "TrackButton";
-            Size = new System.Drawing.Size(248, 25);
+            Size = new System.Drawing.Size(248, 33);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }

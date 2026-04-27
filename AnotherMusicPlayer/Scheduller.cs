@@ -109,7 +109,9 @@ namespace AnotherMusicPlayer
                         {
                             (bool l, string g) = _functionalities[item.Action].Invoke(item);
                             if (l) { item._Status = SchedullerTaskItemStatus.Completed; }
-                            else { Debug.WriteLine(g); }
+                            else { 
+                                //Debug.WriteLine(g); 
+                            }
                         }
                         else
                         {
