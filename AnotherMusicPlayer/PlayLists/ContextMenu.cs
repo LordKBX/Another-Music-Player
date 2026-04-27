@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -76,7 +77,7 @@ namespace AnotherMusicPlayer
                 if (data.Item1.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
                 if (data.Item1.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
                 if (data.Item1.Name.StartsWith("auto_Stars")) { playlistType = AutoPlaylistTypes.StarValue; }
-                List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+                BindingList<PlayListsLineItem> files = new BindingList<PlayListsLineItem>();
                 if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, double.Parse(data.Item1.Name.Replace("auto_Stars", "").Replace("-", ","))); }
                 else { files = autolistData(playlistType, 100); }
                     
@@ -116,7 +117,7 @@ namespace AnotherMusicPlayer
                 if (data.Item1.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
                 if (data.Item1.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
                 if (data.Item1.Name.StartsWith("auto_Stars")) { playlistType = AutoPlaylistTypes.StarValue; }
-                List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+                BindingList<PlayListsLineItem> files = new BindingList<PlayListsLineItem>();
                 if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, double.Parse(data.Item1.Name.Replace("auto_Stars", "").Replace("-", ","))); }
                 else { files = autolistData(playlistType, 100); }
                 List<string> paths = new List<string>();

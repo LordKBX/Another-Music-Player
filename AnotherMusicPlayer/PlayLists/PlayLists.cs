@@ -1,6 +1,7 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -286,7 +287,7 @@ namespace AnotherMusicPlayer
                 if (e.Node.Index == 2) { playlistType = AutoPlaylistTypes.MostRecentlyPlayed; }
                 if (e.Node.Index == 3) { playlistType = AutoPlaylistTypes.BestRating; }
                 else { playlistType = AutoPlaylistTypes.StarValue; }
-                List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+                SortableBindingList<PlayListsLineItem> files = new SortableBindingList<PlayListsLineItem>();
                 if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, double.Parse(e.Node.Name.Replace("auto_Stars", "").Replace("-", ","))); }
                 else { files = autolistData(playlistType, 100); }
                 List<string> paths = new List<string>();
@@ -311,7 +312,7 @@ namespace AnotherMusicPlayer
             }
         }
 
-        private List<PlayListsLineItem> autolistData(AutoPlaylistTypes playlistType, double maxLimit = 50)
+        private SortableBindingList<PlayListsLineItem> autolistData(AutoPlaylistTypes playlistType, double maxLimit = 50)
         {
             string query = "";
             int maxint = Convert.ToInt32(Math.Floor(maxLimit));
@@ -331,9 +332,9 @@ namespace AnotherMusicPlayer
             return ParseFilesQueryDate(rez, (playlistType == AutoPlaylistTypes.MostPlayed || playlistType == AutoPlaylistTypes.MostRecentlyPlayed));
         }
 
-        private List<PlayListsLineItem> ParseFilesQueryDate(Dictionary<string, Dictionary<string, object>> rez, bool ShowColumn0 = false)
+        private SortableBindingList<PlayListsLineItem> ParseFilesQueryDate(Dictionary<string, Dictionary<string, object>> rez, bool ShowColumn0 = false)
         {
-            List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+            SortableBindingList<PlayListsLineItem> files = new SortableBindingList<PlayListsLineItem>();
 
             if (rez == null || rez.Count == 0) { return files; }
             foreach (string key in rez.Keys)
@@ -387,7 +388,7 @@ namespace AnotherMusicPlayer
             Parent.PlayListsTabDataGridView.ReadOnly = false;
             Parent.PlayListsTabDataGridView.DataSource = null;
             Parent.PlayListsTabDataGridView.Invalidate();
-            List<PlayListsLineItem> files = new List<PlayListsLineItem>();
+            SortableBindingList<PlayListsLineItem> files = new SortableBindingList<PlayListsLineItem>();
             if (playlistType == AutoPlaylistTypes.StarValue) { files = autolistData(playlistType, starValue); }
             else { files = autolistData(playlistType, 100); }
             if (playlistType == AutoPlaylistTypes.LastImports) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
@@ -416,7 +417,7 @@ namespace AnotherMusicPlayer
             }
 
             Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT PIndex,LIndex,LOrder,files.* FROM playlistsItems JOIN files ON(files.Path = playlistsItems.Path) WHERE LIndex = "+ playlistId + " ORDER BY LOrder ASC, PIndex ASC", "Path");
-            List<PlayListsLineItem> files = ParseFilesQueryDate(rez, false);
+            SortableBindingList<PlayListsLineItem> files = ParseFilesQueryDate(rez, false);
             foreach (PlayListsLineItem item in files) { item.PlaylistId = playlistId; }
             if (files.Count > 0) { 
                 Parent.PlayListsTabDataGridView.DataSource = files;
