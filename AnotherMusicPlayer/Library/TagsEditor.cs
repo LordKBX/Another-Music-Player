@@ -39,6 +39,7 @@ namespace AnotherMusicPlayer
         public string tAlbumArtists = "";
 
         private ToolStripMenuItem CoverCMPreview = new ToolStripMenuItem() { Text = "Preview Cover" };
+        private ToolStripMenuItem CoverCMSave = new ToolStripMenuItem() { Text = "Save Cover As .." };
         private ToolStripMenuItem CoverCMClear = new ToolStripMenuItem() { Text = "Clear Cover" };
         private ToolStripMenuItem CoverCMAdd = new ToolStripMenuItem() { Text = "Add Cover" };
         private ContextMenuStrip CoverContextMenu = new ContextMenuStrip() { };
@@ -50,7 +51,7 @@ namespace AnotherMusicPlayer
             if (parent == null) { Debug.WriteLine("TagsEditor, parent is null"); return; }
             if (mode == null) { Debug.WriteLine("TagsEditor, mode is null"); return; }
             if (files == null) { Debug.WriteLine("TagsEditor, files is null"); return; }
-            CoverContextMenu.Items.AddRange(new ToolStripItem[] { CoverCMPreview, CoverCMClear, CoverCMAdd });
+            CoverContextMenu.Items.AddRange(new ToolStripItem[] { CoverCMPreview, CoverCMSave, CoverCMClear, CoverCMAdd });
             mode = mode.ToLower();
             if (mode == "file") { mode = "track"; }
             else if (mode == "folder" || mode == "album") { mode = "album"; }
@@ -150,6 +151,7 @@ namespace AnotherMusicPlayer
 
             Cover.ContextMenuStrip = CoverContextMenu;
             CoverCMPreview.Click += CoverCMPreview_Click;
+            CoverCMSave.Click += CoverCMSave_Click;
             CoverCMClear.Click += CoverCMClear_Click;
             CoverCMAdd.Click += CoverCMAdd_Click;
 
@@ -162,9 +164,9 @@ namespace AnotherMusicPlayer
             MainWIndowHead.MouseDown += FormDragable_MouseDown;
             MainWIndowHead.MouseMove += FormDragable_MouseMove;
             MainWIndowHead.MouseUp += FormDragable_MouseUp;
-            TitleLabel.MouseDown += FormDragable_MouseDown;
-            TitleLabel.MouseMove += FormDragable_MouseMove;
-            TitleLabel.MouseUp += FormDragable_MouseUp;
+            WindowTitleLabel.MouseDown += FormDragable_MouseDown;
+            WindowTitleLabel.MouseMove += FormDragable_MouseMove;
+            WindowTitleLabel.MouseUp += FormDragable_MouseUp;
             #endregion
             DialogResult = DialogResult.Cancel;
 
@@ -278,6 +280,11 @@ namespace AnotherMusicPlayer
             LyricsLabel.Text = App.GetTranslation("EditorTagLabelLyrics");
             TitleLabel.Text = App.GetTranslation("EditorTagLabelTitle");
 
+            CoverCMPreview.Text = App.GetTranslation("EditorTagCoverCMPreview", "Preview Cover");
+            CoverCMSave.Text = App.GetTranslation("EditorTagCoverCMSave", "Save Cover As ..");
+            CoverCMClear.Text = App.GetTranslation("EditorTagCoverCMClear", "Clear Cover");
+            CoverCMAdd.Text = App.GetTranslation("EditorTagCoverCMAdd", "Add Cover");
+
             AlbumLabel.Text = App.GetTranslation("EditorTagLabelAlbum");
 
             ComposersLabel.Text = App.GetTranslation("EditorTagLabelComposers");
@@ -329,6 +336,33 @@ namespace AnotherMusicPlayer
             win.Owner = this;
             win.ShowInTaskbar = false;
             win.ShowDialog();
+        }
+
+        private void CoverCMSave_Click(object sender, EventArgs e)
+        {
+            if (Cover.BackgroundImage == null) { return; }
+            System.Drawing.Imaging.ImageFormat format = Cover.BackgroundImage.RawFormat;
+            //Debug.WriteLine("format = " + format.ToString());
+            Microsoft.Win32.SaveFileDialog saveFileDlg = new Microsoft.Win32.SaveFileDialog();
+            string filter = "";
+
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Png)) { filter = "Picture Png (*.png;*.PNG)|*.png;*.PNG"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Jpeg)) { filter = "Picture Jpeg (*.jpg;*.JPG;*.jpeg;*.JPEG)|*.jpg;*.JPG;*.jpeg;*.JPEG"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Bmp)) { filter = "Picture Bmp (*.bmp;*.BMP)|*.bmp;*.BMP"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Gif)) { filter = "Picture Gif (*.gif;*.GIF)|*.gif;*.GIF"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Tiff)) { filter = "Picture Tiff (*.tiff;*.TIFF)|*.tiff;*.TIFF"; }
+            try { if (format.Equals(System.Drawing.Imaging.ImageFormat.Webp)) { filter = "Picture Webp (*.webp;*.WEBP)|*.webp;*.WEBP"; } } catch (Exception) { }
+            if (filter == "") { throw new Exception("Image format not supported"); }
+            saveFileDlg.Filter = filter;
+
+            saveFileDlg.Title = App.GetTranslation("EditorTagCoverCMSave", "File Selection");
+            Nullable<bool> result = saveFileDlg.ShowDialog();
+            if (result == true) {
+                //Debug.WriteLine("saveFileDlg.FileName = " + saveFileDlg.FileName);
+                var i2 = new Bitmap(Cover.BackgroundImage);
+                i2.Save(saveFileDlg.FileName, format);
+                Common.PurgeMemory();
+            }
         }
 
         private void CoverCMClear_Click(object sender, EventArgs e)

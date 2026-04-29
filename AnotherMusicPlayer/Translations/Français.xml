@@ -245,6 +245,7 @@
     
     <EditorTagCoverTooltip><![CDATA[Glisser ici une nouvelle image pour ajout/remplacement\nou Clicker droit pour plus d'option]]></EditorTagCoverTooltip>
     <EditorTagCoverCMPreview><![CDATA[Apperçus Image]]></EditorTagCoverCMPreview>
+    <EditorTagCoverCMSave><![CDATA[Sauvegarder Image ...]]></EditorTagCoverCMSave>
     <EditorTagCoverCMClear><![CDATA[Supprimer Image]]></EditorTagCoverCMClear>
     <EditorTagCoverCMAdd><![CDATA[Ajouter/remplacer Image]]></EditorTagCoverCMAdd>
     <EditorTagCoverImagePreview><![CDATA[Affichage Couverture]]></EditorTagCoverImagePreview>
