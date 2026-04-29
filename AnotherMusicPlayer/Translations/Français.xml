@@ -249,6 +249,7 @@
     <EditorTagCoverCMClear><![CDATA[Supprimer Image]]></EditorTagCoverCMClear>
     <EditorTagCoverCMAdd><![CDATA[Ajouter/remplacer Image]]></EditorTagCoverCMAdd>
     <EditorTagCoverImagePreview><![CDATA[Affichage Couverture]]></EditorTagCoverImagePreview>
+    <EditorTagCoverPictures><![CDATA[Images]]></EditorTagCoverPictures>
     <!--#endregion-->
 
     <!--#region LIBRARY RENAME-->

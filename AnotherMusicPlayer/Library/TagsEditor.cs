@@ -346,12 +346,12 @@ namespace AnotherMusicPlayer
             Microsoft.Win32.SaveFileDialog saveFileDlg = new Microsoft.Win32.SaveFileDialog();
             string filter = "";
 
-            if (format.Equals(System.Drawing.Imaging.ImageFormat.Png)) { filter = "Picture Png (*.png;*.PNG)|*.png;*.PNG"; }
-            if (format.Equals(System.Drawing.Imaging.ImageFormat.Jpeg)) { filter = "Picture Jpeg (*.jpg;*.JPG;*.jpeg;*.JPEG)|*.jpg;*.JPG;*.jpeg;*.JPEG"; }
-            if (format.Equals(System.Drawing.Imaging.ImageFormat.Bmp)) { filter = "Picture Bmp (*.bmp;*.BMP)|*.bmp;*.BMP"; }
-            if (format.Equals(System.Drawing.Imaging.ImageFormat.Gif)) { filter = "Picture Gif (*.gif;*.GIF)|*.gif;*.GIF"; }
-            if (format.Equals(System.Drawing.Imaging.ImageFormat.Tiff)) { filter = "Picture Tiff (*.tiff;*.TIFF)|*.tiff;*.TIFF"; }
-            try { if (format.Equals(System.Drawing.Imaging.ImageFormat.Webp)) { filter = "Picture Webp (*.webp;*.WEBP)|*.webp;*.WEBP"; } } catch (Exception) { }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Png)) { filter = "Png (*.png;*.PNG)|*.png;*.PNG"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Jpeg)) { filter = "Jpeg (*.jpg;*.JPG;*.jpeg;*.JPEG)|*.jpg;*.JPG;*.jpeg;*.JPEG"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Bmp)) { filter = "Bmp (*.bmp;*.BMP)|*.bmp;*.BMP"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Gif)) { filter = "Gif (*.gif;*.GIF)|*.gif;*.GIF"; }
+            if (format.Equals(System.Drawing.Imaging.ImageFormat.Tiff)) { filter = "Tiff (*.tiff;*.TIFF)|*.tiff;*.TIFF"; }
+            try { if (format.Equals(System.Drawing.Imaging.ImageFormat.Webp)) { filter = "Webp (*.webp;*.WEBP)|*.webp;*.WEBP"; } } catch (Exception) { }
             if (filter == "") { throw new Exception("Image format not supported"); }
             saveFileDlg.Filter = filter;
 
@@ -382,9 +382,9 @@ namespace AnotherMusicPlayer
                 if (tx != "") tx += ";";
                 tx += "*" + ext.ToUpper();
             }));
-            openFileDlg.Filter = "Picture (" + tx + ")|" + tx;
+            openFileDlg.Filter = App.GetTranslation("EditorTagCoverPictures", "Pictures") + " (" + tx + ")|" + tx;
             openFileDlg.Multiselect = false;
-            openFileDlg.Title = "File Selection";
+            openFileDlg.Title = App.GetTranslation("EditorTagCoverCMAdd", "File Selection");
             Nullable<bool> result = openFileDlg.ShowDialog();
             if (result == true) { ReplaceCover(openFileDlg.FileNames[0]); }
         }
