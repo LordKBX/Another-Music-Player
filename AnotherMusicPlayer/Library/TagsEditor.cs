@@ -308,18 +308,22 @@ namespace AnotherMusicPlayer
 
         private void CoverCMPreview_Click(object sender, EventArgs e)
         {
+            Color backColor = App.style.GetColor("GlobalBackColor", Color.Black);
             int maxw = Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenWidth - 100);
             int maxh = Convert.ToInt32(System.Windows.SystemParameters.PrimaryScreenHeight - 100);
-            int width = (BitmapCover.Width < maxw) ? BitmapCover.Width : maxw;
-            int height = (BitmapCover.Height < maxw) ? BitmapCover.Height : maxh;
-            Form win = new Form();
-            win.FormBorderStyle = FormBorderStyle.FixedDialog;
+            int width = (BitmapCover.Width + 50 < maxw) ? BitmapCover.Width + 50 : maxw;
+            int height = (BitmapCover.Height + 50 < maxw) ? BitmapCover.Height + 50 : maxh;
+            Form win = new Form() { BackColor = backColor, Text = App.GetTranslation("EditorTagCoverImagePreview", "Cover Preview") };
+            win.FormBorderStyle = FormBorderStyle.SizableToolWindow;
             win.Width = width;
             win.Height = height;
-            Panel pan = new Panel() { AutoScroll = true };
+            win.MinimumSize = new System.Drawing.Size(width, height);
+            Panel pan = new Panel() { AutoScroll = true, Dock = DockStyle.Fill, BackColor = backColor };
             pan.Controls.Add(new Button() { 
-                Text = "", Anchor = AnchorStyles.Top | AnchorStyles.Left, BackgroundImage = BitmapCover, 
-                BackgroundImageLayout = ImageLayout.Center, Width = BitmapCover.Width, Height = BitmapCover.Height
+                Text = "", BackgroundImage = BitmapCover, BackColor = backColor, 
+                Anchor = AnchorStyles.Top | AnchorStyles.Left,
+                BackgroundImageLayout = ImageLayout.Center, Width = BitmapCover.Width, Height = BitmapCover.Height,
+                MinimumSize = new System.Drawing.Size(BitmapCover.Width, BitmapCover.Height)
             });
             win.Controls.Add(pan);
             win.Owner = this;

@@ -79,18 +79,18 @@
             Cover.AllowDrop = true;
             Cover.BackColor = System.Drawing.Color.Black;
             Cover.BackgroundImage = Properties.Resources.CoverImg;
-            Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            Cover.Enabled = false;
+            Cover.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             Cover.FlatAppearance.BorderColor = System.Drawing.Color.Black;
             Cover.FlatAppearance.BorderSize = 0;
             Cover.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             Cover.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             Cover.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            Cover.Location = new System.Drawing.Point(3, 3);
-            Cover.MaximumSize = new System.Drawing.Size(250, 250);
-            Cover.MinimumSize = new System.Drawing.Size(250, 250);
+            Cover.Location = new System.Drawing.Point(4, 4);
+            Cover.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Cover.MaximumSize = new System.Drawing.Size(312, 312);
+            Cover.MinimumSize = new System.Drawing.Size(312, 312);
             Cover.Name = "Cover";
-            Cover.Size = new System.Drawing.Size(250, 250);
+            Cover.Size = new System.Drawing.Size(312, 312);
             Cover.TabIndex = 4;
             Cover.UseVisualStyleBackColor = false;
             // 
@@ -100,7 +100,8 @@
             TitleLabel.AutoSize = true;
             TitleLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             TitleLabel.ForeColor = System.Drawing.Color.White;
-            TitleLabel.Location = new System.Drawing.Point(3, 8);
+            TitleLabel.Location = new System.Drawing.Point(4, 18);
+            TitleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             TitleLabel.Name = "TitleLabel";
             TitleLabel.Size = new System.Drawing.Size(60, 32);
             TitleLabel.TabIndex = 0;
@@ -113,7 +114,8 @@
             PerformersLabel.AutoSize = true;
             PerformersLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             PerformersLabel.ForeColor = System.Drawing.Color.White;
-            PerformersLabel.Location = new System.Drawing.Point(3, 248);
+            PerformersLabel.Location = new System.Drawing.Point(4, 318);
+            PerformersLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             PerformersLabel.Name = "PerformersLabel";
             PerformersLabel.Size = new System.Drawing.Size(129, 32);
             PerformersLabel.TabIndex = 0;
@@ -126,9 +128,10 @@
             PerformersInput.BackColor = System.Drawing.Color.DarkGray;
             PerformersInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             PerformersInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            PerformersInput.Location = new System.Drawing.Point(3, 284);
+            PerformersInput.Location = new System.Drawing.Point(4, 359);
+            PerformersInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             PerformersInput.Name = "PerformersInput";
-            PerformersInput.Size = new System.Drawing.Size(447, 32);
+            PerformersInput.Size = new System.Drawing.Size(558, 32);
             PerformersInput.TabIndex = 1;
             // 
             // AlbumLabel
@@ -137,7 +140,8 @@
             AlbumLabel.AutoSize = true;
             AlbumLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             AlbumLabel.ForeColor = System.Drawing.Color.White;
-            AlbumLabel.Location = new System.Drawing.Point(3, 88);
+            AlbumLabel.Location = new System.Drawing.Point(4, 118);
+            AlbumLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             AlbumLabel.Name = "AlbumLabel";
             AlbumLabel.Size = new System.Drawing.Size(84, 32);
             AlbumLabel.TabIndex = 0;
@@ -150,9 +154,10 @@
             AlbumInput.BackColor = System.Drawing.Color.DarkGray;
             AlbumInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             AlbumInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            AlbumInput.Location = new System.Drawing.Point(3, 124);
+            AlbumInput.Location = new System.Drawing.Point(4, 159);
+            AlbumInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             AlbumInput.Name = "AlbumInput";
-            AlbumInput.Size = new System.Drawing.Size(447, 32);
+            AlbumInput.Size = new System.Drawing.Size(558, 32);
             AlbumInput.TabIndex = 4;
             // 
             // GenresLabel
@@ -161,7 +166,8 @@
             GenresLabel.AutoSize = true;
             GenresLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             GenresLabel.ForeColor = System.Drawing.Color.White;
-            GenresLabel.Location = new System.Drawing.Point(3, 328);
+            GenresLabel.Location = new System.Drawing.Point(4, 418);
+            GenresLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             GenresLabel.Name = "GenresLabel";
             GenresLabel.Size = new System.Drawing.Size(88, 32);
             GenresLabel.TabIndex = 5;
@@ -174,9 +180,10 @@
             GenresInput.BackColor = System.Drawing.Color.DarkGray;
             GenresInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             GenresInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            GenresInput.Location = new System.Drawing.Point(3, 364);
+            GenresInput.Location = new System.Drawing.Point(4, 459);
+            GenresInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             GenresInput.Name = "GenresInput";
-            GenresInput.Size = new System.Drawing.Size(244, 32);
+            GenresInput.Size = new System.Drawing.Size(304, 32);
             GenresInput.TabIndex = 4;
             // 
             // AlbumArtistsLabel
@@ -185,7 +192,8 @@
             AlbumArtistsLabel.AutoSize = true;
             AlbumArtistsLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             AlbumArtistsLabel.ForeColor = System.Drawing.Color.White;
-            AlbumArtistsLabel.Location = new System.Drawing.Point(3, 328);
+            AlbumArtistsLabel.Location = new System.Drawing.Point(4, 418);
+            AlbumArtistsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             AlbumArtistsLabel.Name = "AlbumArtistsLabel";
             AlbumArtistsLabel.Size = new System.Drawing.Size(156, 32);
             AlbumArtistsLabel.TabIndex = 0;
@@ -195,21 +203,21 @@
             // tableLayoutPanel4
             // 
             tableLayoutPanel4.ColumnCount = 3;
-            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 256F));
-            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 3F));
+            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 320F));
+            tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 4F));
             tableLayoutPanel4.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel4.Controls.Add(tableLayoutPanel1, 2, 0);
             tableLayoutPanel4.Controls.Add(Cover, 0, 0);
             tableLayoutPanel4.Controls.Add(tableLayoutPanel2, 0, 1);
             tableLayoutPanel4.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel4.Location = new System.Drawing.Point(1, 53);
+            tableLayoutPanel4.Location = new System.Drawing.Point(1, 66);
             tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 2;
-            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 256F));
+            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 320F));
             tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel4.Size = new System.Drawing.Size(718, 809);
+            tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel4.Size = new System.Drawing.Size(898, 1012);
             tableLayoutPanel4.TabIndex = 8;
             // 
             // tableLayoutPanel1
@@ -229,31 +237,32 @@
             tableLayoutPanel1.Controls.Add(ComposersLabel, 0, 4);
             tableLayoutPanel1.Controls.Add(ComposersInput, 0, 5);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel1.Location = new System.Drawing.Point(262, 3);
+            tableLayoutPanel1.Location = new System.Drawing.Point(328, 4);
+            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 12;
             tableLayoutPanel4.SetRowSpan(tableLayoutPanel1, 2);
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(453, 803);
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(566, 1004);
             tableLayoutPanel1.TabIndex = 8;
             // 
             // TitleInput
@@ -262,9 +271,10 @@
             TitleInput.BackColor = System.Drawing.Color.DarkGray;
             TitleInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             TitleInput.Font = new System.Drawing.Font("Segoe UI", 12F);
-            TitleInput.Location = new System.Drawing.Point(3, 46);
+            TitleInput.Location = new System.Drawing.Point(4, 61);
+            TitleInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             TitleInput.Name = "TitleInput";
-            TitleInput.Size = new System.Drawing.Size(447, 27);
+            TitleInput.Size = new System.Drawing.Size(558, 27);
             TitleInput.TabIndex = 1;
             // 
             // AlbumArtistsInput
@@ -273,9 +283,10 @@
             AlbumArtistsInput.BackColor = System.Drawing.Color.DarkGray;
             AlbumArtistsInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             AlbumArtistsInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            AlbumArtistsInput.Location = new System.Drawing.Point(3, 364);
+            AlbumArtistsInput.Location = new System.Drawing.Point(4, 459);
+            AlbumArtistsInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             AlbumArtistsInput.Name = "AlbumArtistsInput";
-            AlbumArtistsInput.Size = new System.Drawing.Size(447, 32);
+            AlbumArtistsInput.Size = new System.Drawing.Size(558, 32);
             AlbumArtistsInput.TabIndex = 4;
             // 
             // LyricsLabel
@@ -284,7 +295,8 @@
             LyricsLabel.AutoSize = true;
             LyricsLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             LyricsLabel.ForeColor = System.Drawing.Color.White;
-            LyricsLabel.Location = new System.Drawing.Point(3, 408);
+            LyricsLabel.Location = new System.Drawing.Point(4, 518);
+            LyricsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             LyricsLabel.Name = "LyricsLabel";
             LyricsLabel.Size = new System.Drawing.Size(71, 32);
             LyricsLabel.TabIndex = 1;
@@ -296,9 +308,10 @@
             LyricsInput.BackColor = System.Drawing.Color.DarkGray;
             LyricsInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             LyricsInput.Dock = System.Windows.Forms.DockStyle.Fill;
-            LyricsInput.Location = new System.Drawing.Point(3, 443);
+            LyricsInput.Location = new System.Drawing.Point(4, 554);
+            LyricsInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             LyricsInput.Name = "LyricsInput";
-            LyricsInput.Size = new System.Drawing.Size(447, 357);
+            LyricsInput.Size = new System.Drawing.Size(558, 446);
             LyricsInput.TabIndex = 12;
             LyricsInput.Text = "";
             // 
@@ -308,7 +321,8 @@
             ComposersLabel.AutoSize = true;
             ComposersLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             ComposersLabel.ForeColor = System.Drawing.Color.White;
-            ComposersLabel.Location = new System.Drawing.Point(3, 168);
+            ComposersLabel.Location = new System.Drawing.Point(4, 218);
+            ComposersLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             ComposersLabel.Name = "ComposersLabel";
             ComposersLabel.Size = new System.Drawing.Size(133, 32);
             ComposersLabel.TabIndex = 0;
@@ -321,9 +335,10 @@
             ComposersInput.BackColor = System.Drawing.Color.DarkGray;
             ComposersInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             ComposersInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            ComposersInput.Location = new System.Drawing.Point(3, 204);
+            ComposersInput.Location = new System.Drawing.Point(4, 259);
+            ComposersInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             ComposersInput.Name = "ComposersInput";
-            ComposersInput.Size = new System.Drawing.Size(447, 32);
+            ComposersInput.Size = new System.Drawing.Size(558, 32);
             ComposersInput.TabIndex = 4;
             // 
             // tableLayoutPanel2
@@ -342,21 +357,22 @@
             tableLayoutPanel2.Controls.Add(GenresLabel, 0, 8);
             tableLayoutPanel2.Controls.Add(GenresInput, 0, 9);
             tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel2.Location = new System.Drawing.Point(3, 259);
+            tableLayoutPanel2.Location = new System.Drawing.Point(4, 324);
+            tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 11;
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
-            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 40F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new System.Drawing.Size(250, 547);
+            tableLayoutPanel2.Size = new System.Drawing.Size(312, 684);
             tableLayoutPanel2.TabIndex = 11;
             // 
             // SaveButton
@@ -368,10 +384,11 @@
             SaveButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             SaveButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             SaveButton.ForeColor = System.Drawing.Color.White;
-            SaveButton.Location = new System.Drawing.Point(3, 444);
-            SaveButton.MinimumSize = new System.Drawing.Size(150, 100);
+            SaveButton.Location = new System.Drawing.Point(4, 555);
+            SaveButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            SaveButton.MinimumSize = new System.Drawing.Size(188, 125);
             SaveButton.Name = "SaveButton";
-            SaveButton.Size = new System.Drawing.Size(244, 100);
+            SaveButton.Size = new System.Drawing.Size(304, 125);
             SaveButton.TabIndex = 12;
             SaveButton.Tag = "WindowButton";
             SaveButton.Text = "&Save";
@@ -383,7 +400,8 @@
             YearLabel.AutoSize = true;
             YearLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             YearLabel.ForeColor = System.Drawing.Color.White;
-            YearLabel.Location = new System.Drawing.Point(3, 8);
+            YearLabel.Location = new System.Drawing.Point(4, 18);
+            YearLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             YearLabel.Name = "YearLabel";
             YearLabel.Size = new System.Drawing.Size(58, 32);
             YearLabel.TabIndex = 0;
@@ -396,10 +414,11 @@
             YearInput.BackColor = System.Drawing.Color.DarkGray;
             YearInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             YearInput.Font = new System.Drawing.Font("Segoe UI", 13F);
-            YearInput.Location = new System.Drawing.Point(3, 43);
+            YearInput.Location = new System.Drawing.Point(4, 57);
+            YearInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             YearInput.Mask = "9999";
             YearInput.Name = "YearInput";
-            YearInput.Size = new System.Drawing.Size(244, 36);
+            YearInput.Size = new System.Drawing.Size(304, 36);
             YearInput.TabIndex = 5;
             YearInput.ValidatingType = typeof(int);
             // 
@@ -409,7 +428,8 @@
             DiscLabel.AutoSize = true;
             DiscLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             DiscLabel.ForeColor = System.Drawing.Color.White;
-            DiscLabel.Location = new System.Drawing.Point(3, 88);
+            DiscLabel.Location = new System.Drawing.Point(4, 118);
+            DiscLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             DiscLabel.Name = "DiscLabel";
             DiscLabel.Size = new System.Drawing.Size(58, 32);
             DiscLabel.TabIndex = 0;
@@ -420,17 +440,17 @@
             // 
             DiscGrid.ColumnCount = 3;
             DiscGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            DiscGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            DiscGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             DiscGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             DiscGrid.Controls.Add(label1, 1, 0);
             DiscGrid.Controls.Add(DiscInput, 0, 0);
             DiscGrid.Controls.Add(DiscCountInput, 2, 0);
-            DiscGrid.Location = new System.Drawing.Point(0, 120);
+            DiscGrid.Location = new System.Drawing.Point(0, 150);
             DiscGrid.Margin = new System.Windows.Forms.Padding(0);
             DiscGrid.Name = "DiscGrid";
             DiscGrid.RowCount = 1;
             DiscGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            DiscGrid.Size = new System.Drawing.Size(250, 40);
+            DiscGrid.Size = new System.Drawing.Size(312, 50);
             DiscGrid.TabIndex = 6;
             // 
             // label1
@@ -439,9 +459,10 @@
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Segoe UI", 12F);
             label1.ForeColor = System.Drawing.SystemColors.Control;
-            label1.Location = new System.Drawing.Point(118, 6);
+            label1.Location = new System.Drawing.Point(147, 11);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(14, 28);
+            label1.Size = new System.Drawing.Size(17, 28);
             label1.TabIndex = 0;
             label1.Text = "/";
             label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -452,10 +473,11 @@
             DiscInput.BackColor = System.Drawing.Color.DarkGray;
             DiscInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             DiscInput.Font = new System.Drawing.Font("Segoe UI", 13F);
-            DiscInput.Location = new System.Drawing.Point(3, 3);
+            DiscInput.Location = new System.Drawing.Point(4, 7);
+            DiscInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             DiscInput.Mask = "9999";
             DiscInput.Name = "DiscInput";
-            DiscInput.Size = new System.Drawing.Size(109, 36);
+            DiscInput.Size = new System.Drawing.Size(135, 36);
             DiscInput.TabIndex = 5;
             DiscInput.ValidatingType = typeof(int);
             // 
@@ -465,10 +487,11 @@
             DiscCountInput.BackColor = System.Drawing.Color.DarkGray;
             DiscCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             DiscCountInput.Font = new System.Drawing.Font("Segoe UI", 13F);
-            DiscCountInput.Location = new System.Drawing.Point(138, 3);
+            DiscCountInput.Location = new System.Drawing.Point(172, 7);
+            DiscCountInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             DiscCountInput.Mask = "9999";
             DiscCountInput.Name = "DiscCountInput";
-            DiscCountInput.Size = new System.Drawing.Size(109, 36);
+            DiscCountInput.Size = new System.Drawing.Size(136, 36);
             DiscCountInput.TabIndex = 5;
             DiscCountInput.ValidatingType = typeof(int);
             // 
@@ -478,7 +501,8 @@
             TrackLabel.AutoSize = true;
             TrackLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             TrackLabel.ForeColor = System.Drawing.Color.White;
-            TrackLabel.Location = new System.Drawing.Point(3, 168);
+            TrackLabel.Location = new System.Drawing.Point(4, 218);
+            TrackLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             TrackLabel.Name = "TrackLabel";
             TrackLabel.Size = new System.Drawing.Size(68, 32);
             TrackLabel.TabIndex = 0;
@@ -489,17 +513,17 @@
             // 
             TrackGrid.ColumnCount = 3;
             TrackGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            TrackGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            TrackGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             TrackGrid.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             TrackGrid.Controls.Add(label3, 1, 0);
             TrackGrid.Controls.Add(TrackInput, 0, 0);
             TrackGrid.Controls.Add(TrackCountInput, 2, 0);
-            TrackGrid.Location = new System.Drawing.Point(0, 200);
+            TrackGrid.Location = new System.Drawing.Point(0, 250);
             TrackGrid.Margin = new System.Windows.Forms.Padding(0);
             TrackGrid.Name = "TrackGrid";
             TrackGrid.RowCount = 1;
             TrackGrid.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            TrackGrid.Size = new System.Drawing.Size(250, 40);
+            TrackGrid.Size = new System.Drawing.Size(312, 50);
             TrackGrid.TabIndex = 6;
             // 
             // label3
@@ -508,9 +532,10 @@
             label3.AutoSize = true;
             label3.Font = new System.Drawing.Font("Segoe UI", 12F);
             label3.ForeColor = System.Drawing.SystemColors.Control;
-            label3.Location = new System.Drawing.Point(118, 6);
+            label3.Location = new System.Drawing.Point(147, 11);
+            label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(14, 28);
+            label3.Size = new System.Drawing.Size(17, 28);
             label3.TabIndex = 0;
             label3.Text = "/";
             label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -521,10 +546,11 @@
             TrackInput.BackColor = System.Drawing.Color.DarkGray;
             TrackInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             TrackInput.Font = new System.Drawing.Font("Segoe UI", 13F);
-            TrackInput.Location = new System.Drawing.Point(3, 3);
+            TrackInput.Location = new System.Drawing.Point(4, 7);
+            TrackInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             TrackInput.Mask = "9999";
             TrackInput.Name = "TrackInput";
-            TrackInput.Size = new System.Drawing.Size(109, 36);
+            TrackInput.Size = new System.Drawing.Size(135, 36);
             TrackInput.TabIndex = 5;
             TrackInput.ValidatingType = typeof(int);
             // 
@@ -534,10 +560,11 @@
             TrackCountInput.BackColor = System.Drawing.Color.DarkGray;
             TrackCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             TrackCountInput.Font = new System.Drawing.Font("Segoe UI", 13F);
-            TrackCountInput.Location = new System.Drawing.Point(138, 3);
+            TrackCountInput.Location = new System.Drawing.Point(172, 7);
+            TrackCountInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             TrackCountInput.Mask = "9999";
             TrackCountInput.Name = "TrackCountInput";
-            TrackCountInput.Size = new System.Drawing.Size(109, 36);
+            TrackCountInput.Size = new System.Drawing.Size(136, 36);
             TrackCountInput.TabIndex = 5;
             TrackCountInput.ValidatingType = typeof(int);
             // 
@@ -547,7 +574,8 @@
             CopyrightLabel.AutoSize = true;
             CopyrightLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             CopyrightLabel.ForeColor = System.Drawing.Color.White;
-            CopyrightLabel.Location = new System.Drawing.Point(3, 248);
+            CopyrightLabel.Location = new System.Drawing.Point(4, 318);
+            CopyrightLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             CopyrightLabel.Name = "CopyrightLabel";
             CopyrightLabel.Size = new System.Drawing.Size(119, 32);
             CopyrightLabel.TabIndex = 0;
@@ -560,9 +588,10 @@
             CopyrightInput.BackColor = System.Drawing.Color.DarkGray;
             CopyrightInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             CopyrightInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            CopyrightInput.Location = new System.Drawing.Point(3, 284);
+            CopyrightInput.Location = new System.Drawing.Point(4, 359);
+            CopyrightInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             CopyrightInput.Name = "CopyrightInput";
-            CopyrightInput.Size = new System.Drawing.Size(244, 32);
+            CopyrightInput.Size = new System.Drawing.Size(304, 32);
             CopyrightInput.TabIndex = 4;
             // 
             // CloseButton
@@ -573,9 +602,10 @@
             CloseButton.Cursor = System.Windows.Forms.Cursors.Hand;
             CloseButton.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            CloseButton.Location = new System.Drawing.Point(671, 3);
+            CloseButton.Location = new System.Drawing.Point(840, 4);
+            CloseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             CloseButton.Name = "CloseButton";
-            CloseButton.Size = new System.Drawing.Size(44, 45);
+            CloseButton.Size = new System.Drawing.Size(54, 56);
             CloseButton.TabIndex = 3;
             CloseButton.Tag = "WindowButton";
             CloseButton.UseVisualStyleBackColor = false;
@@ -586,8 +616,8 @@
             MainWIndowHead.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             MainWIndowHead.ColumnCount = 2;
             MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             MainWIndowHead.Controls.Add(WindowTitleLabel, 0, 0);
             MainWIndowHead.Controls.Add(CloseButton, 1, 0);
             MainWIndowHead.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -596,7 +626,7 @@
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.Size = new System.Drawing.Size(718, 51);
+            MainWIndowHead.Size = new System.Drawing.Size(898, 64);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
             // 
@@ -609,10 +639,10 @@
             WindowTitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             WindowTitleLabel.ForeColor = System.Drawing.Color.White;
             WindowTitleLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            WindowTitleLabel.Location = new System.Drawing.Point(5, 0);
-            WindowTitleLabel.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            WindowTitleLabel.Location = new System.Drawing.Point(6, 0);
+            WindowTitleLabel.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
             WindowTitleLabel.Name = "WindowTitleLabel";
-            WindowTitleLabel.Size = new System.Drawing.Size(663, 51);
+            WindowTitleLabel.Size = new System.Drawing.Size(830, 64);
             WindowTitleLabel.TabIndex = 0;
             WindowTitleLabel.Tag = "Title";
             WindowTitleLabel.Text = "Another Media Player - Track edition";
@@ -631,20 +661,21 @@
             GlobalTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             GlobalTableLayoutPanel.Name = "GlobalTableLayoutPanel";
             GlobalTableLayoutPanel.RowCount = 2;
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            GlobalTableLayoutPanel.Size = new System.Drawing.Size(720, 863);
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            GlobalTableLayoutPanel.Size = new System.Drawing.Size(900, 1079);
             GlobalTableLayoutPanel.TabIndex = 2;
             // 
             // TagsEditor
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            ClientSize = new System.Drawing.Size(720, 863);
+            ClientSize = new System.Drawing.Size(900, 1079);
             Controls.Add(GlobalTableLayoutPanel);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            MinimumSize = new System.Drawing.Size(720, 760);
+            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            MinimumSize = new System.Drawing.Size(900, 950);
             Name = "TagsEditor";
             Text = "TagsEditor";
             tableLayoutPanel4.ResumeLayout(false);

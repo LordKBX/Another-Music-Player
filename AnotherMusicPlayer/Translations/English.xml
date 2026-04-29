@@ -248,6 +248,7 @@
     <EditorTagCoverCMPreview><![CDATA[Preview Image]]></EditorTagCoverCMPreview>
     <EditorTagCoverCMClear><![CDATA[Delete Image Cover]]></EditorTagCoverCMClear>
     <EditorTagCoverCMAdd><![CDATA[Add/Replace Image]]></EditorTagCoverCMAdd>
+    <EditorTagCoverImagePreview><![CDATA[Cover Preview]]></EditorTagCoverImagePreview>
     <!--#endregion-->
 
     <!--#region LIBRARY RENAME-->
