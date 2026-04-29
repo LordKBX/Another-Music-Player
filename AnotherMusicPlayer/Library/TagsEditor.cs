@@ -496,12 +496,12 @@ namespace AnotherMusicPlayer
                 if (Mode == "track")
                 {
                     if (!System.IO.File.Exists(Files[0])) { return (false, "File not found"); }
-                    using (Tags = TagLib.File.Create(Files[0]))
-                    {
-                        Tags.RemoveTags(TagTypes.AllTags);
-                        Tags.Save();
-                        Tags.Dispose();
-                    }
+                    //using (Tags = TagLib.File.Create(Files[0]))
+                    //{
+                    //    Tags.RemoveTags(TagTypes.Id3v1);
+                    //    Tags.Save();
+                    //    Tags.Dispose();
+                    //}
 
                     using (Tags = TagLib.File.Create(Files[0]))
                     {
