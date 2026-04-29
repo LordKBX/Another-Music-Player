@@ -167,6 +167,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         public MainWindow2()
         {
             InitializeComponent(); InitIcons();
+            this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             SettingsTabLangComboBox.Items.AddRange(App.Languages.ToArray());
             playBackContextMenu = MakePlayBackContextMenu();
 
@@ -752,7 +753,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         Debug.WriteLine(JsonConvert.SerializeObject(err));
                     }
                 }
-                else { bi = FilesTags.MediaPicture(item.Path, App.bdd, true, (Settings.MemoryUsage == 0) ? 150 : 250, (Settings.MemoryUsage == 0) ? 150 : 250); }
+                else { bi = FilesTags.MediaPicture(item.Path, App.bdd, true, /*(Settings.MemoryUsage == 0) ? 150 : */250, /*(Settings.MemoryUsage == 0) ? 150 : */250); }
 
                 if (bi == null) { FileCover.BackgroundImage = Properties.Resources.album_large; }
                 else { FileCover.BackgroundImage = BitmapMagic.BitmapImage2Bitmap(bi); }

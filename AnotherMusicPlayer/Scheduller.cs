@@ -176,7 +176,11 @@ namespace AnotherMusicPlayer
         public SchedullerTaskItemStatus _Status { get; set; }
 
         public string Status { 
-            get { return _Status.ToString(); }
+            get {
+                string st = _Status.ToString();
+                
+                return App.GetTranslation("SchedullerStatus" + st, st); 
+            }
             set { _Status = EnumHelper<SchedullerTaskItemStatus>.Parse2(value) ?? SchedullerTaskItemStatus.Pending; }
         }
 

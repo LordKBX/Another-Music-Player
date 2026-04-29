@@ -368,6 +368,9 @@
     <SchedullerColumnStatus><![CDATA[Status]]></SchedullerColumnStatus>
     <SchedullerColumnAction><![CDATA[Task]]></SchedullerColumnAction>
     <SchedullerCleanupButton><![CDATA[Cleanup finished tasks]]></SchedullerCleanupButton>
+    <SchedullerStatusPending><![CDATA[Pending]]></SchedullerStatusPending>
+    <SchedullerStatusCompleted><![CDATA[Completed]]></SchedullerStatusCompleted>
+    <SchedullerStatusFailed><![CDATA[Failed]]></SchedullerStatusFailed>
     <!--#endregion-->
     
 </ResourceDictionary>

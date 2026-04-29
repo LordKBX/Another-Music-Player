@@ -363,10 +363,13 @@
     <!--#region Scheduller Window -->
     <SchedullerWindowTitle><![CDATA[Liste tâches planifiées]]></SchedullerWindowTitle>
     <SchedullerActionNotFound><![CDATA[Action not found]]></SchedullerActionNotFound>
-  <SchedullerColumnTime><![CDATA[Ajouté le]]></SchedullerColumnTime>
-  <SchedullerColumnStatus><![CDATA[Statut]]></SchedullerColumnStatus>
-  <SchedullerColumnAction><![CDATA[Action]]></SchedullerColumnAction>
-  <SchedullerCleanupButton><![CDATA[Nettoyer fille d'attente]]></SchedullerCleanupButton>
+    <SchedullerColumnTime><![CDATA[Ajouté le]]></SchedullerColumnTime>
+    <SchedullerColumnStatus><![CDATA[Statut]]></SchedullerColumnStatus>
+    <SchedullerColumnAction><![CDATA[Action]]></SchedullerColumnAction>
+    <SchedullerCleanupButton><![CDATA[Nettoyer fille d'attente]]></SchedullerCleanupButton>
+    <SchedullerStatusPending><![CDATA[En attente]]></SchedullerStatusPending>
+    <SchedullerStatusCompleted><![CDATA[Complété]]></SchedullerStatusCompleted>
+    <SchedullerStatusFailed><![CDATA[Échoué]]></SchedullerStatusFailed>
     <!--#endregion-->
     
 
