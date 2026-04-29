@@ -359,6 +359,15 @@
     <PlaylistsWindowAddRadioLabelDescription><![CDATA[Description]]></PlaylistsWindowAddRadioLabelDescription>
     <PlaylistsWindowAddRadioLabelSave><![CDATA[Sauvegarder]]></PlaylistsWindowAddRadioLabelSave>
     <!--#endregion-->
+
+    <!--#region Scheduller Window -->
+    <SchedullerWindowTitle><![CDATA[Liste tâches planifiées]]></SchedullerWindowTitle>
+    <SchedullerActionNotFound><![CDATA[Action not found]]></SchedullerActionNotFound>
+  <SchedullerColumnTime><![CDATA[Ajouté le]]></SchedullerColumnTime>
+  <SchedullerColumnStatus><![CDATA[Statut]]></SchedullerColumnStatus>
+  <SchedullerColumnAction><![CDATA[Action]]></SchedullerColumnAction>
+  <SchedullerCleanupButton><![CDATA[Nettoyer fille d'attente]]></SchedullerCleanupButton>
+    <!--#endregion-->
     
 
 </ResourceDictionary>

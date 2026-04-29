@@ -322,13 +322,13 @@ namespace AnotherMusicPlayer
             SchedullerTaskItem item = App.scheduller.SearchTask("SaveRating", null, FilePath);
             if (item != null) { 
                 item.Details = "" + RatingValue;
-                item.ActionResume = "Save Rating " + RatingValue + " to " + FilePath;
+                item.ActionResume = App.GetTranslation("RatingMessageInfo", "Save Rating $1 to $2").Replace("$1", "" + RatingValue).Replace("$2", FilePath);
             }
             else 
             {
                 App.scheduller.AddTask(new SchedullerTaskItem(){ 
                     Action = "SaveRating",//EditorTagSaveInfo
-                    ActionResume = App.GetTranslation("EditorTagSaveInfo", "Save Rating $1 to $2").Replace("$1", ""+RatingValue).Replace("$2", FilePath),
+                    ActionResume = App.GetTranslation("RatingMessageInfo", "Save Rating $1 to $2").Replace("$1", ""+RatingValue).Replace("$2", FilePath),
                     Details = "" + RatingValue,
                     File = FilePath,
                     Time = DateTime.Now,

@@ -156,6 +156,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 window.SettingsTabEqualizerComboBox.Items[16] = App.GetTranslation("ParamsEqualizerPresets_Soft");
                 window.SettingsTabEqualizerComboBox.Items[17] = App.GetTranslation("ParamsEqualizerPresets_SoftRock");
                 window.SettingsTabEqualizerComboBox.Items[18] = App.GetTranslation("ParamsEqualizerPresets_Techno");
+
+                App.scheduller.Translation();
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }

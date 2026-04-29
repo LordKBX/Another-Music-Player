@@ -27,6 +27,7 @@ namespace AnotherMusicPlayer
         {
             InitializeComponent();
             AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
+            // Exemple of task item
             //schedullerTaskItemBindingSource.Add(new SchedullerTaskItem() // Add test data
             //{
             //    Action = "AAA",
@@ -40,6 +41,8 @@ namespace AnotherMusicPlayer
 
             this.FormClosing += Scheduller_FormClosing;
             this.StartPosition = FormStartPosition.CenterParent;
+
+            Translation();
         }
 
         private void Scheduller_FormClosing(object? sender, FormClosingEventArgs e)
@@ -116,7 +119,7 @@ namespace AnotherMusicPlayer
                         else
                         {
                             item._Status = SchedullerTaskItemStatus.Failed;
-                            item.ActionResume += " - Action not found";
+                            item.ActionResume += " - " + App.GetTranslation("SchedullerActionNotFound", "Action not found");
                         }
                     }
                 });
@@ -151,6 +154,16 @@ namespace AnotherMusicPlayer
         {
             return _functionalities.ContainsKey(actionName);
         }
+
+        public void Translation()
+        {
+            this.Text = App.GetTranslation("SchedullerWindowTitle");
+            this.timeDataGridViewTextBoxColumn.HeaderText = App.GetTranslation("SchedullerColumnTime", "Time");
+            this.statusDataGridViewTextBoxColumn.HeaderText = App.GetTranslation("SchedullerColumnStatus", "Status");
+            this.actionDataGridViewTextBoxColumn.HeaderText = App.GetTranslation("SchedullerColumnAction", "Action");
+            this.button1.Text = App.GetTranslation("SchedullerCleanupButton", "Cleanup finished tasks");
+        }
+
     }
 
     public class SchedullerTaskItem
