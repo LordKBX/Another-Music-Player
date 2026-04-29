@@ -327,8 +327,8 @@ namespace AnotherMusicPlayer
             else 
             {
                 App.scheduller.AddTask(new SchedullerTaskItem(){ 
-                    Action = "SaveRating",
-                    ActionResume = "Save Rating " + RatingValue + " to " + FilePath,
+                    Action = "SaveRating",//EditorTagSaveInfo
+                    ActionResume = App.GetTranslation("EditorTagSaveInfo", "Save Rating $1 to $2").Replace("$1", ""+RatingValue).Replace("$2", FilePath),
                     Details = "" + RatingValue,
                     File = FilePath,
                     Time = DateTime.Now,

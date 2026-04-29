@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
@@ -496,7 +497,7 @@ namespace AnotherMusicPlayer
             App.scheduller.AddTask(new SchedullerTaskItem()
             {
                 Action = "SaveTags",
-                ActionResume = "Save Tags for " + Files.ToArray(),
+                ActionResume = App.GetTranslation("EditorTagSaveInfo", "Save Tags for $$").Replace("$$", string.Join(';', Files)),
                 ExtraData = details,
                 File = string.Join(';', Files),
                 Time = DateTime.Now,

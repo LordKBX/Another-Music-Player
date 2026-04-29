@@ -45,6 +45,8 @@
     <Rating2><![CDATA[Note:]]></Rating2>
     <Lyrics2><![CDATA[Paroles:]]></Lyrics2>
 
+    <RatingMessageInfo><![CDATA[Sauvegarde Note $1 sur $2]]></RatingMessageInfo>
+
     <PlaybackPositionLabel><![CDATA[Total: %X%, Position: %Y%]]></PlaybackPositionLabel>
     <PlaybackPositionLabelRadio><![CDATA[(( Radio - %X% ))]]></PlaybackPositionLabelRadio>
 
@@ -242,6 +244,7 @@
     <EditorTagLabelCopyright><![CDATA[Copyright]]></EditorTagLabelCopyright>
 
     <EditorTagSave><![CDATA[Sauvegarder]]></EditorTagSave>
+    <EditorTagSaveInfo><![CDATA[Sauvegarde des Tags pour $$]]></EditorTagSaveInfo>
     
     <EditorTagCoverTooltip><![CDATA[Glisser ici une nouvelle image pour ajout/remplacement\nou Clicker droit pour plus d'option]]></EditorTagCoverTooltip>
     <EditorTagCoverCMPreview><![CDATA[Apperçus Image]]></EditorTagCoverCMPreview>

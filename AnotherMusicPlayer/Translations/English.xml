@@ -44,6 +44,8 @@
     <Genres2><![CDATA[Genre:]]></Genres2>
     <Rating2><![CDATA[Rating:]]></Rating2>
     <Lyrics2><![CDATA[Lyrics:]]></Lyrics2>
+    
+    <RatingMessageInfo><![CDATA[Save Rating $1 to $2]]></RatingMessageInfo>
 
     <PlaybackPositionLabel><![CDATA[Total: %X%, Position: %Y%]]></PlaybackPositionLabel>
     <PlaybackPositionLabelRadio><![CDATA[(( Radio - %X% ))]]></PlaybackPositionLabelRadio>
@@ -243,6 +245,7 @@
     <EditorTagLabelCopyright><![CDATA[Copyright]]></EditorTagLabelCopyright>
 
     <EditorTagSave><![CDATA[Save]]></EditorTagSave>
+    <EditorTagSaveInfo><![CDATA[Save Tags for $$]]></EditorTagSaveInfo>
     
     <EditorTagCoverTooltip><![CDATA[Drop cover image for add/replacement\nor click right for more options]]></EditorTagCoverTooltip>
     <EditorTagCoverCMPreview><![CDATA[Preview Image]]></EditorTagCoverCMPreview>
