@@ -286,7 +286,7 @@
 
     <PlayListsContextMenuPlayListPlay><![CDATA[Lire la liste]]></PlayListsContextMenuPlayListPlay>
     <PlayListsContextMenuPlayListPlayShuffled><![CDATA[Lire la liste ordre aléatoire]]></PlayListsContextMenuPlayListPlayShuffled>
-    <PlayListsContextMenuPlayListPlayAsSorted><![CDATA[Lire lise dans l'ordre affiché]]></PlayListsContextMenuPlayListPlayAsSorted>
+    <PlayListsContextMenuPlayListPlayAsSorted><![CDATA[Lire liste dans l'ordre affiché]]></PlayListsContextMenuPlayListPlayAsSorted>
     <PlayListsContextMenuPlayListAddCustom><![CDATA[Ajouter une liste]]></PlayListsContextMenuPlayListAddCustom>
     <PlayListsContextMenuPlayListDeleteCustom><![CDATA[Supprimer la liste]]></PlayListsContextMenuPlayListDeleteCustom>
     <PlayListsContextMenuPlayListRenameCustom><![CDATA[Renommer la liste]]></PlayListsContextMenuPlayListRenameCustom>
