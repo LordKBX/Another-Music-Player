@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -31,6 +32,9 @@ namespace AnotherMusicPlayer
                 else if (cm.Items[i].Name == "PlayListPlayShuffled" && 
                     (otype == PlayListsNodeContextMenuType.Auto || otype == PlayListsNodeContextMenuType.CustomNode))
                 { cm.Items[i].Click += (otype == PlayListsNodeContextMenuType.CustomNode)? NodeContextMenu_PlayShuffledCustom : NodeContextMenu_PlayShuffled; }
+                else if (cm.Items[i].Name == "PlayListPlayAsSorted" && 
+                    (otype == PlayListsNodeContextMenuType.Auto || otype == PlayListsNodeContextMenuType.CustomNode))
+                { cm.Items[i].Click += NodeContextMenu_PlaySorted; }
                 // Custom part
                 else if (cm.Items[i].Name == "PlayListCustomDelete" && (otype == PlayListsNodeContextMenuType.CustomNode))
                 { cm.Items[i].Click += NodeContextMenu_DeleteCustom; }
@@ -140,6 +144,65 @@ namespace AnotherMusicPlayer
             if (data <= 0) { Debug.WriteLine("ER 2"); return; }
 
             OpenCustomPlaylist(data, true, true);
+        }
+
+        private int Comparison<PlayListItem>(PlayListItem x, PlayListItem y)
+        {
+            return 0;
+        }
+
+        private void NodeContextMenu_PlaySorted(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Parent.PlayListsTabDataGridView.DataSource == null) { return; }
+                if (Parent.PlayListsTabDataGridView.DataSource.GetType() != typeof(SortableBindingList<PlayListsLineItem>)) { return; }
+
+                var sortedCol = Parent.PlayListsTabDataGridView.SortedColumn.DataPropertyName;
+                SortOrder sortOrder = Parent.PlayListsTabDataGridView.SortOrder;
+
+                Debug.WriteLine("sortedCol = " + sortedCol);
+                Debug.WriteLine("sortOrder = " + sortOrder.ToString());
+
+                if (sortedCol == "Rating") { sortedCol = "RatingValue"; }
+                if (sortedCol == "Duration") { sortedCol = "DurationValue"; }
+
+                List<PlayListsLineItem> list = ((SortableBindingList<PlayListsLineItem>)Parent.PlayListsTabDataGridView.DataSource).ToList();
+                List<PlayListsLineItem> list2 = new List<PlayListsLineItem>();
+                foreach (PlayListsLineItem item in list) {
+                    list2.Add((PlayListsLineItem)item.Clone());
+                }
+                list.Clear();
+                List<string> props = new List<string>() { "PlayCount", "Name", "Artists", "Album", "DurationValue", "RatingValue" };
+                if (props.Contains(sortedCol))
+                {
+                    props.Remove(sortedCol);
+                    props.Insert(0, sortedCol);
+                }
+                list2.Sort(new Comparison<PlayListsLineItem>(delegate (PlayListsLineItem x, PlayListsLineItem y)
+                {
+                    foreach (string prop in props)
+                    {
+                        int cmp = -1;
+                        if (prop == "PlayCount") { cmp = x.PlayCount.CompareTo(y.PlayCount); }
+                        if (prop == "Name") { cmp = x.Name.CompareTo(y.Name); }
+                        if (prop == "Artists") { cmp = x.Artists.CompareTo(y.Artists); }
+                        if (prop == "Album") { cmp = x.Album.CompareTo(y.Album); }
+                        if (prop == "DurationValue") { cmp = x.DurationValue.CompareTo(y.DurationValue); }
+                        if (prop == "RatingValue") { cmp = x.RatingValue.CompareTo(y.RatingValue); }
+                        if (cmp != 0) { return cmp * (sortOrder == SortOrder.Descending ? -1 : 1); }
+                    }
+                    return 0;
+                }));
+
+
+                List<string> paths = new List<string>();
+                foreach (PlayListsLineItem pitem in list2) { paths.Add(pitem.Path); }
+                Player.StopAll();
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(paths.ToArray(), false, 0, 0, true);
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
         private void NodeContextMenu_DeleteCustom(object sender, EventArgs e)
@@ -374,6 +437,7 @@ namespace AnotherMusicPlayer
         // Items
         public ToolStripItem PlayListPlay = null; // For Auto & Custom
         public ToolStripItem PlayListPlayShuffled = null; // For Auto & Custom
+        public ToolStripItem PlayListPlayAsSorted = null; // For Auto & Custom
 
         public ToolStripItem PlayListCustomDelete = null;
         public ToolStripItem PlayListCustomAdd = null;
@@ -400,6 +464,7 @@ namespace AnotherMusicPlayer
             // For Auto & Custom
             PlayListPlay = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlay"), Icons.FromIconKind(IconKind.PlaylistPlay, ButtonIconSize, DefaultBrush));
             PlayListPlayShuffled = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayShuffled"), Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush));
+            PlayListPlayAsSorted = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted"), Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush));
             
             PlayListCustomDelete = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListDeleteCustom"), Icons.FromIconKind(IconKind.PlaylistRemove, ButtonIconSize, DefaultBrush));
             PlayListCustomAdd = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListAddCustom"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
@@ -418,6 +483,7 @@ namespace AnotherMusicPlayer
 
             PlayListPlay.Name = nameof(PlayListPlay);
             PlayListPlayShuffled.Name = nameof(PlayListPlayShuffled);
+            PlayListPlayAsSorted.Name = nameof(PlayListPlayAsSorted);
             PlayListCustomDelete.Name = nameof(PlayListCustomDelete);
             PlayListCustomAdd.Name = nameof(PlayListCustomAdd);
             PlayListCustomRename.Name = nameof(PlayListCustomRename);
@@ -439,6 +505,8 @@ namespace AnotherMusicPlayer
             PlayListPlay.Image = Icons.FromIconKind(IconKind.PlaylistPlay, ButtonIconSize, DefaultBrush);
             PlayListPlayShuffled.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayShuffled");
             PlayListPlayShuffled.Image = Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush);
+            PlayListPlayAsSorted.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted");
+            PlayListPlayAsSorted.Image = Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush);
 
             PlayListCustomDelete.Text = App.GetTranslation("PlayListsContextMenuPlayListDeleteCustom");
             PlayListCustomDelete.Image = Icons.FromIconKind(IconKind.PlaylistRemove, ButtonIconSize, DefaultBrush);

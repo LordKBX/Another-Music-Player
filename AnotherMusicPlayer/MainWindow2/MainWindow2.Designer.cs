@@ -287,7 +287,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 62F));
-            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 75F));
+            GlobalTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 65F));
             GlobalTableLayoutPanel.Size = new Size(1236, 860);
             GlobalTableLayoutPanel.TabIndex = 0;
             // 
@@ -413,12 +413,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel1.Controls.Add(panel1, 2, 0);
             tableLayoutPanel1.Controls.Add(playbackProgressBar, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
-            tableLayoutPanel1.Location = new Point(1, 784);
+            tableLayoutPanel1.Location = new Point(1, 794);
             tableLayoutPanel1.Margin = new Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 1;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new Size(1234, 75);
+            tableLayoutPanel1.Size = new Size(1234, 65);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // DisplayPlaybackPosition
@@ -427,7 +427,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             DisplayPlaybackPosition.AutoSize = true;
             DisplayPlaybackPosition.Font = new Font("Segoe UI", 12F);
             DisplayPlaybackPosition.ForeColor = Color.White;
-            DisplayPlaybackPosition.Location = new Point(4, 23);
+            DisplayPlaybackPosition.Location = new Point(4, 18);
             DisplayPlaybackPosition.Margin = new Padding(4, 0, 4, 0);
             DisplayPlaybackPosition.Name = "DisplayPlaybackPosition";
             DisplayPlaybackPosition.Size = new Size(142, 28);
@@ -442,7 +442,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             panel1.Location = new Point(1084, 0);
             panel1.Margin = new Padding(0);
             panel1.Name = "panel1";
-            panel1.Size = new Size(150, 75);
+            panel1.Size = new Size(150, 65);
             panel1.TabIndex = 0;
             // 
             // GripButton
@@ -455,7 +455,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GripButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 30, 30);
             GripButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
             GripButton.FlatStyle = FlatStyle.Flat;
-            GripButton.Location = new Point(124, 49);
+            GripButton.Location = new Point(124, 39);
             GripButton.Margin = new Padding(0);
             GripButton.Name = "GripButton";
             GripButton.Size = new Size(26, 30);
@@ -471,7 +471,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             DisplayPlaybackSize.Location = new Point(0, 0);
             DisplayPlaybackSize.Margin = new Padding(4, 0, 4, 0);
             DisplayPlaybackSize.Name = "DisplayPlaybackSize";
-            DisplayPlaybackSize.Size = new Size(150, 75);
+            DisplayPlaybackSize.Size = new Size(150, 65);
             DisplayPlaybackSize.TabIndex = 0;
             DisplayPlaybackSize.Text = "00:00";
             DisplayPlaybackSize.TextAlign = ContentAlignment.MiddleCenter;
@@ -480,7 +480,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             playbackProgressBar.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             playbackProgressBar.ForeColor = Color.White;
-            playbackProgressBar.Location = new Point(150, 22);
+            playbackProgressBar.Location = new Point(150, 17);
             playbackProgressBar.Margin = new Padding(0);
             playbackProgressBar.MaxValue = 100000;
             playbackProgressBar.MinimumSize = new Size(0, 31);
@@ -504,7 +504,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, 656F));
-            tableLayoutPanel2.Size = new Size(1234, 657);
+            tableLayoutPanel2.Size = new Size(1234, 667);
             tableLayoutPanel2.TabIndex = 6;
             // 
             // panel3
@@ -515,7 +515,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             panel3.Location = new Point(0, 4);
             panel3.Margin = new Padding(0, 4, 0, 0);
             panel3.Name = "panel3";
-            panel3.Size = new Size(1159, 653);
+            panel3.Size = new Size(1159, 663);
             panel3.TabIndex = 1;
             // 
             // TabControler
@@ -532,7 +532,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             TabControler.Location = new Point(0, 0);
             TabControler.Margin = new Padding(0);
             TabControler.Name = "TabControler";
-            TabControler.Size = new Size(1157, 651);
+            TabControler.Size = new Size(1157, 661);
             TabControler.TabIndex = 7;
             TabControler.TabPadding = new Padding(0);
             TabControler.TabSize = new Size(100, 50);
@@ -548,7 +548,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTab.Location = new Point(0, 50);
             PlaybackTab.Name = "PlaybackTab";
             PlaybackTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            PlaybackTab.Size = new Size(1157, 602);
+            PlaybackTab.Size = new Size(1157, 612);
             PlaybackTab.Text = " Playback";
             // 
             // PlaybackTabMainTableLayoutPanel
@@ -566,7 +566,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabMainTableLayoutPanel.Name = "PlaybackTabMainTableLayoutPanel";
             PlaybackTabMainTableLayoutPanel.RowCount = 1;
             PlaybackTabMainTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlaybackTabMainTableLayoutPanel.Size = new Size(1157, 602);
+            PlaybackTabMainTableLayoutPanel.Size = new Size(1157, 612);
             PlaybackTabMainTableLayoutPanel.TabIndex = 0;
             // 
             // PlaybackTabLeftTableLayoutPanel
@@ -582,7 +582,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLeftTableLayoutPanel.RowCount = 2;
             PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 188F));
             PlaybackTabLeftTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlaybackTabLeftTableLayoutPanel.Size = new Size(188, 600);
+            PlaybackTabLeftTableLayoutPanel.Size = new Size(188, 610);
             PlaybackTabLeftTableLayoutPanel.TabIndex = 1;
             // 
             // PlaybackTabLeftBottomPanel
@@ -593,7 +593,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLeftBottomPanel.Location = new Point(0, 188);
             PlaybackTabLeftBottomPanel.Margin = new Padding(0);
             PlaybackTabLeftBottomPanel.Name = "PlaybackTabLeftBottomPanel";
-            PlaybackTabLeftBottomPanel.Size = new Size(188, 412);
+            PlaybackTabLeftBottomPanel.Size = new Size(188, 422);
             PlaybackTabLeftBottomPanel.TabIndex = 0;
             // 
             // PlaybackTabLeftBottomFlowLayoutPanel
@@ -815,7 +815,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel4.RowCount = 2;
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             tableLayoutPanel4.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel4.Size = new Size(966, 600);
+            tableLayoutPanel4.Size = new Size(966, 610);
             tableLayoutPanel4.TabIndex = 2;
             // 
             // PlaybackPositionLabel
@@ -854,7 +854,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabDataGridView.ShowCellErrors = false;
             PlaybackTabDataGridView.ShowEditingIcon = false;
             PlaybackTabDataGridView.ShowRowErrors = false;
-            PlaybackTabDataGridView.Size = new Size(958, 542);
+            PlaybackTabDataGridView.Size = new Size(958, 552);
             PlaybackTabDataGridView.TabIndex = 3;
             // 
             // SelectedColumn
@@ -2422,7 +2422,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Absolute, 59F));
             tableLayoutPanel3.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new Size(75, 657);
+            tableLayoutPanel3.Size = new Size(75, 667);
             tableLayoutPanel3.TabIndex = 6;
             // 
             // BtnScheduller
@@ -2596,7 +2596,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadata.Controls.Add(pictureBox1, 0, 1);
             GridScanMetadata.Controls.Add(GridScanMetadataNb, 0, 2);
             GridScanMetadata.Dock = DockStyle.Bottom;
-            GridScanMetadata.Location = new Point(0, 508);
+            GridScanMetadata.Location = new Point(0, 518);
             GridScanMetadata.Margin = new Padding(0);
             GridScanMetadata.Name = "GridScanMetadata";
             GridScanMetadata.RowCount = 3;
@@ -2647,14 +2647,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             // LyricsTextBox
             // 
-            LyricsTextBox.Anchor = AnchorStyles.Left | AnchorStyles.Right;
             LyricsTextBox.AutoSize = true;
             LyricsTextBox.BackColor = Color.DimGray;
+            LyricsTextBox.Dock = DockStyle.Fill;
             LyricsTextBox.ForeColor = Color.White;
-            LyricsTextBox.Location = new Point(5, 740);
-            LyricsTextBox.Margin = new Padding(4, 0, 4, 0);
+            LyricsTextBox.Location = new Point(5, 736);
+            LyricsTextBox.Margin = new Padding(4, 4, 4, 0);
             LyricsTextBox.Name = "LyricsTextBox";
-            LyricsTextBox.Size = new Size(1226, 25);
+            LyricsTextBox.Size = new Size(1226, 58);
             LyricsTextBox.TabIndex = 7;
             LyricsTextBox.TextAlign = ContentAlignment.MiddleCenter;
             // 
