@@ -99,6 +99,11 @@ namespace AnotherMusicPlayer
         /// <summary> List of potential path for the Ffmpeg Executable </summary>
         public static string[] FfmpegPaths { get { return (_FfmpegPaths != null) ? _FfmpegPaths.ToArray() : null; } }
 
+        /// <summary> List of potential path for the mp3gain Executable </summary>
+        private static List<string> _mp3gainPaths = null;
+        /// <summary> List of potential path for the mp3gain Executable </summary>
+        public static string[] mp3gainPaths { get { return (_mp3gainPaths != null) ? _mp3gainPaths.ToArray() : null; } }
+
         private static PlayerStatus _LatestPlayerStatus = PlayerStatus.Stop;
         public static PlayerStatus LatestPlayerStatus { get{ return _LatestPlayerStatus; } }
 
@@ -127,7 +132,12 @@ namespace AnotherMusicPlayer
                 AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg-win32-static.exe",
                 AppDomain.CurrentDomain.BaseDirectory + sep + "ffmpeg.exe"
             };
-
+            _mp3gainPaths = new List<string>() {
+                Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData) + sep + App.AppName + sep + "mp3gain.exe",
+                AppDomain.CurrentDomain.BaseDirectory + sep + App.AppName + sep + "mp3gain.exe",
+                new DirectoryInfo(AppDomain.CurrentDomain.BaseDirectory).Parent.Parent.Parent.Parent.Parent.FullName + sep + "mp3gain.exe"
+            };
+            //AnotherMusicPlayer\bin\x64\Debug\net8.0-windows7.0
 
             var name = "PATH";
             var scope = EnvironmentVariableTarget.Process; // or User

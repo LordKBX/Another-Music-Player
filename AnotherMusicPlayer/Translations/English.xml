@@ -63,6 +63,7 @@
     <BtnLibToolTip><![CDATA[App Media Base]]></BtnLibToolTip>
     <BtnDebugToolTip><![CDATA[Debug Export Vars]]></BtnDebugToolTip>
 
+    <PlayingQueueCMInfo><![CDATA[Media Info]]></PlayingQueueCMInfo>
     <PlayingQueueCMPlay><![CDATA[Play Track]]></PlayingQueueCMPlay>
     <PlayingQueueCMRemove><![CDATA[Remove from Queue]]></PlayingQueueCMRemove>
     <PlayingQueueCMEdit><![CDATA[Edit Track]]></PlayingQueueCMEdit>

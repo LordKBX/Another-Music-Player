@@ -8,11 +8,16 @@ using NAudio.Wave;
 
 namespace AnotherMusicPlayer
 {
-    class EqualizerBand
+    public class EqualizerBand:ICloneable
     {
         public float Frequency { get; set; }
         public float Gain { get; set; }
         public float Bandwidth { get; set; }
+
+        public object Clone()
+        {
+            return new EqualizerBand() { Frequency = Frequency, Gain = Gain, Bandwidth = Bandwidth };
+        }
     }
 
     /// <summary>
@@ -57,6 +62,13 @@ namespace AnotherMusicPlayer
 
         public void Update()
         {
+            updated = true;
+            CreateFilters();
+        }
+
+        public void UpdateBand(float Frequency, float Gain)
+        {
+
             updated = true;
             CreateFilters();
         }
@@ -116,6 +128,17 @@ namespace AnotherMusicPlayer
                     new EqualizerBand {Bandwidth = 0.8f, Frequency = 14000, Gain = 0},
                     new EqualizerBand {Bandwidth = 0.8f, Frequency = 16000, Gain = 0}
                 };
+        }
+
+        /// <summary> return an updated equalizer bands array </summary>
+        public static EqualizerBand[] GetUpdatedEqualizerGlobal(float Gain)
+        {
+            EqualizerBand[] bands = (EqualizerBand[])EqualizerBands.Clone();
+            for (int i = 0; i < bands.Length; i++)
+            {
+                try { bands[i].Gain += (Gain * 0.1f); } catch { }
+            }
+            return bands;
         }
 
         /// <summary> update an equalizer band Gain value </summary>

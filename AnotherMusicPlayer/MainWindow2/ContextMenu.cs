@@ -22,7 +22,16 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayBackContextMenu cm = new PlayBackContextMenu();
             for (int i = 0; i < cm.Items.Count; i++)
             {
-                if (cm.Items[i].Name == "PlayTrack")
+                if (cm.Items[i].Name == "MediaInfo")
+                {
+                    cm.Items[i].Click += (object sender, EventArgs e) => {
+                        if (App.win1.PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
+                        int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
+                        MediaInfo mi = new MediaInfo( ((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[id].DataBoundItem).Path );
+                        mi.ShowDialog();
+                    };
+                }
+                else if (cm.Items[i].Name == "PlayTrack")
                 {
                     cm.Items[i].Click += (object sender, EventArgs e) => {
                         if (App.win1.PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
@@ -104,6 +113,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private int ButtonIconSize = 32;
 
         // ITEMS
+        public ToolStripItem MediaInfo = null;
         public ToolStripItem PlayTrack = null;
         public ToolStripItem RemoveTrack = null;
         public ToolStripItem EditTrack = null;
@@ -116,10 +126,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             RenderMode = ToolStripRenderMode.System;
 
+            MediaInfo = Items.Add(App.GetTranslation("PlayingQueueCMInfo"), Icons.FromIconKind(IconKind.InformationVariantCircleOutline, ButtonIconSize, DefaultBrush));
             PlayTrack = Items.Add(App.GetTranslation("PlayingQueueCMPlay"), Icons.FromIconKind(IconKind.PlayCircle, ButtonIconSize, DefaultBrush));
             RemoveTrack = Items.Add(App.GetTranslation("PlayingQueueCMRemove"), Icons.FromIconKind(IconKind.PlaylistMinus, ButtonIconSize, DefaultBrush));
             EditTrack = Items.Add(App.GetTranslation("PlayingQueueCMEdit"), Icons.FromIconKind(IconKind.FileEdit, ButtonIconSize, DefaultBrush));
 
+            MediaInfo.Name = nameof(MediaInfo);
             PlayTrack.Name = nameof(PlayTrack);
             RemoveTrack.Name = nameof(RemoveTrack);
             EditTrack.Name = nameof(EditTrack);
@@ -128,6 +140,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         public void Update()
         {
             DefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor(_ForeColor));
+
+            MediaInfo.ForeColor = _ForeColor;
+            MediaInfo.Text = App.GetTranslation("PlayingQueueCMInfo");
+            MediaInfo.Image = Icons.FromIconKind(IconKind.InformationVariantCircleOutline, ButtonIconSize, DefaultBrush);
 
             PlayTrack.ForeColor = _ForeColor;
             PlayTrack.Text = App.GetTranslation("PlayingQueueCMPlay");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using NAudio.Wave;
+using NAudio.Wave.SampleProviders;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,34 +17,41 @@ namespace AnotherMusicPlayer
         private static PowerModes LatestPowerMode = PowerModes.StatusChange;
         private static bool DoResume = false;
 
-        private static Dictionary<string, float> averageVolumes = new Dictionary<string, float>();
+        private static Dictionary<string, float> FilesGain = new Dictionary<string, float>();
 
-        private static float GetAverageVolumePlaylist() 
+        private static float GetAverageGain() 
         {
             double tot = 0;
             int ncout = 0;
-            foreach (KeyValuePair<string,float> kvp in averageVolumes) 
+            foreach (KeyValuePair<string,float> kvp in FilesGain) 
             {
-                if (kvp.Value == -100.0f) { ncout += 1; }
+                if (kvp.Value == 0.0f) { ncout += 1; }
                 else { tot += kvp.Value; }
             }
-            if(averageVolumes.Count - ncout == 0) { return -100.0f; }
-            tot /= (averageVolumes.Count - ncout);
+            if(FilesGain.Count - ncout == 0) { return 0.0f; }
+            tot /= (FilesGain.Count - ncout);
             return float.Parse(tot.ToString());
 
         }
 
-        private static float GetAverageVolumeFile(string FilePath, bool forced = false) 
+        private static float GetFileGain(string FilePath, bool forced = false) 
         {
-            if (FilePath == null || !System.IO.File.Exists(FilePath)) { return -100.0f; }
-            if(!forced && averageVolumes.ContainsKey(FilePath)) { return averageVolumes[FilePath]; }
-            Dictionary<string, object> infodata = App.bdd.DatabaseFileInfo(FilePath);
-            if(infodata == null) { return -100.0f; }
-            if (infodata.ContainsKey("AverageVolume") && GetAverageVolumePlaylist() > -100)
+            string exe = "";
+            foreach (string path in _mp3gainPaths) 
             {
-                return float.Parse(("" + infodata["AverageVolume"]).Replace(".", ","));
+                if (System.IO.File.Exists(path)) { exe = path; break; }
             }
-            return -100.0f;
+            if (exe == "") { return 0; }
+
+            if (FilePath == null || !System.IO.File.Exists(FilePath)) { return 0.0f; }
+            if(!forced && FilesGain.ContainsKey(FilePath)) { return FilesGain[FilePath]; }
+            Dictionary<string, object> infodata = App.bdd.DatabaseFileInfo(FilePath);
+            if(infodata == null) { return 0.0f; }
+            if (infodata.ContainsKey("Gain") && GetAverageGain() != 0)
+            {
+                return float.Parse(("" + infodata["Gain"]).Replace(".", ","));
+            }
+            return 0.0f;
         }
 
         /// <summary> Playing thread </summary>
@@ -56,8 +64,9 @@ namespace AnotherMusicPlayer
                 AudioFileReader audioFile = null;
                 Equalizer equalizer = null;
                 WaveOutEvent outputDevice = null;
+                VolumeSampleProvider outputSampleProvider = null;
                 long msval = 0;
-                float averagevol = 0;
+                float gain = 0;
 
                 int ret = -1; long ret2 = -1;
 
@@ -100,7 +109,23 @@ namespace AnotherMusicPlayer
                     }
                 }
                 catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); PlaylistNext(); return; }
-                equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
+                if (Settings.NormalizeVolume)
+                {
+                    gain = GetFileGain(FilePath);
+                    if (gain == 0.0f)
+                    {
+                        gain = Library.GetGain(FilePath);
+                        string query = "UPDATE files SET Gain = '" + ("" + gain).Replace(".", ",") + "' WHERE Path = '" + FilePath.Replace("'", "''") + "'";
+                        App.bdd.DatabaseTansactionEnd();
+                        App.bdd.DatabaseQuery(query, null, true);
+                        if (FilesGain.ContainsKey(FilePath)) { FilesGain[FilePath] = gain; }
+                        else { FilesGain.Add(FilePath, gain); }
+                    }
+
+                    Debug.WriteLine("Gain: " + gain);
+                }
+                //equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
+                equalizer = new Equalizer((ISampleProvider)audioFile, GetUpdatedEqualizerGlobal(gain));
                 outputDevice = new WaveOutEvent();
 
                 //outputDevice.Init((IWaveProvider)audioFile);
@@ -131,7 +156,7 @@ namespace AnotherMusicPlayer
                     {
                         Debug.WriteLine("REPLAY !!!!");
                         audioFile = new AudioFileReader(FilePath);
-                        equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
+                        equalizer = new Equalizer((ISampleProvider)audioFile, GetUpdatedEqualizerGlobal(gain));
                         outputDevice = new WaveOutEvent();
                         outputDevice.Init(equalizer);
                         if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }
@@ -143,33 +168,6 @@ namespace AnotherMusicPlayer
                     if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); _LatestPlayerStatus = PlayerStatus.Pause; }
                     if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
                     {
-                        if (Settings.NormalizeVolume)
-                        {
-                            averagevol = GetAverageVolumeFile(FilePath);
-                            if (averagevol <= -100.0f)
-                            {
-                                averagevol = Library.GetAverageVolume(FilePath);
-                                string query = "UPDATE files SET AverageVolume = '" + (""+averagevol).Replace(".", ",") + "' WHERE Path = '" + FilePath.Replace("'", "''") + "'";
-                                App.bdd.DatabaseTansactionEnd();
-                                App.bdd.DatabaseQuery(query, null, true);
-                                if (averageVolumes.ContainsKey(FilePath)) { averageVolumes[FilePath] = averagevol; }
-                                else { averageVolumes.Add(FilePath, averagevol); }
-                            }
-                            if (averagevol > -100.0f)
-                            {
-                                Debug.WriteLine("Audio average volume : " + averagevol + "dB");
-                                float ava = GetAverageVolumePlaylist();
-                                Debug.WriteLine("Playlist average volume : " + ava + "dB");
-                                float avc = 1.0f - ((1.0f + (averagevol * 0.1f)) * 0.1f);
-
-                                float calc = 1.0f - ((1.0f + (averagevol * 0.1f)) * 0.1f) - (avc * Math.Abs(ava) * 0.012f);
-                                if (calc > 1.0) { calc = 1.0f; }
-
-                                audioFile.Volume = calc;
-                                Debug.WriteLine("Audio vol : " + (audioFile.Volume * 100) + "%");
-                            }
-                        }
-
                         outputDevice.Play(); CurrentFile = FilePath;
                         PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
                         evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
@@ -234,7 +232,11 @@ namespace AnotherMusicPlayer
                 // EndOfStreamException thread cleanup process 
                 if (outputDevice != null) { 
                     try { outputDevice.Stop(); } catch (Exception) { } 
-                    outputDevice.Dispose(); outputDevice = null; 
+                    outputDevice.Dispose(); outputDevice = null;
+                }
+                if (outputSampleProvider != null)
+                {
+                    try { outputSampleProvider = null; } catch (Exception) { }
                 }
                 if (equalizer != null) { equalizer = null; }
                 if (audioFile != null) { 

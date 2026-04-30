@@ -50,6 +50,13 @@ namespace AnotherMusicPlayer
             return endPath;
         }
 
+        public static string GetMp3GainPath()
+        {
+            string endPath = null;
+            foreach (string path in _mp3gainPaths) { if (System.IO.File.Exists(path)) { endPath = path; break; } }
+            return endPath;
+        }
+
         /// <summary> Private interface for file convertion usign ffmpeg birary </summary>
         private static async Task<bool> ConvExe(string FileInput, string FileOutput, Int32 quality = 0)
         {

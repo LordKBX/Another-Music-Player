@@ -33,8 +33,8 @@ namespace AnotherMusicPlayer
                 if (TestFile(file))
                 {
                     PlayList.Add(file);
-                    if (!averageVolumes.ContainsKey(file)) { averageVolumes.Add(file, GetAverageVolumeFile(file, true)); }
-                    else { averageVolumes[file] = GetAverageVolumeFile(file, true); }
+                    if (!FilesGain.ContainsKey(file)) { FilesGain.Add(file, GetFileGain(file, true)); }
+                    else { FilesGain[file] = GetFileGain(file, true); }
                     
                     goodFiles += 1;
                 }

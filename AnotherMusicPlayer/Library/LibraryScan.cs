@@ -84,12 +84,12 @@ namespace AnotherMusicPlayer
             _Scanning = false;
         }
 
-        public static readonly float FailledAverageVolume = -100.0f;
-        public static float GetAverageVolume(string file)
+        public static readonly float FailledAverageGain = 0.0f;
+        public static float GetGain(string file)
         {
             char sep = System.IO.Path.DirectorySeparatorChar;
-            string exePath = Player.GetFfmpegPath();
-            if (exePath == null) { return FailledAverageVolume; }
+            string exePath = Player.GetMp3GainPath();
+            if (exePath == null) { return FailledAverageGain; }
 
             // Use ProcessStartInfo class
             ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -98,13 +98,12 @@ namespace AnotherMusicPlayer
             startInfo.UseShellExecute = false;
             startInfo.FileName = exePath;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            startInfo.Arguments = "-i \"" + file + "\" -filter:a volumedetect -f null /dev/null";
+            startInfo.Arguments = "/q /s r /o \"" + file + "\"";
 
             StringBuilder standardOutput = new StringBuilder();
             startInfo.RedirectStandardError = true;
 
-            //Debug.WriteLine("--> GetAverageVolume");
-            //Debug.WriteLine(startInfo.FileName + " " + startInfo.Arguments);
+            Debug.WriteLine(startInfo.FileName + " " + startInfo.Arguments);
             try
             {
                 // Start the process with the info we specified.
@@ -120,43 +119,34 @@ namespace AnotherMusicPlayer
                     // make sure not to miss out on any remaindings.
                     standardOutput.Append(exeProcess.StandardOutput.ReadToEnd());
 
-                    //Debug.WriteLine("Output => " + standardOutput.ToString());
                     string[] lines = standardOutput.ToString().Replace("\r","").Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
-                    foreach (string line in lines) {
-                        if (line.StartsWith("[Parsed_volumedetect_") && line.Contains("mean_volume: ")) 
+                    Debug.WriteLine("Output => " + string.Join('\n', lines));
+                    if (lines.Length > 1) {
+                        string[] blocks = lines[1].Split('\t');
+                        if (blocks.Length > 1)
                         {
-                            //Debug.WriteLine(line);
-                            string[] parts = line.Split("mean_volume: ");
-                            if (parts.Length > 1)
-                            {
-                                string valuePart = parts[1].Trim().Split(' ')[0].Replace(".", ",");
-                                if (float.TryParse(valuePart, out float averageVolume))
-                                {
-                                    return averageVolume;
-                                }
-                            }
+                            return float.Parse(blocks[1]);
                         }
                     }
 
-
-                    return FailledAverageVolume;
+                    return FailledAverageGain;
                 }
             }
             catch (Exception e)
             {
                 Debug.WriteLine("--> ConvExe ERROR : " + JsonConvert.SerializeObject(e));
             }
-            return FailledAverageVolume;
+            return FailledAverageGain;
         }
 
         private void InsertBddFile(FileInfo fi = null, bool commit = false)
         {
             if (fi == null) { return; }
             //float averageVolume = GetAverageVolume(fi.FullName);
-            float averageVolume = -100.0f;
+            float averageVolume = 0.0f;
 
             string query = "INSERT INTO files(Path, Name, Album, Performers, Composers, Genres, Copyright, AlbumArtists, Lyrics, Duration, Size, Disc, " +
-                "DiscCount, Track, TrackCount, Year, Rating, AverageVolume, InsertionDate, LastUpdate) VALUES('";
+                "DiscCount, Track, TrackCount, Year, Rating, Gain, InsertionDate, LastUpdate) VALUES('";
             query += Database.EscapeString(fi.FullName) + "',";
             query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0','0.0','"+ ("" + averageVolume).Replace(".", ",") + "',";
 
