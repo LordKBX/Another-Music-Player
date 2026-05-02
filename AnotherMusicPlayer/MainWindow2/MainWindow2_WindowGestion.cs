@@ -241,7 +241,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     Debug.WriteLine("Width = " + Width);
                     Debug.WriteLine("Height = " + Height);
 
-                    this.ResizeRedraw = true;
+                    this.ResizeRedraw = false;
                 }
             }
             catch (Exception ex)
@@ -252,7 +252,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         }
         public void SizerMouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
         {
-            try { IsResizing = false; }
+            try { IsResizing = false; this.ResizeRedraw = true; }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);

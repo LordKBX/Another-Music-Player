@@ -135,6 +135,7 @@ namespace AnotherMusicPlayer
             PlaylistPositionChanged(evt2);
 
             List<string> querys = new List<string>() { "DELETE FROM queue;" };
+            App.bdd.DatabaseQuerys(querys.ToArray(), true);
         }
 
         /// <summary> Read playlist </summary>

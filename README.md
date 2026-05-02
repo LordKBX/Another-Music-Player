@@ -48,7 +48,7 @@ This is a personal project to create a Music player written with C# SDK .Net 8.0
 * Multiple automatic PlayList & Custom PlayLists
 * WebRadios Support
 
-### Supported Language  <span style="display:block;color:#108F8F;font-size:10px;font-style:italic;">(If your system language is French auto select french à first starup)</span>
+### Supported Languages  <span style="display:block;color:#108F8F;font-size:10px;font-style:italic;">(If your system language is French auto select french à first starup)</span>
 * English
 * French
 
