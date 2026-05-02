@@ -497,7 +497,7 @@ namespace AnotherMusicPlayer
             if (item == null) { Debug.WriteLine("item = null"); return null; }
 
             float gain = Library.FailledAverageGain;
-            if (item.TrackGain == double.NaN) { gain = Library.GetGain(file); }
+            if (item.TrackGain == double.NaN || (""+item.TrackGain) == "NaN" || item.TrackGain == Library.FailledAverageGain) { gain = Library.GetGain(file); }
             else { gain = float.Parse((""+item.TrackGain).Replace(".", ",")); }
 
                 string query = "UPDATE files SET Name='" + EscapeString(item.Name ?? fi.Name);
