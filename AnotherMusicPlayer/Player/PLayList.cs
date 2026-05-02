@@ -58,7 +58,7 @@ namespace AnotherMusicPlayer
             evt2.Position = PlayListIndex;
             PlaylistPositionChanged?.Invoke(evt2);
 
-            SavePlaylist();
+            SavePlaylist(false);
 
             return (goodFiles > 0) ? true : false;
         }
@@ -97,10 +97,10 @@ namespace AnotherMusicPlayer
             evt2.Position = PlayListIndex;
             PlaylistPositionChanged(evt2);
 
-            SavePlaylist();
+            SavePlaylist(false);
         }
 
-        private static void SavePlaylist()
+        public static void SavePlaylist(bool save_indexes = true)
         {
             int lindex = 1;
             List<string> querys = new List<string>() { "DELETE FROM queue;" };
@@ -116,6 +116,12 @@ namespace AnotherMusicPlayer
                 querys.Add(query);
             }
             App.bdd.DatabaseQuerys(querys.ToArray(), true);
+            if (save_indexes)
+            {
+                Settings.LastPlaylistIndex = PlayListIndex;
+                Settings.LastPlaylistDuration = Position(null);
+                Settings.SaveSettings().Wait(500);
+            }
         }
 
         /// <summary> Clear playlist </summary>
@@ -136,6 +142,10 @@ namespace AnotherMusicPlayer
 
             List<string> querys = new List<string>() { "DELETE FROM queue;" };
             App.bdd.DatabaseQuerys(querys.ToArray(), true);
+
+            Settings.LastPlaylistIndex = 0;
+            Settings.LastPlaylistDuration = 0;
+            Settings.SaveSettings().Wait(500);
         }
 
         /// <summary> Read playlist </summary>
@@ -213,6 +223,10 @@ namespace AnotherMusicPlayer
             PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
             evt.Position = PlayListIndex;
             PlaylistPositionChanged(evt);
+
+            Settings.LastPlaylistIndex = PlayListIndex;
+            Settings.LastPlaylistDuration = 0;
+            Settings.SaveSettings();
         }
 
         /// <summary> Read next index in playlist </summary>
@@ -227,6 +241,10 @@ namespace AnotherMusicPlayer
             PlayerPlaylistPositionChangeParams evt = new PlayerPlaylistPositionChangeParams();
             evt.Position = PlayListIndex;
             PlaylistPositionChanged(evt);
+
+            Settings.LastPlaylistIndex = PlayListIndex;
+            Settings.LastPlaylistDuration = 0;
+            Settings.SaveSettings();
         }
 
         /// <summary> Preload next index in playlist </summary>

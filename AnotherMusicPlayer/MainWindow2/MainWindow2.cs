@@ -339,13 +339,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
         }
 
         private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) {
-            if (Player.Mode == Modes.File) {
-                if (Player.LatestPlayerStatus != PlayerStatus.Stop)
-                {
-                    Settings.LastPlaylistIndex = Player.Index;
-                    Settings.LastPlaylistDuration = Player.Position(null);
-                }
-            }
+            if (Player.Mode == Modes.File) { Player.SavePlaylist(); }
+            else { Player.PlaylistClear(); }
 
             Settings.LastWindowWidth = this.Width;
             Settings.LastWindowHeight = this.Height;

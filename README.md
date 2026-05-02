@@ -45,6 +45,8 @@ This is a personal project to create a Music player written with C# SDK .Net 8.0
 * Library sorted by folder with auto scan for update
 * Conversion for audio files not in the supported formats(mp3;wma;aiff) to mp3(with ffmpeg) with the output quality defined in app parameters (by default 128Kbits/s)
 * Interception of Multimedia shortcuts (Play/Pause, Previous Track, Next Track) on windows
+* Equalizer
+* Volume Normalization / ReplayGain (in option)
 * Multiple automatic PlayList & Custom PlayLists
 * WebRadios Support
 
@@ -95,6 +97,8 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C# S
 * Médiatèque triée par dossier avec auto-scan dossier pour mise à jour
 * Conversion des fichiers audio des formats non supportés(mp3;wma;aiff) vers mp3(via ffmpeg) avec choix de la qualité dans les paramèttres(par défaut 128Kbits/s)
 * Interception des raccourcis Multimédia (Play/Pause, Previous Track, Next Track) spécifiques à windows
+* Equalizer
+* Égalisation du volume / ReplayGain (en option)
 * Listes de lecture généré automatiquement & Liste de lecture personalisées
 * Support WebRadios
 
