@@ -1,6 +1,4 @@
-<span style="display:inline-block;padding:5px 15px;
-background:#FF8000;color:#FFF;
-font-size:45px;font-weight:bolder;">Another Music Player</span>
+# <span style="display:inline-block;padding:5px 15px;background:#FF8000;color:#FFF;font-size:45px;font-weight:bolder;">Another Music Player</span>
 
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/01.png?raw=true" target="_blank" title="Capture 01"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/01.png?raw=true" /></a>
 <a href="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/02.png?raw=true" target="_blank" title="Capture 02"><img src="https://raw.githubusercontent.com/LordKBX/Another-Music-Player/master/Captures/V2/small/02.png?raw=true" /></a>
