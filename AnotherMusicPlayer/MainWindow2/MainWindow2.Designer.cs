@@ -1519,7 +1519,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTab.Location = new Point(0, 50);
             SettingsTab.Name = "SettingsTab";
             SettingsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            SettingsTab.Size = new Size(1157, 602);
+            SettingsTab.Size = new Size(1157, 612);
             SettingsTab.Text = " Settings";
             // 
             // panel2
@@ -1532,7 +1532,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             panel2.Location = new Point(0, 0);
             panel2.Margin = new Padding(0);
             panel2.Name = "panel2";
-            panel2.Size = new Size(1157, 602);
+            panel2.Size = new Size(1157, 612);
             panel2.TabIndex = 0;
             // 
             // flowLayoutPanel1

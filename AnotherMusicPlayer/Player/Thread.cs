@@ -36,22 +36,15 @@ namespace AnotherMusicPlayer
 
         private static float GetFileGain(string FilePath, bool forced = false) 
         {
-            string exe = "";
-            foreach (string path in _mp3gainPaths) 
-            {
-                if (System.IO.File.Exists(path)) { exe = path; break; }
-            }
-            if (exe == "") { return 0; }
-
             if (FilePath == null || !System.IO.File.Exists(FilePath)) { return 0.0f; }
             if(!forced && FilesGain.ContainsKey(FilePath)) { return FilesGain[FilePath]; }
             Dictionary<string, object> infodata = App.bdd.DatabaseFileInfo(FilePath);
-            if(infodata == null) { return 0.0f; }
+            if(infodata == null) { return Library.FailledAverageGain; }
             if (infodata.ContainsKey("Gain") && GetAverageGain() != 0)
             {
                 return float.Parse(("" + infodata["Gain"]).Replace(".", ","));
             }
-            return 0.0f;
+            return Library.FailledAverageGain;
         }
 
         /// <summary> Playing thread </summary>
@@ -112,9 +105,10 @@ namespace AnotherMusicPlayer
                 if (Settings.NormalizeVolume)
                 {
                     gain = GetFileGain(FilePath);
-                    if (gain == 0.0f)
+                    if (gain == Library.FailledAverageGain || gain == float.NaN || ("" + gain) == "NaN")
                     {
                         gain = Library.GetGain(FilePath);
+                        if (gain == float.NaN || ("" + gain) == "NaN") { gain = 0; }
                         string query = "UPDATE files SET Gain = '" + ("" + gain).Replace(".", ",") + "' WHERE Path = '" + FilePath.Replace("'", "''") + "'";
                         App.bdd.DatabaseTansactionEnd();
                         App.bdd.DatabaseQuery(query, null, true);
@@ -123,9 +117,13 @@ namespace AnotherMusicPlayer
                     }
 
                     Debug.WriteLine("Gain: " + gain);
+                    gain = gain * 0.5f;
+
+                    Player.GetUpdatedEqualizerGlobal(gain);
                 }
-                //equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
-                equalizer = new Equalizer((ISampleProvider)audioFile, GetUpdatedEqualizerGlobal(gain));
+                //Settings.EqualizerBand1
+                equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
+                //equalizer = new Equalizer((ISampleProvider)audioFile, GetUpdatedEqualizerGlobal(gain));
                 outputDevice = new WaveOutEvent();
 
                 //outputDevice.Init((IWaveProvider)audioFile);
@@ -156,7 +154,8 @@ namespace AnotherMusicPlayer
                     {
                         Debug.WriteLine("REPLAY !!!!");
                         audioFile = new AudioFileReader(FilePath);
-                        equalizer = new Equalizer((ISampleProvider)audioFile, GetUpdatedEqualizerGlobal(gain));
+                        equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
+                        Player.GetUpdatedEqualizerGlobal(gain);
                         outputDevice = new WaveOutEvent();
                         outputDevice.Init(equalizer);
                         if (!AudioList.ContainsKey(FilePath)) { AudioList.Add(FilePath, audioFile); }

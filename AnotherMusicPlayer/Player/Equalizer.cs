@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows.Input;
 using Microsoft.Win32;
 using NAudio.Dsp;
@@ -131,14 +132,24 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> return an updated equalizer bands array </summary>
-        public static EqualizerBand[] GetUpdatedEqualizerGlobal(float Gain)
+        public static void GetUpdatedEqualizerGlobal(float Gain)
         {
-            EqualizerBand[] bands = (EqualizerBand[])EqualizerBands.Clone();
-            for (int i = 0; i < bands.Length; i++)
-            {
-                try { bands[i].Gain += (Gain * 0.1f); } catch { }
-            }
-            return bands;
+            Player.UpdateEqualizer(0, Settings.EqualizerBand1 + Gain);
+            Player.UpdateEqualizer(1, Settings.EqualizerBand2 + Gain);
+            Player.UpdateEqualizer(2, Settings.EqualizerBand3 + Gain);
+            Player.UpdateEqualizer(3, Settings.EqualizerBand4 + Gain);
+            Player.UpdateEqualizer(4, Settings.EqualizerBand5 + Gain);
+            Player.UpdateEqualizer(5, Settings.EqualizerBand6 + Gain);
+            Player.UpdateEqualizer(6, Settings.EqualizerBand7 + Gain);
+            Player.UpdateEqualizer(7, Settings.EqualizerBand8 + Gain);
+            Player.UpdateEqualizer(8, Settings.EqualizerBand9 + Gain);
+            Player.UpdateEqualizer(9, Settings.EqualizerBand10 + Gain);
+            //Debug.WriteLine("--------");
+            //Debug.WriteLine("New EQ");
+            //for (int i = 0; i < EqualizerBands.Length; i++)
+            //{
+            //    Debug.WriteLine("Band: " + EqualizerBands[i].Frequency + " | Gain: " + EqualizerBands[i].Gain);
+            //}
         }
 
         /// <summary> update an equalizer band Gain value </summary>

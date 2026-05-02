@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Win32;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -93,6 +94,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                 window.SettingsTabConvModeComboBox.SelectedIndexChanged += SettingsTabConvModeComboBox_SelectedIndexChanged;
                 window.SettingsTabConvQualityComboBox.SelectedIndexChanged += SettingsTabConvQualityComboBox_SelectedIndexChanged;
+                window.SettingsTabLibraryFolderButton.Click += SettingsTabLibraryFolderButton_Click;
                 window.SettingsTabLibraryFolderTextBox.TextChanged += SettingsTabLibraryFolderTextBox_TextChanged;
                 window.SettingsTabLibraryUnixHiddenFileComboBox.SelectedIndexChanged += SettingsTabLibraryUnixHiddenFileComboBox_SelectedIndexChanged;
                 window.SettingsTabLibraryWindowsHiddenFileComboBox.SelectedIndexChanged += SettingsTabLibraryWindowsHiddenFileComboBox_SelectedIndexChanged;
@@ -220,6 +222,20 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 Settings.LibFolderShowHiden = rez;
                 Settings.SaveSettings();
                 App.win1.library.DisplayPath(App.win1.library.CurrentPath);
+            }
+        }
+
+        private static void SettingsTabLibraryFolderButton_Click(object sender, EventArgs e)
+        {
+            OpenFolderDialog dlg = new OpenFolderDialog();
+
+            dlg.InitialDirectory = Settings.LibFolder;
+            dlg.Multiselect = false;
+            if (dlg.ShowDialog() == true) {
+                window.SettingsTabLibraryFolderTextBox.Text = dlg.FolderName;
+                Settings.LibFolder = dlg.FolderName;
+                Settings.SaveSettings();
+                App.win1.library.InvokeScan();
             }
         }
 

@@ -55,6 +55,7 @@ namespace AnotherMusicPlayer
         public double Rating { get; set; }
         public Bitmap RatingDisplay { get { return Rating2.DrawImage(Rating); } }
         public uint PlayCount { get; set; }
+        public double TrackGain { get; set; }
 
         public string InnerUID { get; set; }
 
@@ -73,7 +74,7 @@ namespace AnotherMusicPlayer
                 = "";
             Duration = Size = 0;
             Disc = DiscCount = Track = TrackCount = Year = PlayCount = 0;
-            Rating = 0.0;
+            Rating = 0.0; TrackGain = 0.0f;
 
             InnerUID = Guid.NewGuid().ToString();
         }
@@ -163,6 +164,7 @@ namespace AnotherMusicPlayer
                     item.Track = tags.Tag.Track;
                     item.TrackCount = tags.Tag.TrackCount;
                     item.Year = tags.Tag.Year;
+                    item.TrackGain = tags.Tag.ReplayGainTrackGain;
 
                     TagLib.Tag tag = tags.GetTag(TagLib.TagTypes.Id3v2);
                     byte rate1 = 0;

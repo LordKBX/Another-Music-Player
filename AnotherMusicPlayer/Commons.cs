@@ -126,6 +126,13 @@ namespace AnotherMusicPlayer
             return System.Drawing.Color.FromArgb(ncolor.A, ncolor.R, ncolor.G, ncolor.B);
         }
 
+        static public bool StringContainsUnicode(string input)
+        {
+            const int MaxAnsiCode = 255;
+
+            return input.Any(c => c > MaxAnsiCode);
+        }
+
         static public void PurgeMemory() 
         {
             GC.Collect();

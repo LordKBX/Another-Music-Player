@@ -383,10 +383,13 @@ namespace AnotherMusicPlayer
             if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
             else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
             if (parent == null) { return; }
-
-            string[] tracks = (string[])parent.Tag;
-            Player.PlaylistClear();
-            Player.PlaylistEnqueue(tracks, false, 0, 0, true);
+            try
+            {
+                string[] tracks = (string[])parent.Tag;
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(tracks, false, 0, 0, true);
+            }
+            catch (Exception ex) { }
         }
 
         private void CM_PlayFolder(object sender, EventArgs e)

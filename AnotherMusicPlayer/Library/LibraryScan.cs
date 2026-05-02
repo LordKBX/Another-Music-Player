@@ -1,17 +1,10 @@
-﻿using AnotherMusicPlayer.MainWindow2Space;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace AnotherMusicPlayer
 {
@@ -84,9 +77,34 @@ namespace AnotherMusicPlayer
             _Scanning = false;
         }
 
-        public static readonly float FailledAverageGain = 0.0f;
+        public static readonly float FailledAverageGain = 0.01f;
         public static float GetGain(string file)
         {
+            Debug.WriteLine("Libray.GetGain(string file)");
+            if (!File.Exists(file)) { return FailledAverageGain; }
+            float calc = 0;
+            if (file.EndsWith(".mp3")) { calc = GetGainMp3(file); }
+
+
+            Debug.WriteLine("Mp3Gain rez = " + calc);
+            
+            return calc;
+        }
+
+        public static float GetGainMp3(string file)
+        {
+            if (!file.EndsWith(".mp3")) { return FailledAverageGain; }
+            if (!File.Exists(file)) { return FailledAverageGain; }
+            bool needTempFile = false;
+            bool deletedTempFile = false;
+
+            if (AnotherMusicPlayer.Common.StringContainsUnicode(file)) {
+                needTempFile = true;
+                string tmp = Path.GetTempPath() + Path.DirectorySeparatorChar + Guid.NewGuid().ToString() + ".mp3";
+                File.Copy(file, tmp, true);
+                file = tmp;
+            }
+
             char sep = System.IO.Path.DirectorySeparatorChar;
             string exePath = Player.GetMp3GainPath();
             if (exePath == null) { return FailledAverageGain; }
@@ -95,6 +113,7 @@ namespace AnotherMusicPlayer
             ProcessStartInfo startInfo = new ProcessStartInfo();
             startInfo.CreateNoWindow = true;
             startInfo.RedirectStandardOutput = true;
+            startInfo.RedirectStandardInput = false;
             startInfo.UseShellExecute = false;
             startInfo.FileName = exePath;
             startInfo.WindowStyle = ProcessWindowStyle.Hidden;
@@ -120,6 +139,8 @@ namespace AnotherMusicPlayer
                     standardOutput.Append(exeProcess.StandardOutput.ReadToEnd());
 
                     string[] lines = standardOutput.ToString().Replace("\r","").Split(new string[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+                    if (needTempFile) { File.Delete(file); deletedTempFile = true; }
+
                     Debug.WriteLine("Output => " + string.Join('\n', lines));
                     if (lines.Length > 1) {
                         string[] blocks = lines[1].Split('\t');
@@ -136,19 +157,18 @@ namespace AnotherMusicPlayer
             {
                 Debug.WriteLine("--> ConvExe ERROR : " + JsonConvert.SerializeObject(e));
             }
+            if (needTempFile && !deletedTempFile) { File.Delete(file); }
             return FailledAverageGain;
         }
 
         private void InsertBddFile(FileInfo fi = null, bool commit = false)
         {
             if (fi == null) { return; }
-            //float averageVolume = GetAverageVolume(fi.FullName);
-            float averageVolume = 0.0f;
 
             string query = "INSERT INTO files(Path, Name, Album, Performers, Composers, Genres, Copyright, AlbumArtists, Lyrics, Duration, Size, Disc, " +
                 "DiscCount, Track, TrackCount, Year, Rating, Gain, InsertionDate, LastUpdate) VALUES('";
             query += Database.EscapeString(fi.FullName) + "',";
-            query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0','0.0','"+ ("" + averageVolume).Replace(".", ",") + "',";
+            query += "'" + Database.EscapeString(Path.GetFileName(fi.Name)) + "',NULL,NULL,NULL,NULL,NULL,NULL,NULL,'0','0','0','0','0','0','0','0.0','"+ ("" + 0.0).Replace(".", ",") + "',";
 
             query += "'" + fi.CreationTimeUtc.ToFileTime() + "',";
             query += "'" + fi.LastWriteTimeUtc.ToFileTime() + "')";
@@ -175,5 +195,12 @@ namespace AnotherMusicPlayer
             Parent.setMetadataScanningState(false);
             Debug.WriteLine("--> ScanTags END <--");
         }
+    }
+
+    public class SampleSingle {
+        public int Rate { get; set; }
+        public int ChannelCount { get; set; }
+        public int[] Data { get; set; }
+        public SampleSingle(int rate, int channelCount) { Rate = rate; ChannelCount = channelCount; }
     }
 }

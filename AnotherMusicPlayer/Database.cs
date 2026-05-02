@@ -220,6 +220,7 @@ namespace AnotherMusicPlayer
         /// <summary> execute SQL query </summary>
         public Dictionary<string, Dictionary<string, object>> DatabaseQuery(string query, string index = null, bool AutoCommit = false)
         {
+            //Debug.WriteLine("DatabaseQuery => " + query);
             Dictionary<string, Dictionary<string, object>> ret = null;
             try
             {
@@ -237,20 +238,33 @@ namespace AnotherMusicPlayer
                     string id = "";
                     while (sqlite_datareader.Read())
                     {
-                        NameValueCollection row = sqlite_datareader.GetValues();
-
-                        row.AllKeys.Contains(index);
-                        if (index != null)
+                        if (sqlite_datareader.HasRows)
                         {
-                            if (row.AllKeys.Contains(index))
+                            NameValueCollection row = sqlite_datareader.GetValues();
+
+                            row.AllKeys.Contains(index);
+                            if (index != null)
                             {
-                                id = row[index];
+                                if (row.AllKeys.Contains(index))
+                                {
+                                    id = row[index];
+                                }
                             }
+                            if (id == "") { id = "" + line; }
+                            if (ret.ContainsKey(id)) { line += 1; continue; }
+                            try { ret.Add(id, Database_NameValueCollectionToDictionary(row, false)); }
+                            //catch (System.ExecutionEngineException err)
+                            //{
+                            //    Debug.WriteLine("DatabaseQuery => " + query);
+                            //    Debug.WriteLine("DatabaseQuery => " + JsonConvert.SerializeObject(err));
+                            //}
+                            catch (Exception ex1)
+                            {
+                                Debug.WriteLine("DatabaseQuery => " + query);
+                                Debug.WriteLine(ex1.Message + "\r\n" + ex1.StackTrace);
+                            }
+                            //Debug.WriteLine(line.ToString());
                         }
-                        if (id == "") { id = "" + line; }
-                        if (ret.ContainsKey(id)) { line += 1; continue; }
-                        try { ret.Add(id, Database_NameValueCollectionToDictionary(row, false)); } catch { }
-                        //Debug.WriteLine(line.ToString());
                         line += 1;
                     }
                 }
@@ -267,6 +281,11 @@ namespace AnotherMusicPlayer
                     }
                 }
             }
+            //catch (System.ExecutionEngineException err)
+            //{
+            //    Debug.WriteLine("DatabaseQuery => " + query);
+            //    Debug.WriteLine("DatabaseQuery => " + JsonConvert.SerializeObject(err));
+            //}
             catch (Exception err)
             {
                 Debug.WriteLine("DatabaseQuery => " + query);
@@ -472,11 +491,16 @@ namespace AnotherMusicPlayer
         {
             if (file == null) { return null; }
             if (!System.IO.File.Exists(file)) { return null; }
-
+            
             FileInfo fi = new FileInfo(file);
             MediaItem item = FilesTags.MediaInfo(file, false);
             if (item == null) { Debug.WriteLine("item = null"); return null; }
-            string query = "UPDATE files SET Name='" + EscapeString(item.Name ?? fi.Name);
+
+            float gain = Library.FailledAverageGain;
+            if (item.TrackGain == double.NaN) { gain = Library.GetGain(file); }
+            else { gain = float.Parse((""+item.TrackGain).Replace(".", ",")); }
+
+                string query = "UPDATE files SET Name='" + EscapeString(item.Name ?? fi.Name);
             if (item.Album != null && item.Album.Trim() != "") query += "', Album='" + EscapeString(item.Album);
             if (item.Performers != null && item.Performers.Trim() != "") query += "', Performers='" + EscapeString(item.Performers);
             if (item.Composers != null && item.Composers.Trim() != "") query += "', Composers='" + EscapeString(item.Composers);
@@ -492,6 +516,7 @@ namespace AnotherMusicPlayer
                 + "', TrackCount='" + item.TrackCount
                 + "', Year='" + item.Year
                 + "', Rating='" + item.Rating
+                + "', Gain='" + gain
                 + "', LastUpdate='" + fi.LastWriteTimeUtc.ToFileTime()
                 + "' WHERE Path='" + EscapeString(file) + "'";
 
