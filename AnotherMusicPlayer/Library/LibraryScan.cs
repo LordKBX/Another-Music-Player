@@ -196,11 +196,4 @@ namespace AnotherMusicPlayer
             Debug.WriteLine("--> ScanTags END <--");
         }
     }
-
-    public class SampleSingle {
-        public int Rate { get; set; }
-        public int ChannelCount { get; set; }
-        public int[] Data { get; set; }
-        public SampleSingle(int rate, int channelCount) { Rate = rate; ChannelCount = channelCount; }
-    }
 }

@@ -236,9 +236,9 @@ namespace AnotherMusicPlayer
                     sqlite_datareader = sqlite_cmd.ExecuteReader();
                     int line = 0;
                     string id = "";
-                    while (sqlite_datareader.Read())
+                    if (sqlite_datareader.HasRows)
                     {
-                        if (sqlite_datareader.HasRows)
+                        while (sqlite_datareader.Read())
                         {
                             NameValueCollection row = sqlite_datareader.GetValues();
 
@@ -264,8 +264,8 @@ namespace AnotherMusicPlayer
                                 Debug.WriteLine(ex1.Message + "\r\n" + ex1.StackTrace);
                             }
                             //Debug.WriteLine(line.ToString());
-                        }
                         line += 1;
+                        }
                     }
                 }
                 else
