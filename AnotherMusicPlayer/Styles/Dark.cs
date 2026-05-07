@@ -37,6 +37,9 @@ namespace AnotherMusicPlayer.Styles
         public static Color GlobalButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 110, 110, 110);
         public static Color GlobalButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 80, 80, 80);
 
+        public static Color ValidateButtonBackColor = Color.ForestGreen;
+        public static Color ValidateButtonForeColor = Color.White;
+
         public static Cursor GripButtonCursor = Cursors.SizeNWSE;
         public static Color GripButtonBackColor = GlobalBackColor;
 

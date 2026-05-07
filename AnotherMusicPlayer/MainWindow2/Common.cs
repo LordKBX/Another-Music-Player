@@ -126,6 +126,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         parent.BackColor = App.style.GetColor("GlobalTrackIconBackColor");
                         ((Button)parent).Cursor = Cursors.Default;
                     }
+                    else if (parent.Width == parent.Height && (Tags.Contains("ValidateButton") || parent.Name == "ValidateButton"))
+                    { 
+                        parent.BackColor = App.style.GetColor("ValidateButtonBackColor");
+                        parent.ForeColor = App.style.GetColor("ValidateButtonForeColor");
+                        ((Button)parent).Cursor = Cursors.Default;
+                    }
                     else
                     {
                         ((Button)parent).Cursor = App.style.GetValue<Cursor>("GlobalButtonCursor", Dark.GlobalButtonCursor);

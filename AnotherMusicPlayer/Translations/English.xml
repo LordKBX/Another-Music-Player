@@ -23,6 +23,7 @@
     <DialogBoxBtnCancel><![CDATA[Cancel]]></DialogBoxBtnCancel>
     <DialogBoxBtnYes><![CDATA[Yes]]></DialogBoxBtnYes>
     <DialogBoxBtnNo><![CDATA[No]]></DialogBoxBtnNo>
+    <DialogBoxBtnSave><![CDATA[Save]]></DialogBoxBtnSave>
     <!--#endregion-->
 
     <Title><![CDATA[Title]]></Title>
@@ -302,6 +303,7 @@
     <PlayListsContextMenuPlayListRenameRadioCategory><![CDATA[Edit Category]]></PlayListsContextMenuPlayListRenameRadioCategory>
     
     <PlayListsContextMenuTrackDelete><![CDATA[Delete Track]]></PlayListsContextMenuTrackDelete>
+    <PlayListsContextMenuOpenFolder><![CDATA[Display Folder]]></PlayListsContextMenuOpenFolder>
     
     <PlayListsContextMenuPlayListDeleteConfirmTitle><![CDATA[Deleting Playlist]]></PlayListsContextMenuPlayListDeleteConfirmTitle>
     <PlayListsContextMenuPlayListDeleteConfirmMessage><![CDATA[Do you confirm the suppression of PlayList '%X%' ?]]></PlayListsContextMenuPlayListDeleteConfirmMessage>

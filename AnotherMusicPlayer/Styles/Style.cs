@@ -33,6 +33,9 @@ namespace AnotherMusicPlayer.Styles
         public static Color GlobalButtonFlatAppearanceMouseDownBackColor;
         public static Color GlobalButtonFlatAppearanceMouseOverBackColor;
 
+        public static Color ValidateButtonBackColor;
+        public static Color ValidateButtonForeColor;
+
         public static Cursor GripButtonCursor;
         public static Color GripButtonBackColor;
 

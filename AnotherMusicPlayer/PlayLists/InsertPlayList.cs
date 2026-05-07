@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using AnotherMusicPlayer.Styles;
+using Newtonsoft.Json;
 using System;
-using System.Windows.Forms;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Drawing;
 using System.Linq;
 using System.Reflection;
-using System.Diagnostics;
-using Newtonsoft.Json;
+using System.Windows.Forms;
 using System.Windows.Markup;
 
 namespace AnotherMusicPlayer
@@ -24,14 +26,22 @@ namespace AnotherMusicPlayer
             if (clearTracks.Count < 1) { throw new Exception("No valid Tracks in parametters"); }
 
             InitializeComponent();
-            AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
+
+            this.StartPosition = FormStartPosition.CenterParent;
+
+            this.BackColor = App.style.GetColor("WindowBackColor");
+            this.Font = App.style.GetValue<Font>("GlobalFont", Dark.GlobalFont);
+
+            ValidateButton.BackColor = App.style.GetColor("ValidateButtonBackColor", Dark.ValidateButtonBackColor);
+            ValidateButton.ForeColor = App.style.GetColor("ValidateButtonForeColor", Dark.ValidateButtonForeColor);
+
             Owner = parent;
             DialogResult = DialogResult.Cancel;
 
             Text = TitleLabel.Text = App.GetTranslation("PlaylistsWindowAddIntoPlaylistTitle");
 
             CustomListLabel.Text = App.GetTranslation("PlaylistsWindowAddIntoPlaylistName");
-            ValidateButton.Text = App.GetTranslation("PlaylistsWindowAddSaveButton");
+            ValidateButton.Text = App.GetTranslation("DialogBoxBtnSave");
 
             ListPlayLists();
             if (CustomListComboBox.Items.Count > 0) { CustomListComboBox.SelectedItem = 0; }
@@ -69,7 +79,7 @@ namespace AnotherMusicPlayer
         private void CustomListButton_Click(object sender, EventArgs e)
         {
             EditPlayList epl = new EditPlayList(Owner, null) { StartPosition = FormStartPosition.CenterParent };
-            if (epl.ShowDialog() == DialogResult.OK) { ListPlayLists(); }
+            if (epl.ShowDialog() == DialogResult.OK) { ListPlayLists(epl.originItem.Name); }
         }
 
         private void ValidateButton_Click(object sender, System.EventArgs e)

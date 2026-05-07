@@ -1,6 +1,6 @@
 ﻿namespace AnotherMusicPlayer
 {
-    partial class MediaInfo
+    partial class MediaInfoWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -104,7 +104,6 @@
             // 
             // flowLayoutPanelLeft
             // 
-            flowLayoutPanelLeft.AutoScroll = true;
             flowLayoutPanelLeft.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             flowLayoutPanelLeft.Dock = System.Windows.Forms.DockStyle.Fill;
             flowLayoutPanelLeft.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
@@ -112,8 +111,9 @@
             flowLayoutPanelLeft.Name = "flowLayoutPanelLeft";
             flowLayoutPanelLeft.Size = new System.Drawing.Size(244, 227);
             flowLayoutPanelLeft.TabIndex = 5;
+            flowLayoutPanelLeft.WrapContents = false;
             // 
-            // MediaInfo
+            // MediaInfoWindow
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -122,7 +122,7 @@
             Controls.Add(tableLayoutPanel4);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             MinimumSize = new System.Drawing.Size(1000, 530);
-            Name = "MediaInfo";
+            Name = "MediaInfoWindow";
             Text = "MediaInfo";
             tableLayoutPanel4.ResumeLayout(false);
             tableLayoutPanel1.ResumeLayout(false);

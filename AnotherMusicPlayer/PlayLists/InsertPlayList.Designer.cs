@@ -56,11 +56,11 @@
             GlobalTableLayoutPanel.Name = "GlobalTableLayoutPanel";
             GlobalTableLayoutPanel.Padding = new System.Windows.Forms.Padding(1);
             GlobalTableLayoutPanel.RowCount = 3;
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            GlobalTableLayoutPanel.Size = new System.Drawing.Size(648, 168);
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            GlobalTableLayoutPanel.Size = new System.Drawing.Size(810, 210);
             GlobalTableLayoutPanel.TabIndex = 1;
             // 
             // ValidateButton
@@ -70,12 +70,13 @@
             ValidateButton.Cursor = System.Windows.Forms.Cursors.Hand;
             ValidateButton.Dock = System.Windows.Forms.DockStyle.Right;
             ValidateButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            ValidateButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            ValidateButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             ValidateButton.ForeColor = System.Drawing.Color.White;
-            ValidateButton.Location = new System.Drawing.Point(444, 110);
-            ValidateButton.MinimumSize = new System.Drawing.Size(200, 0);
+            ValidateButton.Location = new System.Drawing.Point(555, 138);
+            ValidateButton.Margin = new System.Windows.Forms.Padding(4);
+            ValidateButton.MinimumSize = new System.Drawing.Size(250, 0);
             ValidateButton.Name = "ValidateButton";
-            ValidateButton.Size = new System.Drawing.Size(200, 54);
+            ValidateButton.Size = new System.Drawing.Size(250, 67);
             ValidateButton.TabIndex = 4;
             ValidateButton.Tag = "WindowButton";
             ValidateButton.Text = "&Validate";
@@ -86,8 +87,8 @@
             MainWIndowHead.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             MainWIndowHead.ColumnCount = 2;
             MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             MainWIndowHead.Controls.Add(TitleLabel, 0, 0);
             MainWIndowHead.Controls.Add(CloseButton, 1, 0);
             MainWIndowHead.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -96,7 +97,7 @@
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.Size = new System.Drawing.Size(646, 51);
+            MainWIndowHead.Size = new System.Drawing.Size(808, 64);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
             // 
@@ -106,13 +107,13 @@
             TitleLabel.AutoSize = true;
             TitleLabel.BackColor = System.Drawing.Color.Transparent;
             TitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            TitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            TitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             TitleLabel.ForeColor = System.Drawing.Color.White;
             TitleLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            TitleLabel.Location = new System.Drawing.Point(5, 0);
-            TitleLabel.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            TitleLabel.Location = new System.Drawing.Point(6, 0);
+            TitleLabel.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new System.Drawing.Size(591, 51);
+            TitleLabel.Size = new System.Drawing.Size(740, 64);
             TitleLabel.TabIndex = 0;
             TitleLabel.Tag = "Title";
             TitleLabel.Text = "Playlist Selection";
@@ -126,9 +127,10 @@
             CloseButton.Cursor = System.Windows.Forms.Cursors.Hand;
             CloseButton.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            CloseButton.Location = new System.Drawing.Point(599, 3);
+            CloseButton.Location = new System.Drawing.Point(750, 4);
+            CloseButton.Margin = new System.Windows.Forms.Padding(4);
             CloseButton.Name = "CloseButton";
-            CloseButton.Size = new System.Drawing.Size(44, 45);
+            CloseButton.Size = new System.Drawing.Size(54, 56);
             CloseButton.TabIndex = 3;
             CloseButton.Tag = "WindowButton";
             CloseButton.UseVisualStyleBackColor = false;
@@ -136,75 +138,84 @@
             // 
             // tableLayoutPanel1
             // 
+            tableLayoutPanel1.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             tableLayoutPanel1.ColumnCount = 3;
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             tableLayoutPanel1.Controls.Add(CustomListLabel, 0, 0);
             tableLayoutPanel1.Controls.Add(CustomListComboBox, 1, 0);
             tableLayoutPanel1.Controls.Add(CustomListButton, 2, 0);
-            tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel1.Location = new System.Drawing.Point(4, 55);
+            tableLayoutPanel1.Location = new System.Drawing.Point(5, 80);
+            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
+            tableLayoutPanel1.MaximumSize = new System.Drawing.Size(0, 39);
+            tableLayoutPanel1.MinimumSize = new System.Drawing.Size(0, 39);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(640, 49);
+            tableLayoutPanel1.Size = new System.Drawing.Size(800, 39);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // CustomListLabel
             // 
-            CustomListLabel.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            CustomListLabel.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             CustomListLabel.AutoSize = true;
-            CustomListLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            CustomListLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             CustomListLabel.ForeColor = System.Drawing.Color.White;
-            CustomListLabel.Location = new System.Drawing.Point(3, 9);
+            CustomListLabel.Location = new System.Drawing.Point(4, 0);
+            CustomListLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             CustomListLabel.Name = "CustomListLabel";
-            CustomListLabel.Size = new System.Drawing.Size(194, 32);
+            CustomListLabel.Size = new System.Drawing.Size(242, 32);
             CustomListLabel.TabIndex = 0;
             CustomListLabel.Tag = "Title";
             CustomListLabel.Text = "label1";
             // 
             // CustomListComboBox
             // 
-            CustomListComboBox.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            CustomListComboBox.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             CustomListComboBox.BackColor = System.Drawing.Color.DarkGray;
             CustomListComboBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             CustomListComboBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            CustomListComboBox.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            CustomListComboBox.Font = new System.Drawing.Font("Segoe UI", 14F);
             CustomListComboBox.FormattingEnabled = true;
-            CustomListComboBox.Location = new System.Drawing.Point(200, 5);
-            CustomListComboBox.Margin = new System.Windows.Forms.Padding(0, 0, 3, 0);
+            CustomListComboBox.Location = new System.Drawing.Point(250, 0);
+            CustomListComboBox.Margin = new System.Windows.Forms.Padding(0, 0, 4, 0);
             CustomListComboBox.Name = "CustomListComboBox";
-            CustomListComboBox.Size = new System.Drawing.Size(387, 39);
+            CustomListComboBox.Size = new System.Drawing.Size(484, 39);
             CustomListComboBox.TabIndex = 1;
             // 
             // CustomListButton
             // 
+            CustomListButton.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             CustomListButton.BackColor = System.Drawing.Color.Gray;
-            CustomListButton.Dock = System.Windows.Forms.DockStyle.Fill;
+            CustomListButton.BackgroundImage = Properties.Resources.add_white;
+            CustomListButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            CustomListButton.FlatAppearance.BorderColor = System.Drawing.Color.White;
             CustomListButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            CustomListButton.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            CustomListButton.Font = new System.Drawing.Font("Segoe UI", 10F);
             CustomListButton.ForeColor = System.Drawing.Color.White;
-            CustomListButton.Location = new System.Drawing.Point(590, 4);
-            CustomListButton.Margin = new System.Windows.Forms.Padding(0, 4, 0, 5);
+            CustomListButton.Location = new System.Drawing.Point(738, 0);
+            CustomListButton.Margin = new System.Windows.Forms.Padding(0);
+            CustomListButton.MaximumSize = new System.Drawing.Size(39, 39);
+            CustomListButton.MinimumSize = new System.Drawing.Size(39, 39);
             CustomListButton.Name = "CustomListButton";
-            CustomListButton.Size = new System.Drawing.Size(50, 41);
+            CustomListButton.Size = new System.Drawing.Size(39, 39);
             CustomListButton.TabIndex = 2;
-            CustomListButton.Text = ". . . ";
             CustomListButton.UseVisualStyleBackColor = false;
             CustomListButton.Click += CustomListButton_Click;
             // 
             // InsertPlayList
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.White;
-            ClientSize = new System.Drawing.Size(650, 170);
+            ClientSize = new System.Drawing.Size(812, 212);
             Controls.Add(GlobalTableLayoutPanel);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            MaximumSize = new System.Drawing.Size(650, 170);
-            MinimumSize = new System.Drawing.Size(650, 170);
+            Margin = new System.Windows.Forms.Padding(4);
+            MaximumSize = new System.Drawing.Size(812, 212);
+            MinimumSize = new System.Drawing.Size(812, 212);
             Name = "InsertPlayList";
             Padding = new System.Windows.Forms.Padding(1);
             ShowInTaskbar = false;

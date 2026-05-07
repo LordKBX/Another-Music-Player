@@ -59,6 +59,7 @@ namespace AnotherMusicPlayer
                     string[] keys = rez2.Keys.ToArray();
                     index = int.Parse("" + keys[0]); 
                 }
+                index += 1;
                 originItem = new PlayListItem() { FIndex = index, Name = name, Description = description };
                 App.bdd.DatabaseQuery("INSERT INTO playlists(FIndex, Name, Description) Values('"+ index + "', '"+ Database.EscapeString(name) + "', '"+ Database.EscapeString(description) + "')", null, true);
             }

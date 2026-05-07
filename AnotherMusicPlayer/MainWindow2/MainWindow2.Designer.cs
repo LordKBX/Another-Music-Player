@@ -32,10 +32,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            TreeNode treeNode1 = new TreeNode("Automatic");
-            TreeNode treeNode2 = new TreeNode("Recorded");
-            TreeNode treeNode3 = new TreeNode("Web Radio");
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            TreeNode treeNode4 = new TreeNode("Automatic");
+            TreeNode treeNode5 = new TreeNode("Recorded");
+            TreeNode treeNode6 = new TreeNode("Web Radio");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow2));
             GlobalTableLayoutPanel = new TableLayoutPanel();
             MainWIndowHead = new TableLayoutPanel();
@@ -861,8 +861,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SelectedColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             SelectedColumn.DataPropertyName = "Selected";
-            dataGridViewCellStyle1.Font = new Font("Wingdings", 9F);
-            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Wingdings", 9F);
+            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle2;
             SelectedColumn.HeaderText = "";
             SelectedColumn.MinimumWidth = 30;
             SelectedColumn.Name = "SelectedColumn";
@@ -1162,7 +1162,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTab.Location = new Point(0, 50);
             PlayListsTab.Name = "PlayListsTab";
             PlayListsTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            PlayListsTab.Size = new Size(1157, 602);
+            PlayListsTab.Size = new Size(1157, 612);
             PlayListsTab.Text = " PlayLists";
             // 
             // PlayListsTabTableLayoutPanel
@@ -1180,7 +1180,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabTableLayoutPanel.Name = "PlayListsTabTableLayoutPanel";
             PlayListsTabTableLayoutPanel.RowCount = 1;
             PlayListsTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            PlayListsTabTableLayoutPanel.Size = new Size(1157, 602);
+            PlayListsTabTableLayoutPanel.Size = new Size(1157, 612);
             PlayListsTabTableLayoutPanel.TabIndex = 1;
             // 
             // PlaylistsTree
@@ -1197,24 +1197,24 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaylistsTree.Location = new Point(1, 1);
             PlaylistsTree.Margin = new Padding(0);
             PlaylistsTree.Name = "PlaylistsTree";
-            treeNode1.Checked = true;
-            treeNode1.ImageKey = "filter_icon.png";
-            treeNode1.Name = "PlayListsTabTreeNodeAutomatic";
-            treeNode1.SelectedImageKey = "filter_icon.png";
-            treeNode1.Text = "Automatic";
-            treeNode2.Checked = true;
-            treeNode2.ImageKey = "floppy_icon.png";
-            treeNode2.Name = "PlayListsTabTreeNodeRecorded";
-            treeNode2.SelectedImageKey = "floppy_icon.png";
-            treeNode2.Text = "Recorded";
-            treeNode3.Checked = true;
-            treeNode3.ImageKey = "radio_icon.png";
-            treeNode3.Name = "PlayListsTabTreeNodeWebRario";
-            treeNode3.SelectedImageKey = "radio_icon.png";
-            treeNode3.Text = "Web Radio";
-            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
+            treeNode4.Checked = true;
+            treeNode4.ImageKey = "filter_icon.png";
+            treeNode4.Name = "PlayListsTabTreeNodeAutomatic";
+            treeNode4.SelectedImageKey = "filter_icon.png";
+            treeNode4.Text = "Automatic";
+            treeNode5.Checked = true;
+            treeNode5.ImageKey = "floppy_icon.png";
+            treeNode5.Name = "PlayListsTabTreeNodeRecorded";
+            treeNode5.SelectedImageKey = "floppy_icon.png";
+            treeNode5.Text = "Recorded";
+            treeNode6.Checked = true;
+            treeNode6.ImageKey = "radio_icon.png";
+            treeNode6.Name = "PlayListsTabTreeNodeWebRario";
+            treeNode6.SelectedImageKey = "radio_icon.png";
+            treeNode6.Text = "Web Radio";
+            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode5, treeNode6 });
             PlaylistsTree.SelectedImageIndex = 0;
-            PlaylistsTree.Size = new Size(250, 600);
+            PlaylistsTree.Size = new Size(250, 610);
             PlaylistsTree.TabIndex = 0;
             // 
             // PlayListsTabTreeImageList
@@ -1248,8 +1248,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // PlayListsTabSplitContainer1.Panel2
             // 
             PlayListsTabSplitContainer1.Panel2.Controls.Add(PlayListsTabSplitContainer2);
-            PlayListsTabSplitContainer1.Size = new Size(904, 600);
-            PlayListsTabSplitContainer1.SplitterDistance = 112;
+            PlayListsTabSplitContainer1.Size = new Size(904, 610);
+            PlayListsTabSplitContainer1.SplitterDistance = 113;
             PlayListsTabSplitContainer1.SplitterWidth = 1;
             PlayListsTabSplitContainer1.TabIndex = 1;
             // 
@@ -1264,7 +1264,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel5.Name = "tableLayoutPanel5";
             tableLayoutPanel5.RowCount = 1;
             tableLayoutPanel5.RowStyles.Add(new RowStyle(SizeType.Percent, 50F));
-            tableLayoutPanel5.Size = new Size(904, 112);
+            tableLayoutPanel5.Size = new Size(904, 113);
             tableLayoutPanel5.TabIndex = 0;
             // 
             // PlayListsTabVoidLabel
@@ -1296,8 +1296,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             PlayListsTabSplitContainer2.Panel2.AutoScroll = true;
             PlayListsTabSplitContainer2.Panel2.Controls.Add(PlayListsTabRadioPanel);
-            PlayListsTabSplitContainer2.Size = new Size(904, 487);
-            PlayListsTabSplitContainer2.SplitterDistance = 146;
+            PlayListsTabSplitContainer2.Size = new Size(904, 496);
+            PlayListsTabSplitContainer2.SplitterDistance = 148;
             PlayListsTabSplitContainer2.SplitterWidth = 1;
             PlayListsTabSplitContainer2.TabIndex = 2;
             // 
@@ -1321,7 +1321,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayListsTabDataGridView.ShowCellErrors = false;
             PlayListsTabDataGridView.ShowEditingIcon = false;
             PlayListsTabDataGridView.ShowRowErrors = false;
-            PlayListsTabDataGridView.Size = new Size(904, 146);
+            PlayListsTabDataGridView.Size = new Size(904, 148);
             PlayListsTabDataGridView.TabIndex = 0;
             // 
             // ColumnPlayCount

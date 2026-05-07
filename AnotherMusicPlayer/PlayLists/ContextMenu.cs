@@ -7,6 +7,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.IO;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Windows.Forms;
@@ -19,6 +20,7 @@ namespace AnotherMusicPlayer
 {
     public partial class PlayLists
     {
+        #region TreeList NodeContextMenu
         private ContextMenuStrip MakeNodeContextMenu(TreeNode parent, PlayListsNodeContextMenuType otype)
         {
             ContextMenuStrip cm = new PlayListsNodeContextMenu();
@@ -32,9 +34,7 @@ namespace AnotherMusicPlayer
                 else if (cm.Items[i].Name == "PlayListPlayShuffled" && 
                     (otype == PlayListsNodeContextMenuType.Auto || otype == PlayListsNodeContextMenuType.CustomNode))
                 { cm.Items[i].Click += (otype == PlayListsNodeContextMenuType.CustomNode)? NodeContextMenu_PlayShuffledCustom : NodeContextMenu_PlayShuffled; }
-                else if (cm.Items[i].Name == "PlayListPlayAsSorted" && 
-                    (otype == PlayListsNodeContextMenuType.Auto || otype == PlayListsNodeContextMenuType.CustomNode))
-                { cm.Items[i].Click += NodeContextMenu_PlaySorted; }
+                
                 // Custom part
                 else if (cm.Items[i].Name == "PlayListCustomDelete" && (otype == PlayListsNodeContextMenuType.CustomNode))
                 { cm.Items[i].Click += NodeContextMenu_DeleteCustom; }
@@ -151,60 +151,7 @@ namespace AnotherMusicPlayer
             return 0;
         }
 
-        private void NodeContextMenu_PlaySorted(object sender, EventArgs e)
-        {
-            try
-            {
-                if (Parent.PlayListsTabDataGridView.DataSource == null) { return; }
-                if (Parent.PlayListsTabDataGridView.DataSource.GetType() != typeof(SortableBindingList<PlayListsLineItem>)) { return; }
-
-                var sortedCol = Parent.PlayListsTabDataGridView.SortedColumn.DataPropertyName;
-                SortOrder sortOrder = Parent.PlayListsTabDataGridView.SortOrder;
-
-                Debug.WriteLine("sortedCol = " + sortedCol);
-                Debug.WriteLine("sortOrder = " + sortOrder.ToString());
-
-                if (sortedCol == "Rating") { sortedCol = "RatingValue"; }
-                if (sortedCol == "Duration") { sortedCol = "DurationValue"; }
-
-                List<PlayListsLineItem> list = ((SortableBindingList<PlayListsLineItem>)Parent.PlayListsTabDataGridView.DataSource).ToList();
-                List<PlayListsLineItem> list2 = new List<PlayListsLineItem>();
-                foreach (PlayListsLineItem item in list) {
-                    list2.Add((PlayListsLineItem)item.Clone());
-                }
-                list.Clear();
-                List<string> props = new List<string>() { "PlayCount", "Name", "Artists", "Album", "DurationValue", "RatingValue" };
-                if (props.Contains(sortedCol))
-                {
-                    props.Remove(sortedCol);
-                    props.Insert(0, sortedCol);
-                }
-                list2.Sort(new Comparison<PlayListsLineItem>(delegate (PlayListsLineItem x, PlayListsLineItem y)
-                {
-                    foreach (string prop in props)
-                    {
-                        int cmp = -1;
-                        if (prop == "PlayCount") { cmp = x.PlayCount.CompareTo(y.PlayCount); }
-                        if (prop == "Name") { cmp = x.Name.CompareTo(y.Name); }
-                        if (prop == "Artists") { cmp = x.Artists.CompareTo(y.Artists); }
-                        if (prop == "Album") { cmp = x.Album.CompareTo(y.Album); }
-                        if (prop == "DurationValue") { cmp = x.DurationValue.CompareTo(y.DurationValue); }
-                        if (prop == "RatingValue") { cmp = x.RatingValue.CompareTo(y.RatingValue); }
-                        if (cmp != 0) { return cmp * (sortOrder == SortOrder.Descending ? -1 : 1); }
-                    }
-                    return 0;
-                }));
-
-
-                List<string> paths = new List<string>();
-                foreach (PlayListsLineItem pitem in list2) { paths.Add(pitem.Path); }
-                Player.StopAll();
-                Player.PlaylistClear();
-                Player.PlaylistEnqueue(paths.ToArray(), false, 0, 0, true);
-            }
-            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
-        }
-
+        
         private void NodeContextMenu_DeleteCustom(object sender, EventArgs e)
         {
             ToolStripItem item = (ToolStripItem)sender;
@@ -370,35 +317,41 @@ namespace AnotherMusicPlayer
             //    userlistClick(TItem, null);
             //}
         }
+        #endregion
 
+        #region Cell ContextMenu
         private ContextMenuStrip MakeCellContextMenu(Control parent)
         {
-            ContextMenuStrip cm = new PlayListsCellContextMenu();
-            for (int i = 0; i < cm.Items.Count; i++)
-            {
-                cm.Items[i].Tag = parent;
-                if (cm.Items[i].Name == "PlayTrack") { cm.Items[i].Click += PlayTrack_Click; }
-                else if (cm.Items[i].Name == "RemoveTrack") { cm.Items[i].Click += RemoveTrack_Click; ; }
-            }
+            PlayListsCellContextMenu cm = new PlayListsCellContextMenu();
+
+            cm.PlayTrack.Tag = parent;
+            cm.PlayTrack.Click += PlayTrack_Click;
+
+            cm.PlayListPlayAsSorted.Tag = parent;
+            cm.PlayListPlayAsSorted.Click += PlayListPlayAsSorted_Click;
+
+            cm.OpenFolder.Tag = parent;
+            cm.OpenFolder.Click += OpenFolder_Click;
+
+            cm.RemoveTrack.Tag = parent;
+            cm.RemoveTrack.Click += RemoveTrack_Click;
+
+            cm.InfoMedia.Tag = parent;
+            cm.InfoMedia.Click += InfoMedia_Click;
 
             return cm;
         }
 
-        private void RemoveTrack_Click(object sender, EventArgs e)
+        private void InfoMedia_Click(object sender, EventArgs e)
         {
+            Debug.WriteLine("InfoMedia_Click()");
             ToolStripItem parentItem = (ToolStripItem)sender;
             if (parentItem.Tag == null) { return; }
             Control parent = (Control)parentItem.Tag;
             PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
-            if(item.PlaylistId <= 0) { return; }
 
-            if (DialogBox.ShowDialog(App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmTitle", "ERROR"),
-                App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmMessage", "ERROR").Replace("%X%", item.Name),
-                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
-            {
-                App.bdd.DatabaseQuery("DELETE FROM playlistsItems WHERE PIndex = " + item.PlaylistItemId, null, true);
-                App.win1.playLists.Init();
-            }
+            MediaInfoWindow ip = new MediaInfoWindow(App.win1, item.Path);
+            ip.ShowDialog();
         }
 
         private void PlayTrack_Click(object sender, EventArgs e)
@@ -412,6 +365,103 @@ namespace AnotherMusicPlayer
             Player.PlaylistClear();
             Player.PlaylistEnqueue(new string[] { item.Path }, false, 0, 0, true);
         }
+
+        private void OpenFolder_Click(object sender, EventArgs e)
+        {
+            ToolStripItem parentItem = (ToolStripItem)sender;
+            if (parentItem.Tag == null) { return; }
+            Control parent = (Control)parentItem.Tag;
+            PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
+            FileInfo fi = new FileInfo(item.Path);
+
+            Parent.library.DisplayPath(fi.DirectoryName);
+            Parent.TabControler.SelectedIndex = 1;
+            //try
+            //{ Process.Start("explorer.exe", "/select,\"" + item.Path + "\""); }
+            //catch (Exception ex)
+            //{ MessageBox.Show("Error opening folder: " + ex.Message); }
+        }
+
+        private void PlayListPlayAsSorted_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (Parent.PlayListsTabDataGridView.DataSource == null) { return; }
+                if (Parent.PlayListsTabDataGridView.DataSource.GetType() != typeof(SortableBindingList<PlayListsLineItem>)) { return; }
+
+                List<PlayListsLineItem> list = ((SortableBindingList<PlayListsLineItem>)Parent.PlayListsTabDataGridView.DataSource).ToList();
+                List<string> paths = new List<string>();
+
+                if (Parent.PlayListsTabDataGridView.SortedColumn == null)
+                {
+                    foreach (PlayListsLineItem pitem in list) { paths.Add(pitem.Path); }
+                }
+                else
+                {
+                    var sortedCol = Parent.PlayListsTabDataGridView.SortedColumn.DataPropertyName;
+                    SortOrder sortOrder = Parent.PlayListsTabDataGridView.SortOrder;
+
+                    Debug.WriteLine("sortedCol = " + sortedCol);
+                    Debug.WriteLine("sortOrder = " + sortOrder.ToString());
+
+                    if (sortedCol == "Rating") { sortedCol = "RatingValue"; }
+                    if (sortedCol == "Duration") { sortedCol = "DurationValue"; }
+
+                    List<PlayListsLineItem> list2 = new List<PlayListsLineItem>();
+                    foreach (PlayListsLineItem item in list)
+                    {
+                        list2.Add((PlayListsLineItem)item.Clone());
+                    }
+                    list.Clear();
+                    List<string> props = new List<string>() { "PlayCount", "Name", "Artists", "Album", "DurationValue", "RatingValue" };
+                    if (props.Contains(sortedCol))
+                    {
+                        props.Remove(sortedCol);
+                        props.Insert(0, sortedCol);
+                    }
+                    list2.Sort(new Comparison<PlayListsLineItem>(delegate (PlayListsLineItem x, PlayListsLineItem y)
+                    {
+                        foreach (string prop in props)
+                        {
+                            int cmp = -1;
+                            if (prop == "PlayCount") { cmp = x.PlayCount.CompareTo(y.PlayCount); }
+                            if (prop == "Name") { cmp = x.Name.CompareTo(y.Name); }
+                            if (prop == "Artists") { cmp = x.Artists.CompareTo(y.Artists); }
+                            if (prop == "Album") { cmp = x.Album.CompareTo(y.Album); }
+                            if (prop == "DurationValue") { cmp = x.DurationValue.CompareTo(y.DurationValue); }
+                            if (prop == "RatingValue") { cmp = x.RatingValue.CompareTo(y.RatingValue); }
+                            if (cmp != 0) { return cmp * (sortOrder == SortOrder.Descending ? -1 : 1); }
+                        }
+                        return 0;
+                    }));
+
+                    foreach (PlayListsLineItem pitem in list2) { paths.Add(pitem.Path); }
+                }
+
+                Player.StopAll();
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(paths.ToArray(), false, 0, 0, true);
+            }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+        }
+
+        private void RemoveTrack_Click(object sender, EventArgs e)
+        {
+            ToolStripItem parentItem = (ToolStripItem)sender;
+            if (parentItem.Tag == null) { return; }
+            Control parent = (Control)parentItem.Tag;
+            PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
+            if (item.PlaylistId <= 0) { return; }
+
+            if (DialogBox.ShowDialog(App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmTitle", "ERROR"),
+                App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmMessage", "ERROR").Replace("%X%", item.Name),
+                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
+            {
+                App.bdd.DatabaseQuery("DELETE FROM playlistsItems WHERE PIndex = " + item.PlaylistItemId, null, true);
+                App.win1.playLists.Init();
+            }
+        }
+        #endregion
     }
 
     public enum PlayListsNodeContextMenuType { Auto, Custom, Radio, CustomNode, RadioCategory, RadioNode }
@@ -437,7 +487,6 @@ namespace AnotherMusicPlayer
         // Items
         public ToolStripItem PlayListPlay = null; // For Auto & Custom
         public ToolStripItem PlayListPlayShuffled = null; // For Auto & Custom
-        public ToolStripItem PlayListPlayAsSorted = null; // For Auto & Custom
 
         public ToolStripItem PlayListCustomDelete = null;
         public ToolStripItem PlayListCustomAdd = null;
@@ -464,8 +513,7 @@ namespace AnotherMusicPlayer
             // For Auto & Custom
             PlayListPlay = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlay"), Icons.FromIconKind(IconKind.PlaylistPlay, ButtonIconSize, DefaultBrush));
             PlayListPlayShuffled = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayShuffled"), Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush));
-            PlayListPlayAsSorted = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted"), Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush));
-            
+             
             PlayListCustomDelete = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListDeleteCustom"), Icons.FromIconKind(IconKind.PlaylistRemove, ButtonIconSize, DefaultBrush));
             PlayListCustomAdd = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListAddCustom"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
             PlayListCustomRename = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListRenameCustom"), Icons.FromIconKind(IconKind.PlaylistEdit, ButtonIconSize, DefaultBrush));
@@ -483,7 +531,6 @@ namespace AnotherMusicPlayer
 
             PlayListPlay.Name = nameof(PlayListPlay);
             PlayListPlayShuffled.Name = nameof(PlayListPlayShuffled);
-            PlayListPlayAsSorted.Name = nameof(PlayListPlayAsSorted);
             PlayListCustomDelete.Name = nameof(PlayListCustomDelete);
             PlayListCustomAdd.Name = nameof(PlayListCustomAdd);
             PlayListCustomRename.Name = nameof(PlayListCustomRename);
@@ -505,8 +552,6 @@ namespace AnotherMusicPlayer
             PlayListPlay.Image = Icons.FromIconKind(IconKind.PlaylistPlay, ButtonIconSize, DefaultBrush);
             PlayListPlayShuffled.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayShuffled");
             PlayListPlayShuffled.Image = Icons.FromIconKind(IconKind.BowlMix, ButtonIconSize, DefaultBrush);
-            PlayListPlayAsSorted.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted");
-            PlayListPlayAsSorted.Image = Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush);
 
             PlayListCustomDelete.Text = App.GetTranslation("PlayListsContextMenuPlayListDeleteCustom");
             PlayListCustomDelete.Image = Icons.FromIconKind(IconKind.PlaylistRemove, ButtonIconSize, DefaultBrush);
@@ -555,9 +600,32 @@ namespace AnotherMusicPlayer
         private SolidColorBrush DefaultBrush = new SolidColorBrush(Colors.White);
         private int ButtonIconSize = 32;
 
+        public void SetType(PlayListsNodeContextMenuType type)
+        {
+            if (type == PlayListsNodeContextMenuType.Auto)
+            {
+                InfoMedia.Visible = true;
+                PlayTrack.Visible = true;
+                PlayListPlayAsSorted.Visible = true;
+                OpenFolder.Visible = true;
+                RemoveTrack.Visible = false;
+            }
+            else
+            {
+                InfoMedia.Visible = true;
+                PlayTrack.Visible = true;
+                PlayListPlayAsSorted.Visible = true;
+                OpenFolder.Visible = true;
+                RemoveTrack.Visible = true;
+            }
+        }
+
 
         // Items
+        public ToolStripItem InfoMedia = null;
         public ToolStripItem PlayTrack = null;
+        public ToolStripItem PlayListPlayAsSorted = null;
+        public ToolStripItem OpenFolder = null;
         public ToolStripItem RemoveTrack = null;
 
         public PlayListsCellContextMenu()
@@ -569,20 +637,35 @@ namespace AnotherMusicPlayer
             RenderMode = ToolStripRenderMode.System;
 
             // For Auto & Custom
+            InfoMedia = Items.Add(App.GetTranslation("PlayingQueueCMInfo"), Icons.FromIconKind(IconKind.InformationVariantCircleOutline, ButtonIconSize, DefaultBrush));
             PlayTrack = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayTrack"), Icons.FromIconKind(IconKind.Play, ButtonIconSize, DefaultBrush));
+            PlayListPlayAsSorted = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted"), Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush));
+            OpenFolder = Items.Add(App.GetTranslation("PlayListsContextMenuOpenFolder"), Icons.FromIconKind(IconKind.FolderOpen, ButtonIconSize, DefaultBrush));
 
             RemoveTrack = Items.Add(App.GetTranslation("PlayListsContextMenuTrackDelete"), Icons.FromIconKind(IconKind.Delete, ButtonIconSize, DefaultBrush));
 
             PlayTrack.Name = nameof(PlayTrack);
             RemoveTrack.Name = nameof(RemoveTrack);
+            OpenFolder.Name = nameof(OpenFolder);
+            PlayListPlayAsSorted.Name = nameof(PlayListPlayAsSorted);
+            InfoMedia.Name = nameof(InfoMedia);
         }
 
         public void Update()
         {
             DefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor(_ForeColor));
 
+            InfoMedia.Text = App.GetTranslation("PlayingQueueCMInfo");
+            InfoMedia.Image = Icons.FromIconKind(IconKind.InformationVariantCircleOutline, ButtonIconSize, DefaultBrush);
+
             PlayTrack.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayTrack");
             PlayTrack.Image = Icons.FromIconKind(IconKind.Play, ButtonIconSize, DefaultBrush);
+
+            PlayListPlayAsSorted.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted");
+            PlayListPlayAsSorted.Image = Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush);
+
+            OpenFolder.Text = App.GetTranslation("PlayListsContextMenuOpenFolder");
+            OpenFolder.Image = Icons.FromIconKind(IconKind.FolderOpen, ButtonIconSize, DefaultBrush);
 
             RemoveTrack.Text = App.GetTranslation("PlayListsContextMenuTrackDelete");
             RemoveTrack.Image = Icons.FromIconKind(IconKind.Delete, ButtonIconSize, DefaultBrush);

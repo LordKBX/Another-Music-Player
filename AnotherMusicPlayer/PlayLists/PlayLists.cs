@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Security.AccessControl;
 using System.Windows.Forms;
@@ -69,11 +70,12 @@ namespace AnotherMusicPlayer
 
         private void PlayListsTabDataGridView_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            if (!IsCustom) { return; }
             if (e.RowIndex < 0 || e.RowIndex >= Parent.PlayListsTabDataGridView.Rows.Count) { return; }
+            ((PlayListsCellContextMenu)DataGridViewContextMenu).SetType((IsCustom)? PlayListsNodeContextMenuType.Custom : PlayListsNodeContextMenuType.Auto);
 
             if (e.Button == MouseButtons.Right)
             {
+                Parent.PlayListsTabDataGridView.Rows[e.RowIndex].Selected = true;
                 PlayListsLineItem item = (PlayListsLineItem)Parent.PlayListsTabDataGridView.Rows[e.RowIndex].DataBoundItem;
                 Parent.PlayListsTabDataGridView.Tag = item;
                 DataGridViewContextMenu.Show(System.Windows.Forms.Cursor.Position);

@@ -144,9 +144,10 @@ namespace AnotherMusicPlayer
                     Debug.WriteLine("Output => " + string.Join('\n', lines));
                     if (lines.Length > 1) {
                         string[] blocks = lines[1].Split('\t');
-                        if (blocks.Length > 1)
+                        if (blocks.Length > 2)
                         {
-                            return float.Parse(blocks[1]);
+                            //return float.Parse(blocks[1]);
+                            return float.Parse(blocks[2].Replace('.', ','));
                         }
                     }
 

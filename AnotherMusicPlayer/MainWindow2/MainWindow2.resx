@@ -117,21 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="SelectedColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="NameColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="DurationColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="ArtistsColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="AlbumColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
   <metadata name="PlayListsTabTreeImageList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
@@ -140,8 +125,8 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAEZTeXN0ZW0uV2luZG93cy5Gb3JtcywgQ3VsdHVyZT1uZXV0cmFs
         LCBQdWJsaWNLZXlUb2tlbj1iNzdhNWM1NjE5MzRlMDg5BQEAAAAmU3lzdGVtLldpbmRvd3MuRm9ybXMu
         SW1hZ2VMaXN0U3RyZWFtZXIBAAAABERhdGEHAgIAAAAJAwAAAA8DAAAACgwAAAJNU0Z0AUkBTAIBAQoB
-        AAHIAQIByAECARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMAATADAAEBAQABIAYAATAe
-        AAEnAasB9gH/AScBqwH2Af8DNQFVFAABXQJhAc8BJwGrAfYB/wM2AVcYAAQBAzcBWgPDAf4I/wgABAGc
+        AAHQAQIB0AECARABAAEQAQAE/wEhAQAI/wFCAU0BNgcAATYDAAEoAwABQAMAATADAAEBAQABIAYAATAe
+        AAEnAasB9gH/AScBqwH2Af8DNQFVFAABXQJhAc8BJwGrAfYB/wM2AVcYAAQBAzcBWgPBAf4I/wgABAGc
         AAFcAmEB2QEjAbwB9QH/AScBqwH2Af8BJwGrAfYB/wMMARAEAAFGAkcBgAEnAasB9gH/ASYBrgH2Af8B
         JwGrAfYB/xgAAx0BKQz/A2UB4gNgAc4IAAT/A0wBj5gAATgCOQFdAScBrAH2Af8BHgHNAfQB/wEfAcgB
         9QH/AScBqwH2Af8BJwGrAfYB/wEnAasB9gH/AR4BzQH0Af8BHgHNAfQB/wEnAasB9gH/FAADJQE3CP8D
@@ -160,10 +145,10 @@
         tAH2Af8BIAHFAfUB/wEeAc0B9AH/AR4BzQH0Af8BHgHNAfQB/wEeAc0B9AH/AR4BzQH0Af8BIgG/AfQB
         /wEmAbAB9QH/AScBqwH2Af8BJwGrAfYB/wEnAasB9gH/BAAE/wNhAc8QAANOAZUE/6gAAxkBIgNPAZkB
         JwGrAfYB/wEnAasB9gH/AR4BzQH0Af8BHgHNAfQB/wEeAc0B9AH/AScBqwH2Af8BXgJoAfADSQGIAwkB
-        DAwAA5AB+gT/AwIBAwwAAzkBXwT/EAADLgFGA2UB3ZwAAScBqwH2Af8BHgHNAfQB/wEeAc0B9AH/ASUB
+        DAwAA40B+gT/AwIBAwwAAzkBXwT/EAADLgFGA2UB3ZwAAScBqwH2Af8BHgHNAfQB/wEeAc0B9AH/ASUB
         swH1Af8BXgJlAeIYAAMWAR4E/wNiAdwgAAMMAQ8I/5wAA0QBewEnAasB9gH/AR4BzQH0Af8BJwGrAfYB
-        /yAAA1IBoQT/A2IB3AMCAQMUAAMeASsDvgH9BP8DHwEsoAABJwGrAfYB/wEjAbkB9gH/AVoBfAF+Afgk
-        AANTAaII/wNhAc8DPQFnAy4BRgNLAYsDZQHnCP8DJwE6pAABUgJUAagBJwGrAfYB/ywAAxYBHgOQAfoU
+        /yAAA1IBoQT/A2IB3AMCAQMUAAMeASsDvgH9BP8DHwEsoAABJwGrAfYB/wEjAbkB9gH/AVsBfAF9Afgk
+        AANTAaII/wNhAc8DPQFnAy4BRgNLAYsDZQHnCP8DJwE6pAABUgJUAagBJwGrAfYB/ywAAxYBHgONAfoU
         /wNhAdQDBgEHrAABXgJiAdf/AKkACP8DNQFVFAADYQHPBP8DNgFXCAADTgGVMP8DEwEZHAADFgEdCP8D
         IwEzCP9gAANhAdkM/wMMARAEAANHAYAM/xAANP8cABz/EAADawHyPP8MAAM5AV0k/wwAA0EBcANOAZQw
         /wMwAUoMAANWAass/wgAQP8QACT/DAAE/wQANP8MAAMxAU0U/wQAFP8IAAj/SAAk/wwABP8DQQFwA04B
@@ -173,7 +158,7 @@
         /wQACP8DaAHwA0cBgAT/CAA4/wNiAeE4/xAAAwQBBRT/BAAU/wgACP8MAAz/DAAQ/wQAA2cB6nT/EAAD
         JAE0FP8EABT/CAAI/xAAA2oB5hAAA0cBgAz/EAADGQEiA08BmRj/A2gB8ANJAYgDCQEMCAA0/wMTARoQ
         AANNAZIs/wgACP8gAAMzAVAQ/xwAEP8DZQHiFAADbgH1GP8DHAEnMAADEwEZHP8QAAj/JAAQ/xwAA0QB
-        ewz/HAAU/wMcASc4AANVAa0U/xQAAzABSwT/VAAI/wN+AfhwAAMmATgMAANUAaZwAANUAagE//wAA2IB
+        ewz/HAAU/wMcASc4AANVAa0U/xQAAzABSwT/VAAI/wN9AfhwAAMmATgMAANUAaZwAANUAagE//wAA2IB
         13gAA2cB6iAAAy4BRjz/Ay4BRjz/XAAE/wNnAeocAEj/Ay0BRAQACP8DLQFEBAAM/wMTARkEAANNAZMI
         /1wACP8DZwHqGABI/wgACP8IAAj/BAAI/wNGAX0DTQGTBP9cAAz/GABI/wNeAdIDIwEzCP8DXgHSAyMB
         Mwj/BAAM/wQABP8QACD/LAAM/xgAaP8EAAz/AxMBGQT/EAAg/ywADP8YAGz/DAAI/xAAIP8oAAN8AfgM
@@ -210,6 +195,36 @@
     <value>True</value>
   </metadata>
   <metadata name="PlayListsColumnRating.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SelectedColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="NameColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="DurationColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ArtistsColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="AlbumColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="SelectedColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="NameColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="DurationColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="ArtistsColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>True</value>
+  </metadata>
+  <metadata name="AlbumColumn.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />

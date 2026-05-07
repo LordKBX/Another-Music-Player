@@ -34,6 +34,12 @@ namespace AnotherMusicPlayer
                     cm.Items[i].Tag = backPath;
                     cm.Items[i].Visible = true;
                 }
+                if (cm.Items[i].Name == "GetMediaInfo" && type == "track")
+                {
+                    cm.Items[i].Click += CM_GetMediaInfo;
+                    cm.Items[i].Tag = parent;
+                    cm.Items[i].Visible = true;
+                }
                 else if (cm.Items[i].Name.ToLower() == "add" + type)
                 {
                     cm.Items[i].Tag = parent;
@@ -121,6 +127,29 @@ namespace AnotherMusicPlayer
             string tag = (string)((ToolStripItem)sender).Tag;
             DirectoryInfo di = new DirectoryInfo(tag);
             DisplayPath(di.Parent.FullName);
+        }
+
+        private void CM_GetMediaInfo(object sender, EventArgs e)
+        {
+            Debug.WriteLine("CM_GetMediaInfo()");
+
+            ToolStripItem item = (ToolStripItem)sender;
+            Control parent = null;
+            if (item.Owner.Parent != null) { parent = item.Owner.Parent; }
+            else if (item.Tag != null) { try { parent = (Control)item.Tag; } catch (Exception) { } }
+            if (parent == null) { Debug.WriteLine("parent is null"); return; }
+
+            Debug.WriteLine(parent.GetType().Name);
+            if (parent.GetType() == typeof(TrackButton))
+            {
+                string track = (string)parent.Tag;
+                MediaInfoWindow ip = new MediaInfoWindow(App.win1, track);
+                ip.ShowDialog();
+            }
+            else
+            {
+                Debug.WriteLine("Invalid associated element");
+            }
         }
 
         private void CM_AddPlaylistTrack(object sender, EventArgs e)
@@ -603,6 +632,9 @@ namespace AnotherMusicPlayer
         private SolidColorBrush DefaultBrush = new SolidColorBrush(Colors.White);
         private int ButtonIconSize = 32;
 
+        // PARTIE Media Info Window
+        public ToolStripItem GetMediaInfo = null;
+
         // PARTIE BACK BUTTON
         public ToolStripItem BackFolder = null;
         // ADD IN PLAYLIST ORDONED
@@ -647,6 +679,8 @@ namespace AnotherMusicPlayer
             RenderMode = ToolStripRenderMode.System;
             // PARTIE BACK BUTTON
             BackFolder = Items.Add(App.GetTranslation("LibraryContextMenuGetBack"), Icons.FromIconKind(IconKind.ArrowLeftTop, ButtonIconSize, DefaultBrush));
+            // PARTIE Media Info Window
+            GetMediaInfo = Items.Add(App.GetTranslation("PlayingQueueCMInfo"), Icons.FromIconKind(IconKind.InformationVariantCircleOutline, ButtonIconSize, DefaultBrush));
             // ADD IN PLAYLIST ORDONED
             AddFolder = Items.Add(App.GetTranslation("LibraryContextMenuAddFolder"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
             AddTrack = Items.Add(App.GetTranslation("LibraryContextMenuAddTrack"), Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush));
@@ -681,6 +715,7 @@ namespace AnotherMusicPlayer
             PlayListsAddDisk = Items.Add(App.GetTranslation("LibraryContextMenuPlayListsAddDisk"), Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush));
 
             BackFolder.Name = nameof(BackFolder);
+            GetMediaInfo.Name = nameof(GetMediaInfo);
 
             AddFolder.Name = nameof(AddFolder);
             AddTrack.Name = nameof(AddTrack);
@@ -720,6 +755,8 @@ namespace AnotherMusicPlayer
             DefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor(_ForeColor));
             // PARTIE BACK BUTTON
             BackFolder.ForeColor = _ForeColor; BackFolder.Text = App.GetTranslation("LibraryContextMenuGetBack"); BackFolder.Image = Icons.FromIconKind(IconKind.ArrowLeftTop, ButtonIconSize, DefaultBrush);
+            // PARTIE Media Info Window
+            GetMediaInfo.ForeColor = _ForeColor; GetMediaInfo.Text = App.GetTranslation("PlayingQueueCMInfo"); GetMediaInfo.Image = Icons.FromIconKind(IconKind.InformationVariantCircleOutline, ButtonIconSize, DefaultBrush);
             // ADD IN PLAYLIST ORDONED
             AddFolder.ForeColor = _ForeColor; AddFolder.Text = App.GetTranslation("LibraryContextMenuAddFolder"); AddFolder.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
             AddTrack.ForeColor = _ForeColor; AddTrack.Text = App.GetTranslation("LibraryContextMenuAddTrack"); AddTrack.Image = Icons.FromIconKind(IconKind.PlaylistPlus, ButtonIconSize, DefaultBrush);
