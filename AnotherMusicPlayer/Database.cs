@@ -40,14 +40,24 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> store status if in transaction mode </summary>
-        private bool inTransaction { get { return (Transaction != null); } }
+        private bool inTransaction { get { return IsInTransaction(); } }
         private SQLiteTransaction Transaction = null;
 
         /// <summary> Get status if in transaction mode </summary>
-        public bool IsInTransaction() { return (Transaction==null)?false:inTransaction; }
+        public bool IsInTransaction() { 
+            if(Transaction==null) return false;
+            try {
+                //Transaction.IsolationLevel
+                return true;
+            }
+            catch (ObjectDisposedException)
+            {
+                return false;
+            }
+        }
 
         /// <summary> Initialize transaction </summary>
-        private void DatabaseTansactionStart()
+        public void DatabaseTansactionStart()
         {
             if (inTransaction) { return; }
             try
@@ -67,8 +77,10 @@ namespace AnotherMusicPlayer
                 Transaction.Commit();
                 Transaction.Dispose();
             }
-            catch(ObjectDisposedException) { }
-            catch(Exception ex) { Debug.WriteLine("--> DatabaseTansactionEnd() : Catch ERROR <--\r\n" + ex.Message + "\r\n" + ex.StackTrace);  }
+            catch(ObjectDisposedException) {
+                Debug.WriteLine("--> DatabaseTansactionEnd() : ObjectDisposedException");
+            }
+            catch (Exception ex) { Debug.WriteLine("--> DatabaseTansactionEnd() : Catch ERROR <--\r\n" + ex.Message + "\r\n" + ex.StackTrace);  }
         }
 
         /// <summary> Commit transaction </summary>
@@ -121,9 +133,9 @@ namespace AnotherMusicPlayer
                 DatabaseFolder = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + SeparatorChar + AppName;
                 if (!System.IO.Directory.Exists(DatabaseFolder)) { System.IO.Directory.CreateDirectory(DatabaseFolder); }
                 Debug.WriteLine("--> Database() : DatabasePath = " + DatabaseFolder + SeparatorChar + "base.db");
-                DatabaseConnection = new SQLiteConnection("Data Source=" + DatabaseFolder + SeparatorChar + "base.db; Version = 3; New = True; Compress = True; ");
+                DatabaseConnection = new SQLiteConnection("Data Source=" + DatabaseFolder + SeparatorChar + "base.db; Version = 3; New = True; Compress = True; AutoCommit = True;");
                 DatabaseConnection.Open();
-                DatabaseTansactionStart();
+                //DatabaseTansactionStart();
 
                 DatabaseDetectOrCreateTable("params", "CREATE TABLE params("
                     + "ParamName TEXT, "
@@ -181,7 +193,7 @@ namespace AnotherMusicPlayer
                     + "Description TEXT,"
                     + "Logo TEXT,"
                     + "PRIMARY KEY(\"CRID\" AUTOINCREMENT))");
-                DatabaseTansactionEnd();
+                //DatabaseTansactionEnd();
             }
             catch(Exception e) { 
                 Debug.WriteLine("--> Database() : Catch ERROR <--");
@@ -268,15 +280,15 @@ namespace AnotherMusicPlayer
                 }
                 else
                 {
-                    if (AutoCommit)
-                    {
-                        if (!IsInTransaction()) { DatabaseTansactionStart(); }
-                    }
+                    //if (AutoCommit)
+                    //{
+                    //    if (!IsInTransaction()) { DatabaseTansactionStart(); }
+                    //}
                     try { sqlite_cmd.ExecuteNonQuery(); } catch { }
-                    if (AutoCommit)
-                    {
-                        DatabaseTansactionEnd();
-                    }
+                    //if (AutoCommit)
+                    //{
+                    //    DatabaseTansactionEnd();
+                    //}
                 }
             }
             //catch (System.ExecutionEngineException err)
@@ -295,10 +307,10 @@ namespace AnotherMusicPlayer
         /// <summary> execute SQL query </summary>
         public void DatabaseQuerys(string[] querys, bool autocommit = true)
         {
-            if (autocommit)
-            {
-                if (!IsInTransaction()) { DatabaseTansactionStart(); }
-            }
+            //if (autocommit)
+            //{
+            //    if (!IsInTransaction()) { DatabaseTansactionStart(); }
+            //}
             foreach (string query in querys)
             {
                 if (query == null) { continue; }
@@ -309,10 +321,10 @@ namespace AnotherMusicPlayer
                 if (tq.StartsWith("SELECT ")) { }
                 else { try { sqlite_cmd.ExecuteNonQuery(); } catch (Exception err) { Debug.WriteLine("--> DatabaseQuerys error => " + JsonConvert.SerializeObject(err)); } }
             }
-            if (autocommit)
-            {
-                DatabaseTansactionEnd();
-            }
+            //if (autocommit)
+            //{
+            //    DatabaseTansactionEnd();
+            //}
         }
 
 
@@ -348,7 +360,7 @@ namespace AnotherMusicPlayer
             query = "DELETE FROM covers WHERE Path LIKE '" + Path.Replace("\\", "/").Replace("'", "<") + "%'";
             sqlite_cmd.CommandText = query;
             sqlite_cmd.ExecuteNonQuery();
-            DatabaseTansactionEnd();
+            //DatabaseTansactionEnd();
         }
 
         /// <summary> Save cover for specific path </summary>
@@ -357,12 +369,12 @@ namespace AnotherMusicPlayer
             try
             {
                 CoverData = CoverData.Trim();
-                if (!IsInTransaction()) { DatabaseTansactionStart(); }
+                //if (!IsInTransaction()) { DatabaseTansactionStart(); }
                 SQLiteCommand sqlite_cmd;
                 sqlite_cmd = DatabaseConnection.CreateCommand();
                 sqlite_cmd.CommandText = "INSERT INTO covers(Path, Data) VALUES('" + Path.Replace("\\", "/").Replace("'", "<") + "', '" + CoverData + "')";
                 sqlite_cmd.ExecuteNonQuery();
-                DatabaseTansactionEnd();
+                //DatabaseTansactionEnd();
             }
             catch (Exception err) { Debug.WriteLine("--> DatabaseSaveCover ERROR : " + JsonConvert.SerializeObject(err)); }
         }
@@ -393,7 +405,7 @@ namespace AnotherMusicPlayer
                 sqlite_cmd = DatabaseConnection.CreateCommand();
                 sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + EscapeString(Param) + "'";
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
-                if (!IsInTransaction() && autoCommit) { DatabaseTansactionStart(); }
+                //if (!IsInTransaction() && autoCommit) { DatabaseTansactionStart(); }
                 string query = "";
                 if (sqlite_datareader.HasRows)
                 {
@@ -404,6 +416,68 @@ namespace AnotherMusicPlayer
                     query = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES('" + EscapeString(Param) + "', '" + EscapeString(ParamType) + "', '" + EscapeString(Value) + "')";
                 }
                 DatabaseQuerys(new string[] { query }, autoCommit);
+            }
+            catch (Exception err) { Debug.WriteLine("--> DatabaseSaveParam ERROR : " + JsonConvert.SerializeObject(err)); }
+        }
+
+        /// <summary> Save value for specific param </summary>
+        public void DatabaseSaveParams(List<ParamObject> Params)
+        {
+            try
+            {
+                List<string> existingParams = new List<string>();
+                SQLiteDataReader sqlite_datareader;
+                SQLiteCommand sqlite_cmd;
+                sqlite_cmd = DatabaseConnection.CreateCommand();
+                sqlite_cmd.CommandText = "SELECT ParamName FROM params";
+                sqlite_datareader = sqlite_cmd.ExecuteReader();
+                if (sqlite_datareader.HasRows)
+                {
+                    while (sqlite_datareader.Read())
+                    {
+                        NameValueCollection row = sqlite_datareader.GetValues();
+                        existingParams.Add(row.Get(0));
+                    }
+                }
+
+                Debug.WriteLine(JsonConvert.SerializeObject(existingParams));
+                List<ParamObject> inserts = new List<ParamObject>();
+                List<ParamObject> updates = new List<ParamObject>();
+
+                foreach (ParamObject param in Params)
+                {
+                    if (existingParams.Contains(param.Name))
+                    {
+                        updates.Add(param);
+                    }
+                    else
+                    {
+                        inserts.Add(param);
+                    }
+                }
+
+                if(inserts.Count > 0)
+                {
+                    string qi = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES";
+                    int i = 0;
+                    foreach (ParamObject param in inserts)
+                    {
+                        if (i > 0) { qi += ", "; }
+                        qi += "('" + EscapeString(param.Name) + "', '" + EscapeString(param.TypeName) + "', '" + EscapeString(param.Value) + "')";
+                        i += 1;
+                    }
+                    DatabaseQuery(qi);
+                }
+
+                if(updates.Count > 0)
+                {
+                    List<string> queries = new List<string>();
+                    foreach (ParamObject param in updates)
+                    {
+                        queries.Add("UPDATE params SET ParamValue = '" + EscapeString(param.Value) + "' WHERE ParamName = '" + EscapeString(param.Name) + "'");
+                    }
+                    DatabaseQuerys(queries.ToArray());
+                }
             }
             catch (Exception err) { Debug.WriteLine("--> DatabaseSaveParam ERROR : " + JsonConvert.SerializeObject(err)); }
         }
@@ -461,7 +535,7 @@ namespace AnotherMusicPlayer
                 cq.Enqueue(file);
             }
 
-            if (!IsInTransaction()) { DatabaseTansactionStart(); }
+            //if (!IsInTransaction()) { DatabaseTansactionStart(); }
             Action action = () =>
             {
                 int cpt = 0;
@@ -479,7 +553,7 @@ namespace AnotherMusicPlayer
             try { Parallel.Invoke(action, action, action, action, action, action); }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
 
-            if (IsInTransaction()) { DatabaseTansactionEnd(); }
+            //if (IsInTransaction()) { DatabaseTansactionEnd(); }
             return ret;
         }
 

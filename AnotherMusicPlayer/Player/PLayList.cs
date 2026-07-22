@@ -120,7 +120,9 @@ namespace AnotherMusicPlayer
             {
                 Settings.LastPlaylistIndex = PlayListIndex;
                 Settings.LastPlaylistDuration = Position(null);
-                Settings.SaveSettings().Wait(500);
+
+                App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+                App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
             }
         }
 
@@ -145,7 +147,8 @@ namespace AnotherMusicPlayer
 
             Settings.LastPlaylistIndex = 0;
             Settings.LastPlaylistDuration = 0;
-            Settings.SaveSettings().Wait(500);
+            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
         }
 
         /// <summary> Read playlist </summary>
@@ -226,7 +229,8 @@ namespace AnotherMusicPlayer
 
             Settings.LastPlaylistIndex = PlayListIndex;
             Settings.LastPlaylistDuration = 0;
-            Settings.SaveSettings();
+            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
         }
 
         /// <summary> Read next index in playlist </summary>
@@ -244,7 +248,8 @@ namespace AnotherMusicPlayer
 
             Settings.LastPlaylistIndex = PlayListIndex;
             Settings.LastPlaylistDuration = 0;
-            Settings.SaveSettings();
+            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
         }
 
         /// <summary> Preload next index in playlist </summary>

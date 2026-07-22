@@ -341,6 +341,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) {
             if (Player.Mode == Modes.File) { Player.SavePlaylist(); }
             else { Player.PlaylistClear(); }
+            KeyboardGlobal.Kill();
 
             Settings.LastWindowWidth = this.Width;
             Settings.LastWindowHeight = this.Height;
@@ -349,8 +350,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             Settings.LastWindowTop = this.Top;
             Settings.LastWindowLeft = this.Left;
 
-            Settings.SaveSettings().Wait(500);
-            KeyboardGlobal.Kill(); 
+            //Settings.SaveSettings().Wait(500);
         }
 
         private void Player_StatusChange()
@@ -490,7 +490,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     DisplayPlaybackSize.Text = App.displayTime(duration);
                     playbackProgressBar.Value = Convert.ToInt32(Math.Round(Convert.ToDouble(position) * playbackProgressBar.MaxValue / duration, 0, MidpointRounding.ToEven));
                     Settings.LastPlaylistDuration = position;
-                    Settings.SaveSettingsAsync();
+                    App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
                     if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
 
                     if (LyricsTimedLines != null && Settings.DisplayLiveLyrics)
@@ -552,8 +552,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     catch (Exception ex1) { Debug.WriteLine(ex1.Message + "\r\n" + ex1.StackTrace); }
                 }
 
-                Settings.LastPlaylistIndex = pos;
-                Settings.SaveSettings();
+               App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+
+
                 if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }

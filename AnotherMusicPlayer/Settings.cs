@@ -175,46 +175,47 @@ namespace AnotherMusicPlayer
         {
             await Dispatcher.CurrentDispatcher.InvokeAsync(new Action(() =>
             {
-                App.bdd.DatabaseSaveParam("Lang", Lang, "TEXT");
+                List<ParamObject> Params = new List<ParamObject>();
+                Params.Add(new ParamObject() { Name = "Lang", TypeName = "TEXT", Value = Lang });
+                Params.Add(new ParamObject() { Name = "ConversionMode", TypeName = "INT", Value = "" + ConversionMode });
+                Params.Add(new ParamObject() { Name = "ConversionBitRate", TypeName = "INT", Value = "" + ConversionBitRate });
+                Params.Add(new ParamObject() { Name = "MemoryUsage", TypeName = "INT", Value = "" + MemoryUsage });
 
-                App.bdd.DatabaseSaveParam("ConversionMode", "" + ConversionMode, "INT");
-                App.bdd.DatabaseSaveParam("ConversionBitRate", "" + ConversionBitRate, "INT");
+                Params.Add(new ParamObject() { Name = "LibFolder", TypeName = "TEXT", Value = LibFolder });
+                Params.Add(new ParamObject() { Name = "LibFolderShowHiden", TypeName = "INT", Value = "" + (LibFolderShowHiden?1:0) });
+                Params.Add(new ParamObject() { Name = "LibFolderShowUnixHiden", TypeName = "INT", Value = "" + (LibFolderShowUnixHiden ? 1 : 0) });
+                Params.Add(new ParamObject() { Name = "StartUpPlay", TypeName = "INT", Value = "" + (StartUpPlay ? 1 : 0) });
+                Params.Add(new ParamObject() { Name = "AlwaysOnTop", TypeName = "INT", Value = "" + (AlwaysOnTop ? 1 : 0) });
+                Params.Add(new ParamObject() { Name = "AutoCloseLyrics", TypeName = "INT", Value = "" + (AutoCloseLyrics ? 1 : 0) });
+                Params.Add(new ParamObject() { Name = "DisplayLiveLyrics", TypeName = "INT", Value = "" + (DisplayLiveLyrics ? 1 : 0) });
+                Params.Add(new ParamObject() { Name = "NormalizeVolume", TypeName = "INT", Value = "" + (NormalizeVolume ? 1 : 0) });
 
-                App.bdd.DatabaseSaveParam("MemoryUsage", "" + MemoryUsage, "INT");
+                Params.Add(new ParamObject() { Name = "StyleName", TypeName = "TEXT", Value = StyleName });
 
-                App.bdd.DatabaseSaveParam("LibFolder", LibFolder, "TEXT");
-                App.bdd.DatabaseSaveParam("LibFolderShowHiden", "" + ((LibFolderShowHiden) ? 1 : 0), "INT");
-                App.bdd.DatabaseSaveParam("LibFolderShowUnixHiden", "" + ((LibFolderShowUnixHiden) ? 1 : 0), "INT");
-                App.bdd.DatabaseSaveParam("StartUpPlay", "" + ((StartUpPlay) ? 1 : 0), "INT");
-                App.bdd.DatabaseSaveParam("AlwaysOnTop", "" + ((AlwaysOnTop) ? 1 : 0), "INT");
-                App.bdd.DatabaseSaveParam("AutoCloseLyrics", "" + ((AutoCloseLyrics) ? 1 : 0), "INT");
-                App.bdd.DatabaseSaveParam("DisplayLiveLyrics", "" + ((DisplayLiveLyrics) ? 1 : 0), "INT");
-                App.bdd.DatabaseSaveParam("NormalizeVolume", "" + ((NormalizeVolume) ? 1 : 0), "INT");
+                Params.Add(new ParamObject() { Name = "EqualizerPreset", TypeName = "TEXT", Value = EqualizerPreset });
+                Params.Add(new ParamObject() { Name = "EqualizerBand1", TypeName = "FLOAT", Value = "" + EqualizerBand1 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand2", TypeName = "FLOAT", Value = "" + EqualizerBand2 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand3", TypeName = "FLOAT", Value = "" + EqualizerBand3 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand4", TypeName = "FLOAT", Value = "" + EqualizerBand4 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand5", TypeName = "FLOAT", Value = "" + EqualizerBand5 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand6", TypeName = "FLOAT", Value = "" + EqualizerBand6 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand7", TypeName = "FLOAT", Value = "" + EqualizerBand7 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand8", TypeName = "FLOAT", Value = "" + EqualizerBand8 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand9", TypeName = "FLOAT", Value = "" + EqualizerBand9 });
+                Params.Add(new ParamObject() { Name = "EqualizerBand10", TypeName = "FLOAT", Value = "" + EqualizerBand10 });
 
-                App.bdd.DatabaseSaveParam("StyleName", StyleName, "TEXT");
+                Params.Add(new ParamObject() { Name = "LastWindowWidth", TypeName = "INT", Value = "" + LastWindowWidth });
+                Params.Add(new ParamObject() { Name = "LastWindowHeight", TypeName = "INT", Value = "" + LastWindowHeight });
+                Params.Add(new ParamObject() { Name = "LastWindowState", TypeName = "TEXT", Value = EnumHelper<FormWindowState>.GetDisplayValue(LastWindowState) });
 
-                App.bdd.DatabaseSaveParam("EqualizerPreset", EqualizerPreset, "TEXT");
-                App.bdd.DatabaseSaveParam("EqualizerBand1", "" + EqualizerBand1, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand2", "" + EqualizerBand2, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand3", "" + EqualizerBand3, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand4", "" + EqualizerBand4, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand5", "" + EqualizerBand5, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand6", "" + EqualizerBand6, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand7", "" + EqualizerBand7, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand8", "" + EqualizerBand8, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand9", "" + EqualizerBand9, "FLOAT");
-                App.bdd.DatabaseSaveParam("EqualizerBand10", "" + EqualizerBand10, "FLOAT");
+                Params.Add(new ParamObject() { Name = "LastWindowLeft", TypeName = "INT", Value = "" + LastWindowLeft });
+                Params.Add(new ParamObject() { Name = "LastWindowTop", TypeName = "INT", Value = "" + LastWindowTop });
 
-                App.bdd.DatabaseSaveParam("LastWindowWidth", "" + LastWindowWidth, "INT");
-                App.bdd.DatabaseSaveParam("LastWindowHeight", "" + LastWindowHeight, "INT");
-                App.bdd.DatabaseSaveParam("LastWindowState", EnumHelper<FormWindowState>.GetDisplayValue(LastWindowState), "TEXT");
+                Params.Add(new ParamObject() { Name = "LastPlaylistIndex", TypeName = "INT", Value = "" + LastPlaylistIndex });
+                Params.Add(new ParamObject() { Name = "LastPlaylistDuration", TypeName = "INT", Value = "" + LastPlaylistDuration });
+                Params.Add(new ParamObject() { Name = "LastRepeatStatus", TypeName = "INT", Value = "" + LastRepeatStatus });
 
-                App.bdd.DatabaseSaveParam("LastWindowLeft", "" + LastWindowLeft, "INT");
-                App.bdd.DatabaseSaveParam("LastWindowTop", "" + LastWindowTop, "INT");
-
-                App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + LastPlaylistIndex, "INT");
-                App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + LastPlaylistDuration, "INT");
-                App.bdd.DatabaseSaveParam("LastRepeatStatus", "" + LastRepeatStatus, "INT", true);
+                App.bdd.DatabaseSaveParams(Params);
             }));
             return true;
         }
@@ -226,5 +227,11 @@ namespace AnotherMusicPlayer
                 Settings.SaveSettings();
             }));
         }
+    }
+
+    public class ParamObject { 
+        public string Name { get; set; }
+        public string TypeName { get; set; }
+        public string Value { get; set; }
     }
 }
