@@ -131,6 +131,30 @@ namespace AnotherMusicPlayer
         public static Dictionary<double, byte> ReverseTableRateWindows = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 1 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
         public static Dictionary<byte, double> TableRatePlayer = new Dictionary<byte, double>() { { 0, 0.0 }, { 2, 1.0 }, { 64, 2.0 }, { 128, 3.0 }, { 196, 4.0 }, { 255, 5.0 } };
         public static Dictionary<double, byte> ReverseTableRatePlayer = new Dictionary<double, byte>() { { 0.0, 0 }, { 1.0, 2 }, { 2.0, 64 }, { 3.0, 128 }, { 4.0, 196 }, { 5.0, 255 } };
+        public static string[] CorrectArtistsList(string[] artistsNames) {
+            List<string> result = new List<string>();
+            foreach(string name in artistsNames){
+                string n = name.Trim();
+                if(n.Length > 0){
+                    n = n.Replace(",", ";").Replace("and", ";").Replace("&", ";");
+                    string[] sp = n.Split(';');
+                    if (sp.Length > 1)
+                    {
+                        foreach (string s in sp)
+                        {
+                            string sn = s.Trim();
+                            if (sn.Length > 0)
+                            {
+                                result.Add(sn);
+                            }
+                        }
+                    }
+                    else { result.Add(n); }
+                }
+            }
+            return result.ToArray();
+        }
+
 
         /// <summary> Recuperate Media MetaData(cover excluded) </summary>
         public static MediaItem MediaInfo(string FilePath, bool Selected, string OriginPath = null)
@@ -153,14 +177,22 @@ namespace AnotherMusicPlayer
                     item.DurationS = "00:00";
 
                     item.Size = new System.IO.FileInfo(OriginPath ?? FilePath).Length;
-                    item.Performers = string.Join(';', tags.Tag.Performers);
-                    item.Composers = string.Join(';', tags.Tag.Composers);
+                    item.Performers = string.Join(';', CorrectArtistsList(tags.Tag.Performers));
+                    item.Composers = string.Join(';', CorrectArtistsList(tags.Tag.Composers));
                     item.Copyright = tags.Tag.Copyright;
                     item.Disc = tags.Tag.Disc;
                     item.DiscCount = tags.Tag.DiscCount;
-                    item.AlbumArtists = tags.Tag.JoinedAlbumArtists;
-                    item.Genres = string.Join(';', tags.Tag.Genres).Trim();
+                    item.AlbumArtists = string.Join(';', CorrectArtistsList(tags.Tag.AlbumArtists));
+                    item.Genres = string.Join(';', CorrectArtistsList(tags.Tag.Genres)).Trim();
                     item.Lyrics = tags.Tag.Lyrics;
+
+                    string lext = Path.GetExtension(FilePath).ToLower();
+                    string testPath = FilePath.Replace(lext, ".lrc");
+                    if (System.IO.File.Exists(testPath)) {
+                        try { item.Lyrics = System.IO.File.ReadAllText(testPath); }
+                        catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+                    }
+
                     item.Track = tags.Tag.Track;
                     item.TrackCount = tags.Tag.TrackCount;
                     item.Year = tags.Tag.Year;

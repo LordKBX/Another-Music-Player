@@ -1,18 +1,19 @@
-﻿using System;
-using System.IO;
-using System.Collections.Specialized;
-using System.Collections.Generic;
-using System.Collections.Concurrent;
-using System.Windows;
-using System.Diagnostics;
+﻿using AnotherMusicPlayer.MainWindow2Space;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Linq;
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Data.SQLite;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
+using System.Windows;
 using System.Windows.Threading;
-using AnotherMusicPlayer.MainWindow2Space;
 
 namespace AnotherMusicPlayer
 {
@@ -39,11 +40,11 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> store status if in transaction mode </summary>
-        private bool inTransaction = false;
+        private bool inTransaction { get { return (Transaction != null); } }
         private SQLiteTransaction Transaction = null;
 
         /// <summary> Get status if in transaction mode </summary>
-        public bool IsInTransaction() { return inTransaction; }
+        public bool IsInTransaction() { return (Transaction==null)?false:inTransaction; }
 
         /// <summary> Initialize transaction </summary>
         private void DatabaseTansactionStart()
@@ -52,7 +53,6 @@ namespace AnotherMusicPlayer
             try
             {
                 Transaction = DatabaseConnection.BeginTransaction();
-                inTransaction = true;
             }
             catch { Debug.WriteLine("--> DatabaseTansactionStart() : Catch ERROR <--"); }
         }
@@ -66,9 +66,9 @@ namespace AnotherMusicPlayer
             {
                 Transaction.Commit();
                 Transaction.Dispose();
-                inTransaction = false;
             }
-            catch { Debug.WriteLine("--> DatabaseTansactionEnd() : Catch ERROR <--"); inTransaction = false; }
+            catch(ObjectDisposedException) { }
+            catch(Exception ex) { Debug.WriteLine("--> DatabaseTansactionEnd() : Catch ERROR <--\r\n" + ex.Message + "\r\n" + ex.StackTrace);  }
         }
 
         /// <summary> Commit transaction </summary>
@@ -83,11 +83,9 @@ namespace AnotherMusicPlayer
                 Debug.WriteLine("--> DatabaseTansactionEndAndStart() : P3 <--");
                 Transaction.Dispose();
                 Debug.WriteLine("--> DatabaseTansactionEndAndStart() : P4 <--");
-                inTransaction = false;
 
                 Transaction = DatabaseConnection.BeginTransaction();
                 Debug.WriteLine("--> DatabaseTansactionEndAndStart() : P5 <--");
-                inTransaction = true;
             }
             catch { Debug.WriteLine("--> DatabaseTansactionEndAndStart() : Catch ERROR <--"); }
         }
@@ -396,18 +394,16 @@ namespace AnotherMusicPlayer
                 sqlite_cmd.CommandText = "SELECT ParamValue,ParamType FROM params WHERE ParamName = '" + EscapeString(Param) + "'";
                 sqlite_datareader = sqlite_cmd.ExecuteReader();
                 if (!IsInTransaction() && autoCommit) { DatabaseTansactionStart(); }
-                SQLiteCommand sqlite_cmd2;
-                sqlite_cmd2 = DatabaseConnection.CreateCommand();
+                string query = "";
                 if (sqlite_datareader.HasRows)
                 {
-                    sqlite_cmd2.CommandText = "UPDATE params SET ParamValue = '" + EscapeString(Value) + "' WHERE ParamName = '" + EscapeString(Param) + "'";
+                    query = "UPDATE params SET ParamValue = '" + EscapeString(Value) + "' WHERE ParamName = '" + EscapeString(Param) + "'";
                 }
                 else
                 {
-                    sqlite_cmd2.CommandText = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES('" + EscapeString(Param) + "', '" + EscapeString(ParamType) + "', '" + EscapeString(Value) + "')";
+                    query = "INSERT INTO params(ParamName, ParamType, ParamValue) VALUES('" + EscapeString(Param) + "', '" + EscapeString(ParamType) + "', '" + EscapeString(Value) + "')";
                 }
-                sqlite_cmd2.ExecuteNonQuery();
-                if (autoCommit) DatabaseTansactionEnd();
+                DatabaseQuerys(new string[] { query }, autoCommit);
             }
             catch (Exception err) { Debug.WriteLine("--> DatabaseSaveParam ERROR : " + JsonConvert.SerializeObject(err)); }
         }

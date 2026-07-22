@@ -46,6 +46,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             if (parent.InvokeRequired) { parent.Invoke(() => { LocalControlEvent(sender, e); }); return; }
             try
             {
+                if(e.Control && e.KeyCode == Keys.R) {
+                    parent.Left = Screen.PrimaryScreen.Bounds.Left;
+                    parent.Top = Screen.PrimaryScreen.Bounds.Top;
+                    parent.Width = 1024;
+                    parent.Height = 800;
+                }
                 double ntime = App.UnixTimestamp();
 
                 List<Keys> autorised = new List<Keys>() { Keys.Space, Keys.Left, Keys.Right, Keys.Up, Keys.Down };
