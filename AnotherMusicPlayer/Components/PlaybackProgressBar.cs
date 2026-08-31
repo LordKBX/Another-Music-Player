@@ -64,9 +64,11 @@ namespace AnotherMusicPlayer
         public PlaybackProgressBar()
         {
             InitializeComponent();
+            progressBar1.BackColor = this.BackColor;
+            progressBar1.ForeColor = this.ForeColor;
             this.SizeChanged += PlaybackProgressBar_SizeChanged;
-            this.BackColorChanged += (object sender, EventArgs e) => { progressBar1.BackColor = this.BackColor; };
-            this.ForeColorChanged += (object sender, EventArgs e) => { progressBar1.ForeColor = this.ForeColor; };
+            this.BackColorChanged += (object sender, EventArgs e) => { progressBar1.BackColor = this.BackColor; Debug.WriteLine("PlaybackProgressBar BackColorChanged"); };
+            this.ForeColorChanged += (object sender, EventArgs e) => { progressBar1.ForeColor = this.ForeColor; Debug.WriteLine("PlaybackProgressBar ForeColorChanged"); };
             this.MouseDown += PlaybackProgressBar_MouseDown;
             progressBar1.MouseDown += PlaybackProgressBar_MouseDown;
             Calculate();

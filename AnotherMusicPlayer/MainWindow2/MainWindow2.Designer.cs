@@ -43,7 +43,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MinimizeButton = new Button();
             MaximizeButton = new Button();
             CloseButton = new Button();
-            button1 = new Button();
+            WindowIconButton = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             DisplayPlaybackPosition = new Label();
             panel1 = new Panel();
@@ -146,10 +146,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryTableLayoutPanel = new TableLayoutPanel();
             SettingsTabLibraryFolderTextBox = new TextBox();
             SettingsTabLibraryFolderButton = new Button();
-            SettingsTabLibraryUnixHiddenFileLabel = new Label();
             SettingsTabLibraryUnixHiddenFileComboBox = new ComboBox();
-            SettingsTabLibraryWindowsHiddenFileLabel = new Label();
             SettingsTabLibraryWindowsHiddenFileComboBox = new ComboBox();
+            SettingsTabLibraryWindowsHiddenFileLabel = new Label();
+            SettingsTabLibraryUnixHiddenFileLabel = new Label();
+            SettingsTabLibraryHiddenFileLabel = new Label();
             SettingsTabEqualizerGroupBox = new GroupBox();
             SettingsTabEqualizerTableLayoutPanel = new TableLayoutPanel();
             SettingsTabEqualizerComboBox = new ComboBox();
@@ -304,7 +305,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             MainWIndowHead.Controls.Add(MinimizeButton, 2, 0);
             MainWIndowHead.Controls.Add(MaximizeButton, 3, 0);
             MainWIndowHead.Controls.Add(CloseButton, 4, 0);
-            MainWIndowHead.Controls.Add(button1, 0, 0);
+            MainWIndowHead.Controls.Add(WindowIconButton, 0, 0);
             MainWIndowHead.Dock = DockStyle.Fill;
             MainWIndowHead.Location = new Point(1, 1);
             MainWIndowHead.Margin = new Padding(0);
@@ -386,22 +387,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             CloseButton.UseVisualStyleBackColor = false;
             CloseButton.Click += CloseButton_Click;
             // 
-            // button1
+            // WindowIconButton
             // 
-            button1.BackgroundImage = Properties.Resources.album_large;
-            button1.BackgroundImageLayout = ImageLayout.Zoom;
-            button1.Dock = DockStyle.Fill;
-            button1.FlatAppearance.BorderColor = Color.FromArgb(30, 30, 30);
-            button1.FlatAppearance.BorderSize = 0;
-            button1.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 30, 30);
-            button1.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
-            button1.FlatStyle = FlatStyle.Flat;
-            button1.Location = new Point(0, 0);
-            button1.Margin = new Padding(0);
-            button1.Name = "button1";
-            button1.Size = new Size(62, 64);
-            button1.TabIndex = 4;
-            button1.UseVisualStyleBackColor = true;
+            WindowIconButton.BackgroundImage = Properties.Resources.album_large;
+            WindowIconButton.BackgroundImageLayout = ImageLayout.Zoom;
+            WindowIconButton.Dock = DockStyle.Fill;
+            WindowIconButton.FlatAppearance.BorderColor = Color.FromArgb(30, 30, 30);
+            WindowIconButton.FlatAppearance.BorderSize = 0;
+            WindowIconButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 30, 30);
+            WindowIconButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
+            WindowIconButton.FlatStyle = FlatStyle.Flat;
+            WindowIconButton.Location = new Point(0, 0);
+            WindowIconButton.Margin = new Padding(0);
+            WindowIconButton.Name = "WindowIconButton";
+            WindowIconButton.Size = new Size(62, 64);
+            WindowIconButton.TabIndex = 4;
+            WindowIconButton.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -828,6 +829,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackPositionLabel.Size = new Size(958, 25);
             PlaybackPositionLabel.TabIndex = 2;
             PlaybackPositionLabel.Text = "label1";
+            PlaybackPositionLabel.TextAlign = ContentAlignment.MiddleLeft;
             PlaybackPositionLabel.UseMnemonic = false;
             // 
             // PlaybackTabDataGridView
@@ -1553,7 +1555,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Margin = new Padding(4, 5, 4, 5);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(1134, 770);
+            flowLayoutPanel1.Size = new Size(1134, 814);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // SettingsTabLangGroupBox
@@ -1608,20 +1610,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // SettingsTabStyleComboBox
             // 
             SettingsTabStyleComboBox.BackColor = Color.Gray;
-            SettingsTabStyleComboBox.DisplayMember = "English";
+            SettingsTabStyleComboBox.DisplayMember = "Dark";
             SettingsTabStyleComboBox.Dock = DockStyle.Fill;
             SettingsTabStyleComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
             SettingsTabStyleComboBox.FlatStyle = FlatStyle.Flat;
             SettingsTabStyleComboBox.ForeColor = Color.Black;
             SettingsTabStyleComboBox.FormattingEnabled = true;
-            SettingsTabStyleComboBox.Items.AddRange(new object[] { "Dark", "Red" });
             SettingsTabStyleComboBox.Location = new Point(8, 33);
             SettingsTabStyleComboBox.Margin = new Padding(4, 5, 4, 5);
-            SettingsTabStyleComboBox.MaxDropDownItems = 2;
+            SettingsTabStyleComboBox.MaxDropDownItems = 10;
             SettingsTabStyleComboBox.Name = "SettingsTabStyleComboBox";
             SettingsTabStyleComboBox.Size = new Size(198, 33);
             SettingsTabStyleComboBox.TabIndex = 0;
-            SettingsTabStyleComboBox.ValueMember = "English";
+            SettingsTabStyleComboBox.ValueMember = "Dark";
             // 
             // SettingsTabAutoPlayGroupBox
             // 
@@ -1897,7 +1898,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryGroupBox.MinimumSize = new Size(475, 125);
             SettingsTabLibraryGroupBox.Name = "SettingsTabLibraryGroupBox";
             SettingsTabLibraryGroupBox.Padding = new Padding(8, 9, 8, 9);
-            SettingsTabLibraryGroupBox.Size = new Size(475, 167);
+            SettingsTabLibraryGroupBox.Size = new Size(475, 211);
             SettingsTabLibraryGroupBox.TabIndex = 1;
             SettingsTabLibraryGroupBox.TabStop = false;
             SettingsTabLibraryGroupBox.Text = "Library";
@@ -1909,20 +1910,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 125F));
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryFolderTextBox, 0, 0);
             SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryFolderButton, 1, 0);
-            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryUnixHiddenFileLabel, 0, 1);
-            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryUnixHiddenFileComboBox, 1, 1);
-            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryWindowsHiddenFileLabel, 0, 2);
-            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryWindowsHiddenFileComboBox, 1, 2);
+            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryUnixHiddenFileComboBox, 1, 2);
+            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryWindowsHiddenFileComboBox, 1, 3);
+            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryWindowsHiddenFileLabel, 0, 3);
+            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryUnixHiddenFileLabel, 0, 2);
+            SettingsTabLibraryTableLayoutPanel.Controls.Add(SettingsTabLibraryHiddenFileLabel, 0, 1);
             SettingsTabLibraryTableLayoutPanel.Dock = DockStyle.Top;
             SettingsTabLibraryTableLayoutPanel.Location = new Point(8, 33);
             SettingsTabLibraryTableLayoutPanel.Margin = new Padding(4);
             SettingsTabLibraryTableLayoutPanel.Name = "SettingsTabLibraryTableLayoutPanel";
-            SettingsTabLibraryTableLayoutPanel.RowCount = 4;
+            SettingsTabLibraryTableLayoutPanel.RowCount = 5;
+            SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
             SettingsTabLibraryTableLayoutPanel.RowStyles.Add(new RowStyle());
-            SettingsTabLibraryTableLayoutPanel.Size = new Size(459, 125);
+            SettingsTabLibraryTableLayoutPanel.Size = new Size(459, 169);
             SettingsTabLibraryTableLayoutPanel.TabIndex = 0;
             // 
             // SettingsTabLibraryFolderTextBox
@@ -1954,17 +1957,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryFolderButton.Text = ". . .";
             SettingsTabLibraryFolderButton.UseVisualStyleBackColor = false;
             // 
-            // SettingsTabLibraryUnixHiddenFileLabel
-            // 
-            SettingsTabLibraryUnixHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            SettingsTabLibraryUnixHiddenFileLabel.AutoSize = true;
-            SettingsTabLibraryUnixHiddenFileLabel.Location = new Point(4, 47);
-            SettingsTabLibraryUnixHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
-            SettingsTabLibraryUnixHiddenFileLabel.Name = "SettingsTabLibraryUnixHiddenFileLabel";
-            SettingsTabLibraryUnixHiddenFileLabel.Size = new Size(326, 25);
-            SettingsTabLibraryUnixHiddenFileLabel.TabIndex = 0;
-            SettingsTabLibraryUnixHiddenFileLabel.Text = "Show hidden files style Unix";
-            // 
             // SettingsTabLibraryUnixHiddenFileComboBox
             // 
             SettingsTabLibraryUnixHiddenFileComboBox.BackColor = Color.Gray;
@@ -1975,24 +1967,13 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryUnixHiddenFileComboBox.ForeColor = Color.Black;
             SettingsTabLibraryUnixHiddenFileComboBox.FormattingEnabled = true;
             SettingsTabLibraryUnixHiddenFileComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabLibraryUnixHiddenFileComboBox.Location = new Point(338, 45);
+            SettingsTabLibraryUnixHiddenFileComboBox.Location = new Point(338, 85);
             SettingsTabLibraryUnixHiddenFileComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabLibraryUnixHiddenFileComboBox.MaxDropDownItems = 2;
             SettingsTabLibraryUnixHiddenFileComboBox.Name = "SettingsTabLibraryUnixHiddenFileComboBox";
             SettingsTabLibraryUnixHiddenFileComboBox.Size = new Size(117, 33);
             SettingsTabLibraryUnixHiddenFileComboBox.TabIndex = 1;
             SettingsTabLibraryUnixHiddenFileComboBox.ValueMember = "English";
-            // 
-            // SettingsTabLibraryWindowsHiddenFileLabel
-            // 
-            SettingsTabLibraryWindowsHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            SettingsTabLibraryWindowsHiddenFileLabel.AutoSize = true;
-            SettingsTabLibraryWindowsHiddenFileLabel.Location = new Point(4, 87);
-            SettingsTabLibraryWindowsHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
-            SettingsTabLibraryWindowsHiddenFileLabel.Name = "SettingsTabLibraryWindowsHiddenFileLabel";
-            SettingsTabLibraryWindowsHiddenFileLabel.Size = new Size(326, 25);
-            SettingsTabLibraryWindowsHiddenFileLabel.TabIndex = 0;
-            SettingsTabLibraryWindowsHiddenFileLabel.Text = "Show hidden files style Windows";
             // 
             // SettingsTabLibraryWindowsHiddenFileComboBox
             // 
@@ -2004,7 +1985,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryWindowsHiddenFileComboBox.ForeColor = Color.Black;
             SettingsTabLibraryWindowsHiddenFileComboBox.FormattingEnabled = true;
             SettingsTabLibraryWindowsHiddenFileComboBox.Items.AddRange(new object[] { "No", "Yes" });
-            SettingsTabLibraryWindowsHiddenFileComboBox.Location = new Point(338, 85);
+            SettingsTabLibraryWindowsHiddenFileComboBox.Location = new Point(338, 125);
             SettingsTabLibraryWindowsHiddenFileComboBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabLibraryWindowsHiddenFileComboBox.MaxDropDownItems = 2;
             SettingsTabLibraryWindowsHiddenFileComboBox.Name = "SettingsTabLibraryWindowsHiddenFileComboBox";
@@ -2012,13 +1993,46 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabLibraryWindowsHiddenFileComboBox.TabIndex = 2;
             SettingsTabLibraryWindowsHiddenFileComboBox.ValueMember = "English";
             // 
+            // SettingsTabLibraryWindowsHiddenFileLabel
+            // 
+            SettingsTabLibraryWindowsHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            SettingsTabLibraryWindowsHiddenFileLabel.AutoSize = true;
+            SettingsTabLibraryWindowsHiddenFileLabel.Location = new Point(4, 127);
+            SettingsTabLibraryWindowsHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
+            SettingsTabLibraryWindowsHiddenFileLabel.Name = "SettingsTabLibraryWindowsHiddenFileLabel";
+            SettingsTabLibraryWindowsHiddenFileLabel.Size = new Size(326, 25);
+            SettingsTabLibraryWindowsHiddenFileLabel.TabIndex = 0;
+            SettingsTabLibraryWindowsHiddenFileLabel.Text = "style Windows";
+            // 
+            // SettingsTabLibraryUnixHiddenFileLabel
+            // 
+            SettingsTabLibraryUnixHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            SettingsTabLibraryUnixHiddenFileLabel.AutoSize = true;
+            SettingsTabLibraryUnixHiddenFileLabel.Location = new Point(4, 87);
+            SettingsTabLibraryUnixHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
+            SettingsTabLibraryUnixHiddenFileLabel.Name = "SettingsTabLibraryUnixHiddenFileLabel";
+            SettingsTabLibraryUnixHiddenFileLabel.Size = new Size(326, 25);
+            SettingsTabLibraryUnixHiddenFileLabel.TabIndex = 0;
+            SettingsTabLibraryUnixHiddenFileLabel.Text = "style Unix";
+            // 
+            // SettingsTabLibraryHiddenFileLabel
+            // 
+            SettingsTabLibraryHiddenFileLabel.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            SettingsTabLibraryHiddenFileLabel.AutoSize = true;
+            SettingsTabLibraryHiddenFileLabel.Location = new Point(4, 47);
+            SettingsTabLibraryHiddenFileLabel.Margin = new Padding(4, 0, 4, 0);
+            SettingsTabLibraryHiddenFileLabel.Name = "SettingsTabLibraryHiddenFileLabel";
+            SettingsTabLibraryHiddenFileLabel.Size = new Size(326, 25);
+            SettingsTabLibraryHiddenFileLabel.TabIndex = 0;
+            SettingsTabLibraryHiddenFileLabel.Text = "Show hidden files";
+            // 
             // SettingsTabEqualizerGroupBox
             // 
             SettingsTabEqualizerGroupBox.AutoSize = true;
             SettingsTabEqualizerGroupBox.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             SettingsTabEqualizerGroupBox.Controls.Add(SettingsTabEqualizerTableLayoutPanel);
             SettingsTabEqualizerGroupBox.ForeColor = Color.White;
-            SettingsTabEqualizerGroupBox.Location = new Point(4, 411);
+            SettingsTabEqualizerGroupBox.Location = new Point(4, 455);
             SettingsTabEqualizerGroupBox.Margin = new Padding(4, 5, 4, 5);
             SettingsTabEqualizerGroupBox.MinimumSize = new Size(750, 125);
             SettingsTabEqualizerGroupBox.Name = "SettingsTabEqualizerGroupBox";
@@ -2824,7 +2838,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private Label PlaybackTabArtistsLabelValue;
         private Button FileCover;
         private TableLayoutPanel tableLayoutPanel4;
-        private Button button1;
+        private Button WindowIconButton;
         private Label PlaybackTabDurationLabelValue;
         private TableLayoutPanel SettingsTabConvTableLayoutPanel;
         private TableLayoutPanel SettingsTabLibraryTableLayoutPanel;
@@ -2920,7 +2934,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private Panel panel3;
         internal Label TitleLabel;
         internal TableLayoutPanel LibraryNavigationContent;
-        private ImageList PlayListsTabTreeImageList;
         internal TreeView PlaylistsTree;
         internal SplitContainer PlayListsTabSplitContainer1;
         internal SplitContainer PlayListsTabSplitContainer2;
@@ -2961,5 +2974,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal ComboBox SettingsTabDisplayLiveLyricsComboBox;
         internal GroupBox SettingsNormalizeVolumeGroupBox;
         internal ComboBox SettingsNormalizeVolumeComboBox;
+        internal Label SettingsTabLibraryHiddenFileLabel;
+        internal ImageList PlayListsTabTreeImageList;
     }
 }

@@ -13,12 +13,20 @@ namespace AnotherMusicPlayer.Styles
 {
     public interface Style
     {
+        internal static Type StyleType;
+        //internal Type styleType;
+
         public static Font GlobalFont;
         public static Font GlobalFontTitle;
         public static Color GlobalBackColor;
         public static Color GlobalForeColor;
         public static Color GlobalIconColor;
         public static int GlobalIconSize;
+
+        public static Color ContextMenuBackColor;
+        public static Color ContextMenuForeColor;
+        public static Color ContextMenuOverBackColor;
+        public static Color ContextMenuPushBackColor;
 
         public static Color GlobalTrackIconBackColor;
 
@@ -73,12 +81,17 @@ namespace AnotherMusicPlayer.Styles
         public static DataGridViewCellBorderStyle GridViewCellBorderStyle;
         public static DataGridViewHeaderBorderStyle GridViewHeaderBorderStyle;
         public static int GridViewColumnHeaderHeight;
+        public static Color GridViewBackColor;
+
         public static Color GridViewRowBackColor;
-        public static Color GridViewRowBackColorAlt;
-        public static Color GridViewRowBackColorSelection;
         public static Color GridViewRowForeColor;
+
+        public static Color GridViewRowBackColorAlt;
         public static Color GridViewRowForeColorAlt;
+
+        public static Color GridViewRowBackColorSelection;
         public static Color GridViewRowForeColorSelection;
+
         public static Color GridViewColumnHeaderBackColor;
         public static Color GridViewColumnHeaderForeColor;
 
@@ -91,6 +104,9 @@ namespace AnotherMusicPlayer.Styles
         public static Color LibraryFolderButtonMouseOverBackColor;
         public static Color LibraryFolderButtonMouseDownBackColor;
         public static int LibraryFolderButtonIconSize;
+
+        public static Color RattingStarEmptyColor;
+        public static Color RattingStarFullColor;
 
         public Color GetColor(string reference, Color? defaultColor = null);
 

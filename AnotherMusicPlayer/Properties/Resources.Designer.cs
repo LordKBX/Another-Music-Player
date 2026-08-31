@@ -81,6 +81,17 @@ namespace AnotherMusicPlayer.Properties {
         }
         
         /// <summary>
+        ///   Recherche une chaîne localisée semblable à &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+        ///&lt;svg version=&quot;1.1&quot; xmlns=&quot;http://www.w3.org/2000/svg&quot; width=&quot;512&quot; height=&quot;512&quot;&gt;
+        ///&lt;path d=&quot;M0 0 C0.78177738 -0.00581376 1.56355476 -0.01162753 2.36902237 -0.01761746 C4.99266607 -0.03223318 7.61537655 -0.0183252 10.23901367 -0.00457001 C12.13732889 -0.0091783 14.03564053 -0.01553074 15.9339447 -0.02347898 C21.15362574 -0.04020519 26.37301494 -0.03191092 31.59269714 -0.01953411 C37.22059119 -0.01049944 42.84843436 -0.02444549 48.47631836 -0.0354538 C59.5026231 -0.0532605  [le reste de la chaîne a été tronqué]&quot;;.
+        /// </summary>
+        public static string album_svg {
+            get {
+                return ResourceManager.GetString("album_svg", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Recherche une ressource localisée de type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap CoverImg {

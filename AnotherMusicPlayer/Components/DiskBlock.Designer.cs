@@ -61,9 +61,10 @@
             label1.AutoSize = true;
             label1.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold);
             label1.ForeColor = System.Drawing.Color.White;
-            label1.Location = new System.Drawing.Point(3, 1);
+            label1.Location = new System.Drawing.Point(0, 1);
+            label1.Margin = new System.Windows.Forms.Padding(0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(242, 23);
+            label1.Size = new System.Drawing.Size(248, 23);
             label1.TabIndex = 0;
             label1.Text = "label1";
             // 

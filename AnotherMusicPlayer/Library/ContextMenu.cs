@@ -118,6 +118,7 @@ namespace AnotherMusicPlayer
                 }
                 else { cm.Items[i].Visible = false; }
             }
+            cm.Renderer = new CMRenderer();
             return cm;
         }
 
@@ -629,7 +630,8 @@ namespace AnotherMusicPlayer
             get { return _BackColor; }
             set { base.BackColor = _BackColor = value; Update(); }
         }
-        private SolidColorBrush DefaultBrush = new SolidColorBrush(Colors.White);
+
+        private SolidColorBrush DefaultBrush = new SolidColorBrush(Icons.ToMediaColor(App.style.GetColor("ContextMenuForeColor", System.Drawing.Color.White)));
         private int ButtonIconSize = 32;
 
         // PARTIE Media Info Window

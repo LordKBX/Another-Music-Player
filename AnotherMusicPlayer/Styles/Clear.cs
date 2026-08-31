@@ -9,36 +9,36 @@ using System.Windows.Forms;
 
 namespace AnotherMusicPlayer.Styles
 {
-    internal class Dark: AnotherMusicPlayer.Styles.Style
+    internal class Clear: AnotherMusicPlayer.Styles.Style
     {
-        internal static Type StyleType = typeof(Dark);
-        internal Type styleType = typeof(Dark);
+        internal static Type StyleType = typeof(Clear);
+        internal Type styleType = typeof(Clear);
 
         public static Font GlobalFont = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
         public static Font GlobalFontTitle = new Font("Segoe UI", 15, FontStyle.Regular, GraphicsUnit.Point);
         public static Font GlobalFontTitleBold = new Font("Segoe UI", 15, FontStyle.Bold, GraphicsUnit.Point);
-        public static Color GlobalBackColor = Color.FromArgb(255, 30, 30, 30);
-        public static Color GlobalForeColor = Color.FromArgb(255, 255, 255, 255);
-        public static Color GlobalIconColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color GlobalBackColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color GlobalForeColor = Color.FromArgb(255, 0, 0, 0);
+        public static Color GlobalIconColor = Color.FromArgb(255, 0, 0, 0);
         public static int GlobalIconSize = 24;
 
-        public static Color ContextMenuBackColor = Color.FromArgb(255, 30, 30, 30);
-        public static Color ContextMenuForeColor = Color.FromArgb(255, 255, 255, 255);
-        public static Color ContextMenuOverBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color ContextMenuPushBackColor = Color.FromArgb(255, 90, 90, 90);
+        public static Color ContextMenuBackColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color ContextMenuForeColor = Color.FromArgb(255, 0, 0, 0);
+        public static Color ContextMenuOverBackColor = Color.FromArgb(255, 100, 100, 255);
+        public static Color ContextMenuPushBackColor = Color.FromArgb(255, 230, 230, 230);
 
         public static Color GlobalTrackIconBackColor = Color.FromArgb(255, 0, 0, 0);
 
-        public static Color GlobalButtonBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color GlobalButtonForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color GlobalButtonBackColor = Color.FromArgb(255, 200, 200, 200);
+        public static Color GlobalButtonForeColor = Color.FromArgb(255, 0, 0, 0);
         public static Font GlobalButtonFont = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
         public static Cursor GlobalButtonCursor = Cursors.Hand;
         public static FlatStyle GlobalButtonFlatStyle = FlatStyle.Flat;
-        public static Color GlobalButtonFlatAppearanceBorderColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color GlobalButtonFlatAppearanceBorderColor = Color.FromArgb(255, 0, 0, 0);
         public static uint GlobalButtonFlatAppearanceBorderSize = 1;
-        public static Color GlobalButtonFlatAppearanceCheckedBackColor = Color.FromArgb(255, 110, 110, 110);
-        public static Color GlobalButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 110, 110, 110);
-        public static Color GlobalButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 80, 80, 80);
+        public static Color GlobalButtonFlatAppearanceCheckedBackColor = Color.FromArgb(255, 150, 150, 200);
+        public static Color GlobalButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 150, 150, 200);
+        public static Color GlobalButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 180, 180, 250);
 
         public static Color ValidateButtonBackColor = Color.ForestGreen;
         public static Color ValidateButtonForeColor = Color.White;
@@ -46,8 +46,8 @@ namespace AnotherMusicPlayer.Styles
         public static Cursor GripButtonCursor = Cursors.SizeNWSE;
         public static Color GripButtonBackColor = GlobalBackColor;
 
-        public static Color GlobalTextBoxBackColor = Color.FromArgb(255, 80, 80, 80);
-        public static Color GlobalTextBoxForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color GlobalTextBoxBackColor = Color.FromArgb(255, 200, 200, 200);
+        public static Color GlobalTextBoxForeColor = Color.FromArgb(255, 0, 0, 0);
         public static BorderStyle GlobalTextBoxBorderStyle = BorderStyle.None;
         public static int GlobalTextBoxMinHeight = 25;
         public static Font GlobalTextBoxFont = new Font("Segoe UI", GlobalTextBoxMinHeight * 0.45F , FontStyle.Regular, GraphicsUnit.Point);
@@ -56,24 +56,24 @@ namespace AnotherMusicPlayer.Styles
         public static Color WindowButtonBackColor = Color.Gray;
 
         public static FlatStyle ComboBoxFlatStyle = FlatStyle.Flat;
-        public static Color ComboBoxBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color ComboBoxForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color ComboBoxBackColor = Color.FromArgb(255, 200, 200, 200);
+        public static Color ComboBoxForeColor = Color.FromArgb(255, 0, 0, 0);
 
         public static FlatStyle CheckBoxFlatStyle = FlatStyle.Flat;
         public static Cursor CheckBoxCursor = Cursors.Hand;
-        public static Color CheckBoxBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color CheckBoxForeColor = Color.FromArgb(255, 255, 255, 255);
-        public static Color CheckBoxFlatAppearanceBorderColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color CheckBoxBackColor = Color.FromArgb(255, 250, 250, 250);
+        public static Color CheckBoxForeColor = Color.FromArgb(255, 0, 0, 0);
+        public static Color CheckBoxFlatAppearanceBorderColor = Color.FromArgb(255, 0, 0, 0);
         public static uint CheckBoxFlatAppearanceBorderSize = 1;
-        public static Color CheckBoxFlatAppearanceCheckedBackColor = Color.FromArgb(255, 255, 128, 0);
-        public static Color CheckBoxFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 255, 128, 0);
-        public static Color CheckBoxFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 255, 192, 128);
+        public static Color CheckBoxFlatAppearanceCheckedBackColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color CheckBoxFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 230, 230, 230);
+        public static Color CheckBoxFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 240, 240, 240);
 
-        public static Color TabIconColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color TabIconColor = Color.FromArgb(255, 0, 0, 0);
         public static int TabIconSize = 24;
-        public static Color TabBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color TabBackColorSelected = Color.FromArgb(255, 255, 128, 0);
-        public static Color TabBackColorOver = Color.FromArgb(255, 255, 192, 128);
+        public static Color TabBackColor = Color.FromArgb(255, 200, 200, 200);
+        public static Color TabBackColorSelected = Color.FromArgb(255, 0, 128, 200);
+        public static Color TabBackColorOver = Color.FromArgb(255, 0, 128, 255);
 
         public static Font GridViewFont = new Font("Segoe UI", 9, FontStyle.Regular, GraphicsUnit.Point);
         public static BorderStyle GridViewBorderStyle = BorderStyle.FixedSingle;
@@ -82,26 +82,26 @@ namespace AnotherMusicPlayer.Styles
         public static int GridViewColumnHeaderHeight = 25;
         public static Color GridViewBackColor = Color.FromArgb(255, 160, 160, 160);
 
-        public static Color GridViewRowBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color GridViewRowForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color GridViewRowBackColor = Color.FromArgb(255, 244, 183, 240);
+        public static Color GridViewRowForeColor = Color.FromArgb(255, 0, 0, 0);
 
-        public static Color GridViewRowBackColorAlt = Color.FromArgb(255, 70, 50, 70);
-        public static Color GridViewRowForeColorAlt = Color.FromArgb(255, 255, 255, 255);
+        public static Color GridViewRowBackColorAlt = Color.FromArgb(255, 163, 198, 255);
+        public static Color GridViewRowForeColorAlt = Color.FromArgb(255, 0, 0, 0);
 
         public static Color GridViewRowBackColorSelection = Color.FromKnownColor(KnownColor.Highlight);
         public static Color GridViewRowForeColorSelection = Color.FromArgb(255, 255, 255, 255);
 
-        public static Color GridViewColumnHeaderBackColor = Color.Teal;
+        public static Color GridViewColumnHeaderBackColor = Color.FromArgb(255, 160, 160, 160);
         public static Color GridViewColumnHeaderForeColor = Color.FromArgb(255, 255, 255, 255);
 
-        public static Color PlaybackProgressBarBackColor = Color.FromArgb(255, 30, 30, 30);
-        public static Color PlaybackProgressBarForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color PlaybackProgressBarBackColor = Color.FromArgb(255, 180, 180, 180);
+        public static Color PlaybackProgressBarForeColor = Color.FromArgb(255, 90, 90, 200);
 
-        public static Color LibraryFolderButtonBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color LibraryFolderButtonForeColor = Color.FromArgb(255, 255, 255, 255);
-        public static Color LibraryFolderButtonBorderColor = Color.FromArgb(255, 255, 255, 255);
-        public static Color LibraryFolderButtonMouseOverBackColor = Color.FromArgb(255, 90, 90, 90);
-        public static Color LibraryFolderButtonMouseDownBackColor = Color.FromArgb(255, 120, 120, 120);
+        public static Color LibraryFolderButtonBackColor = Color.FromArgb(255, 250, 250, 250);
+        public static Color LibraryFolderButtonForeColor = Color.FromArgb(255, 0, 0, 0);
+        public static Color LibraryFolderButtonBorderColor = Color.FromArgb(255, 0, 0, 0);
+        public static Color LibraryFolderButtonMouseOverBackColor = Color.FromArgb(255, 220, 220, 220);
+        public static Color LibraryFolderButtonMouseDownBackColor = Color.FromArgb(255, 200, 200, 200);
         public static int LibraryFolderButtonIconSize = 35;
 
         public static Color RattingStarEmptyColor = Color.FromArgb(255, 178, 178, 178);

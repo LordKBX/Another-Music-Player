@@ -2,14 +2,17 @@
 using AnotherMusicPlayer.Styles;
 using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Diagnostics;
 using System.Drawing;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Resources;
 using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
@@ -19,6 +22,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
+using System.Xml.Linq;
 using TagLib;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using Control = System.Windows.Forms.Control;
@@ -30,7 +34,7 @@ namespace AnotherMusicPlayer
     {
         public static readonly string AppName = "AnotherMusicPlayer";
         public static Database bdd = new Database();
-        public static List<string> Languages = new List<string> { "English", "Français" };
+        public static List<string> Languages = new List<string> { };
         public static List<string> Styles = new List<string> { };
 
         private static bool _IsDebug = false;
@@ -49,6 +53,25 @@ namespace AnotherMusicPlayer
         [STAThread]
         public static void Main(string[] args)
         {
+            ResourceSet? rset = Properties.Resources.ResourceManager.GetResourceSet(CultureInfo.CurrentCulture, true, true);
+            if (rset != null)
+            {
+                List<DictionaryEntry> files = new List<DictionaryEntry>();
+                files = rset.Cast<DictionaryEntry>().Where(x => ((x.Value == null) ? false : (x.Value.GetType() == typeof(string)))).ToList();
+                foreach (DictionaryEntry file in files)
+                {
+                    string key = "" + file.Key.ToString();
+                    string data = (file.Value != null) ? "" + file.Value.ToString() : "";
+
+                    if (key.StartsWith("Translation_"))
+                    {
+                        try { Languages.Add(key.Replace("Translation_", "")); }
+                        catch (Exception ex) { }
+                    }
+                }
+            }
+            else { Languages = new List<string> { "English", "Français" }; }
+
             TestDebug();
             Settings.LoadSettings();
 
@@ -57,8 +80,10 @@ namespace AnotherMusicPlayer
             Assembly stylesAsm = typeof(AnotherMusicPlayer.Styles.Dark).Assembly;
             foreach (Type type in stylesAsm.GetTypes())
             {
+                //Debug.WriteLine(type.FullName);
                 if (type.FullName.StartsWith("AnotherMusicPlayer.Styles.") && type.Name != "Style") { Styles.Add(type.Name); }
             }
+            Debug.WriteLine(JsonConvert.SerializeObject(Styles));
             if (!Styles.Contains(Settings.StyleName)) { Settings.StyleName = Styles[0]; }
             UpdateStyle();
             Player.INIT();

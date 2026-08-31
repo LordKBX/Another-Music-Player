@@ -64,6 +64,7 @@ namespace AnotherMusicPlayer
             }
 
             cm.Tag = parent;
+            cm.Renderer = new CMRenderer();
             return cm;
         }
 
@@ -339,6 +340,7 @@ namespace AnotherMusicPlayer
             cm.InfoMedia.Tag = parent;
             cm.InfoMedia.Click += InfoMedia_Click;
 
+            cm.Renderer = new CMRenderer();
             return cm;
         }
 
@@ -597,7 +599,8 @@ namespace AnotherMusicPlayer
             get { return _BackColor; }
             set { base.BackColor = _BackColor = value; Update(); }
         }
-        private SolidColorBrush DefaultBrush = new SolidColorBrush(Colors.White);
+
+        private SolidColorBrush DefaultBrush = new SolidColorBrush(Icons.ToMediaColor(App.style.GetColor("ContextMenuForeColor", System.Drawing.Color.White)));
         private int ButtonIconSize = 32;
 
         public void SetType(PlayListsNodeContextMenuType type)

@@ -50,7 +50,7 @@
             button1.Margin = new System.Windows.Forms.Padding(0);
             button1.Name = "button1";
             MainTableLayoutPanel.SetRowSpan(button1, 2);
-            button1.Size = new System.Drawing.Size(150, 148);
+            button1.Size = new System.Drawing.Size(188, 185);
             button1.TabIndex = 0;
             button1.UseVisualStyleBackColor = false;
             // 
@@ -60,9 +60,10 @@
             label1.AutoEllipsis = true;
             label1.AutoSize = true;
             label1.ForeColor = System.Drawing.Color.White;
-            label1.Location = new System.Drawing.Point(153, 2);
+            label1.Location = new System.Drawing.Point(192, 3);
+            label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(142, 20);
+            label1.Size = new System.Drawing.Size(176, 25);
             label1.TabIndex = 0;
             label1.Text = "<AA>";
             // 
@@ -71,7 +72,7 @@
             MainTableLayoutPanel.AutoSize = true;
             MainTableLayoutPanel.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             MainTableLayoutPanel.ColumnCount = 2;
-            MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 150F));
+            MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 188F));
             MainTableLayoutPanel.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             MainTableLayoutPanel.Controls.Add(button1);
             MainTableLayoutPanel.Controls.Add(label1, 1, 0);
@@ -81,10 +82,10 @@
             MainTableLayoutPanel.Margin = new System.Windows.Forms.Padding(0);
             MainTableLayoutPanel.Name = "MainTableLayoutPanel";
             MainTableLayoutPanel.RowCount = 2;
-            MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
             MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            MainTableLayoutPanel.Size = new System.Drawing.Size(298, 148);
+            MainTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            MainTableLayoutPanel.Size = new System.Drawing.Size(372, 185);
             MainTableLayoutPanel.TabIndex = 1;
             // 
             // tableLayoutPanel1
@@ -95,12 +96,13 @@
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(diskBlock1, 0, 1);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Top;
-            tableLayoutPanel1.Location = new System.Drawing.Point(153, 28);
+            tableLayoutPanel1.Location = new System.Drawing.Point(192, 35);
+            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            tableLayoutPanel1.Size = new System.Drawing.Size(142, 87);
+            tableLayoutPanel1.Size = new System.Drawing.Size(176, 87);
             tableLayoutPanel1.TabIndex = 2;
             // 
             // diskBlock1
@@ -109,25 +111,27 @@
             diskBlock1.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             diskBlock1.BackColor = System.Drawing.Color.Transparent;
             diskBlock1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            diskBlock1.Dock = System.Windows.Forms.DockStyle.Top;
             diskBlock1.Location = new System.Drawing.Point(0, 0);
             diskBlock1.Margin = new System.Windows.Forms.Padding(0);
-            diskBlock1.MinimumSize = new System.Drawing.Size(200, 0);
+            diskBlock1.MinimumSize = new System.Drawing.Size(250, 2);
             diskBlock1.Name = "diskBlock1";
-            diskBlock1.Size = new System.Drawing.Size(200, 87);
+            diskBlock1.Size = new System.Drawing.Size(250, 87);
             diskBlock1.TabIndex = 0;
             // 
             // AlbumBlock
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             AutoSize = true;
             AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             BackColor = System.Drawing.Color.Transparent;
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             Controls.Add(MainTableLayoutPanel);
-            MinimumSize = new System.Drawing.Size(300, 150);
+            Margin = new System.Windows.Forms.Padding(4);
+            MinimumSize = new System.Drawing.Size(374, 187);
             Name = "AlbumBlock";
-            Size = new System.Drawing.Size(298, 148);
+            Size = new System.Drawing.Size(372, 185);
             MainTableLayoutPanel.ResumeLayout(false);
             MainTableLayoutPanel.PerformLayout();
             tableLayoutPanel1.ResumeLayout(false);

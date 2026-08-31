@@ -190,19 +190,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {
             try
             {
-                Debug.WriteLine("SizerMouseMove");
+                //Debug.WriteLine("SizerMouseMove");
                 if (!IsResizing) { return; }
                 if (IsResizing)
                 {
-                    Debug.WriteLine("Calculate");
+                    //Debug.WriteLine("Calculate");
                     this.Width = Cursor.Position.X - ResizePosX + ResizeSizeW;
                     this.Height = Cursor.Position.Y - ResizePosY + ResizeSizeH;
 
 
-                    Debug.WriteLine("ResizeSizeW = " + ResizeSizeW);
-                    Debug.WriteLine("ResizeSizeH = " + ResizeSizeH);
-                    Debug.WriteLine("Width = " + Width);
-                    Debug.WriteLine("Height = " + Height);
+                    //Debug.WriteLine("ResizeSizeW = " + ResizeSizeW);
+                    //Debug.WriteLine("ResizeSizeH = " + ResizeSizeH);
+                    //Debug.WriteLine("Width = " + Width);
+                    //Debug.WriteLine("Height = " + Height);
 
                     this.ResizeRedraw = true;
                 }

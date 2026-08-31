@@ -23,6 +23,7 @@ namespace AnotherMusicPlayer.Components
 
         public TrackButton() { Init(null); }
         public TrackButton(MediaItem item) { Init(item); }
+
         private void Init(MediaItem item)
         {
             InitializeComponent();
@@ -41,6 +42,19 @@ namespace AnotherMusicPlayer.Components
                 this.Tag = item.Path;
             }
             //else { throw new Exception("MediaItem not valid"); }
+            this.BackColorChanged += TrackButton_BackColorChanged;
+            this.ForeColorChanged += TrackButton_ForeColorChanged;
+        }
+
+        private void TrackButton_BackColorChanged(object sender, EventArgs e)
+        {
+            tableLayoutPanel1.BackColor = this.BackColor;
+            label1.BackColor = this.BackColor;
+        }
+
+        private void TrackButton_ForeColorChanged(object sender, EventArgs e)
+        {
+            label1.ForeColor = this.ForeColor;
         }
 
         private void TrackButton_DoubleClick(object sender, EventArgs e)

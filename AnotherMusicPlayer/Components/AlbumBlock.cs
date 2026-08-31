@@ -1,4 +1,5 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
+using AnotherMusicPlayer.Styles;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -38,6 +39,7 @@ namespace AnotherMusicPlayer.Components
             string al = albumT.Key;
             if (al == null || al.Trim() == "") { if (uniqueDir) { al = "<UNKWON ALBUM>"; } else { al = albumT.Value.Values.First().First().Value.Name; } }
             label1.Text = al;
+            label1.ForeColor = App.style.GetColor("GlobalForeColor", Dark.GlobalForeColor);
             BitmapImage bi = BitmapMagic.BitmapToBitmapImage(defaultCover);
             try { bi = FilesTags.MediaPicture(coverPath, App.bdd, true, 150, 150, false); } catch (Exception) { }
             button1.BackgroundImage = BitmapMagic.BitmapImage2Bitmap(bi);

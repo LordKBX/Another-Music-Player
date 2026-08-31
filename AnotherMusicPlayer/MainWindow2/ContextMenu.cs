@@ -12,7 +12,6 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Threading;
-
 namespace AnotherMusicPlayer.MainWindow2Space
 {
     public partial class MainWindow2
@@ -105,6 +104,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     };
                 }
             }
+
+            cm.Renderer = new CMRenderer();
             return cm;
         }
     }
@@ -124,7 +125,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             get { return _BackColor; }
             set { base.BackColor = _BackColor = value; Update(); }
         }
-        private SolidColorBrush DefaultBrush = new SolidColorBrush(Colors.White);
+        private SolidColorBrush DefaultBrush = new SolidColorBrush(Icons.ToMediaColor(App.style.GetColor("ContextMenuForeColor", System.Drawing.Color.White)));
         private int ButtonIconSize = 32;
 
         // ITEMS

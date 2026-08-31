@@ -1,4 +1,6 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
+using AnotherMusicPlayer.Properties;
+using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -6,8 +8,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
+using System.Resources;
 using System.Security.AccessControl;
 using System.Windows.Forms;
+using System.Windows.Media;
+using System.Xml.Linq;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using Button = System.Windows.Forms.Button;
 
@@ -134,9 +139,31 @@ namespace AnotherMusicPlayer
         }
         #endregion
 
+        internal void AddIcon(IconKind ico, string label, System.Drawing.Color colo) {
+            System.Windows.Media.Color color = Icons.ToMediaColor(colo);
+            Bitmap icon = Icons.FromIconKind(ico, 16, new SolidColorBrush(color));
+            Parent.PlayListsTabTreeImageList.Images.Add(label, icon);
+        }
+
+        internal void UpdatePlayListViewIcons() {
+            Parent.PlayListsTabTreeImageList.Images.Clear();
+            AddIcon(IconKind.SquareMedium, "dot_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.Filter, "filter_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.Floppy, "floppy_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.Radio, "radio_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.FolderOpen, "folder_open_trimed.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.AlertDecagram, "new_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.ChartLine, "chart_line_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+            AddIcon(IconKind.Star, "star_white.png", App.style.GetColor("RattingStarEmptyColor", System.Drawing.Color.White));
+            AddIcon(IconKind.Star, "star_up.png", App.style.GetColor("RattingStarFullColor", System.Drawing.Color.Yellow));
+            AddIcon(IconKind.History, "history_recent_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
+        }
+
         public void Init()
         {
             if (Parent.PlaylistsTree.InvokeRequired) { Parent.PlaylistsTree.Invoke(() => { Init(); }); return; }
+
+
             Parent.PlaylistsTree.Nodes[0].Nodes.Clear(); Parent.PlaylistsTree.Nodes[1].Nodes.Clear(); Parent.PlaylistsTree.Nodes[2].Nodes.Clear();
             DisplayVoidPanel();
             Parent.PlayListsTabDataGridView.AutoGenerateColumns = false;

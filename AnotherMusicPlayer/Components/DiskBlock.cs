@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AnotherMusicPlayer.Styles;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,10 +22,10 @@ namespace AnotherMusicPlayer.Components
     {
         public DiskBlock() { Init(null); }
         public DiskBlock(KeyValuePair<uint, Dictionary<string, MediaItem>> disk) { Init(disk); }
-        public static int MinimumHeight = 30;
+        public static int MinimumHeight = 35;
         private int CalcHeight = 0;
-        private static int r0Height = 30;
-        private static int rxHeight = 30;
+        private static int r0Height = 35;
+        private static int rxHeight = 35;
         private bool hasLine0 = false;
 
         private void Init(KeyValuePair<uint, Dictionary<string, MediaItem>>? disk)
@@ -52,6 +53,7 @@ namespace AnotherMusicPlayer.Components
                 this.Tag = brList;
                 if (disk?.Key > 0) { this.ContextMenuStrip = App.win1.library.MakeContextMenu(this, "disk"); }
                 ApplyHeight();
+                label1.ForeColor = App.style.GetColor("GlobalForeColor", Dark.GlobalForeColor);
             }
         }
 
@@ -63,6 +65,10 @@ namespace AnotherMusicPlayer.Components
                 tableLayoutPanel2.RowStyles.Add(new RowStyle(SizeType.Absolute, rxHeight));
             }
             else { tableLayoutPanel2.RowStyles[0] = new RowStyle(SizeType.Absolute, rxHeight); }
+            int i = tableLayoutPanel2.RowCount - 1;
+            if (i == 0 || i % 2 == 0) { button.BackColor = App.style.GetColor("GridViewRowBackColor"); button.ForeColor = App.style.GetColor("GridViewRowForeColor"); }
+            else { button.BackColor = App.style.GetColor("GridViewRowBackColorAlt"); button.ForeColor = App.style.GetColor("GridViewRowForeColorAlt"); }
+            
             tableLayoutPanel2.Controls.Add(button);
             if (ispublic) { ApplyHeight(); }
         }
@@ -72,7 +78,7 @@ namespace AnotherMusicPlayer.Components
             //if (lines > 4) { lines += 1; }
             if (tableLayoutPanel2.Controls.Count < tableLayoutPanel2.RowCount) { lines -= 1; }
 
-            CalcHeight = 6 + ((hasLine0) ? r0Height : 0) + ((lines) * rxHeight) + ((lines) * 1);
+            CalcHeight = 0 + ((hasLine0) ? r0Height : 0) + ((lines) * rxHeight)/* + ((lines) * 1)*/;
 
             if (CalcHeight > MinimumHeight)
             {

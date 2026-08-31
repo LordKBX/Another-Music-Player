@@ -117,10 +117,11 @@
     <ParamsDisplayLiveLyrics0><![CDATA[No]]></ParamsDisplayLiveLyrics0>
     <ParamsDisplayLiveLyrics1><![CDATA[Yes]]></ParamsDisplayLiveLyrics1>
 
-    <ParamsLibHiddenFilesUnixLabel><![CDATA[Show hidden files style Unix]]></ParamsLibHiddenFilesUnixLabel>
+    <ParamsLibHiddenFilesLabel><![CDATA[Show hidden files]]></ParamsLibHiddenFilesLabel>
+    <ParamsLibHiddenFilesUnixLabel><![CDATA[Style Unix]]></ParamsLibHiddenFilesUnixLabel>
     <ParamsLibHiddenFilesUnix0><![CDATA[No]]></ParamsLibHiddenFilesUnix0>
     <ParamsLibHiddenFilesUnix1><![CDATA[Yes]]></ParamsLibHiddenFilesUnix1>
-    <ParamsLibHiddenFilesWindowsLabel><![CDATA[Show hidden files style Windows]]></ParamsLibHiddenFilesWindowsLabel>
+    <ParamsLibHiddenFilesWindowsLabel><![CDATA[Style Windows]]></ParamsLibHiddenFilesWindowsLabel>
     <ParamsLibHiddenFilesWindows0><![CDATA[No]]></ParamsLibHiddenFilesWindows0>
     <ParamsLibHiddenFilesWindows1><![CDATA[Yes]]></ParamsLibHiddenFilesWindows1>
 

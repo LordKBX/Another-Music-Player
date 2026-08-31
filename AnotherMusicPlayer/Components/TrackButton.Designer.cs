@@ -86,10 +86,10 @@
             BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             Controls.Add(tableLayoutPanel1);
             Margin = new System.Windows.Forms.Padding(0);
-            MaximumSize = new System.Drawing.Size(0, 27);
+            MaximumSize = new System.Drawing.Size(0, 35);
             MinimumSize = new System.Drawing.Size(250, 35);
             Name = "TrackButton";
-            Size = new System.Drawing.Size(248, 33);
+            Size = new System.Drawing.Size(248, 35);
             tableLayoutPanel1.ResumeLayout(false);
             ResumeLayout(false);
         }

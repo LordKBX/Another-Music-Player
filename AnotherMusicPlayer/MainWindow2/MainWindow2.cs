@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Resources;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
@@ -179,11 +180,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             library = new Library(this);
             playLists = new PlayLists(this);
+            playLists.UpdatePlayListViewIcons();
 
             PlaylistIndexAtLoading = Settings.LastPlaylistIndex;
             if (Settings.LastRepeatStatus == 0) { Player.Repeat(false); Player.Loop(false); }
             else if (Settings.LastRepeatStatus == 1) { Player.Repeat(true); Player.Loop(false); }
             else { Player.Repeat(false); Player.Loop(true); }
+            BtnRepeat.BackgroundImage = (Player.IsRepeat()) ? IconRepeatOnce : (Player.IsLoop()) ? IconRepeat : IconRepeatOff;
+
             Debug.WriteLine("PlaylistIndexAtLoading = " + PlaylistIndexAtLoading);
             GlobalTableLayoutPanel.RowStyles[2].Height = 0;
 
@@ -225,6 +229,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     else if (Player.IsRepeat()) { Player.Repeat(false); Player.Loop(false); }
                     else { Player.Repeat(false); Player.Loop(true); }
                     BtnRepeat.BackgroundImage = (Player.IsRepeat()) ? IconRepeatOnce : (Player.IsLoop()) ? IconRepeat : IconRepeatOff;
+                    Settings.LastRepeatStatus = (Player.IsLoop()) ? 2 : (Player.IsRepeat()) ? 1 : 0;
+                    App.bdd.DatabaseSaveParam("LastRepeatStatus", "" + Settings.LastRepeatStatus, "INT");
                 };
                 playbackProgressBar.Change += PlaybackProgressBar_Change;
                 #endregion
@@ -471,6 +477,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             {
                 App.UpdateStyle();
                 InitIcons();
+                playLists.UpdatePlayListViewIcons();
             }
         }
         public void AlwaysOnTop(bool val) { this.TopMost = val; }
@@ -491,14 +498,15 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     playbackProgressBar.Value = Convert.ToInt32(Math.Round(Convert.ToDouble(position) * playbackProgressBar.MaxValue / duration, 0, MidpointRounding.ToEven));
                     Settings.LastPlaylistDuration = position;
                     App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
-                    if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
+                    if (Settings.AutoCloseLyrics && position <= 500) { CloseLyricsWindows(); }
 
                     if (LyricsTimedLines != null && Settings.DisplayLiveLyrics)
                     {
                         List<long> times = LyricsTimedLines.Keys.ToList();
-                        var index = times.BinarySearch(position);
+                        int index = 0;
+                        foreach (long t in times) { if(t>position) { index = times.IndexOf(t) - 1; break; } }
 
-                        LyricsTextBox.Text = LyricsTimedLines[times[~index - 1]];
+                        LyricsTextBox.Text = LyricsTimedLines[times[index]];
                     }
                     else 
                     {

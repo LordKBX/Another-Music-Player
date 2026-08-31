@@ -11,31 +11,34 @@ namespace AnotherMusicPlayer.Styles
 {
     internal class Red: AnotherMusicPlayer.Styles.Style
     {
-        private Type styleType = typeof(Red);
+        internal static Type StyleType = typeof(Red);
+        internal Type styleType = typeof(Red);
 
-        public static Font GlobalFont = new Font("Segoe UI", 9, FontStyle.Regular, GraphicsUnit.Point);
-        public static Font GlobalFontTitle = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
-        public static Font GlobalFontTitleBold = new Font("Segoe UI", 12, FontStyle.Bold, GraphicsUnit.Point);
-        public static Color GlobalBackColor = Color.FromArgb(255, 255, 30, 30);
+        public static Font GlobalFont = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
+        public static Font GlobalFontTitle = new Font("Segoe UI", 15, FontStyle.Regular, GraphicsUnit.Point);
+        public static Font GlobalFontTitleBold = new Font("Segoe UI", 15, FontStyle.Bold, GraphicsUnit.Point);
+        public static Color GlobalBackColor = Color.FromArgb(255, 150, 30, 30);
         public static Color GlobalForeColor = Color.FromArgb(255, 255, 255, 255);
         public static Color GlobalIconColor = Color.FromArgb(255, 255, 255, 255);
         public static int GlobalIconSize = 24;
 
-        public static Color ContextMenuBackColor = Color.FromArgb(255, 30, 30, 30);
+        public static Color ContextMenuBackColor = Color.FromArgb(255, 200, 50, 50);
         public static Color ContextMenuForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Color ContextMenuOverBackColor = Color.FromArgb(255, 220, 70, 70);
+        public static Color ContextMenuPushBackColor = Color.FromArgb(255, 250, 80, 80);
 
         public static Color GlobalTrackIconBackColor = Color.FromArgb(255, 0, 0, 0);
 
-        public static Color GlobalButtonBackColor = Color.FromArgb(255, 255, 50, 50);
+        public static Color GlobalButtonBackColor = Color.FromArgb(255, 132, 46, 91);
         public static Color GlobalButtonForeColor = Color.FromArgb(255, 255, 255, 255);
         public static Font GlobalButtonFont = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
         public static Cursor GlobalButtonCursor = Cursors.Hand;
         public static FlatStyle GlobalButtonFlatStyle = FlatStyle.Flat;
         public static Color GlobalButtonFlatAppearanceBorderColor = Color.FromArgb(255, 255, 255, 255);
         public static uint GlobalButtonFlatAppearanceBorderSize = 1;
-        public static Color GlobalButtonFlatAppearanceCheckedBackColor = Color.FromArgb(255, 110, 110, 110);
-        public static Color GlobalButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 110, 110, 110);
-        public static Color GlobalButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 80, 80, 80);
+        public static Color GlobalButtonFlatAppearanceCheckedBackColor = Color.FromArgb(255, 132, 46, 91);
+        public static Color GlobalButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 255, 119, 119);
+        public static Color GlobalButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 220, 70, 70);
 
         public static Color ValidateButtonBackColor = Color.ForestGreen;
         public static Color ValidateButtonForeColor = Color.White;
@@ -43,7 +46,7 @@ namespace AnotherMusicPlayer.Styles
         public static Cursor GripButtonCursor = Cursors.SizeNWSE;
         public static Color GripButtonBackColor = GlobalBackColor;
 
-        public static Color GlobalTextBoxBackColor = Color.FromArgb(255, 80, 80, 80);
+        public static Color GlobalTextBoxBackColor = Color.FromArgb(255, 186, 107, 107);
         public static Color GlobalTextBoxForeColor = Color.FromArgb(255, 255, 255, 255);
         public static BorderStyle GlobalTextBoxBorderStyle = BorderStyle.None;
         public static int GlobalTextBoxMinHeight = 25;
@@ -53,7 +56,7 @@ namespace AnotherMusicPlayer.Styles
         public static Color WindowButtonBackColor = Color.Gray;
 
         public static FlatStyle ComboBoxFlatStyle = FlatStyle.Flat;
-        public static Color ComboBoxBackColor = Color.FromArgb(255, 50, 50, 50);
+        public static Color ComboBoxBackColor = Color.FromArgb(255, 132, 46, 91);
         public static Color ComboBoxForeColor = Color.FromArgb(255, 255, 255, 255);
 
         public static FlatStyle CheckBoxFlatStyle = FlatStyle.Flat;
@@ -68,22 +71,27 @@ namespace AnotherMusicPlayer.Styles
 
         public static Color TabIconColor = Color.FromArgb(255, 255, 255, 255);
         public static int TabIconSize = 24;
-        public static Color TabBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color TabBackColorSelected = Color.FromArgb(255, 255, 128, 0);
-        public static Color TabBackColorOver = Color.FromArgb(255, 255, 192, 128);
+        public static Color TabBackColor = Color.FromArgb(255, 132, 46, 91);
+        public static Color TabBackColorSelected = Color.FromArgb(255, 255, 119, 119);
+        public static Color TabBackColorOver = Color.FromArgb(255, 220, 70, 70);
 
         public static Font GridViewFont = new Font("Segoe UI", 9, FontStyle.Regular, GraphicsUnit.Point);
         public static BorderStyle GridViewBorderStyle = BorderStyle.FixedSingle;
         public static DataGridViewCellBorderStyle GridViewCellBorderStyle = DataGridViewCellBorderStyle.Single;
         public static DataGridViewHeaderBorderStyle GridViewHeaderBorderStyle = DataGridViewHeaderBorderStyle.Raised;
         public static int GridViewColumnHeaderHeight = 25;
-        public static Color GridViewRowBackColor = Color.FromArgb(255, 50, 50, 50);
-        public static Color GridViewRowBackColorAlt = Color.FromArgb(255, 70, 50, 70);
-        public static Color GridViewRowBackColorSelection = Color.FromKnownColor(KnownColor.Highlight);
+        public static Color GridViewBackColor = Color.FromArgb(255, 186, 107, 107);
+
+        public static Color GridViewRowBackColor = Color.FromArgb(255, 193, 67, 135);
         public static Color GridViewRowForeColor = Color.FromArgb(255, 255, 255, 255);
+
+        public static Color GridViewRowBackColorAlt = Color.FromArgb(255, 118, 41, 81);
         public static Color GridViewRowForeColorAlt = Color.FromArgb(255, 255, 255, 255);
+
+        public static Color GridViewRowBackColorSelection = Color.FromArgb(255, 255, 119, 119);
         public static Color GridViewRowForeColorSelection = Color.FromArgb(255, 255, 255, 255);
-        public static Color GridViewColumnHeaderBackColor = Color.Teal;
+
+        public static Color GridViewColumnHeaderBackColor = Color.FromArgb(255, 118, 41, 81);
         public static Color GridViewColumnHeaderForeColor = Color.FromArgb(255, 255, 255, 255);
 
         public static Color PlaybackProgressBarBackColor = Color.FromArgb(255, 30, 30, 30);
@@ -96,6 +104,9 @@ namespace AnotherMusicPlayer.Styles
         public static Color LibraryFolderButtonMouseDownBackColor = Color.FromArgb(255, 120, 120, 120);
         public static int LibraryFolderButtonIconSize = 35;
 
+        public static Color RattingStarEmptyColor = Color.FromArgb(255, 178, 178, 178);
+        public static Color RattingStarFullColor = Color.FromArgb(255, 246, 171, 39);
+
         public Color GetColor(string reference, Color? defaultColor = null)
         {
             if (defaultColor == null) { defaultColor = Color.White; }
@@ -105,10 +116,17 @@ namespace AnotherMusicPlayer.Styles
         public T GetValue<T>(string reference, T defaultValue)
         {
             Type valueType = typeof(T);
-
-            object rt = styleType.InvokeMember(reference, BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.GetField, Type.DefaultBinder, null, null);
-            if (rt == null || rt.GetType() != valueType) { return defaultValue; }
-            return (T)rt;
+            try
+            {
+                object rt = styleType.InvokeMember(reference, BindingFlags.Static | BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.GetField, Type.DefaultBinder, null, null);
+                if (rt == null || rt.GetType() != valueType) { return defaultValue; }
+                return (T)rt;
+            }
+            catch(Exception ex)
+            {
+                Console.WriteLine("Error in style GetValue: " + ex.Message + "\r\n" + ex.StackTrace);
+                return defaultValue;
+            }
         }
     }
 }

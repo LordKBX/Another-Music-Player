@@ -13,12 +13,23 @@ using Brush = System.Windows.Media.Brush;
 using Pen = System.Windows.Media.Pen;
 using System.Windows.Forms;
 
+
 namespace AnotherMusicPlayer.MainWindow2Space
 {
     internal static class Icons
     {
         private static Color DefaultColor = Colors.White;
-        private static Brush DefaultBrush = new SolidColorBrush(DefaultColor);
+        private static Brush DefaultBrush = new SolidColorBrush(DefaultColor); 
+        
+        public static System.Windows.Media.Color ToMediaColor(System.Drawing.Color color)
+        {
+            return System.Windows.Media.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
+        
+        public static System.Drawing.Color ToDrawingColor(System.Windows.Media.Color color)
+        {
+            return System.Drawing.Color.FromArgb(color.A, color.R, color.G, color.B);
+        }
 
         public static Bitmap FromDataString(string source, int TargetSize = 32, Brush brush = null) 
         {

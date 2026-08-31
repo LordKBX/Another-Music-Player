@@ -127,6 +127,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                 window.SettingsTabLibraryGroupBox.Text = App.GetTranslation("ParamsLibFolderLabel");
                 App.SetToolTip(window.SettingsTabLibraryFolderButton, App.GetTranslation("ParamsLibFolderSelectorTitle"));
+                window.SettingsTabLibraryHiddenFileLabel.Text = App.GetTranslation("ParamsLibHiddenFilesLabel");
                 window.SettingsTabLibraryUnixHiddenFileLabel.Text = App.GetTranslation("ParamsLibHiddenFilesUnixLabel");
                 window.SettingsTabLibraryUnixHiddenFileComboBox.Items[0] = App.GetTranslation("ParamsLibHiddenFilesUnix0");
                 window.SettingsTabLibraryUnixHiddenFileComboBox.Items[1] = App.GetTranslation("ParamsLibHiddenFilesUnix1");
