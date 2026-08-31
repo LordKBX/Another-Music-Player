@@ -481,7 +481,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
         }
         public void AlwaysOnTop(bool val) { this.TopMost = val; }
-        private void ReplaceElementDualText(Control ctrl, string text) { ctrl.Text = text; App.SetToolTip(ctrl, text); }
+        private void ReplaceElementDualText(Control ctrl, string text) {
+            Font ft = App.style.GetValue<Font>("GlobalFont", AnotherMusicPlayer.Styles.Dark.GlobalFont);
+            int w = ctrl.Width - ctrl.Padding.Left - ctrl.Padding.Right;
+            float max = w / (ft.SizeInPoints - 1);
+            if (text.Length > max) { ctrl.Text = text.Substring(0, Convert.ToInt32(max)) + "..."; }
+            else { ctrl.Text = text; }
+            App.SetToolTip(ctrl, text); 
+        }
         #endregion
 
         #region Playback change functions
