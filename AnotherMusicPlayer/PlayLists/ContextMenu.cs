@@ -76,6 +76,8 @@ namespace AnotherMusicPlayer
 
             if (data.Item2 == PlayListsNodeContextMenuType.Auto)
             {
+                Player.StopAll();
+                Player.PlaylistClear();
                 AutoPlaylistTypes playlistType = AutoPlaylistTypes.LastImports;
                 if (data.Item1.Index == 0) { playlistType = AutoPlaylistTypes.LastImports; }
                 if (data.Item1.Index == 1) { playlistType = AutoPlaylistTypes.MostPlayed; }
@@ -88,8 +90,6 @@ namespace AnotherMusicPlayer
                     
                 List<string> paths = new List<string>();
                 foreach (PlayListsLineItem pitem in files) { paths.Add(pitem.Path); }
-                Player.StopAll();
-                Player.PlaylistClear();
                 Player.PlaylistEnqueue(paths.ToArray(), false, 0, 0, true);
             }
             else if (data.Item2 == PlayListsNodeContextMenuType.CustomNode)
@@ -116,6 +116,8 @@ namespace AnotherMusicPlayer
 
             if (data.Item2 == PlayListsNodeContextMenuType.Auto)
             {
+                Player.StopAll();
+                Player.PlaylistClear();
                 AutoPlaylistTypes playlistType = AutoPlaylistTypes.LastImports;
                 if (data.Item1.Index == 0) { playlistType = AutoPlaylistTypes.LastImports; }
                 if (data.Item1.Index == 1) { playlistType = AutoPlaylistTypes.MostPlayed; }
@@ -127,8 +129,6 @@ namespace AnotherMusicPlayer
                 else { files = autolistData(playlistType, 100); }
                 List<string> paths = new List<string>();
                 foreach (PlayListsLineItem pitem in files) { paths.Add(pitem.Path); }
-                Player.StopAll();
-                Player.PlaylistClear();
                 Player.PlaylistEnqueue(paths.ToArray(), true, 0, 0, true);
             }
             else if (data.Item2 == PlayListsNodeContextMenuType.CustomNode)

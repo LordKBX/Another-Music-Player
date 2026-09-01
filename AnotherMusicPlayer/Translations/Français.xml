@@ -241,7 +241,7 @@
     <EditorTagLabelAlbum><![CDATA[Album]]></EditorTagLabelAlbum>
     <EditorTagLabelGenres><![CDATA[Genres]]></EditorTagLabelGenres>
     <EditorTagLabelAlbumArtists><![CDATA[Album Artistes]]></EditorTagLabelAlbumArtists>
-    <EditorTagLabelAlbumYear><![CDATA[Année de sortie]]></EditorTagLabelAlbumYear>
+    <EditorTagLabelYear><![CDATA[Année de sortie]]></EditorTagLabelYear>
     <EditorTagLabelDisc><![CDATA[Disque]]></EditorTagLabelDisc>
     <EditorTagLabelTrack><![CDATA[Piste]]></EditorTagLabelTrack>
     <EditorTagLabelCopyright><![CDATA[Copyright]]></EditorTagLabelCopyright>

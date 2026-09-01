@@ -29,7 +29,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static Type typeDataGridViewCheckBoxColumn = typeof(DataGridViewCheckBoxColumn);
         private static Type typePlaybackProgressBar = typeof(PlaybackProgressBar);
         private static Type typeTextBox = typeof(TextBox);
+        private static Type typeMaskedTextBox = typeof(MaskedTextBox);
         private static Type typeRichTextBox = typeof(RichTextBox);
+        private static Type typeNumericUpDown = typeof(NumericUpDown);
         private static Type typeLabel = typeof(Label);
         private static Type typeString = typeof(string);
         private static Type typeRating2 = typeof(Rating2);
@@ -37,6 +39,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
         public static void SetGlobalColor(Control parent, int lv = 0)
         {
+            if (parent == null) { return; }
             bool skipSub = false;
             if (parent is Form)
             {
@@ -97,14 +100,31 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     dgv.AlternatingRowsDefaultCellStyle.ForeColor = App.style.GetColor("GridViewRowForeColorAlt");
                     dgv.AlternatingRowsDefaultCellStyle.SelectionForeColor = App.style.GetColor("GridViewRowForeColorSelection");
                 }
-                else if (type == typeLabel && (Tags.Contains("Bold")))
+                else if (type == typeLabel)
                 {
+                    ((Label)parent).BackColor = App.style.GetColor("GlobalBackColor", Styles.Dark.GlobalBackColor);
+                    ((Label)parent).ForeColor = App.style.GetColor("GlobalForeColor", Styles.Dark.GlobalForeColor);
+                    ((Label)parent).Font = App.style.GetValue<Font>("GlobalFont", Styles.Dark.GlobalFont);
+
                     if (Tags.Contains("Bold"))
                     {
-                        parent.BackColor = App.style.GetColor("GlobalBackColor");
-                        try { parent.ForeColor = App.style.GetColor("GlobalForeColor", Dark.GlobalForeColor); } catch (Exception) { }
                         ((Label)parent).Font = App.style.GetValue<Font>("GlobalFontTitleBold", Dark.GlobalFontTitleBold);
                         ((Label)parent).TextAlign = ContentAlignment.MiddleLeft;
+                    }
+                    else if (parent.Name == "TitleLabel")
+                    {
+                        ((Label)parent).Font = App.style.GetValue<Font>("GlobalFontTitle", Styles.Dark.GlobalFontTitle);
+                        ((Label)parent).TextAlign = ContentAlignment.MiddleLeft;
+                    }
+                    else if (parent.Name == "LyricsTextBox")
+                    {
+                        ((Label)parent).BackColor = App.style.GetColor("LyricsTextBoxBackColor", Styles.Dark.LyricsTextBoxBackColor);
+                        ((Label)parent).Font = App.style.GetValue<Font>("GlobalFontTitle", Styles.Dark.GlobalFontTitle);
+                        ((Label)parent).TextAlign = ContentAlignment.MiddleCenter;
+
+                        ((Label)parent).Image = Icons.FromIconKind(IconKind.MicrophoneVariant, 32, new SolidColorBrush(Icons.ToMediaColor(App.style.GetColor("GlobalForeColor", Styles.Dark.GlobalForeColor))));
+                        ((Label)parent).ImageAlign = ContentAlignment.TopLeft;
+
                     }
                 }
                 else if (type == typeDataGridViewTextBoxColumn)
@@ -222,10 +242,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 {
                     parent.BackColor = App.style.GetColor("GlobalTextBoxBackColor");
                     parent.ForeColor = App.style.GetColor("GlobalTextBoxForeColor");
+                    parent.Font = App.style.GetValue<Font>("GlobalFont", AnotherMusicPlayer.Styles.Dark.GlobalFont);
                     ((TextBox)parent).BorderStyle = App.style.GetValue<BorderStyle>("GlobalTextBoxBorderStyle", BorderStyle.None);
                     ((TextBox)parent).AutoSize = false;
-                    ((TextBox)parent).TextAlign = HorizontalAlignment.Left;
-                    ((TextBox)parent).Padding = new Padding(0);
+                    parent.MinimumSize = new Size(0, App.style.GetValue<int>("GlobalTextBoxMinHeight", Dark.GlobalTextBoxMinHeight));
+                    parent.Font = App.style.GetValue<Font>("GlobalTextBoxFont", Dark.GlobalTextBoxFont);
+                }
+                else if (type == typeMaskedTextBox)
+                {
+                    parent.BackColor = App.style.GetColor("GlobalTextBoxBackColor");
+                    parent.ForeColor = App.style.GetColor("GlobalTextBoxForeColor");
+                    parent.Font = App.style.GetValue<Font>("GlobalFont", AnotherMusicPlayer.Styles.Dark.GlobalFont);
+                    ((MaskedTextBox)parent).BorderStyle = App.style.GetValue<BorderStyle>("GlobalTextBoxBorderStyle", BorderStyle.None);
+                    ((MaskedTextBox)parent).AutoSize = false;
                     parent.MinimumSize = new Size(0, App.style.GetValue<int>("GlobalTextBoxMinHeight", Dark.GlobalTextBoxMinHeight));
                     parent.Font = App.style.GetValue<Font>("GlobalTextBoxFont", Dark.GlobalTextBoxFont);
                 }
@@ -263,6 +292,17 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 else if (type == typeRating2)
                 {
                     parent.BackColor = Color.Transparent;
+                    return;
+                }
+                else if (type == typeof(PlayBackContextMenu) || type == typeof(PlayListsNodeContextMenu) || type == typeof(LibraryContextMenu))
+                {
+                    Debug.WriteLine("<<<< PlayBackContextMenu >>>>");
+                    parent.BackColor = App.style.GetColor("ContextMenuBackColor");
+                    parent.ForeColor = App.style.GetColor("ContextMenuForeColor");
+                    if (type == typeof(PlayBackContextMenu) && App.win1 != null) { App.win1.playBackContextMenu = App.win1.MakePlayBackContextMenu(); }
+                    if (type == typeof(PlayListsNodeContextMenu)) { ((PlayListsNodeContextMenu)parent).Update(); }
+                    if (type == typeof(LibraryContextMenu)) { ((LibraryContextMenu)parent).Update(); }
+                    
                     return;
                 }
                 else

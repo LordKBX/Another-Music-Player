@@ -19,6 +19,7 @@ namespace AnotherMusicPlayer
             FolderPath = folderPath;
             PathTab = pathTab;
             InitializeComponent();
+            AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
 
             input.Text = pathTab[pathTab.Length - 1];
             this.Load += RenameWindow_Loaded;

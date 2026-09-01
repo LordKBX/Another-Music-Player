@@ -32,10 +32,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            TreeNode treeNode4 = new TreeNode("Automatic");
-            TreeNode treeNode5 = new TreeNode("Recorded");
-            TreeNode treeNode6 = new TreeNode("Web Radio");
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            TreeNode treeNode1 = new TreeNode("Automatic");
+            TreeNode treeNode2 = new TreeNode("Recorded");
+            TreeNode treeNode3 = new TreeNode("Web Radio");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow2));
             GlobalTableLayoutPanel = new TableLayoutPanel();
             MainWIndowHead = new TableLayoutPanel();
@@ -616,7 +616,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabLeftBottomFlowLayoutPanel.Dock = DockStyle.Top;
             PlaybackTabLeftBottomFlowLayoutPanel.FlowDirection = FlowDirection.TopDown;
             PlaybackTabLeftBottomFlowLayoutPanel.Location = new Point(0, 0);
-            PlaybackTabLeftBottomFlowLayoutPanel.Margin = new Padding(4, 5, 4, 5);
+            PlaybackTabLeftBottomFlowLayoutPanel.Margin = new Padding(4, 5, 0, 5);
             PlaybackTabLeftBottomFlowLayoutPanel.MinimumSize = new Size(188, 311);
             PlaybackTabLeftBottomFlowLayoutPanel.Name = "PlaybackTabLeftBottomFlowLayoutPanel";
             PlaybackTabLeftBottomFlowLayoutPanel.Size = new Size(188, 364);
@@ -631,24 +631,26 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabTitleLabelInfo.Margin = new Padding(0, 4, 0, 0);
             PlaybackTabTitleLabelInfo.Name = "PlaybackTabTitleLabelInfo";
             PlaybackTabTitleLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabTitleLabelInfo.Size = new Size(175, 30);
+            PlaybackTabTitleLabelInfo.Size = new Size(185, 30);
             PlaybackTabTitleLabelInfo.TabIndex = 1;
             PlaybackTabTitleLabelInfo.Tag = "Title";
             PlaybackTabTitleLabelInfo.Text = "Title:";
             // 
             // PlaybackTabTitleLabelValue
             // 
+            PlaybackTabTitleLabelValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             PlaybackTabTitleLabelValue.AutoEllipsis = true;
-            PlaybackTabTitleLabelValue.Dock = DockStyle.Fill;
+            PlaybackTabLeftBottomFlowLayoutPanel.SetFlowBreak(PlaybackTabTitleLabelValue, true);
             PlaybackTabTitleLabelValue.Font = new Font("Segoe UI", 9F);
             PlaybackTabTitleLabelValue.Location = new Point(0, 34);
             PlaybackTabTitleLabelValue.Margin = new Padding(0);
-            PlaybackTabTitleLabelValue.MinimumSize = new Size(175, 25);
+            PlaybackTabTitleLabelValue.MinimumSize = new Size(185, 25);
             PlaybackTabTitleLabelValue.Name = "PlaybackTabTitleLabelValue";
             PlaybackTabTitleLabelValue.Padding = new Padding(14, 0, 0, 0);
-            PlaybackTabTitleLabelValue.Size = new Size(175, 25);
+            PlaybackTabTitleLabelValue.Size = new Size(185, 25);
             PlaybackTabTitleLabelValue.TabIndex = 1;
             PlaybackTabTitleLabelValue.Text = "Track Name";
+            PlaybackTabTitleLabelValue.UseCompatibleTextRendering = true;
             PlaybackTabTitleLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabAlbumLabelInfo
@@ -659,23 +661,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabAlbumLabelInfo.Margin = new Padding(0);
             PlaybackTabAlbumLabelInfo.Name = "PlaybackTabAlbumLabelInfo";
             PlaybackTabAlbumLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabAlbumLabelInfo.Size = new Size(175, 30);
+            PlaybackTabAlbumLabelInfo.Size = new Size(185, 30);
             PlaybackTabAlbumLabelInfo.TabIndex = 1;
             PlaybackTabAlbumLabelInfo.Tag = "Title";
             PlaybackTabAlbumLabelInfo.Text = "Album:";
             // 
             // PlaybackTabAlbumLabelValue
             // 
+            PlaybackTabAlbumLabelValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             PlaybackTabAlbumLabelValue.AutoEllipsis = true;
-            PlaybackTabAlbumLabelValue.Dock = DockStyle.Fill;
+            PlaybackTabLeftBottomFlowLayoutPanel.SetFlowBreak(PlaybackTabAlbumLabelValue, true);
             PlaybackTabAlbumLabelValue.Font = new Font("Segoe UI", 9F);
             PlaybackTabAlbumLabelValue.Location = new Point(0, 89);
             PlaybackTabAlbumLabelValue.Margin = new Padding(0);
-            PlaybackTabAlbumLabelValue.MinimumSize = new Size(175, 25);
+            PlaybackTabAlbumLabelValue.MinimumSize = new Size(185, 25);
             PlaybackTabAlbumLabelValue.Name = "PlaybackTabAlbumLabelValue";
             PlaybackTabAlbumLabelValue.Padding = new Padding(14, 0, 0, 0);
-            PlaybackTabAlbumLabelValue.Size = new Size(175, 25);
+            PlaybackTabAlbumLabelValue.Size = new Size(185, 25);
             PlaybackTabAlbumLabelValue.TabIndex = 1;
+            PlaybackTabAlbumLabelValue.UseCompatibleTextRendering = true;
             PlaybackTabAlbumLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabArtistsLabelInfo
@@ -686,22 +690,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabArtistsLabelInfo.Margin = new Padding(0);
             PlaybackTabArtistsLabelInfo.Name = "PlaybackTabArtistsLabelInfo";
             PlaybackTabArtistsLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabArtistsLabelInfo.Size = new Size(175, 30);
+            PlaybackTabArtistsLabelInfo.Size = new Size(185, 30);
             PlaybackTabArtistsLabelInfo.TabIndex = 1;
             PlaybackTabArtistsLabelInfo.Tag = "Title";
             PlaybackTabArtistsLabelInfo.Text = "Artists:";
             // 
             // PlaybackTabArtistsLabelValue
             // 
+            PlaybackTabArtistsLabelValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             PlaybackTabArtistsLabelValue.AutoEllipsis = true;
+            PlaybackTabLeftBottomFlowLayoutPanel.SetFlowBreak(PlaybackTabArtistsLabelValue, true);
             PlaybackTabArtistsLabelValue.Font = new Font("Segoe UI", 9F);
             PlaybackTabArtistsLabelValue.Location = new Point(0, 144);
             PlaybackTabArtistsLabelValue.Margin = new Padding(0);
-            PlaybackTabArtistsLabelValue.MinimumSize = new Size(175, 25);
+            PlaybackTabArtistsLabelValue.MinimumSize = new Size(185, 25);
             PlaybackTabArtistsLabelValue.Name = "PlaybackTabArtistsLabelValue";
             PlaybackTabArtistsLabelValue.Padding = new Padding(14, 0, 0, 0);
-            PlaybackTabArtistsLabelValue.Size = new Size(175, 25);
+            PlaybackTabArtistsLabelValue.Size = new Size(185, 25);
             PlaybackTabArtistsLabelValue.TabIndex = 1;
+            PlaybackTabArtistsLabelValue.UseCompatibleTextRendering = true;
             PlaybackTabArtistsLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabGenresLabelInfo
@@ -712,23 +719,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabGenresLabelInfo.Margin = new Padding(0);
             PlaybackTabGenresLabelInfo.Name = "PlaybackTabGenresLabelInfo";
             PlaybackTabGenresLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabGenresLabelInfo.Size = new Size(175, 30);
+            PlaybackTabGenresLabelInfo.Size = new Size(185, 30);
             PlaybackTabGenresLabelInfo.TabIndex = 1;
             PlaybackTabGenresLabelInfo.Tag = "Title";
             PlaybackTabGenresLabelInfo.Text = "Genre:";
             // 
             // PlaybackTabGenresLabelValue
             // 
+            PlaybackTabGenresLabelValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             PlaybackTabGenresLabelValue.AutoEllipsis = true;
-            PlaybackTabGenresLabelValue.Dock = DockStyle.Fill;
+            PlaybackTabLeftBottomFlowLayoutPanel.SetFlowBreak(PlaybackTabGenresLabelValue, true);
             PlaybackTabGenresLabelValue.Font = new Font("Segoe UI", 9F);
             PlaybackTabGenresLabelValue.Location = new Point(0, 199);
             PlaybackTabGenresLabelValue.Margin = new Padding(0);
-            PlaybackTabGenresLabelValue.MinimumSize = new Size(175, 25);
+            PlaybackTabGenresLabelValue.MinimumSize = new Size(185, 25);
             PlaybackTabGenresLabelValue.Name = "PlaybackTabGenresLabelValue";
             PlaybackTabGenresLabelValue.Padding = new Padding(14, 0, 0, 0);
-            PlaybackTabGenresLabelValue.Size = new Size(175, 28);
+            PlaybackTabGenresLabelValue.Size = new Size(185, 28);
             PlaybackTabGenresLabelValue.TabIndex = 1;
+            PlaybackTabGenresLabelValue.UseCompatibleTextRendering = true;
             PlaybackTabGenresLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabDurationLabelInfo
@@ -739,22 +748,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabDurationLabelInfo.Margin = new Padding(0);
             PlaybackTabDurationLabelInfo.Name = "PlaybackTabDurationLabelInfo";
             PlaybackTabDurationLabelInfo.Padding = new Padding(2, 0, 0, 0);
-            PlaybackTabDurationLabelInfo.Size = new Size(175, 30);
+            PlaybackTabDurationLabelInfo.Size = new Size(185, 30);
             PlaybackTabDurationLabelInfo.TabIndex = 1;
             PlaybackTabDurationLabelInfo.Tag = "Title";
             PlaybackTabDurationLabelInfo.Text = "Duration:";
             // 
             // PlaybackTabDurationLabelValue
             // 
-            PlaybackTabDurationLabelValue.Dock = DockStyle.Fill;
+            PlaybackTabDurationLabelValue.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            PlaybackTabDurationLabelValue.AutoEllipsis = true;
+            PlaybackTabLeftBottomFlowLayoutPanel.SetFlowBreak(PlaybackTabDurationLabelValue, true);
             PlaybackTabDurationLabelValue.Font = new Font("Segoe UI", 9F);
             PlaybackTabDurationLabelValue.Location = new Point(0, 257);
             PlaybackTabDurationLabelValue.Margin = new Padding(0);
-            PlaybackTabDurationLabelValue.MinimumSize = new Size(175, 25);
+            PlaybackTabDurationLabelValue.MinimumSize = new Size(185, 25);
             PlaybackTabDurationLabelValue.Name = "PlaybackTabDurationLabelValue";
             PlaybackTabDurationLabelValue.Padding = new Padding(14, 0, 0, 0);
-            PlaybackTabDurationLabelValue.Size = new Size(175, 28);
+            PlaybackTabDurationLabelValue.Size = new Size(185, 28);
             PlaybackTabDurationLabelValue.TabIndex = 1;
+            PlaybackTabDurationLabelValue.UseCompatibleTextRendering = true;
             PlaybackTabDurationLabelValue.UseMnemonic = false;
             // 
             // PlaybackTabRatting
@@ -845,7 +857,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaybackTabDataGridView.EnableHeadersVisualStyles = false;
             PlaybackTabDataGridView.Location = new Point(4, 54);
             PlaybackTabDataGridView.Margin = new Padding(4);
-            PlaybackTabDataGridView.MultiSelect = false;
             PlaybackTabDataGridView.Name = "PlaybackTabDataGridView";
             PlaybackTabDataGridView.ReadOnly = true;
             PlaybackTabDataGridView.RowHeadersVisible = false;
@@ -863,8 +874,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SelectedColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             SelectedColumn.DataPropertyName = "Selected";
-            dataGridViewCellStyle2.Font = new Font("Wingdings", 9F);
-            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Wingdings", 9F);
+            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle1;
             SelectedColumn.HeaderText = "";
             SelectedColumn.MinimumWidth = 30;
             SelectedColumn.Name = "SelectedColumn";
@@ -1199,22 +1210,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaylistsTree.Location = new Point(1, 1);
             PlaylistsTree.Margin = new Padding(0);
             PlaylistsTree.Name = "PlaylistsTree";
-            treeNode4.Checked = true;
-            treeNode4.ImageKey = "filter_icon.png";
-            treeNode4.Name = "PlayListsTabTreeNodeAutomatic";
-            treeNode4.SelectedImageKey = "filter_icon.png";
-            treeNode4.Text = "Automatic";
-            treeNode5.Checked = true;
-            treeNode5.ImageKey = "floppy_icon.png";
-            treeNode5.Name = "PlayListsTabTreeNodeRecorded";
-            treeNode5.SelectedImageKey = "floppy_icon.png";
-            treeNode5.Text = "Recorded";
-            treeNode6.Checked = true;
-            treeNode6.ImageKey = "radio_icon.png";
-            treeNode6.Name = "PlayListsTabTreeNodeWebRario";
-            treeNode6.SelectedImageKey = "radio_icon.png";
-            treeNode6.Text = "Web Radio";
-            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode5, treeNode6 });
+            treeNode1.Checked = true;
+            treeNode1.ImageKey = "filter_icon.png";
+            treeNode1.Name = "PlayListsTabTreeNodeAutomatic";
+            treeNode1.SelectedImageKey = "filter_icon.png";
+            treeNode1.Text = "Automatic";
+            treeNode2.Checked = true;
+            treeNode2.ImageKey = "floppy_icon.png";
+            treeNode2.Name = "PlayListsTabTreeNodeRecorded";
+            treeNode2.SelectedImageKey = "floppy_icon.png";
+            treeNode2.Text = "Recorded";
+            treeNode3.Checked = true;
+            treeNode3.ImageKey = "radio_icon.png";
+            treeNode3.Name = "PlayListsTabTreeNodeWebRario";
+            treeNode3.SelectedImageKey = "radio_icon.png";
+            treeNode3.Text = "Web Radio";
+            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
             PlaylistsTree.SelectedImageIndex = 0;
             PlaylistsTree.Size = new Size(250, 610);
             PlaylistsTree.TabIndex = 0;

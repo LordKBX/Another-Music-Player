@@ -434,6 +434,8 @@ namespace AnotherMusicPlayer
 
         private void OpenCustomPlaylist(int playlistId, bool startPlay = false, bool Shuffled = false)
         {
+            Player.StopAll();
+            Player.PlaylistClear();
             if (!startPlay)
             {
                 DisplayListPanel();
@@ -456,8 +458,6 @@ namespace AnotherMusicPlayer
             {
                 List<string> paths = new List<string>();
                 foreach (PlayListsLineItem item in files) { paths.Add(item.Path); }
-                Player.StopAll();
-                Player.PlaylistClear();
                 Player.PlaylistEnqueue(paths.ToArray(), Shuffled, 0, 0, false);
             }
             Parent.setLoadingState(false); 

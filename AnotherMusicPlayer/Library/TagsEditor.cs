@@ -48,6 +48,7 @@ namespace AnotherMusicPlayer
         public TagsEditor(MainWindow2 parent, string mode = "track", string[] files = null)
         {
             InitializeComponent();
+            AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
 
             if (parent == null) { Debug.WriteLine("TagsEditor, parent is null"); return; }
             if (mode == null) { Debug.WriteLine("TagsEditor, mode is null"); return; }

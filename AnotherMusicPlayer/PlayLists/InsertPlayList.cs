@@ -26,6 +26,7 @@ namespace AnotherMusicPlayer
             if (clearTracks.Count < 1) { throw new Exception("No valid Tracks in parametters"); }
 
             InitializeComponent();
+            AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
 
             this.StartPosition = FormStartPosition.CenterParent;
 

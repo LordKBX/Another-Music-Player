@@ -49,7 +49,7 @@ namespace AnotherMusicPlayer.Styles
         public static Color GlobalTextBoxBackColor = Color.FromArgb(255, 200, 200, 200);
         public static Color GlobalTextBoxForeColor = Color.FromArgb(255, 0, 0, 0);
         public static BorderStyle GlobalTextBoxBorderStyle = BorderStyle.None;
-        public static int GlobalTextBoxMinHeight = 25;
+        public static int GlobalTextBoxMinHeight = 35;
         public static Font GlobalTextBoxFont = new Font("Segoe UI", GlobalTextBoxMinHeight * 0.45F , FontStyle.Regular, GraphicsUnit.Point);
 
         public static Color WindowBackColor = Color.FromArgb(255, 255, 255, 255);
@@ -106,6 +106,8 @@ namespace AnotherMusicPlayer.Styles
 
         public static Color RattingStarEmptyColor = Color.FromArgb(255, 178, 178, 178);
         public static Color RattingStarFullColor = Color.FromArgb(255, 246, 171, 39);
+
+        public static Color LyricsTextBoxBackColor = Color.FromArgb(50, 0, 0, 0);
 
         public Color GetColor(string reference, Color? defaultColor = null)
         {

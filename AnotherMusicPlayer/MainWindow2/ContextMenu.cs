@@ -27,6 +27,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         if (App.win1.PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
                         int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
                         MediaInfoWindow mi = new MediaInfoWindow( this, ((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[id].DataBoundItem).Path );
+                        mi.StartPosition = FormStartPosition.CenterScreen;
                         mi.ShowDialog();
                     };
                 }
@@ -64,14 +65,35 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 {
                     cm.Items[i].Click += (object sender, EventArgs e) => {
                         if (App.win1.PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
-                        int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
-
-                        if (Player.Index  == id)
+                        if (App.win1.PlaybackTabDataGridView.SelectedRows.Count == 1)
                         {
-                            ((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[Player.Index].DataBoundItem).Selected = "";
-                            Player.StopAll();
+                            int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
+
+                            if (Player.Index == id)
+                            {
+                                ((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[Player.Index].DataBoundItem).Selected = "";
+                                Player.StopAll();
+                            }
+                            Player.PlaylistRemoveIndex(id);
                         }
-                        Player.PlaylistRemoveIndex(id);
+                        else {
+                            List<int> ids = new List<int>();
+                            foreach (DataGridViewRow row in App.win1.PlaybackTabDataGridView.SelectedRows) {
+                                ids.Add(row.Index);
+                            }
+                            ids.Sort();
+                            ids.Reverse();
+
+                            foreach (int id in ids) {
+                                if (Player.Index == id)
+                                {
+                                    //((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[Player.Index].DataBoundItem).Selected = "";
+                                    Player.StopAll();
+                                }
+                                Player.PlaylistRemoveIndex(id);
+                            }
+                        }
+                        Player.SavePlaylist();
                     };
                 }
                 else if (cm.Items[i].Name == "EditTrack")
@@ -84,6 +106,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         if (Player.Index == id) { Player.Stop(); }
 
                         TagsEditor tags = new TagsEditor(this, "track", new string[] { trackPath });
+                        tags.StartPosition = FormStartPosition.CenterScreen;
 
                         if (tags.ShowDialog() == DialogResult.OK)
                         {
@@ -137,6 +160,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
         public PlayBackContextMenu()
         {
+            Tag = "ContextMenu";
             Font = new Font("Segoe UI", 15, System.Drawing.FontStyle.Regular, GraphicsUnit.Point);
             base.BackColor = _BackColor = App.style.GetColor("ContextMenuBackColor");
             base.ForeColor = _ForeColor = App.style.GetColor("ContextMenuForeColor");
@@ -154,6 +178,14 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlayTrack.Name = nameof(PlayTrack);
             RemoveTrack.Name = nameof(RemoveTrack);
             EditTrack.Name = nameof(EditTrack);
+        }
+
+        public void SetMultiple(bool multiple)
+        {
+            MediaInfo.Enabled = MediaInfo.Visible = !multiple;
+            OpenFolder.Enabled = OpenFolder.Visible = !multiple;
+            PlayTrack.Enabled = PlayTrack.Visible = !multiple;
+            EditTrack.Enabled = EditTrack.Visible = !multiple;
         }
 
         public void Update()

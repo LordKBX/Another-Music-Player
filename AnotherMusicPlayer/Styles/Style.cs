@@ -108,6 +108,8 @@ namespace AnotherMusicPlayer.Styles
         public static Color RattingStarEmptyColor;
         public static Color RattingStarFullColor;
 
+        public static Color LyricsTextBoxBackColor;
+
         public Color GetColor(string reference, Color? defaultColor = null);
 
         public T GetValue<T>(string reference, T defaultValue);

@@ -16,6 +16,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static AnotherMusicPlayer.Player;
+using Modes = AnotherMusicPlayer.Player.Modes;
 using Button = System.Windows.Forms.Button;
 using Color = System.Drawing.Color;
 using Control = System.Windows.Forms.Control;
@@ -100,11 +101,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
-        private PlayBackContextMenu playBackContextMenu;
+        internal PlayBackContextMenu playBackContextMenu;
 
         public void InitIcons()
         {
             Common.SetGlobalColor(this);
+            Common.SetGlobalColor(playBackContextMenu);
             //this.BackColor = App.style.GetColor("WindowBackColor");
 
             SolidColorBrush PlaybackIconDefaultBrush = new SolidColorBrush(App.DrawingColorToMediaColor(App.style.GetColor("GlobalIconColor")));
@@ -167,10 +169,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
         /// <summary> Object music player </summary>
         public MainWindow2()
         {
-            InitializeComponent(); InitIcons();
+            InitializeComponent();
+            playBackContextMenu = MakePlayBackContextMenu(); 
+            InitIcons();
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             SettingsTabLangComboBox.Items.AddRange(App.Languages.ToArray());
-            playBackContextMenu = MakePlayBackContextMenu();
 
             this.Width = Convert.ToInt32(Math.Floor(Settings.LastWindowWidth));
             this.Height = Convert.ToInt32(Math.Floor(Settings.LastWindowHeight));
@@ -319,7 +322,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 else if (e.RowIndex >= PlaybackTabDataGridView.Rows.Count) { return; }
                 try
                 {
-                    PlaybackTabDataGridView.Rows[e.RowIndex].Selected = true;
+                    if (PlaybackTabDataGridView.Rows[e.RowIndex].Selected == false) { PlaybackTabDataGridView.ClearSelection(); PlaybackTabDataGridView.Rows[e.RowIndex].Selected = true; }
+                    
+                    if (PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
+                    else if (PlaybackTabDataGridView.SelectedRows.Count == 1) { playBackContextMenu.SetMultiple(false); }
+                    else { playBackContextMenu.SetMultiple(true); }
+
                     playBackContextMenu.Show(System.Windows.Forms.Cursor.Position);
                 }
                 catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
@@ -483,9 +491,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
         public void AlwaysOnTop(bool val) { this.TopMost = val; }
         private void ReplaceElementDualText(Control ctrl, string text) {
             Font ft = App.style.GetValue<Font>("GlobalFont", AnotherMusicPlayer.Styles.Dark.GlobalFont);
-            int w = ctrl.Width - ctrl.Padding.Left - ctrl.Padding.Right;
-            float max = w / (ft.SizeInPoints - 1);
-            if (text.Length > max) { ctrl.Text = text.Substring(0, Convert.ToInt32(max)) + "..."; }
+            if (ctrl.GetType() == typeof(Label)) { ((Label)ctrl).AutoEllipsis = false; }
+            if (ctrl.Tag == null || "" + ctrl.Tag == "PlaybackTabLabel") { ctrl.MinimumSize = new Size(ctrl.Parent.Width - 2, 28); }
+
+            int w = ctrl.Parent.Width - 2 - ctrl.Padding.Left - ctrl.Padding.Right;
+            float max = (w / (ft.SizeInPoints));
+            if (text.Length > Convert.ToInt32(max)) { ctrl.Text = text.Substring(0, Convert.ToInt32(max)) + "..."; }
             else { ctrl.Text = text; }
             App.SetToolTip(ctrl, text); 
         }
@@ -510,12 +521,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     if (LyricsTimedLines != null && Settings.DisplayLiveLyrics)
                     {
                         List<long> times = LyricsTimedLines.Keys.ToList();
-                        int index = 0;
-                        foreach (long t in times) { if(t>position) { index = times.IndexOf(t) - 1; break; } }
+                        List<LyricsBlock> lines = new List<LyricsBlock>();
+                        foreach (long t in times)
+                        {
+                            if (lines.Count > 0)
+                            {
+                                if (t < lines[lines.Count - 1].End) { lines[lines.Count - 1].End = t - 1; }
+                            }
+                            lines.Add(new LyricsBlock() { Start = t, End = t + 5000, Text = LyricsTimedLines[t] });
+                        }
 
-                        LyricsTextBox.Text = LyricsTimedLines[times[index]];
+                        string text = "...";
+                        foreach (LyricsBlock line in lines)
+                        {
+                            if (position >= line.Start && position <= line.End) { text = line.Text; }
+                        }
+
+                        LyricsTextBox.Text = text;
                     }
-                    else 
+                    else
                     {
                         GlobalTableLayoutPanel.RowStyles[2].Height = 0;
                     }
@@ -550,6 +574,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     try
                     {
                         playbackProgressBar.Enabled = true;
+                        PlaybackTabDataGridView.ClearSelection();
                         PlaybackTabDataGridView.Rows[pos].Selected = true;
                         PlaybackTabDataGridView.FirstDisplayedScrollingRowIndex = pos;
                         foreach (PlayListViewItem tm in PlayListItems) { tm.Selected = ""; }
@@ -770,6 +795,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 else { FileCover.BackgroundImage = BitmapMagic.BitmapImage2Bitmap(bi); }
                 Debug.WriteLine(JsonConvert.SerializeObject(item));
                 PlaybackTabTitleLabelValue.Visible = true;
+                ReplaceElementDualText(TitleLabel, item.Name);
                 ReplaceElementDualText(PlaybackTabTitleLabelValue, item.Name);
                 if (item.Album.Trim().Length > 0)
                 { PlaybackTabAlbumLabelInfo.Visible = true; PlaybackTabAlbumLabelValue.Visible = true; ReplaceElementDualText(PlaybackTabAlbumLabelValue, item.Album); }
@@ -816,10 +842,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GlobalTableLayoutPanel.RowStyles[2].Height = 50;
 
             LyricsTextBox.Text = "";
-            LyricsTextBox.BackColor = App.style.GetColor("GlobalBackColor");
-            LyricsTextBox.ForeColor = App.style.GetColor("ContextMenuForeColor");
-            LyricsTextBox.Font = App.style.GetValue<Font>("GlobalFontTitle", this.Font);
-            LyricsTextBox.TextAlign = ContentAlignment.MiddleCenter;
             LyricsTimedLines = item.GetTimedLyrics();
         }
     }

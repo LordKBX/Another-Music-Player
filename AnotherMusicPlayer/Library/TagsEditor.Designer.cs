@@ -86,7 +86,7 @@
             Cover.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             Cover.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             Cover.Location = new System.Drawing.Point(4, 4);
-            Cover.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Cover.Margin = new System.Windows.Forms.Padding(4);
             Cover.MaximumSize = new System.Drawing.Size(312, 312);
             Cover.MinimumSize = new System.Drawing.Size(312, 312);
             Cover.Name = "Cover";
@@ -96,28 +96,28 @@
             // 
             // TitleLabel
             // 
-            TitleLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            TitleLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             TitleLabel.AutoSize = true;
             TitleLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             TitleLabel.ForeColor = System.Drawing.Color.White;
             TitleLabel.Location = new System.Drawing.Point(4, 18);
             TitleLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new System.Drawing.Size(60, 32);
+            TitleLabel.Size = new System.Drawing.Size(558, 32);
             TitleLabel.TabIndex = 0;
             TitleLabel.Tag = "Title";
             TitleLabel.Text = "Title";
             // 
             // PerformersLabel
             // 
-            PerformersLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            PerformersLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             PerformersLabel.AutoSize = true;
             PerformersLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             PerformersLabel.ForeColor = System.Drawing.Color.White;
             PerformersLabel.Location = new System.Drawing.Point(4, 318);
             PerformersLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             PerformersLabel.Name = "PerformersLabel";
-            PerformersLabel.Size = new System.Drawing.Size(129, 32);
+            PerformersLabel.Size = new System.Drawing.Size(558, 32);
             PerformersLabel.TabIndex = 0;
             PerformersLabel.Tag = "Title";
             PerformersLabel.Text = "Performers";
@@ -129,21 +129,21 @@
             PerformersInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             PerformersInput.Font = new System.Drawing.Font("Segoe UI", 14F);
             PerformersInput.Location = new System.Drawing.Point(4, 359);
-            PerformersInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            PerformersInput.Margin = new System.Windows.Forms.Padding(4);
             PerformersInput.Name = "PerformersInput";
             PerformersInput.Size = new System.Drawing.Size(558, 32);
             PerformersInput.TabIndex = 1;
             // 
             // AlbumLabel
             // 
-            AlbumLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            AlbumLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             AlbumLabel.AutoSize = true;
             AlbumLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             AlbumLabel.ForeColor = System.Drawing.Color.White;
             AlbumLabel.Location = new System.Drawing.Point(4, 118);
             AlbumLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             AlbumLabel.Name = "AlbumLabel";
-            AlbumLabel.Size = new System.Drawing.Size(84, 32);
+            AlbumLabel.Size = new System.Drawing.Size(558, 32);
             AlbumLabel.TabIndex = 0;
             AlbumLabel.Tag = "Title";
             AlbumLabel.Text = "Album";
@@ -155,21 +155,21 @@
             AlbumInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             AlbumInput.Font = new System.Drawing.Font("Segoe UI", 14F);
             AlbumInput.Location = new System.Drawing.Point(4, 159);
-            AlbumInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            AlbumInput.Margin = new System.Windows.Forms.Padding(4);
             AlbumInput.Name = "AlbumInput";
             AlbumInput.Size = new System.Drawing.Size(558, 32);
             AlbumInput.TabIndex = 4;
             // 
             // GenresLabel
             // 
-            GenresLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            GenresLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             GenresLabel.AutoSize = true;
             GenresLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             GenresLabel.ForeColor = System.Drawing.Color.White;
             GenresLabel.Location = new System.Drawing.Point(4, 418);
             GenresLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             GenresLabel.Name = "GenresLabel";
-            GenresLabel.Size = new System.Drawing.Size(88, 32);
+            GenresLabel.Size = new System.Drawing.Size(304, 32);
             GenresLabel.TabIndex = 5;
             GenresLabel.Tag = "Title";
             GenresLabel.Text = "Genres";
@@ -181,21 +181,21 @@
             GenresInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             GenresInput.Font = new System.Drawing.Font("Segoe UI", 14F);
             GenresInput.Location = new System.Drawing.Point(4, 459);
-            GenresInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            GenresInput.Margin = new System.Windows.Forms.Padding(4);
             GenresInput.Name = "GenresInput";
             GenresInput.Size = new System.Drawing.Size(304, 32);
             GenresInput.TabIndex = 4;
             // 
             // AlbumArtistsLabel
             // 
-            AlbumArtistsLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            AlbumArtistsLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             AlbumArtistsLabel.AutoSize = true;
             AlbumArtistsLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             AlbumArtistsLabel.ForeColor = System.Drawing.Color.White;
             AlbumArtistsLabel.Location = new System.Drawing.Point(4, 418);
             AlbumArtistsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             AlbumArtistsLabel.Name = "AlbumArtistsLabel";
-            AlbumArtistsLabel.Size = new System.Drawing.Size(156, 32);
+            AlbumArtistsLabel.Size = new System.Drawing.Size(558, 32);
             AlbumArtistsLabel.TabIndex = 0;
             AlbumArtistsLabel.Tag = "Title";
             AlbumArtistsLabel.Text = "Album Artists";
@@ -238,7 +238,7 @@
             tableLayoutPanel1.Controls.Add(ComposersInput, 0, 5);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel1.Location = new System.Drawing.Point(328, 4);
-            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 12;
             tableLayoutPanel4.SetRowSpan(tableLayoutPanel1, 2);
@@ -272,7 +272,7 @@
             TitleInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             TitleInput.Font = new System.Drawing.Font("Segoe UI", 12F);
             TitleInput.Location = new System.Drawing.Point(4, 61);
-            TitleInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            TitleInput.Margin = new System.Windows.Forms.Padding(4);
             TitleInput.Name = "TitleInput";
             TitleInput.Size = new System.Drawing.Size(558, 27);
             TitleInput.TabIndex = 1;
@@ -284,21 +284,21 @@
             AlbumArtistsInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             AlbumArtistsInput.Font = new System.Drawing.Font("Segoe UI", 14F);
             AlbumArtistsInput.Location = new System.Drawing.Point(4, 459);
-            AlbumArtistsInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            AlbumArtistsInput.Margin = new System.Windows.Forms.Padding(4);
             AlbumArtistsInput.Name = "AlbumArtistsInput";
             AlbumArtistsInput.Size = new System.Drawing.Size(558, 32);
             AlbumArtistsInput.TabIndex = 4;
             // 
             // LyricsLabel
             // 
-            LyricsLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            LyricsLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             LyricsLabel.AutoSize = true;
             LyricsLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             LyricsLabel.ForeColor = System.Drawing.Color.White;
             LyricsLabel.Location = new System.Drawing.Point(4, 518);
             LyricsLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             LyricsLabel.Name = "LyricsLabel";
-            LyricsLabel.Size = new System.Drawing.Size(71, 32);
+            LyricsLabel.Size = new System.Drawing.Size(558, 32);
             LyricsLabel.TabIndex = 1;
             LyricsLabel.Tag = "Title";
             LyricsLabel.Text = "Lyrics";
@@ -309,7 +309,7 @@
             LyricsInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             LyricsInput.Dock = System.Windows.Forms.DockStyle.Fill;
             LyricsInput.Location = new System.Drawing.Point(4, 554);
-            LyricsInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            LyricsInput.Margin = new System.Windows.Forms.Padding(4);
             LyricsInput.Name = "LyricsInput";
             LyricsInput.Size = new System.Drawing.Size(558, 446);
             LyricsInput.TabIndex = 12;
@@ -317,14 +317,14 @@
             // 
             // ComposersLabel
             // 
-            ComposersLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            ComposersLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             ComposersLabel.AutoSize = true;
             ComposersLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             ComposersLabel.ForeColor = System.Drawing.Color.White;
             ComposersLabel.Location = new System.Drawing.Point(4, 218);
             ComposersLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             ComposersLabel.Name = "ComposersLabel";
-            ComposersLabel.Size = new System.Drawing.Size(133, 32);
+            ComposersLabel.Size = new System.Drawing.Size(558, 32);
             ComposersLabel.TabIndex = 0;
             ComposersLabel.Tag = "Title";
             ComposersLabel.Text = "Composers";
@@ -336,7 +336,7 @@
             ComposersInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             ComposersInput.Font = new System.Drawing.Font("Segoe UI", 14F);
             ComposersInput.Location = new System.Drawing.Point(4, 259);
-            ComposersInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            ComposersInput.Margin = new System.Windows.Forms.Padding(4);
             ComposersInput.Name = "ComposersInput";
             ComposersInput.Size = new System.Drawing.Size(558, 32);
             ComposersInput.TabIndex = 4;
@@ -352,13 +352,13 @@
             tableLayoutPanel2.Controls.Add(DiscGrid, 0, 3);
             tableLayoutPanel2.Controls.Add(TrackLabel, 0, 4);
             tableLayoutPanel2.Controls.Add(TrackGrid, 0, 5);
-            tableLayoutPanel2.Controls.Add(CopyrightLabel, 0, 6);
             tableLayoutPanel2.Controls.Add(CopyrightInput, 0, 7);
             tableLayoutPanel2.Controls.Add(GenresLabel, 0, 8);
             tableLayoutPanel2.Controls.Add(GenresInput, 0, 9);
+            tableLayoutPanel2.Controls.Add(CopyrightLabel, 0, 6);
             tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             tableLayoutPanel2.Location = new System.Drawing.Point(4, 324);
-            tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(4);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 11;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
@@ -385,7 +385,7 @@
             SaveButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             SaveButton.ForeColor = System.Drawing.Color.White;
             SaveButton.Location = new System.Drawing.Point(4, 555);
-            SaveButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            SaveButton.Margin = new System.Windows.Forms.Padding(4);
             SaveButton.MinimumSize = new System.Drawing.Size(188, 125);
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new System.Drawing.Size(304, 125);
@@ -396,14 +396,14 @@
             // 
             // YearLabel
             // 
-            YearLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            YearLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             YearLabel.AutoSize = true;
             YearLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             YearLabel.ForeColor = System.Drawing.Color.White;
             YearLabel.Location = new System.Drawing.Point(4, 18);
             YearLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             YearLabel.Name = "YearLabel";
-            YearLabel.Size = new System.Drawing.Size(58, 32);
+            YearLabel.Size = new System.Drawing.Size(304, 32);
             YearLabel.TabIndex = 0;
             YearLabel.Tag = "Title";
             YearLabel.Text = "Year";
@@ -415,23 +415,24 @@
             YearInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             YearInput.Font = new System.Drawing.Font("Segoe UI", 13F);
             YearInput.Location = new System.Drawing.Point(4, 57);
-            YearInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            YearInput.Margin = new System.Windows.Forms.Padding(4);
             YearInput.Mask = "9999";
             YearInput.Name = "YearInput";
             YearInput.Size = new System.Drawing.Size(304, 36);
             YearInput.TabIndex = 5;
+            YearInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             YearInput.ValidatingType = typeof(int);
             // 
             // DiscLabel
             // 
-            DiscLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            DiscLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             DiscLabel.AutoSize = true;
             DiscLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             DiscLabel.ForeColor = System.Drawing.Color.White;
             DiscLabel.Location = new System.Drawing.Point(4, 118);
             DiscLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             DiscLabel.Name = "DiscLabel";
-            DiscLabel.Size = new System.Drawing.Size(58, 32);
+            DiscLabel.Size = new System.Drawing.Size(304, 32);
             DiscLabel.TabIndex = 0;
             DiscLabel.Tag = "Title";
             DiscLabel.Text = "Disc";
@@ -474,11 +475,12 @@
             DiscInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             DiscInput.Font = new System.Drawing.Font("Segoe UI", 13F);
             DiscInput.Location = new System.Drawing.Point(4, 7);
-            DiscInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            DiscInput.Margin = new System.Windows.Forms.Padding(4);
             DiscInput.Mask = "9999";
             DiscInput.Name = "DiscInput";
             DiscInput.Size = new System.Drawing.Size(135, 36);
             DiscInput.TabIndex = 5;
+            DiscInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             DiscInput.ValidatingType = typeof(int);
             // 
             // DiscCountInput
@@ -488,23 +490,24 @@
             DiscCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             DiscCountInput.Font = new System.Drawing.Font("Segoe UI", 13F);
             DiscCountInput.Location = new System.Drawing.Point(172, 7);
-            DiscCountInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            DiscCountInput.Margin = new System.Windows.Forms.Padding(4);
             DiscCountInput.Mask = "9999";
             DiscCountInput.Name = "DiscCountInput";
             DiscCountInput.Size = new System.Drawing.Size(136, 36);
             DiscCountInput.TabIndex = 5;
+            DiscCountInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             DiscCountInput.ValidatingType = typeof(int);
             // 
             // TrackLabel
             // 
-            TrackLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            TrackLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             TrackLabel.AutoSize = true;
             TrackLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             TrackLabel.ForeColor = System.Drawing.Color.White;
             TrackLabel.Location = new System.Drawing.Point(4, 218);
             TrackLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             TrackLabel.Name = "TrackLabel";
-            TrackLabel.Size = new System.Drawing.Size(68, 32);
+            TrackLabel.Size = new System.Drawing.Size(304, 32);
             TrackLabel.TabIndex = 0;
             TrackLabel.Tag = "Title";
             TrackLabel.Text = "Track";
@@ -547,11 +550,12 @@
             TrackInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             TrackInput.Font = new System.Drawing.Font("Segoe UI", 13F);
             TrackInput.Location = new System.Drawing.Point(4, 7);
-            TrackInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            TrackInput.Margin = new System.Windows.Forms.Padding(4);
             TrackInput.Mask = "9999";
             TrackInput.Name = "TrackInput";
             TrackInput.Size = new System.Drawing.Size(135, 36);
             TrackInput.TabIndex = 5;
+            TrackInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             TrackInput.ValidatingType = typeof(int);
             // 
             // TrackCountInput
@@ -561,23 +565,24 @@
             TrackCountInput.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             TrackCountInput.Font = new System.Drawing.Font("Segoe UI", 13F);
             TrackCountInput.Location = new System.Drawing.Point(172, 7);
-            TrackCountInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            TrackCountInput.Margin = new System.Windows.Forms.Padding(4);
             TrackCountInput.Mask = "9999";
             TrackCountInput.Name = "TrackCountInput";
             TrackCountInput.Size = new System.Drawing.Size(136, 36);
             TrackCountInput.TabIndex = 5;
+            TrackCountInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             TrackCountInput.ValidatingType = typeof(int);
             // 
             // CopyrightLabel
             // 
-            CopyrightLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left;
+            CopyrightLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             CopyrightLabel.AutoSize = true;
             CopyrightLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             CopyrightLabel.ForeColor = System.Drawing.Color.White;
             CopyrightLabel.Location = new System.Drawing.Point(4, 318);
             CopyrightLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             CopyrightLabel.Name = "CopyrightLabel";
-            CopyrightLabel.Size = new System.Drawing.Size(119, 32);
+            CopyrightLabel.Size = new System.Drawing.Size(304, 32);
             CopyrightLabel.TabIndex = 0;
             CopyrightLabel.Tag = "Title";
             CopyrightLabel.Text = "Copyright";
@@ -589,7 +594,7 @@
             CopyrightInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             CopyrightInput.Font = new System.Drawing.Font("Segoe UI", 14F);
             CopyrightInput.Location = new System.Drawing.Point(4, 359);
-            CopyrightInput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            CopyrightInput.Margin = new System.Windows.Forms.Padding(4);
             CopyrightInput.Name = "CopyrightInput";
             CopyrightInput.Size = new System.Drawing.Size(304, 32);
             CopyrightInput.TabIndex = 4;
@@ -603,7 +608,7 @@
             CloseButton.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             CloseButton.Location = new System.Drawing.Point(840, 4);
-            CloseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            CloseButton.Margin = new System.Windows.Forms.Padding(4);
             CloseButton.Name = "CloseButton";
             CloseButton.Size = new System.Drawing.Size(54, 56);
             CloseButton.TabIndex = 3;
@@ -674,7 +679,7 @@
             ClientSize = new System.Drawing.Size(900, 1079);
             Controls.Add(GlobalTableLayoutPanel);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            Margin = new System.Windows.Forms.Padding(4);
             MinimumSize = new System.Drawing.Size(900, 950);
             Name = "TagsEditor";
             Text = "TagsEditor";
