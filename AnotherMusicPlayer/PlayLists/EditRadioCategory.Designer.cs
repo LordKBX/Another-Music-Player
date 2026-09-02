@@ -65,11 +65,11 @@
             GlobalTableLayoutPanel.Name = "GlobalTableLayoutPanel";
             GlobalTableLayoutPanel.Padding = new System.Windows.Forms.Padding(1);
             GlobalTableLayoutPanel.RowCount = 3;
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 51F));
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
-            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            GlobalTableLayoutPanel.Size = new System.Drawing.Size(648, 448);
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 75F));
+            GlobalTableLayoutPanel.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 25F));
+            GlobalTableLayoutPanel.Size = new System.Drawing.Size(810, 560);
             GlobalTableLayoutPanel.TabIndex = 1;
             // 
             // ValidateButton
@@ -79,14 +79,15 @@
             ValidateButton.Cursor = System.Windows.Forms.Cursors.Hand;
             ValidateButton.Dock = System.Windows.Forms.DockStyle.Right;
             ValidateButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            ValidateButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            ValidateButton.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold);
             ValidateButton.ForeColor = System.Drawing.Color.White;
-            ValidateButton.Location = new System.Drawing.Point(444, 390);
-            ValidateButton.MinimumSize = new System.Drawing.Size(200, 0);
+            ValidateButton.Location = new System.Drawing.Point(555, 488);
+            ValidateButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            ValidateButton.MinimumSize = new System.Drawing.Size(250, 0);
             ValidateButton.Name = "ValidateButton";
-            ValidateButton.Size = new System.Drawing.Size(200, 54);
+            ValidateButton.Size = new System.Drawing.Size(250, 67);
             ValidateButton.TabIndex = 4;
-            ValidateButton.Tag = "WindowButton";
+            ValidateButton.Tag = "ValidateButton";
             ValidateButton.Text = "&Validate";
             ValidateButton.UseVisualStyleBackColor = false;
             // 
@@ -95,8 +96,8 @@
             MainWIndowHead.BackColor = System.Drawing.Color.FromArgb(30, 30, 30);
             MainWIndowHead.ColumnCount = 2;
             MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 62F));
+            MainWIndowHead.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 25F));
             MainWIndowHead.Controls.Add(TitleLabel, 0, 0);
             MainWIndowHead.Controls.Add(CloseButton, 1, 0);
             MainWIndowHead.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -105,7 +106,7 @@
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            MainWIndowHead.Size = new System.Drawing.Size(646, 51);
+            MainWIndowHead.Size = new System.Drawing.Size(808, 64);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
             // 
@@ -115,13 +116,13 @@
             TitleLabel.AutoSize = true;
             TitleLabel.BackColor = System.Drawing.Color.Transparent;
             TitleLabel.Dock = System.Windows.Forms.DockStyle.Fill;
-            TitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            TitleLabel.Font = new System.Drawing.Font("Segoe UI", 12F);
             TitleLabel.ForeColor = System.Drawing.Color.White;
             TitleLabel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            TitleLabel.Location = new System.Drawing.Point(5, 0);
-            TitleLabel.Margin = new System.Windows.Forms.Padding(5, 0, 0, 0);
+            TitleLabel.Location = new System.Drawing.Point(6, 0);
+            TitleLabel.Margin = new System.Windows.Forms.Padding(6, 0, 0, 0);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new System.Drawing.Size(591, 51);
+            TitleLabel.Size = new System.Drawing.Size(740, 64);
             TitleLabel.TabIndex = 0;
             TitleLabel.Tag = "Title";
             TitleLabel.Text = "Edit WebRadio Category";
@@ -135,9 +136,10 @@
             CloseButton.Cursor = System.Windows.Forms.Cursors.Hand;
             CloseButton.Dock = System.Windows.Forms.DockStyle.Fill;
             CloseButton.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            CloseButton.Location = new System.Drawing.Point(599, 3);
+            CloseButton.Location = new System.Drawing.Point(750, 4);
+            CloseButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             CloseButton.Name = "CloseButton";
-            CloseButton.Size = new System.Drawing.Size(44, 45);
+            CloseButton.Size = new System.Drawing.Size(54, 56);
             CloseButton.TabIndex = 3;
             CloseButton.Tag = "WindowButton";
             CloseButton.UseVisualStyleBackColor = false;
@@ -147,7 +149,7 @@
             // 
             tableLayoutPanel1.CellBorderStyle = System.Windows.Forms.TableLayoutPanelCellBorderStyle.Single;
             tableLayoutPanel1.ColumnCount = 2;
-            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             tableLayoutPanel1.Controls.Add(NameLabel, 0, 0);
             tableLayoutPanel1.Controls.Add(NameTextBox, 1, 0);
@@ -156,25 +158,26 @@
             tableLayoutPanel1.Controls.Add(LogoLabel, 0, 2);
             tableLayoutPanel1.Controls.Add(tableLayoutPanel2, 1, 2);
             tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel1.Location = new System.Drawing.Point(1, 52);
+            tableLayoutPanel1.Location = new System.Drawing.Point(1, 65);
             tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 3;
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 62F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 156F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(646, 335);
+            tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 195F));
+            tableLayoutPanel1.Size = new System.Drawing.Size(808, 419);
             tableLayoutPanel1.TabIndex = 5;
             // 
             // NameLabel
             // 
             NameLabel.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             NameLabel.AutoSize = true;
-            NameLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            NameLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             NameLabel.ForeColor = System.Drawing.Color.White;
-            NameLabel.Location = new System.Drawing.Point(4, 10);
+            NameLabel.Location = new System.Drawing.Point(5, 16);
+            NameLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             NameLabel.Name = "NameLabel";
-            NameLabel.Size = new System.Drawing.Size(194, 32);
+            NameLabel.Size = new System.Drawing.Size(242, 32);
             NameLabel.TabIndex = 0;
             NameLabel.Tag = "Title";
             NameLabel.Text = "label1";
@@ -184,21 +187,23 @@
             NameTextBox.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             NameTextBox.BackColor = System.Drawing.Color.DarkGray;
             NameTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            NameTextBox.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            NameTextBox.Location = new System.Drawing.Point(205, 10);
+            NameTextBox.Font = new System.Drawing.Font("Segoe UI", 14F);
+            NameTextBox.Location = new System.Drawing.Point(256, 16);
+            NameTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             NameTextBox.Name = "NameTextBox";
-            NameTextBox.Size = new System.Drawing.Size(437, 32);
+            NameTextBox.Size = new System.Drawing.Size(547, 32);
             NameTextBox.TabIndex = 1;
             // 
             // DescriptionLabel
             // 
             DescriptionLabel.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             DescriptionLabel.AutoSize = true;
-            DescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            DescriptionLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             DescriptionLabel.ForeColor = System.Drawing.Color.White;
-            DescriptionLabel.Location = new System.Drawing.Point(4, 98);
+            DescriptionLabel.Location = new System.Drawing.Point(5, 127);
+            DescriptionLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             DescriptionLabel.Name = "DescriptionLabel";
-            DescriptionLabel.Size = new System.Drawing.Size(194, 32);
+            DescriptionLabel.Size = new System.Drawing.Size(242, 32);
             DescriptionLabel.TabIndex = 0;
             DescriptionLabel.Tag = "Title";
             DescriptionLabel.Text = "Description";
@@ -208,9 +213,10 @@
             DescriptionTextBox.BackColor = System.Drawing.Color.DarkGray;
             DescriptionTextBox.BorderStyle = System.Windows.Forms.BorderStyle.None;
             DescriptionTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            DescriptionTextBox.Location = new System.Drawing.Point(205, 55);
+            DescriptionTextBox.Location = new System.Drawing.Point(256, 68);
+            DescriptionTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             DescriptionTextBox.Name = "DescriptionTextBox";
-            DescriptionTextBox.Size = new System.Drawing.Size(437, 119);
+            DescriptionTextBox.Size = new System.Drawing.Size(547, 150);
             DescriptionTextBox.TabIndex = 2;
             DescriptionTextBox.Text = "";
             // 
@@ -218,11 +224,12 @@
             // 
             LogoLabel.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             LogoLabel.AutoSize = true;
-            LogoLabel.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            LogoLabel.Font = new System.Drawing.Font("Segoe UI", 14F);
             LogoLabel.ForeColor = System.Drawing.Color.White;
-            LogoLabel.Location = new System.Drawing.Point(4, 240);
+            LogoLabel.Location = new System.Drawing.Point(5, 304);
+            LogoLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             LogoLabel.Name = "LogoLabel";
-            LogoLabel.Size = new System.Drawing.Size(194, 32);
+            LogoLabel.Size = new System.Drawing.Size(242, 32);
             LogoLabel.TabIndex = 0;
             LogoLabel.Tag = "Title";
             LogoLabel.Text = "Logo";
@@ -235,12 +242,12 @@
             tableLayoutPanel2.Controls.Add(LogoButton, 0, 0);
             tableLayoutPanel2.Controls.Add(tableLayoutPanel3, 1, 0);
             tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel2.Location = new System.Drawing.Point(202, 178);
+            tableLayoutPanel2.Location = new System.Drawing.Point(252, 223);
             tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
             tableLayoutPanel2.Name = "tableLayoutPanel2";
             tableLayoutPanel2.RowCount = 1;
             tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel2.Size = new System.Drawing.Size(443, 156);
+            tableLayoutPanel2.Size = new System.Drawing.Size(555, 195);
             tableLayoutPanel2.TabIndex = 3;
             // 
             // LogoButton
@@ -254,11 +261,12 @@
             LogoButton.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Black;
             LogoButton.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Black;
             LogoButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            LogoButton.Location = new System.Drawing.Point(3, 3);
-            LogoButton.MaximumSize = new System.Drawing.Size(150, 150);
-            LogoButton.MinimumSize = new System.Drawing.Size(150, 150);
+            LogoButton.Location = new System.Drawing.Point(4, 4);
+            LogoButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            LogoButton.MaximumSize = new System.Drawing.Size(188, 188);
+            LogoButton.MinimumSize = new System.Drawing.Size(188, 188);
             LogoButton.Name = "LogoButton";
-            LogoButton.Size = new System.Drawing.Size(150, 150);
+            LogoButton.Size = new System.Drawing.Size(188, 188);
             LogoButton.TabIndex = 4;
             LogoButton.UseVisualStyleBackColor = false;
             // 
@@ -272,11 +280,12 @@
             tableLayoutPanel3.Controls.Add(BtnClear, 2, 0);
             tableLayoutPanel3.Controls.Add(LogoButtonAction, 1, 0);
             tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            tableLayoutPanel3.Location = new System.Drawing.Point(159, 3);
+            tableLayoutPanel3.Location = new System.Drawing.Point(200, 4);
+            tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             tableLayoutPanel3.Name = "tableLayoutPanel3";
             tableLayoutPanel3.RowCount = 1;
             tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel3.Size = new System.Drawing.Size(281, 150);
+            tableLayoutPanel3.Size = new System.Drawing.Size(351, 187);
             tableLayoutPanel3.TabIndex = 5;
             // 
             // BtnClear
@@ -287,12 +296,13 @@
             BtnClear.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(90, 90, 90);
             BtnClear.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 50, 50);
             BtnClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            BtnClear.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            BtnClear.Font = new System.Drawing.Font("Segoe UI", 14F);
             BtnClear.ForeColor = System.Drawing.Color.White;
-            BtnClear.Location = new System.Drawing.Point(143, 53);
-            BtnClear.MaximumSize = new System.Drawing.Size(50, 0);
+            BtnClear.Location = new System.Drawing.Point(179, 71);
+            BtnClear.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            BtnClear.MaximumSize = new System.Drawing.Size(62, 0);
             BtnClear.Name = "BtnClear";
-            BtnClear.Size = new System.Drawing.Size(50, 44);
+            BtnClear.Size = new System.Drawing.Size(62, 44);
             BtnClear.TabIndex = 7;
             BtnClear.Text = "☒";
             BtnClear.UseVisualStyleBackColor = true;
@@ -306,12 +316,13 @@
             LogoButtonAction.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(90, 90, 90);
             LogoButtonAction.FlatAppearance.MouseOverBackColor = System.Drawing.Color.FromArgb(50, 50, 50);
             LogoButtonAction.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            LogoButtonAction.Font = new System.Drawing.Font("Segoe UI", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            LogoButtonAction.Font = new System.Drawing.Font("Segoe UI", 14F);
             LogoButtonAction.ForeColor = System.Drawing.Color.White;
-            LogoButtonAction.Location = new System.Drawing.Point(87, 53);
-            LogoButtonAction.MaximumSize = new System.Drawing.Size(50, 0);
+            LogoButtonAction.Location = new System.Drawing.Point(109, 71);
+            LogoButtonAction.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            LogoButtonAction.MaximumSize = new System.Drawing.Size(62, 0);
             LogoButtonAction.Name = "LogoButtonAction";
-            LogoButtonAction.Size = new System.Drawing.Size(50, 44);
+            LogoButtonAction.Size = new System.Drawing.Size(62, 44);
             LogoButtonAction.TabIndex = 6;
             LogoButtonAction.Text = "···";
             LogoButtonAction.UseVisualStyleBackColor = true;
@@ -319,14 +330,15 @@
             // 
             // EditRadioCategory
             // 
-            AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
+            AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.White;
-            ClientSize = new System.Drawing.Size(650, 450);
+            ClientSize = new System.Drawing.Size(812, 562);
             Controls.Add(GlobalTableLayoutPanel);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            MaximumSize = new System.Drawing.Size(650, 450);
-            MinimumSize = new System.Drawing.Size(650, 450);
+            Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            MaximumSize = new System.Drawing.Size(812, 562);
+            MinimumSize = new System.Drawing.Size(812, 562);
             Name = "EditRadioCategory";
             Padding = new System.Windows.Forms.Padding(1);
             ShowInTaskbar = false;

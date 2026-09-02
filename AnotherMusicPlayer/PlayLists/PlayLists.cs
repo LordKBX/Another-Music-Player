@@ -1,5 +1,6 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
 using AnotherMusicPlayer.Properties;
+using ExCSS;
 using NAudio.CoreAudioApi;
 using System;
 using System.Collections.Generic;
@@ -57,6 +58,7 @@ namespace AnotherMusicPlayer
             Parent.PlayListsTabRadioButton.Click += PlayListsTabRadioButton_Click;
             Parent.PlayListsTabDataGridView.CellMouseClick += PlayListsTabDataGridView_CellMouseClick;
             Parent.PlayListsTabDataGridView.CellMouseDoubleClick += PlayListsTabDataGridView_CellMouseDoubleClick;
+            Parent.PlayListsTabDataGridView.MultiSelect = true;
 
             DataGridViewContextMenu = MakeCellContextMenu(Parent.PlayListsTabDataGridView);
 
@@ -80,10 +82,21 @@ namespace AnotherMusicPlayer
 
             if (e.Button == MouseButtons.Right)
             {
-                Parent.PlayListsTabDataGridView.Rows[e.RowIndex].Selected = true;
-                PlayListsLineItem item = (PlayListsLineItem)Parent.PlayListsTabDataGridView.Rows[e.RowIndex].DataBoundItem;
-                Parent.PlayListsTabDataGridView.Tag = item;
-                DataGridViewContextMenu.Show(System.Windows.Forms.Cursor.Position);
+                if (Parent.PlayListsTabDataGridView.SelectedRows.Count < 2)
+                {
+                    Parent.PlayListsTabDataGridView.ClearSelection();
+                    Parent.PlayListsTabDataGridView.Rows[e.RowIndex].Selected = true;
+                    PlayListsLineItem item = (PlayListsLineItem)Parent.PlayListsTabDataGridView.Rows[e.RowIndex].DataBoundItem;
+                    Parent.PlayListsTabDataGridView.Tag = item;
+                    ((PlayListsCellContextMenu)DataGridViewContextMenu).MultipleSwitch(false);
+                    DataGridViewContextMenu.Show(System.Windows.Forms.Cursor.Position);
+                }
+                else
+                {
+                    ((PlayListsCellContextMenu)DataGridViewContextMenu).MultipleSwitch(true);
+                    Parent.PlayListsTabDataGridView.Rows[e.RowIndex].Selected = true;
+                    DataGridViewContextMenu.Show(System.Windows.Forms.Cursor.Position);
+                }
             }
         }
 
@@ -159,9 +172,16 @@ namespace AnotherMusicPlayer
             AddIcon(IconKind.History, "history_recent_icon.png", App.style.GetColor("GlobalForeColor", System.Drawing.Color.White));
         }
 
-        public void Init()
+        public void Init(PlayListItem selection = null)
         {
             if (Parent.PlaylistsTree.InvokeRequired) { Parent.PlaylistsTree.Invoke(() => { Init(); }); return; }
+
+            Parent.PlayListsTabDataGridView.Columns[0].HeaderText = App.GetTranslation("PlayCount");
+            Parent.PlayListsTabDataGridView.Columns[1].HeaderText = App.GetTranslation("Title");
+            Parent.PlayListsTabDataGridView.Columns[2].HeaderText = App.GetTranslation("Artist");
+            Parent.PlayListsTabDataGridView.Columns[3].HeaderText = App.GetTranslation("Album");
+            Parent.PlayListsTabDataGridView.Columns[4].HeaderText = App.GetTranslation("Duration");
+            Parent.PlayListsTabDataGridView.Columns[5].HeaderText = App.GetTranslation("Rating");
 
 
             Parent.PlaylistsTree.Nodes[0].Nodes.Clear(); Parent.PlaylistsTree.Nodes[1].Nodes.Clear(); Parent.PlaylistsTree.Nodes[2].Nodes.Clear();
@@ -191,6 +211,10 @@ namespace AnotherMusicPlayer
                 TreeNode item = new TreeNode() { Text = "" + row.Value["Name"], Tag = int.Parse("" + row.Value["FIndex"]), ToolTipText = "" + row.Value["Description"] };
                 item.ContextMenuStrip = MakeNodeContextMenu(item, PlayListsNodeContextMenuType.CustomNode);
                 Parent.PlaylistsTree.Nodes[1].Nodes.Add(item);
+                if (selection != null && ""+selection.FIndex == ""+row.Value["FIndex"]) { 
+                    TreeNodeMouseClickEventArgs ev = new TreeNodeMouseClickEventArgs(item, MouseButtons.Left, 1, 0, 0);
+                    PlaylistsTree_NodeMouseClick(Parent.PlaylistsTree.SelectedNode, ev);
+                }
             }
 
             Dictionary<string, TreeNode> radioCats = new Dictionary<string, TreeNode>();
@@ -422,20 +446,22 @@ namespace AnotherMusicPlayer
             else { files = autolistData(playlistType, 100); }
             if (playlistType == AutoPlaylistTypes.LastImports) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
             else if (playlistType == AutoPlaylistTypes.MostPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = true; }
-            else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = true; }
+            else if (playlistType == AutoPlaylistTypes.MostRecentlyPlayed) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
             else if (playlistType == AutoPlaylistTypes.BestRating) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
             else if (playlistType == AutoPlaylistTypes.StarValue) { Parent.PlayListsTabDataGridView.Columns[0].Visible = false; }
 
             if (files == null) { return; }
             if (files.Count > 0) { Parent.PlayListsTabDataGridView.DataSource = files; }
+
+            if (playlistType == AutoPlaylistTypes.BestRating || playlistType == AutoPlaylistTypes.StarValue) 
+            { Parent.PlayListsTabDataGridView.Columns[5].HeaderText = App.GetTranslation("Rating") + "    (" + files.Count + ")"; }
+            else { Parent.PlayListsTabDataGridView.Columns[5].HeaderText = App.GetTranslation("Rating"); }
             Parent.PlayListsTabDataGridView.Invalidate();
             Parent.setLoadingState(false);
         }
 
         private void OpenCustomPlaylist(int playlistId, bool startPlay = false, bool Shuffled = false)
         {
-            Player.StopAll();
-            Player.PlaylistClear();
             if (!startPlay)
             {
                 DisplayListPanel();
@@ -446,14 +472,19 @@ namespace AnotherMusicPlayer
                 Parent.PlayListsTabDataGridView.DataSource = null;
                 Parent.PlayListsTabDataGridView.Invalidate();
             }
+            else {
+                Player.StopAll();
+                Player.PlaylistClear();
+            }
 
-            Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT PIndex,LIndex,LOrder,files.* FROM playlistsItems JOIN files ON(files.Path = playlistsItems.Path) WHERE LIndex = "+ playlistId + " ORDER BY LOrder ASC, PIndex ASC", "Path");
+            Dictionary<string, Dictionary<string, object>> rez = App.bdd.DatabaseQuery("SELECT PIndex,LIndex,LOrder,files.* FROM playlistsItems JOIN files ON(files.Path = playlistsItems.Path) WHERE LIndex = " + playlistId + " ORDER BY LOrder ASC, PIndex ASC", "Path");
             SortableBindingList<PlayListsLineItem> files = ParseFilesQueryDate(rez, false);
             foreach (PlayListsLineItem item in files) { item.PlaylistId = playlistId; }
             if (files.Count > 0) { 
                 Parent.PlayListsTabDataGridView.DataSource = files;
                 Parent.PlayListsTabDataGridView.Invalidate();
             }
+            Parent.PlayListsTabDataGridView.Columns[5].HeaderText = App.GetTranslation("Rating") + "    (" + files.Count + ")";
             if (startPlay)
             {
                 List<string> paths = new List<string>();

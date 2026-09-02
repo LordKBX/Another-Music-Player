@@ -236,7 +236,7 @@ namespace AnotherMusicPlayer
         /// <summary> Read next index in playlist </summary>
         public static void PlaylistNext()
         {
-            Debug.WriteLine("--> PlaylistNext <--");
+            //Debug.WriteLine("--> PlaylistNext <--");
             PlayListIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
             if (!PlayLoop && PlayListIndex == 0) { return; }
             Play(PlayList[PlayListIndex]);
@@ -253,7 +253,7 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> Preload next index in playlist </summary>
-        public static void PlaylistPreloadNext()
+        public async static void PlaylistPreloadNext()
         {
             //Debug.WriteLine("--> PlaylistPreloadNext <--");
             int nextIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;

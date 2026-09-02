@@ -43,6 +43,25 @@ namespace AnotherMusicPlayer.Styles
 
         public static Color ValidateButtonBackColor;
         public static Color ValidateButtonForeColor;
+        public static Font ValidateButtonFont;
+        public static Cursor ValidateButtonCursor;
+        public static FlatStyle ValidateButtonFlatStyle;
+        public static Color ValidateButtonFlatAppearanceBorderColor;
+        public static uint ValidateButtonFlatAppearanceBorderSize;
+        public static Color ValidateButtonFlatAppearanceCheckedBackColor;
+        public static Color ValidateButtonFlatAppearanceMouseDownBackColor;
+        public static Color ValidateButtonFlatAppearanceMouseOverBackColor;
+
+        public static Color CancelButtonBackColor;
+        public static Color CancelButtonForeColor;
+        public static Font CancelButtonFont;
+        public static Cursor CancelButtonCursor;
+        public static FlatStyle CancelButtonFlatStyle;
+        public static Color CancelButtonFlatAppearanceBorderColor;
+        public static uint CancelButtonFlatAppearanceBorderSize;
+        public static Color CancelButtonFlatAppearanceCheckedBackColor;
+        public static Color CancelButtonFlatAppearanceMouseDownBackColor;
+        public static Color CancelButtonFlatAppearanceMouseOverBackColor;
 
         public static Cursor GripButtonCursor;
         public static Color GripButtonBackColor;

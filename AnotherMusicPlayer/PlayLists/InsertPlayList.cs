@@ -36,6 +36,10 @@ namespace AnotherMusicPlayer
             ValidateButton.BackColor = App.style.GetColor("ValidateButtonBackColor", Dark.ValidateButtonBackColor);
             ValidateButton.ForeColor = App.style.GetColor("ValidateButtonForeColor", Dark.ValidateButtonForeColor);
 
+            CustomListComboBox.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Bottom;
+            Font f = App.style.GetValue<Font>("GlobalFont", Dark.GlobalFont);
+            CustomListComboBox.Font = new Font(f.FontFamily, 17, f.Style);
+
             Owner = parent;
             DialogResult = DialogResult.Cancel;
 
@@ -96,10 +100,10 @@ namespace AnotherMusicPlayer
             foreach (string track in clearTracks) { querys.Add(query + "('" + listId + "', '" + Database.EscapeString(track) + "', '" + (startOrder + offset) + "')"); offset += 1; }
             App.bdd.DatabaseQuerys(querys.ToArray(), true);
 
-            App.win1.playLists.Init();
+            //App.win1.playLists.Init();
 
             DialogResult = DialogResult.OK;
-            App.win1.playLists.Init();
+            //App.win1.playLists.Init();
             Close();
         }
 

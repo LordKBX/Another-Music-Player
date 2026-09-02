@@ -520,19 +520,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                     if (LyricsTimedLines != null && Settings.DisplayLiveLyrics)
                     {
-                        List<long> times = LyricsTimedLines.Keys.ToList();
-                        List<LyricsBlock> lines = new List<LyricsBlock>();
-                        foreach (long t in times)
-                        {
-                            if (lines.Count > 0)
-                            {
-                                if (t < lines[lines.Count - 1].End) { lines[lines.Count - 1].End = t - 1; }
-                            }
-                            lines.Add(new LyricsBlock() { Start = t, End = t + 5000, Text = LyricsTimedLines[t] });
-                        }
-
                         string text = "...";
-                        foreach (LyricsBlock line in lines)
+                        foreach (LyricsBlock line in LyricsTimedLinesParsed)
                         {
                             if (position >= line.Start && position <= line.End) { text = line.Text; }
                         }
@@ -793,7 +782,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                 if (bi == null) { FileCover.BackgroundImage = Properties.Resources.album_large; }
                 else { FileCover.BackgroundImage = BitmapMagic.BitmapImage2Bitmap(bi); }
-                Debug.WriteLine(JsonConvert.SerializeObject(item));
+                //Debug.WriteLine(JsonConvert.SerializeObject(item));
                 PlaybackTabTitleLabelValue.Visible = true;
                 ReplaceElementDualText(TitleLabel, item.Name);
                 ReplaceElementDualText(PlaybackTabTitleLabelValue, item.Name);
@@ -832,9 +821,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
         public bool IsLyricsVisible() { return (GlobalTableLayoutPanel.RowStyles[2].Height > 0); }
         public Dictionary<long, string> LyricsTimedLines = null;
+        internal List<LyricsBlock> LyricsTimedLinesParsed = null;
 
         private void ShowLyricsLine(MediaItem item) {
             LyricsTimedLines = null;
+            LyricsTimedLinesParsed = null;
             if (!Settings.DisplayLiveLyrics || item == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
             if(item.Lyrics == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
             string lyrics = item.Lyrics.Trim();
@@ -843,6 +834,20 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             LyricsTextBox.Text = "";
             LyricsTimedLines = item.GetTimedLyrics();
+            LyricsTimedLinesParsed = new List<LyricsBlock>();
+
+            if (LyricsTimedLines != null && LyricsTimedLines.Count > 0)
+            {
+                List<long> times = LyricsTimedLines.Keys.ToList();
+                foreach (long t in times)
+                {
+                    if (LyricsTimedLinesParsed.Count > 0)
+                    {
+                        if (t < LyricsTimedLinesParsed[LyricsTimedLinesParsed.Count - 1].End) { LyricsTimedLinesParsed[LyricsTimedLinesParsed.Count - 1].End = t - 1; }
+                    }
+                    LyricsTimedLinesParsed.Add(new LyricsBlock() { Start = t, End = t + 8000, Text = LyricsTimedLines[t] });
+                }
+            }
         }
     }
 }

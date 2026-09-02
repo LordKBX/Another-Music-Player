@@ -32,10 +32,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
-            TreeNode treeNode1 = new TreeNode("Automatic");
-            TreeNode treeNode2 = new TreeNode("Recorded");
-            TreeNode treeNode3 = new TreeNode("Web Radio");
+            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
+            TreeNode treeNode4 = new TreeNode("Automatic");
+            TreeNode treeNode5 = new TreeNode("Recorded");
+            TreeNode treeNode6 = new TreeNode("Web Radio");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow2));
             GlobalTableLayoutPanel = new TableLayoutPanel();
             MainWIndowHead = new TableLayoutPanel();
@@ -97,7 +97,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFiles = new TableLayoutPanel();
             PlayListsTab = new Manina.Windows.Forms.Tab();
             PlayListsTabTableLayoutPanel = new TableLayoutPanel();
-            PlaylistsTree = new TreeView();
+            PlaylistsTree = new TreeViewNoHorizontalScroll();
             PlayListsTabTreeImageList = new ImageList(components);
             PlayListsTabSplitContainer1 = new SplitContainer();
             tableLayoutPanel5 = new TableLayoutPanel();
@@ -874,8 +874,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SelectedColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             SelectedColumn.DataPropertyName = "Selected";
-            dataGridViewCellStyle1.Font = new Font("Wingdings", 9F);
-            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle2.Font = new Font("Wingdings", 9F);
+            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle2;
             SelectedColumn.HeaderText = "";
             SelectedColumn.MinimumWidth = 30;
             SelectedColumn.Name = "SelectedColumn";
@@ -926,10 +926,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTab.ForeColor = Color.White;
             LibraryTab.HotAndActiveTabBackColor = Color.FromArgb(255, 128, 0);
             LibraryTab.HotTabBackColor = Color.FromArgb(255, 192, 128);
-            LibraryTab.Location = new Point(0, 62);
+            LibraryTab.Location = new Point(0, 50);
             LibraryTab.Name = "LibraryTab";
             LibraryTab.SelectedBackColor = Color.FromArgb(255, 128, 0);
-            LibraryTab.Size = new Size(1071, 640);
+            LibraryTab.Size = new Size(1157, 612);
             LibraryTab.Text = " Library";
             // 
             // LibraryTabTableLayoutPanel
@@ -950,7 +950,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 50F));
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             LibraryTabTableLayoutPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 25F));
-            LibraryTabTableLayoutPanel.Size = new Size(1071, 640);
+            LibraryTabTableLayoutPanel.Size = new Size(1157, 612);
             LibraryTabTableLayoutPanel.TabIndex = 1;
             // 
             // LibraryNavigationPathContener
@@ -959,7 +959,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationPathContener.Location = new Point(1, 1);
             LibraryNavigationPathContener.Margin = new Padding(0);
             LibraryNavigationPathContener.Name = "LibraryNavigationPathContener";
-            LibraryNavigationPathContener.Size = new Size(1069, 50);
+            LibraryNavigationPathContener.Size = new Size(1155, 50);
             LibraryNavigationPathContener.TabIndex = 0;
             // 
             // LibraryFiltersGrid
@@ -972,7 +972,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFiltersGrid.Location = new Point(5, 56);
             LibraryFiltersGrid.Margin = new Padding(4);
             LibraryFiltersGrid.Name = "LibraryFiltersGrid";
-            LibraryFiltersGrid.Size = new Size(1061, 42);
+            LibraryFiltersGrid.Size = new Size(1147, 42);
             LibraryFiltersGrid.TabIndex = 1;
             LibraryFiltersGrid.WrapContents = false;
             // 
@@ -1053,8 +1053,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             LibraryTabSplitContainer.Panel2.Controls.Add(LibraryTabSplitContainer2);
             LibraryTabSplitContainer.Panel2MinSize = 100;
-            LibraryTabSplitContainer.Size = new Size(1061, 528);
-            LibraryTabSplitContainer.SplitterDistance = 274;
+            LibraryTabSplitContainer.Size = new Size(1147, 500);
+            LibraryTabSplitContainer.SplitterDistance = 259;
             LibraryTabSplitContainer.SplitterWidth = 1;
             LibraryTabSplitContainer.TabIndex = 3;
             // 
@@ -1074,7 +1074,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContent.RowCount = 2;
             LibraryNavigationContent.RowStyles.Add(new RowStyle(SizeType.Absolute, 38F));
             LibraryNavigationContent.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            LibraryNavigationContent.Size = new Size(1061, 274);
+            LibraryNavigationContent.Size = new Size(1147, 259);
             LibraryNavigationContent.TabIndex = 0;
             // 
             // LibraryFoldersLabel
@@ -1085,7 +1085,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryFoldersLabel.Margin = new Padding(0);
             LibraryFoldersLabel.Name = "LibraryFoldersLabel";
             LibraryFoldersLabel.Padding = new Padding(4, 0, 4, 0);
-            LibraryFoldersLabel.Size = new Size(1061, 38);
+            LibraryFoldersLabel.Size = new Size(1147, 38);
             LibraryFoldersLabel.TabIndex = 0;
             LibraryFoldersLabel.Tag = "Bold";
             LibraryFoldersLabel.Text = "Folders";
@@ -1103,7 +1103,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFolders.Name = "LibraryNavigationContentFolders";
             LibraryNavigationContentFolders.ReadOnly = true;
             LibraryNavigationContentFolders.RowHeadersWidth = 51;
-            LibraryNavigationContentFolders.Size = new Size(1061, 236);
+            LibraryNavigationContentFolders.Size = new Size(1147, 221);
             LibraryNavigationContentFolders.TabIndex = 1;
             // 
             // LibraryTabSplitContainer2
@@ -1120,8 +1120,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // LibraryTabSplitContainer2.Panel2
             // 
             LibraryTabSplitContainer2.Panel2.Controls.Add(LibraryNavigationContentFilesParent);
-            LibraryTabSplitContainer2.Size = new Size(1061, 253);
-            LibraryTabSplitContainer2.SplitterDistance = 353;
+            LibraryTabSplitContainer2.Size = new Size(1147, 240);
+            LibraryTabSplitContainer2.SplitterDistance = 381;
             LibraryTabSplitContainer2.SplitterWidth = 1;
             LibraryTabSplitContainer2.TabIndex = 0;
             // 
@@ -1136,7 +1136,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibrarySearchContent.Name = "LibrarySearchContent";
             LibrarySearchContent.ReadOnly = true;
             LibrarySearchContent.RowHeadersWidth = 51;
-            LibrarySearchContent.Size = new Size(353, 253);
+            LibrarySearchContent.Size = new Size(381, 240);
             LibrarySearchContent.TabIndex = 1;
             // 
             // LibraryNavigationContentFilesParent
@@ -1147,7 +1147,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFilesParent.Location = new Point(0, 0);
             LibraryNavigationContentFilesParent.Margin = new Padding(0);
             LibraryNavigationContentFilesParent.Name = "LibraryNavigationContentFilesParent";
-            LibraryNavigationContentFilesParent.Size = new Size(707, 253);
+            LibraryNavigationContentFilesParent.Size = new Size(765, 240);
             LibraryNavigationContentFilesParent.TabIndex = 0;
             // 
             // LibraryNavigationContentFiles
@@ -1162,7 +1162,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LibraryNavigationContentFiles.RowCount = 1;
             LibraryNavigationContentFiles.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             LibraryNavigationContentFiles.RowStyles.Add(new RowStyle(SizeType.Absolute, 12F));
-            LibraryNavigationContentFiles.Size = new Size(707, 12);
+            LibraryNavigationContentFiles.Size = new Size(765, 12);
             LibraryNavigationContentFiles.TabIndex = 1;
             // 
             // PlayListsTab
@@ -1210,22 +1210,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaylistsTree.Location = new Point(1, 1);
             PlaylistsTree.Margin = new Padding(0);
             PlaylistsTree.Name = "PlaylistsTree";
-            treeNode1.Checked = true;
-            treeNode1.ImageKey = "filter_icon.png";
-            treeNode1.Name = "PlayListsTabTreeNodeAutomatic";
-            treeNode1.SelectedImageKey = "filter_icon.png";
-            treeNode1.Text = "Automatic";
-            treeNode2.Checked = true;
-            treeNode2.ImageKey = "floppy_icon.png";
-            treeNode2.Name = "PlayListsTabTreeNodeRecorded";
-            treeNode2.SelectedImageKey = "floppy_icon.png";
-            treeNode2.Text = "Recorded";
-            treeNode3.Checked = true;
-            treeNode3.ImageKey = "radio_icon.png";
-            treeNode3.Name = "PlayListsTabTreeNodeWebRario";
-            treeNode3.SelectedImageKey = "radio_icon.png";
-            treeNode3.Text = "Web Radio";
-            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
+            treeNode4.Checked = true;
+            treeNode4.ImageKey = "filter_icon.png";
+            treeNode4.Name = "PlayListsTabTreeNodeAutomatic";
+            treeNode4.SelectedImageKey = "filter_icon.png";
+            treeNode4.Text = "Automatic";
+            treeNode5.Checked = true;
+            treeNode5.ImageKey = "floppy_icon.png";
+            treeNode5.Name = "PlayListsTabTreeNodeRecorded";
+            treeNode5.SelectedImageKey = "floppy_icon.png";
+            treeNode5.Text = "Recorded";
+            treeNode6.Checked = true;
+            treeNode6.ImageKey = "radio_icon.png";
+            treeNode6.Name = "PlayListsTabTreeNodeWebRario";
+            treeNode6.SelectedImageKey = "radio_icon.png";
+            treeNode6.Text = "Web Radio";
+            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode5, treeNode6 });
             PlaylistsTree.SelectedImageIndex = 0;
             PlaylistsTree.Size = new Size(250, 610);
             PlaylistsTree.TabIndex = 0;
@@ -2945,7 +2945,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private Panel panel3;
         internal Label TitleLabel;
         internal TableLayoutPanel LibraryNavigationContent;
-        internal TreeView PlaylistsTree;
+        internal TreeViewNoHorizontalScroll PlaylistsTree;
         internal SplitContainer PlayListsTabSplitContainer1;
         internal SplitContainer PlayListsTabSplitContainer2;
         internal TableLayoutPanel tableLayoutPanel5;

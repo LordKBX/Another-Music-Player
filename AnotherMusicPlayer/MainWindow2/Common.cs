@@ -212,11 +212,31 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         ((Button)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("GlobalButtonFlatAppearanceMouseOverBackColor");
                         ((Button)parent).Cursor = Cursors.Default;
                     }
-                    else if (parent.Width == parent.Height && (Tags.Contains("ValidateButton") || parent.Name == "ValidateButton"))
+                    else if ((Tags.Contains("ValidateButton") || parent.Name == "ValidateButton"))
                     { 
                         parent.BackColor = App.style.GetColor("ValidateButtonBackColor");
                         parent.ForeColor = App.style.GetColor("ValidateButtonForeColor");
-                        ((Button)parent).Cursor = Cursors.Default;
+                        parent.Font = App.style.GetValue<Font>("ValidateButtonFont", Dark.ValidateButtonFont);
+                        ((Button)parent).FlatStyle = App.style.GetValue<FlatStyle>("ValidateButtonFlatStyle", FlatStyle.Flat);
+                        ((Button)parent).Cursor = App.style.GetValue<Cursor>("ValidateButtonCursor", Cursors.Default);
+                        ((Button)parent).FlatAppearance.BorderSize = App.style.GetValue<int>("ValidateButtonFlatAppearanceBorderSize", 1);
+                        ((Button)parent).FlatAppearance.BorderColor = App.style.GetColor("ValidateButtonFlatAppearanceBorderColor");
+                        ((Button)parent).FlatAppearance.CheckedBackColor = App.style.GetColor("ValidateButtonFlatAppearanceCheckedBackColor");
+                        ((Button)parent).FlatAppearance.MouseDownBackColor = App.style.GetColor("ValidateButtonFlatAppearanceMouseDownBackColor");
+                        ((Button)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("ValidateButtonFlatAppearanceMouseOverBackColor");
+                    }
+                    else if ((Tags.Contains("CancelButton") || parent.Name == "CancelButton"))
+                    { 
+                        parent.BackColor = App.style.GetColor("CancelButtonBackColor");
+                        parent.ForeColor = App.style.GetColor("CancelButtonForeColor");
+                        parent.Font = App.style.GetValue<Font>("CancelButtonFont", Dark.CancelButtonFont);
+                        ((Button)parent).FlatStyle = App.style.GetValue<FlatStyle>("CancelButtonFlatStyle", FlatStyle.Flat);
+                        ((Button)parent).Cursor = App.style.GetValue<Cursor>("CancelButtonCursor", Cursors.Default);
+                        ((Button)parent).FlatAppearance.BorderSize = App.style.GetValue<int>("CancelButtonFlatAppearanceBorderSize", 1);
+                        ((Button)parent).FlatAppearance.BorderColor = App.style.GetColor("CancelButtonFlatAppearanceBorderColor");
+                        ((Button)parent).FlatAppearance.CheckedBackColor = App.style.GetColor("CancelButtonFlatAppearanceCheckedBackColor");
+                        ((Button)parent).FlatAppearance.MouseDownBackColor = App.style.GetColor("CancelButtonFlatAppearanceMouseDownBackColor");
+                        ((Button)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("CancelButtonFlatAppearanceMouseOverBackColor");
                     }
                     else
                     {

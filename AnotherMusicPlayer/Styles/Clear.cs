@@ -40,8 +40,27 @@ namespace AnotherMusicPlayer.Styles
         public static Color GlobalButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 150, 150, 200);
         public static Color GlobalButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 180, 180, 250);
 
-        public static Color ValidateButtonBackColor = Color.ForestGreen;
-        public static Color ValidateButtonForeColor = Color.White;
+        public static Color ValidateButtonBackColor = Color.FromArgb(255, 34, 139, 34);
+        public static Color ValidateButtonForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Font ValidateButtonFont = GlobalFont;
+        public static Cursor ValidateButtonCursor = Cursors.Hand;
+        public static FlatStyle ValidateButtonFlatStyle = FlatStyle.Flat;
+        public static Color ValidateButtonFlatAppearanceBorderColor = Color.FromArgb(255, 255, 255, 255);
+        public static uint ValidateButtonFlatAppearanceBorderSize = 0;
+        public static Color ValidateButtonFlatAppearanceCheckedBackColor = Color.FromArgb(255, 50, 201, 50);
+        public static Color ValidateButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 50, 201, 50);
+        public static Color ValidateButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 40, 160, 40);
+
+        public static Color CancelButtonBackColor = Color.FromArgb(255, 255, 0, 0);
+        public static Color CancelButtonForeColor = Color.FromArgb(255, 255, 255, 255);
+        public static Font CancelButtonFont = GlobalFont;
+        public static Cursor CancelButtonCursor = Cursors.Hand;
+        public static FlatStyle CancelButtonFlatStyle = FlatStyle.Flat;
+        public static Color CancelButtonFlatAppearanceBorderColor = Color.FromArgb(255, 255, 255, 255);
+        public static uint CancelButtonFlatAppearanceBorderSize = 0;
+        public static Color CancelButtonFlatAppearanceCheckedBackColor = Color.FromArgb(255, 255, 109, 109);
+        public static Color CancelButtonFlatAppearanceMouseDownBackColor = Color.FromArgb(255, 255, 109, 109);
+        public static Color CancelButtonFlatAppearanceMouseOverBackColor = Color.FromArgb(255, 255, 66, 66);
 
         public static Cursor GripButtonCursor = Cursors.SizeNWSE;
         public static Color GripButtonBackColor = GlobalBackColor;

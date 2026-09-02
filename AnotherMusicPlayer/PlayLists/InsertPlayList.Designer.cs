@@ -78,7 +78,7 @@
             ValidateButton.Name = "ValidateButton";
             ValidateButton.Size = new System.Drawing.Size(250, 67);
             ValidateButton.TabIndex = 4;
-            ValidateButton.Tag = "WindowButton";
+            ValidateButton.Tag = "ValidateButton";
             ValidateButton.Text = "&Validate";
             ValidateButton.UseVisualStyleBackColor = false;
             // 

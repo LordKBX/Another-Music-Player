@@ -27,6 +27,25 @@ namespace AnotherMusicPlayer
         public DialogBox(Form owner = null)
         {
             InitializeComponent();
+            AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
+
+            MessageIcon.FlatAppearance.BorderSize = 0;
+            MessageIcon.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            MessageIcon.BackColor = System.Drawing.Color.Transparent;
+            MessageIcon.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Transparent;
+            MessageIcon.FlatAppearance.CheckedBackColor = System.Drawing.Color.Transparent;
+            MessageIcon.FlatAppearance.MouseDownBackColor = System.Drawing.Color.Transparent;
+            MessageIcon.Cursor = System.Windows.Forms.Cursors.Default;
+
+            MessageBlock.BackColor = App.style.GetColor("GlobalBackColor");
+            MessageBlock.ForeColor = App.style.GetColor("GlobalForeColor");
+            MessageBlock.Font = App.style.GetValue<Font>("GlobalFontTitle", AnotherMusicPlayer.Styles.Dark.GlobalFont);
+
+            BtnOK.Text = App.GetTranslation("DialogBoxBtnOk");
+            BtnCancel.Text = App.GetTranslation("DialogBoxBtnCancel");
+            BtnYes.Text = App.GetTranslation("DialogBoxBtnYes");
+            BtnNo.Text = App.GetTranslation("DialogBoxBtnNo");
+
             Owner = owner ?? App.win1;
             BtnOK.Click += BtnOK_Click;
             BtnCancel.Click += BtnCancel_Click;
@@ -52,8 +71,8 @@ namespace AnotherMusicPlayer
             dialog.TitleLabel.Text = title;
             dialog.MessageBlock.Text = message;
             if (icon == DialogBoxIcons.Warning) { dialog.MessageIcon.BackgroundImage = Properties.Resources.dialog_warning; }
-            if (icon == DialogBoxIcons.Error) { dialog.MessageIcon.BackgroundImage = Properties.Resources.dialog_error; }
-            if (icon == DialogBoxIcons.Info) { dialog.MessageIcon.BackgroundImage = Properties.Resources.dialog_info; }
+            else if (icon == DialogBoxIcons.Error) { dialog.MessageIcon.BackgroundImage = Properties.Resources.dialog_error; }
+            else if (icon == DialogBoxIcons.Info) { dialog.MessageIcon.BackgroundImage = Properties.Resources.dialog_info; }
             else { dialog.MessageIcon.BackgroundImage = Properties.Resources.dialog_info; }
 
             if (buttons == DialogBoxButtons.Ok)

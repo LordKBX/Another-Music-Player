@@ -340,6 +340,9 @@ namespace AnotherMusicPlayer
             cm.InfoMedia.Tag = parent;
             cm.InfoMedia.Click += InfoMedia_Click;
 
+            cm.AddToPlaylist.Tag = parent;
+            cm.AddToPlaylist.Click += TracksToPlaylist_Click;
+
             cm.Renderer = new CMRenderer();
             return cm;
         }
@@ -360,12 +363,77 @@ namespace AnotherMusicPlayer
         {
             ToolStripItem parentItem = (ToolStripItem)sender;
             if (parentItem.Tag == null) { return; }
-            Control parent = (Control)parentItem.Tag;
-            PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
+            DataGridView parent = (DataGridView)parentItem.Tag;
 
-            Player.StopAll();
-            Player.PlaylistClear();
-            Player.PlaylistEnqueue(new string[] { item.Path }, false, 0, 0, true);
+            if (parent.SelectedRows.Count == 0) { return; }
+            if (parent.SelectedRows.Count > 1)
+            {
+                List<string> paths = new List<string>();
+                Dictionary<int, PlayListsLineItem> rows = new Dictionary<int, PlayListsLineItem>();
+                int m = parent.SelectedRows.Count;
+                for (int i = 0; i < m; i++)
+                {
+                    if (parent.SelectedRows[i].DataBoundItem is PlayListsLineItem rowItem)
+                    {
+                        rows.Add(parent.SelectedRows[i].Index, (PlayListsLineItem)parent.SelectedRows[i].DataBoundItem);
+                    }
+                }
+                List<int> keys = rows.Keys.ToList();
+                keys.Sort();
+
+                for (int i = 0; i < keys.Count; i++)
+                {
+                    paths.Add(rows[keys[i]].Path);
+                }
+                Player.StopAll();
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(paths.ToArray(), false, 0, 0, true);
+            }
+            else
+            {
+                PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
+                Player.StopAll();
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(new string[] { item.Path }, false, 0, 0, true);
+            }
+        }
+
+        private void TracksToPlaylist_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("TracksToPlaylist_Click()");
+            try
+            {
+                ToolStripItem parentItem = (ToolStripItem)sender;
+                if (parentItem.Tag == null) { Debug.WriteLine("Tag is null"); return; }
+                DataGridView parent = (DataGridView)parentItem.Tag;
+
+                if (parent.SelectedRows.Count <= 0) { Debug.WriteLine("parent.SelectedRows.Count == 0"); return; }
+                else
+                {
+                    List<string> paths = new List<string>();
+                    Dictionary<int, PlayListsLineItem> rows = new Dictionary<int, PlayListsLineItem>();
+                    int m = parent.SelectedRows.Count;
+                    for (int i = 0; i < m; i++)
+                    {
+                        if (parent.SelectedRows[i].DataBoundItem is PlayListsLineItem rowItem)
+                        {
+                            rows.Add(parent.SelectedRows[i].Index, (PlayListsLineItem)parent.SelectedRows[i].DataBoundItem);
+                        }
+                    }
+                    List<int> keys = rows.Keys.ToList();
+                    keys.Sort();
+
+                    for (int i = 0; i < keys.Count; i++)
+                    {
+                        paths.Add(rows[keys[i]].Path);
+                    }
+                    //Debug.WriteLine(JsonConvert.SerializeObject(paths));
+
+                    InsertPlayList ip = new InsertPlayList(App.win1, paths.ToArray());
+                    ip.ShowDialog();
+                }
+            }
+            catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
         private void OpenFolder_Click(object sender, EventArgs e)
@@ -451,16 +519,52 @@ namespace AnotherMusicPlayer
         {
             ToolStripItem parentItem = (ToolStripItem)sender;
             if (parentItem.Tag == null) { return; }
-            Control parent = (Control)parentItem.Tag;
-            PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
-            if (item.PlaylistId <= 0) { return; }
+            DataGridView parent = (DataGridView)parentItem.Tag;
 
-            if (DialogBox.ShowDialog(App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmTitle", "ERROR"),
-                App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmMessage", "ERROR").Replace("%X%", item.Name),
-                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
+            if (parent.SelectedRows.Count == 0) { return; }
+            if (parent.SelectedRows.Count > 1)
             {
-                App.bdd.DatabaseQuery("DELETE FROM playlistsItems WHERE PIndex = " + item.PlaylistItemId, null, true);
-                App.win1.playLists.Init();
+                if (DialogBox.ShowDialog(App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmTitle", "ERROR"),
+                    App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmMessage2", "ERROR"),
+                    DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
+                {
+                    List<string> paths = new List<string>();
+                    Dictionary<int, PlayListsLineItem> rows = new Dictionary<int, PlayListsLineItem>();
+                    int m = parent.SelectedRows.Count;
+                    for (int i = 0; i < m; i++)
+                    {
+                        if (parent.SelectedRows[i].DataBoundItem is PlayListsLineItem rowItem)
+                        {
+                            rows.Add(parent.SelectedRows[i].Index, (PlayListsLineItem)parent.SelectedRows[i].DataBoundItem);
+                        }
+                    }
+                    List<int> keys = rows.Keys.ToList();
+                    keys.OrderByDescending(x => x);
+
+                    Debug.WriteLine(JsonConvert.SerializeObject(keys));
+                    int pid = rows[keys[0]].PlaylistId;
+
+                    for (int i = 0; i < keys.Count; i++)
+                    {
+                        App.bdd.DatabaseQuery("DELETE FROM playlistsItems WHERE LIndex = " + rows[keys[i]].PlaylistId + " AND  PIndex = " + rows[keys[i]].PlaylistItemId, null, true);
+                    }
+
+                    App.win1.playLists.Init(new PlayListItem() { FIndex = pid });
+
+                }
+            }
+            else
+            {
+                PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
+                if (item.PlaylistId <= 0) { return; }
+
+                if (DialogBox.ShowDialog(App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmTitle", "ERROR"),
+                    App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmMessage", "ERROR").Replace("%X%", item.Name),
+                    DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
+                {
+                    App.bdd.DatabaseQuery("DELETE FROM playlistsItems WHERE LIndex = " + item.PlaylistId + " AND PIndex = " + item.PlaylistItemId, null, true);
+                    App.win1.playLists.Init(new PlayListItem() { FIndex = item.PlaylistId });
+                }
             }
         }
         #endregion
@@ -603,8 +707,11 @@ namespace AnotherMusicPlayer
         private SolidColorBrush DefaultBrush = new SolidColorBrush(Icons.ToMediaColor(App.style.GetColor("ContextMenuForeColor", System.Drawing.Color.White)));
         private int ButtonIconSize = 32;
 
+        private PlayListsNodeContextMenuType CMType = PlayListsNodeContextMenuType.Auto;
+
         public void SetType(PlayListsNodeContextMenuType type)
         {
+            CMType = type;
             if (type == PlayListsNodeContextMenuType.Auto)
             {
                 InfoMedia.Visible = true;
@@ -612,6 +719,7 @@ namespace AnotherMusicPlayer
                 PlayListPlayAsSorted.Visible = true;
                 OpenFolder.Visible = true;
                 RemoveTrack.Visible = false;
+                AddToPlaylist.Visible = true;
             }
             else
             {
@@ -620,6 +728,7 @@ namespace AnotherMusicPlayer
                 PlayListPlayAsSorted.Visible = true;
                 OpenFolder.Visible = true;
                 RemoveTrack.Visible = true;
+                AddToPlaylist.Visible = false;
             }
         }
 
@@ -629,6 +738,7 @@ namespace AnotherMusicPlayer
         public ToolStripItem PlayTrack = null;
         public ToolStripItem PlayListPlayAsSorted = null;
         public ToolStripItem OpenFolder = null;
+        public ToolStripItem AddToPlaylist = null;
         public ToolStripItem RemoveTrack = null;
 
         public PlayListsCellContextMenu()
@@ -645,6 +755,7 @@ namespace AnotherMusicPlayer
             PlayListPlayAsSorted = Items.Add(App.GetTranslation("PlayListsContextMenuPlayListPlayAsSorted"), Icons.FromIconKind(IconKind.ClipboardTextPlayOutline, ButtonIconSize, DefaultBrush));
             OpenFolder = Items.Add(App.GetTranslation("PlayListsContextMenuOpenFolder"), Icons.FromIconKind(IconKind.FolderOpen, ButtonIconSize, DefaultBrush));
 
+            AddToPlaylist = Items.Add(App.GetTranslation("LibraryContextMenuPlayListsAddGeneric"), Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush));
             RemoveTrack = Items.Add(App.GetTranslation("PlayListsContextMenuTrackDelete"), Icons.FromIconKind(IconKind.Delete, ButtonIconSize, DefaultBrush));
 
             PlayTrack.Name = nameof(PlayTrack);
@@ -652,6 +763,22 @@ namespace AnotherMusicPlayer
             OpenFolder.Name = nameof(OpenFolder);
             PlayListPlayAsSorted.Name = nameof(PlayListPlayAsSorted);
             InfoMedia.Name = nameof(InfoMedia);
+            AddToPlaylist.Name = nameof(AddToPlaylist);
+        }
+
+        public void MultipleSwitch(bool multiple) {
+            InfoMedia.Visible = InfoMedia.Enabled = !multiple;
+            OpenFolder.Visible = OpenFolder.Enabled = !multiple;
+            if (multiple)
+            {
+                PlayTrack.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayTracks");
+                RemoveTrack.Text = App.GetTranslation("PlayListsContextMenuTracksDelete");
+            }
+            else
+            {
+                PlayTrack.Text = App.GetTranslation("PlayListsContextMenuPlayListPlayTrack");
+                RemoveTrack.Text = App.GetTranslation("PlayListsContextMenuTrackDelete");
+            }
         }
 
         public void Update()
@@ -672,6 +799,9 @@ namespace AnotherMusicPlayer
 
             RemoveTrack.Text = App.GetTranslation("PlayListsContextMenuTrackDelete");
             RemoveTrack.Image = Icons.FromIconKind(IconKind.Delete, ButtonIconSize, DefaultBrush);
+
+            AddToPlaylist.Text = App.GetTranslation("LibraryContextMenuPlayListsAddGeneric");
+            AddToPlaylist.Image = Icons.FromIconKind(IconKind.TableColumnPlusAfter, ButtonIconSize, DefaultBrush);
         }
     }
 }

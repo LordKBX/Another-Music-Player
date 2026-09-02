@@ -36,13 +36,16 @@ namespace AnotherMusicPlayer
 
         private static float GetFileGain(string FilePath, bool forced = false) 
         {
-            if (FilePath == null || !System.IO.File.Exists(FilePath)) { return 0.0f; }
-            if(!forced && FilesGain.ContainsKey(FilePath)) { return FilesGain[FilePath]; }
+            FilePath = FilePath.Replace("\\\\", "\\");
+            //if (FilePath == null || !System.IO.File.Exists(FilePath)) { return 0.0f; }
+            //if(!forced && FilesGain.ContainsKey(FilePath)) { return FilesGain[FilePath]; }
             Dictionary<string, object> infodata = App.bdd.DatabaseFileInfo(FilePath);
+            //Debug.WriteLine(JsonConvert.SerializeObject(infodata));
             if(infodata == null) { return Library.FailledAverageGain; }
             if (infodata.ContainsKey("Gain") && GetAverageGain() != 0)
             {
-                return float.Parse(("" + infodata["Gain"]).Replace(".", ","));
+                float r = float.Parse(("" + infodata["Gain"]).Replace(".", ","));
+                return r;
             }
             return Library.FailledAverageGain;
         }
@@ -104,22 +107,23 @@ namespace AnotherMusicPlayer
                 catch (Exception err) { Debug.WriteLine(JsonConvert.SerializeObject(err)); PlaylistNext(); return; }
                 if (Settings.NormalizeVolume)
                 {
+                    //Debug.WriteLine("GetFileGain(\""+FilePath+"\")");
                     gain = GetFileGain(FilePath);
                     if (gain == Library.FailledAverageGain || gain == float.NaN || ("" + gain) == "NaN")
                     {
+                        //Debug.WriteLine("Library.GetGain(\"" + FilePath + "\")");
                         gain = Library.GetGain(FilePath);
                         if (gain == float.NaN || ("" + gain) == "NaN") { gain = 0; }
-                        string query = "UPDATE files SET Gain = '" + ("" + gain).Replace(".", ",") + "' WHERE Path = '" + FilePath.Replace("'", "''") + "'";
+                        string query = "UPDATE files SET Gain = '" + ("" + gain).Replace(".", ",") + "' WHERE Path = '" + FilePath.Replace("'", "''").Replace("\\\\", "\\") + "'";
                         App.bdd.DatabaseTansactionEnd();
                         App.bdd.DatabaseQuery(query, null, true);
                         if (FilesGain.ContainsKey(FilePath)) { FilesGain[FilePath] = gain; }
                         else { FilesGain.Add(FilePath, gain); }
+                        Debug.WriteLine("Gain: " + gain);
                     }
 
-                    Debug.WriteLine("Gain: " + gain);
                     gain = gain * 0.5f;
 
-                    Player.GetUpdatedEqualizerGlobal(gain);
                 }
                 //Settings.EqualizerBand1
                 equalizer = new Equalizer((ISampleProvider)audioFile, EqualizerBands);
@@ -167,6 +171,7 @@ namespace AnotherMusicPlayer
                     if (ret == 0 && outputDevice.PlaybackState == PlaybackState.Playing) { outputDevice.Pause(); _LatestPlayerStatus = PlayerStatus.Pause; }
                     if (ret == 1 && outputDevice.PlaybackState != PlaybackState.Playing)
                     {
+                        Player.GetUpdatedEqualizerGlobal(gain);
                         outputDevice.Play(); CurrentFile = FilePath;
                         PlayerLengthChangedEventParams evtp = new PlayerLengthChangedEventParams();
                         evtp.duration = (long)(((AudioFileReader)audioFile).TotalTime.TotalMilliseconds);
@@ -220,7 +225,9 @@ namespace AnotherMusicPlayer
                                 else { PlaylistNext(); break; }
                             }
 
-                            if (evt.Position >= evt.duration - 5000) { PlaylistPreloadNext(); }
+                            if (evt.Position >= evt.duration - 5000) {
+                                PlaylistPreloadNext();
+                            }
                         }
                         catch(Exception) { break; }
                     }

@@ -26,6 +26,7 @@
     <DialogBoxBtnSave><![CDATA[Save]]></DialogBoxBtnSave>
     <!--#endregion-->
 
+    <PlayCount><![CDATA[N° Plays]]></PlayCount>
     <Title><![CDATA[Title]]></Title>
     <Album><![CDATA[Album]]></Album>
     <Artist><![CDATA[Artists]]></Artist>
@@ -295,6 +296,7 @@
     <PlayListsContextMenuPlayListDeleteCustom><![CDATA[Delete Playlist]]></PlayListsContextMenuPlayListDeleteCustom>
     <PlayListsContextMenuPlayListRenameCustom><![CDATA[Rename Playlist]]></PlayListsContextMenuPlayListRenameCustom>
     <PlayListsContextMenuPlayListPlayTrack><![CDATA[Play Track]]></PlayListsContextMenuPlayListPlayTrack>
+    <PlayListsContextMenuPlayListPlayTracks><![CDATA[Play Tracks]]></PlayListsContextMenuPlayListPlayTracks>
     <PlayListsContextMenuPlayListPlayRadio><![CDATA[Play WebRadio]]></PlayListsContextMenuPlayListPlayRadio>
     <PlayListsContextMenuPlayListAddRadio><![CDATA[Add a WebRadio]]></PlayListsContextMenuPlayListAddRadio>
     <PlayListsContextMenuPlayListDeleteRadio><![CDATA[Delete WebRadio]]></PlayListsContextMenuPlayListDeleteRadio>
@@ -304,6 +306,7 @@
     <PlayListsContextMenuPlayListRenameRadioCategory><![CDATA[Edit Category]]></PlayListsContextMenuPlayListRenameRadioCategory>
     
     <PlayListsContextMenuTrackDelete><![CDATA[Delete Track]]></PlayListsContextMenuTrackDelete>
+    <PlayListsContextMenuTracksDelete><![CDATA[Delete Tracks]]></PlayListsContextMenuTracksDelete>
     <PlayListsContextMenuOpenFolder><![CDATA[Display Folder]]></PlayListsContextMenuOpenFolder>
     
     <PlayListsContextMenuPlayListDeleteConfirmTitle><![CDATA[Deleting Playlist]]></PlayListsContextMenuPlayListDeleteConfirmTitle>

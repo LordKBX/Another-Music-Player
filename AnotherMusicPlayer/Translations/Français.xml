@@ -26,6 +26,7 @@
     <DialogBoxBtnSave><![CDATA[Sauvegarder]]></DialogBoxBtnSave>
     <!--#endregion-->
     
+    <PlayCount><![CDATA[N° Lecture]]></PlayCount>
     <Title><![CDATA[Titre]]></Title>
     <Album><![CDATA[Album]]></Album>
     <Artist><![CDATA[Artistes]]></Artist>
@@ -294,6 +295,7 @@
     <PlayListsContextMenuPlayListDeleteCustom><![CDATA[Supprimer la liste]]></PlayListsContextMenuPlayListDeleteCustom>
     <PlayListsContextMenuPlayListRenameCustom><![CDATA[Renommer la liste]]></PlayListsContextMenuPlayListRenameCustom>
     <PlayListsContextMenuPlayListPlayTrack><![CDATA[Lire Piste]]></PlayListsContextMenuPlayListPlayTrack>
+    <PlayListsContextMenuPlayListPlayTracks><![CDATA[Lire Pistes]]></PlayListsContextMenuPlayListPlayTracks>
     <PlayListsContextMenuPlayListPlayRadio><![CDATA[Lire WebRadio]]></PlayListsContextMenuPlayListPlayRadio>
     <PlayListsContextMenuPlayListAddRadio><![CDATA[Ajouter une WebRadio]]></PlayListsContextMenuPlayListAddRadio>
     <PlayListsContextMenuPlayListDeleteRadio><![CDATA[Supprimer WebRadio]]></PlayListsContextMenuPlayListDeleteRadio>
@@ -303,6 +305,7 @@
     <PlayListsContextMenuPlayListRenameRadioCategory><![CDATA[Editer Catégorie]]></PlayListsContextMenuPlayListRenameRadioCategory>
     
     <PlayListsContextMenuTrackDelete><![CDATA[Supprimer la piste]]></PlayListsContextMenuTrackDelete>
+    <PlayListsContextMenuTracksDelete><![CDATA[Supprimer les pistes]]></PlayListsContextMenuTracksDelete>
     <PlayListsContextMenuOpenFolder><![CDATA[Afficher Dossier]]></PlayListsContextMenuOpenFolder>
     
     <PlayListsContextMenuPlayListDeleteConfirmTitle><![CDATA[Suppression de liste]]></PlayListsContextMenuPlayListDeleteConfirmTitle>

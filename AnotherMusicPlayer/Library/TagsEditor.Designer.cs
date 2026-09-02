@@ -59,8 +59,8 @@
             label3 = new System.Windows.Forms.Label();
             TrackInput = new System.Windows.Forms.MaskedTextBox();
             TrackCountInput = new System.Windows.Forms.MaskedTextBox();
-            CopyrightLabel = new System.Windows.Forms.Label();
             CopyrightInput = new System.Windows.Forms.TextBox();
+            CopyrightLabel = new System.Windows.Forms.Label();
             CloseButton = new System.Windows.Forms.Button();
             MainWIndowHead = new System.Windows.Forms.TableLayoutPanel();
             WindowTitleLabel = new System.Windows.Forms.Label();
@@ -390,7 +390,7 @@
             SaveButton.Name = "SaveButton";
             SaveButton.Size = new System.Drawing.Size(304, 125);
             SaveButton.TabIndex = 12;
-            SaveButton.Tag = "WindowButton";
+            SaveButton.Tag = "ValidateButton";
             SaveButton.Text = "&Save";
             SaveButton.UseVisualStyleBackColor = false;
             // 
@@ -573,6 +573,18 @@
             TrackCountInput.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             TrackCountInput.ValidatingType = typeof(int);
             // 
+            // CopyrightInput
+            // 
+            CopyrightInput.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
+            CopyrightInput.BackColor = System.Drawing.Color.DarkGray;
+            CopyrightInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            CopyrightInput.Font = new System.Drawing.Font("Segoe UI", 14F);
+            CopyrightInput.Location = new System.Drawing.Point(4, 359);
+            CopyrightInput.Margin = new System.Windows.Forms.Padding(4);
+            CopyrightInput.Name = "CopyrightInput";
+            CopyrightInput.Size = new System.Drawing.Size(304, 32);
+            CopyrightInput.TabIndex = 4;
+            // 
             // CopyrightLabel
             // 
             CopyrightLabel.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
@@ -586,18 +598,6 @@
             CopyrightLabel.TabIndex = 0;
             CopyrightLabel.Tag = "Title";
             CopyrightLabel.Text = "Copyright";
-            // 
-            // CopyrightInput
-            // 
-            CopyrightInput.Anchor = System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
-            CopyrightInput.BackColor = System.Drawing.Color.DarkGray;
-            CopyrightInput.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            CopyrightInput.Font = new System.Drawing.Font("Segoe UI", 14F);
-            CopyrightInput.Location = new System.Drawing.Point(4, 359);
-            CopyrightInput.Margin = new System.Windows.Forms.Padding(4);
-            CopyrightInput.Name = "CopyrightInput";
-            CopyrightInput.Size = new System.Drawing.Size(304, 32);
-            CopyrightInput.TabIndex = 4;
             // 
             // CloseButton
             // 

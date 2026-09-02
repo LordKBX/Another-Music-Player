@@ -485,6 +485,7 @@ namespace AnotherMusicPlayer
         /// <summary> Get Basic Metadata of a media file if stored in database </summary>
         public Dictionary<string, object> DatabaseFileInfo(string path, bool forceUpdate = false)
         {
+            //Debug.WriteLine("DatabaseFileInfo(\""+ EscapeString(path) + "\")");
             try
             {
                 Dictionary<string, Dictionary<string, object>> rt = DatabaseQuery("SELECT * FROM files WHERE Path='" + EscapeString(path) + "' ORDER BY Path ASC", "Path");
