@@ -518,7 +518,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
                     if (Settings.AutoCloseLyrics && position <= 500) { CloseLyricsWindows(); }
 
-                    if (LyricsTimedLines != null && Settings.DisplayLiveLyrics)
+                    if (LyricsTimedLinesParsed != null && Settings.DisplayLiveLyrics)
                     {
                         string text = "...";
                         foreach (LyricsBlock line in LyricsTimedLinesParsed)
@@ -820,11 +820,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         }
 
         public bool IsLyricsVisible() { return (GlobalTableLayoutPanel.RowStyles[2].Height > 0); }
-        public Dictionary<long, string> LyricsTimedLines = null;
         internal List<LyricsBlock> LyricsTimedLinesParsed = null;
 
         private void ShowLyricsLine(MediaItem item) {
-            LyricsTimedLines = null;
+            Dictionary<long, string> LyricsTimedLines = null;
             LyricsTimedLinesParsed = null;
             if (!Settings.DisplayLiveLyrics || item == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
             if(item.Lyrics == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
@@ -834,10 +833,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             LyricsTextBox.Text = "";
             LyricsTimedLines = item.GetTimedLyrics();
-            LyricsTimedLinesParsed = new List<LyricsBlock>();
 
             if (LyricsTimedLines != null && LyricsTimedLines.Count > 0)
             {
+                LyricsTimedLinesParsed = new List<LyricsBlock>();
                 List<long> times = LyricsTimedLines.Keys.ToList();
                 foreach (long t in times)
                 {

@@ -76,6 +76,7 @@ This is a personal project to create a Music player written with C# SDK .Net 8.0
 |SourceGear.sqlite3.ext|3.50.4.5|[link](https://www.nuget.org/packages/System.Data.SQLite)|
 |System.Drawing.Common|8.0.18|[link](https://www.nuget.org/packages/System.Drawing.Common/8.0.18)|
 |taglib-sharp-netstandard2.0|2.1.0|[link](https://github.com/mono/taglib-sharp)|
+|Svg|3.4.8|[link](https://github.com/svg-net/SVG)|
 
 ### <span style="color:#8E708E;font-size:25px;font-weight:bold;">Executables</span>
 
@@ -128,6 +129,7 @@ Ceci est un projet personnel de création d'un lecteur de musique écrit en C# S
 |SourceGear.sqlite3.ext|3.50.4.5|[Lien](https://www.nuget.org/packages/System.Data.SQLite)|
 |System.Drawing.Common|8.0.18|[Lien](https://www.nuget.org/packages/System.Drawing.Common/8.0.18)|
 |taglib-sharp-netstandard2.0|2.1.0|[Lien](https://github.com/mono/taglib-sharp)|
+|Svg|3.4.8|[link](https://github.com/svg-net/SVG)|
 
 ### <span style="color:#8E708E;font-size:25px;font-weight:bold;">Executables</span>
 
