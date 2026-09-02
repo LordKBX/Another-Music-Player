@@ -83,7 +83,7 @@ namespace AnotherMusicPlayer
             if (Lyrics == null) { return false; }
             string lyrics = Lyrics.Trim();
             if (lyrics.Length == 0) { return false; }
-            if (!lyrics.StartsWith("[ti:")) { return false; }
+            if (!lyrics.Contains("[ti:")) { return false; }
 
             Regex timeRegex = new Regex(@"\[(\d{2}):(\d{2})(\.(\d{2,3}))?\]");
             if(timeRegex.IsMatch(lyrics)){ return true; }
