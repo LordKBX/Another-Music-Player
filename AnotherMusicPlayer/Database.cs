@@ -599,7 +599,10 @@ namespace AnotherMusicPlayer
         {
             if (file == null) { return false; }
             if (System.IO.File.Exists(file)) { return false; }
-            try { DatabaseQuerys(new string[] { "DELETE FROM files WHERE Path='" + EscapeString(file) + "'" }, commit); }
+            try { 
+                DatabaseQuerys(new string[] { "DELETE FROM files WHERE Path='" + EscapeString(file) + "'" }, commit); 
+                DatabaseQuerys(new string[] { "DELETE FROM covers WHERE LIKE '" + EscapeString(file).Replace("\\\\", "\\").Replace("\\", "/") + "|'%" }, commit); 
+            }
             catch { return false; }
             return true;
         }

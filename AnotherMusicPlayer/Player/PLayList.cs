@@ -1,5 +1,7 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
+using Newtonsoft.Json;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
@@ -15,6 +17,7 @@ namespace AnotherMusicPlayer
             int initialNbFiles = PlayList.Count;
             int goodFiles = 0;
             string[] Tfiles = files;
+            List<string> badFiles = new List<string>();
             if (random == true)
             {
                 List<string> tmp = new List<string>();
@@ -35,8 +38,12 @@ namespace AnotherMusicPlayer
                     PlayList.Add(file);
                     if (!FilesGain.ContainsKey(file)) { FilesGain.Add(file, GetFileGain(file, true)); }
                     else { FilesGain[file] = GetFileGain(file, true); }
-                    
+
                     goodFiles += 1;
+                }
+                else {
+                    // Delete from database files that no longer exist
+                    App.bdd.DeleteFileAsync(file, true);
                 }
             }
 
