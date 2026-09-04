@@ -32,18 +32,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void InitializeComponent()
         {
             components = new System.ComponentModel.Container();
-            DataGridViewCellStyle dataGridViewCellStyle2 = new DataGridViewCellStyle();
-            TreeNode treeNode4 = new TreeNode("Automatic");
-            TreeNode treeNode5 = new TreeNode("Recorded");
-            TreeNode treeNode6 = new TreeNode("Web Radio");
+            DataGridViewCellStyle dataGridViewCellStyle1 = new DataGridViewCellStyle();
+            TreeNode treeNode1 = new TreeNode("Automatic");
+            TreeNode treeNode2 = new TreeNode("Recorded");
+            TreeNode treeNode3 = new TreeNode("Web Radio");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow2));
             GlobalTableLayoutPanel = new TableLayoutPanel();
             MainWIndowHead = new TableLayoutPanel();
+            WindowIconButton = new Button();
             TitleLabel = new Label();
+            UpdateButton = new Button();
             MinimizeButton = new Button();
             MaximizeButton = new Button();
             CloseButton = new Button();
-            WindowIconButton = new Button();
             tableLayoutPanel1 = new TableLayoutPanel();
             DisplayPlaybackPosition = new Label();
             panel1 = new Panel();
@@ -295,27 +296,45 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // MainWIndowHead
             // 
             MainWIndowHead.BackColor = Color.FromArgb(30, 30, 30);
-            MainWIndowHead.ColumnCount = 5;
+            MainWIndowHead.ColumnCount = 6;
             MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
             MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
-            MainWIndowHead.Controls.Add(TitleLabel, 1, 0);
-            MainWIndowHead.Controls.Add(MinimizeButton, 2, 0);
-            MainWIndowHead.Controls.Add(MaximizeButton, 3, 0);
-            MainWIndowHead.Controls.Add(CloseButton, 4, 0);
+            MainWIndowHead.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 62F));
             MainWIndowHead.Controls.Add(WindowIconButton, 0, 0);
+            MainWIndowHead.Controls.Add(TitleLabel, 1, 0);
+            MainWIndowHead.Controls.Add(UpdateButton, 2, 0);
+            MainWIndowHead.Controls.Add(MinimizeButton, 3, 0);
+            MainWIndowHead.Controls.Add(MaximizeButton, 4, 0);
+            MainWIndowHead.Controls.Add(CloseButton, 5, 0);
             MainWIndowHead.Dock = DockStyle.Fill;
             MainWIndowHead.Location = new Point(1, 1);
             MainWIndowHead.Margin = new Padding(0);
             MainWIndowHead.Name = "MainWIndowHead";
             MainWIndowHead.RowCount = 1;
             MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
-            MainWIndowHead.RowStyles.Add(new RowStyle(SizeType.Absolute, 64F));
             MainWIndowHead.Size = new Size(1234, 64);
             MainWIndowHead.TabIndex = 3;
             MainWIndowHead.Tag = "WindowHead";
+            // 
+            // WindowIconButton
+            // 
+            WindowIconButton.BackgroundImage = Properties.Resources.album_large;
+            WindowIconButton.BackgroundImageLayout = ImageLayout.Zoom;
+            WindowIconButton.Dock = DockStyle.Fill;
+            WindowIconButton.FlatAppearance.BorderColor = Color.FromArgb(30, 30, 30);
+            WindowIconButton.FlatAppearance.BorderSize = 0;
+            WindowIconButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 30, 30);
+            WindowIconButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
+            WindowIconButton.FlatStyle = FlatStyle.Flat;
+            WindowIconButton.Location = new Point(0, 0);
+            WindowIconButton.Margin = new Padding(0);
+            WindowIconButton.Name = "WindowIconButton";
+            WindowIconButton.Size = new Size(62, 64);
+            WindowIconButton.TabIndex = 4;
+            WindowIconButton.UseVisualStyleBackColor = true;
             // 
             // TitleLabel
             // 
@@ -329,12 +348,29 @@ namespace AnotherMusicPlayer.MainWindow2Space
             TitleLabel.Location = new Point(68, 0);
             TitleLabel.Margin = new Padding(6, 0, 0, 0);
             TitleLabel.Name = "TitleLabel";
-            TitleLabel.Size = new Size(980, 64);
+            TitleLabel.Size = new Size(918, 64);
             TitleLabel.TabIndex = 0;
             TitleLabel.Tag = "Title";
             TitleLabel.Text = "Title";
             TitleLabel.TextAlign = ContentAlignment.MiddleLeft;
             TitleLabel.DoubleClick += TitleLabel_DoubleClick;
+            // 
+            // UpdateButton
+            // 
+            UpdateButton.BackColor = Color.Gray;
+            UpdateButton.BackgroundImage = Properties.Resources.dialog_warning;
+            UpdateButton.BackgroundImageLayout = ImageLayout.Zoom;
+            UpdateButton.Cursor = Cursors.Hand;
+            UpdateButton.Dock = DockStyle.Fill;
+            UpdateButton.FlatStyle = FlatStyle.Popup;
+            UpdateButton.Location = new Point(990, 4);
+            UpdateButton.Margin = new Padding(4);
+            UpdateButton.Name = "UpdateButton";
+            UpdateButton.Size = new Size(54, 56);
+            UpdateButton.TabIndex = 5;
+            UpdateButton.Tag = "WindowButton";
+            UpdateButton.UseVisualStyleBackColor = false;
+            UpdateButton.Click += UpdateButton_Click;
             // 
             // MinimizeButton
             // 
@@ -386,23 +422,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             CloseButton.Tag = "WindowButton";
             CloseButton.UseVisualStyleBackColor = false;
             CloseButton.Click += CloseButton_Click;
-            // 
-            // WindowIconButton
-            // 
-            WindowIconButton.BackgroundImage = Properties.Resources.album_large;
-            WindowIconButton.BackgroundImageLayout = ImageLayout.Zoom;
-            WindowIconButton.Dock = DockStyle.Fill;
-            WindowIconButton.FlatAppearance.BorderColor = Color.FromArgb(30, 30, 30);
-            WindowIconButton.FlatAppearance.BorderSize = 0;
-            WindowIconButton.FlatAppearance.MouseDownBackColor = Color.FromArgb(30, 30, 30);
-            WindowIconButton.FlatAppearance.MouseOverBackColor = Color.FromArgb(30, 30, 30);
-            WindowIconButton.FlatStyle = FlatStyle.Flat;
-            WindowIconButton.Location = new Point(0, 0);
-            WindowIconButton.Margin = new Padding(0);
-            WindowIconButton.Name = "WindowIconButton";
-            WindowIconButton.Size = new Size(62, 64);
-            WindowIconButton.TabIndex = 4;
-            WindowIconButton.UseVisualStyleBackColor = true;
             // 
             // tableLayoutPanel1
             // 
@@ -874,8 +893,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             SelectedColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
             SelectedColumn.DataPropertyName = "Selected";
-            dataGridViewCellStyle2.Font = new Font("Wingdings", 9F);
-            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle1.Font = new Font("Wingdings", 9F);
+            SelectedColumn.DefaultCellStyle = dataGridViewCellStyle1;
             SelectedColumn.HeaderText = "";
             SelectedColumn.MinimumWidth = 30;
             SelectedColumn.Name = "SelectedColumn";
@@ -1210,22 +1229,22 @@ namespace AnotherMusicPlayer.MainWindow2Space
             PlaylistsTree.Location = new Point(1, 1);
             PlaylistsTree.Margin = new Padding(0);
             PlaylistsTree.Name = "PlaylistsTree";
-            treeNode4.Checked = true;
-            treeNode4.ImageKey = "filter_icon.png";
-            treeNode4.Name = "PlayListsTabTreeNodeAutomatic";
-            treeNode4.SelectedImageKey = "filter_icon.png";
-            treeNode4.Text = "Automatic";
-            treeNode5.Checked = true;
-            treeNode5.ImageKey = "floppy_icon.png";
-            treeNode5.Name = "PlayListsTabTreeNodeRecorded";
-            treeNode5.SelectedImageKey = "floppy_icon.png";
-            treeNode5.Text = "Recorded";
-            treeNode6.Checked = true;
-            treeNode6.ImageKey = "radio_icon.png";
-            treeNode6.Name = "PlayListsTabTreeNodeWebRario";
-            treeNode6.SelectedImageKey = "radio_icon.png";
-            treeNode6.Text = "Web Radio";
-            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode4, treeNode5, treeNode6 });
+            treeNode1.Checked = true;
+            treeNode1.ImageKey = "filter_icon.png";
+            treeNode1.Name = "PlayListsTabTreeNodeAutomatic";
+            treeNode1.SelectedImageKey = "filter_icon.png";
+            treeNode1.Text = "Automatic";
+            treeNode2.Checked = true;
+            treeNode2.ImageKey = "floppy_icon.png";
+            treeNode2.Name = "PlayListsTabTreeNodeRecorded";
+            treeNode2.SelectedImageKey = "floppy_icon.png";
+            treeNode2.Text = "Recorded";
+            treeNode3.Checked = true;
+            treeNode3.ImageKey = "radio_icon.png";
+            treeNode3.Name = "PlayListsTabTreeNodeWebRario";
+            treeNode3.SelectedImageKey = "radio_icon.png";
+            treeNode3.Text = "Web Radio";
+            PlaylistsTree.Nodes.AddRange(new TreeNode[] { treeNode1, treeNode2, treeNode3 });
             PlaylistsTree.SelectedImageIndex = 0;
             PlaylistsTree.Size = new Size(250, 610);
             PlaylistsTree.TabIndex = 0;
@@ -2987,5 +3006,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
         internal ComboBox SettingsNormalizeVolumeComboBox;
         internal Label SettingsTabLibraryHiddenFileLabel;
         internal ImageList PlayListsTabTreeImageList;
+        internal Button UpdateButton;
     }
 }

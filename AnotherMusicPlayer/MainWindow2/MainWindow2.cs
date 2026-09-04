@@ -1,5 +1,7 @@
-﻿using Microsoft.WindowsAPICodePack.Taskbar;
+﻿using App;
+using Microsoft.WindowsAPICodePack.Taskbar;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -7,8 +9,11 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
+using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -16,10 +21,11 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using static AnotherMusicPlayer.Player;
-using Modes = AnotherMusicPlayer.Player.Modes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.TrayNotify;
 using Button = System.Windows.Forms.Button;
 using Color = System.Drawing.Color;
 using Control = System.Windows.Forms.Control;
+using Modes = AnotherMusicPlayer.Player.Modes;
 using Pen = System.Drawing.Pen;
 using Timer = System.Windows.Forms.Timer;
 
@@ -28,6 +34,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
     public partial class MainWindow2 : Form
     {
         private Timer LoadTimer = new Timer();
+        private Timer HourlyTimer = new Timer();
 
         /// <summary> Used for storing object dependant of the Operating system </summary>
         private Dictionary<string, object> ListReferences = new Dictionary<string, object>();
@@ -98,7 +105,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 if (state == true) { GridScanMetadata.Visible = true; GridScanMetadataNb.Text = "" + nb; }
                 else { GridScanMetadata.Visible = false; }
             }
-            catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+            catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
         internal PlayBackContextMenu playBackContextMenu;
@@ -166,11 +173,180 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
         }
 
+        
+        public static bool IsVersionString(string input)
+        { return Regex.IsMatch(input, "^([0-9\\.]{1,})$"); }
+
+        public static string NumEvenner(string input, int length = 3)
+        {
+            string ret = "" + input;
+            while (ret.Length < length) { ret = "0" + ret; }
+            return ret;
+        }
+
+        public static long AppNumberVersion(string version)
+        {
+            if (!IsVersionString(version)) { return 0; }
+            string endVersion = "";
+            string[] tab = version.Split('.');
+            foreach (string block in tab) { endVersion += NumEvenner(block, 4); }
+
+            return long.Parse(endVersion);
+        }
+
+        private static HttpClient getHttpCLient()
+        {
+            HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+            httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "deflate");
+            httpClient.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+            httpClient.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
+            httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
+            httpClient.DefaultRequestHeaders.Add("Host", "api.github.com");
+            httpClient.DefaultRequestHeaders.Add("Pragma", "no-cache");
+
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0");
+            httpClient.Timeout = new TimeSpan(0, 0, 10);
+
+            return httpClient;
+        }
+
+        private static string CheckAppVersionUrl = "https://api.github.com/repos/LordKBX/Another-Music-Player/releases";
+        public static FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo("" + Assembly.GetEntryAssembly().Location);
+        private bool CheckAppVersionInUse = false;
+
+        private static (long, string) ParseGitHubManifest(string content)
+        {
+            string downloadUrl = "";
+            long contentVersion = 0;
+            List<Dictionary<string, object>> list = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(content);
+            if (list[0].ContainsKey("assets") == false)
+            { return (0, ""); }
+            if (list[0].ContainsKey("tag_name") == false)
+            { return (0, ""); }
+
+            if (list[0]["assets"].GetType() == typeof(Newtonsoft.Json.Linq.JArray))
+            {
+                foreach (JObject kvp in ((Newtonsoft.Json.Linq.JArray)list[0]["assets"]))
+                {
+                    downloadUrl = kvp.GetValue("browser_download_url").ToString();
+                }
+            }
+            contentVersion = AppNumberVersion("" + list[0]["tag_name"]);
+
+            return (contentVersion, downloadUrl);
+        }
+
+        public void CheckAppVersion(bool IsBackground = false)
+        {
+            if (versionInfo == null) { return; }
+            if (CheckAppVersionInUse) { return; }
+            CheckAppVersionInUse = true;
+            try
+            {
+                long currentVersion = AppNumberVersion("0" + versionInfo.FileVersion);
+                HttpClient httpClient = getHttpCLient();
+                Task<HttpResponseMessage> task = httpClient.GetAsync(CheckAppVersionUrl);
+                task.Wait();
+                if (task.Result.IsSuccessStatusCode)
+                {
+                    string downloadUrl = "";
+                    string content = task.Result.Content.ReadAsStringAsync().Result;
+                    long contentVersion = 0;
+
+                    (contentVersion, downloadUrl) = ParseGitHubManifest(content);
+                    if(contentVersion == 0) 
+                    { if (IsBackground == false) MessageBox.Show("Impossible de tester la disponibilité d'une mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); CheckAppVersionInUse = false; return; }
+                    
+                    Debug.WriteLine("currentVersionInt = " + currentVersion);
+                    Debug.WriteLine("contentVersionInt = " + contentVersion);
+                    Debug.WriteLine("downloadUrl = " + downloadUrl);
+
+                    if (contentVersion > currentVersion) { ShowUpdateButton(true); CheckAppVersionInUse = false; return; }
+                    else { if (IsBackground == false) MessageBox.Show("L'application est à jour", "Info - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1); }
+                }
+                else
+                {
+                    if (IsBackground == false) MessageBox.Show("Impossible de tester la disponibilité d'une mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                }
+            }
+            catch (Exception ex) { Debug.WriteLine(ex); }
+            CheckAppVersionInUse = false;
+            ShowUpdateButton(false);
+        }
+
+        private void DownloadLatestVersion() {
+            if (!DialogBox.ShowDialog("Alert",
+                "Do you confirm downloading newest installer and running it ?",
+                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
+            {return;}
+            HttpClient httpClient = getHttpCLient();
+            Task<HttpResponseMessage> task = httpClient.GetAsync(CheckAppVersionUrl);
+            task.Wait();
+            if (task.Result.IsSuccessStatusCode)
+            {
+                string downloadUrl = "";
+                string content = task.Result.Content.ReadAsStringAsync().Result;
+                long contentVersion = 0;
+
+                (contentVersion, downloadUrl) = ParseGitHubManifest(content);
+                if (contentVersion == 0)
+                { MessageBox.Show("Impossible de récupérer la mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); return; }
+
+                string fileName = "" + versionInfo.ProductName + "-" + contentVersion + ".exe";
+                string endFile = Path.GetTempPath() + fileName;
+                FileStreamOptions streamOption = new FileStreamOptions() { Access = FileAccess.Write, Mode = FileMode.OpenOrCreate, Share = FileShare.ReadWrite };
+                FileStream endstream = new FileStream(endFile, streamOption);
+                endstream.Position = 0;
+                endstream.SetLength(0);
+
+                HttpClient httpClient2 = getHttpCLient();
+                httpClient2.Timeout = new TimeSpan(0, 1, 0);
+                Task<Stream> downStream = httpClient2.GetStreamAsync(downloadUrl);
+                downStream.Wait(httpClient2.Timeout);
+                if (downStream.IsCompleted)
+                {
+                    byte[] buff = new byte[1024];
+                    int bytes = -1;
+                    do
+                    {
+                        // Read the client's test message.
+                        bytes = downStream.Result.Read(buff, 0, buff.Length);
+                        if (bytes < buff.Length)
+                        {
+                            for (int i = bytes; i < buff.Length; i++) { buff[i] = 0; }
+                        }
+                        endstream.Write(buff, 0, bytes);
+                    } while (bytes != 0);
+                    endstream.Close();
+
+                    Process proc = new Process();
+                    proc.StartInfo.FileName = endFile;
+                    proc.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /RESTARTAPPLICATIONS";
+                    proc.Start();
+
+                    Environment.Exit(0);
+                }
+                else
+                {
+                    MessageBox.Show("Impossible de télécharger la mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+                }
+            }
+        }
+
+        private void UpdateButton_Click(object sender, EventArgs e) { DownloadLatestVersion(); }
+        private void ShowUpdateButton(bool visible)
+        {
+            if (this.InvokeRequired) { this.Invoke(() => { ShowUpdateButton(visible); }); return; }
+            UpdateButton.Visible = visible;
+            MainWIndowHead.ColumnStyles[2].Width = (visible) ? 62 : 0;
+        }
+
         /// <summary> Object music player </summary>
         public MainWindow2()
         {
             InitializeComponent();
-            playBackContextMenu = MakePlayBackContextMenu(); 
+            playBackContextMenu = MakePlayBackContextMenu();
             InitIcons();
             this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint, true);
             SettingsTabLangComboBox.Items.AddRange(App.Languages.ToArray());
@@ -293,24 +469,32 @@ namespace AnotherMusicPlayer.MainWindow2Space
             LoadTimer.Interval = 200;
             LoadTimer.Start();
 
+            HourlyTimer.Tick += HourlyTimer_Tick; ;
+            HourlyTimer.Interval = 360000 * 5;//360000 = 1h, 4320000 = 12h, 8640000 = 24h
+            HourlyTimer.Start();
+
             this.FormClosed += MainWindow2_FormClosed;
+            CheckAppVersion(true);
         }
 
         public static void PlayPause()
         {
             Debug.WriteLine("Player.Mode=" + Player.Mode);
-            if (Player.Mode == Modes.Radio) {
-                Debug.WriteLine("RadioPlayer.IsPlaying = " + ((RadioPlayer.IsPlaying)?"True":"False"));
-                if (RadioPlayer.IsPlaying) { RadioPlayer.Stop(); } else { Task<bool> a = RadioPlayer.Start(); } 
+            if (Player.Mode == Modes.Radio)
+            {
+                Debug.WriteLine("RadioPlayer.IsPlaying = " + ((RadioPlayer.IsPlaying) ? "True" : "False"));
+                if (RadioPlayer.IsPlaying) { RadioPlayer.Stop(); } else { Task<bool> a = RadioPlayer.Start(); }
             }
-            else { 
-                if (Player.IsPlaying()) { 
+            else
+            {
+                if (Player.IsPlaying())
+                {
                     Settings.LastPlaylistIndex = Player.Index;
                     Settings.LastPlaylistDuration = Player.Position(null);
                     Settings.SaveSettingsAsync();
-                    Player.Pause(); 
-                } 
-                else { Player.Play(); } 
+                    Player.Pause();
+                }
+                else { Player.Play(); }
             }
         }
 
@@ -323,7 +507,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 try
                 {
                     if (PlaybackTabDataGridView.Rows[e.RowIndex].Selected == false) { PlaybackTabDataGridView.ClearSelection(); PlaybackTabDataGridView.Rows[e.RowIndex].Selected = true; }
-                    
+
                     if (PlaybackTabDataGridView.SelectedRows.Count <= 0) { return; }
                     else if (PlaybackTabDataGridView.SelectedRows.Count == 1) { playBackContextMenu.SetMultiple(false); }
                     else { playBackContextMenu.SetMultiple(true); }
@@ -352,7 +536,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
 
-        private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e) {
+        private void MainWindow2_FormClosed(object sender, FormClosedEventArgs e)
+        {
             if (Player.Mode == Modes.File) { Player.SavePlaylist(); }
             else { Player.PlaylistClear(); }
             KeyboardGlobal.Kill();
@@ -372,7 +557,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             if (this.InvokeRequired) { this.Invoke(() => { Player_StatusChange(); }); return; }
             try
             {
-                if (Player.LatestPlayerStatus == PlayerStatus.Stop && RadioPlayer.IsPlaying == false) 
+                if (Player.LatestPlayerStatus == PlayerStatus.Stop && RadioPlayer.IsPlaying == false)
                 { UpdateLeftPannelMediaInfo(null); PlaybackPositionLabel.Text = "--"; }
                 if (Player.Mode == Modes.Radio)
                 {
@@ -383,9 +568,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     SetTitle(PlaybackPositionLabel.Text);
                     playbackProgressBar.Value = 0;
                     playbackProgressBar.Enabled = false;
-                    PlayListViewItem item = new PlayListViewItem() { 
-                        Name = PlaybackPositionLabel.Text, Album = "", AlbumArtists="", Composers="", Performers = "",
-                        Duration =0, DurationS="--:--", OriginPath = "", Path = Player.GetCurrentFile(), Selected = MainWindow2.PlayListSelectionChar };
+                    PlayListViewItem item = new PlayListViewItem()
+                    {
+                        Name = PlaybackPositionLabel.Text,
+                        Album = "",
+                        AlbumArtists = "",
+                        Composers = "",
+                        Performers = "",
+                        Duration = 0,
+                        DurationS = "--:--",
+                        OriginPath = "",
+                        Path = Player.GetCurrentFile(),
+                        Selected = MainWindow2.PlayListSelectionChar
+                    };
                     PlaybackTabDataGridView.DataSource = null;
                     PlaybackTabDataGridView.Invalidate();
                     PlaybackTabDataGridView.DataSource = new ObservableCollection<PlayListViewItem>() { item };
@@ -413,6 +608,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             //library.DisplayPathAsync();
             LibraryLoadOldPlaylist();
             library.DisplayPath();
+            library.InvokeScan();
+        }
+
+        private void HourlyTimer_Tick(object sender, EventArgs e)
+        {
+            CheckAppVersion(true);
             library.InvokeScan();
         }
 
@@ -479,7 +680,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             PlayListsTabTableLayoutPanel.ColumnStyles[0] = new ColumnStyle(SizeType.Absolute, stringSize.Width + 60);
         }
-        public void UpdateStyle() {
+        public void UpdateStyle()
+        {
             if (this.InvokeRequired) { this.Invoke(() => { UpdateStyle(); }); return; }
             if (Settings.StyleName != App.style.GetType().Name)
             {
@@ -489,7 +691,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
         }
         public void AlwaysOnTop(bool val) { this.TopMost = val; }
-        private void ReplaceElementDualText(Control ctrl, string text) {
+        private void ReplaceElementDualText(Control ctrl, string text)
+        {
             Font ft = App.style.GetValue<Font>("GlobalFont", AnotherMusicPlayer.Styles.Dark.GlobalFont);
             if (ctrl.GetType() == typeof(Label)) { ((Label)ctrl).AutoEllipsis = false; }
             if (ctrl.Tag == null || "" + ctrl.Tag == "PlaybackTabLabel") { ctrl.MinimumSize = new Size(ctrl.Parent.Width - 2, 28); }
@@ -498,7 +701,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             float max = (w / (ft.SizeInPoints));
             if (text.Length > Convert.ToInt32(max)) { ctrl.Text = text.Substring(0, Convert.ToInt32(max)) + "..."; }
             else { ctrl.Text = text; }
-            App.SetToolTip(ctrl, text); 
+            App.SetToolTip(ctrl, text);
         }
         #endregion
 
@@ -581,7 +784,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     catch (Exception ex1) { Debug.WriteLine(ex1.Message + "\r\n" + ex1.StackTrace); }
                 }
 
-               App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+                App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
 
 
                 if (Settings.AutoCloseLyrics) { CloseLyricsWindows(); }
@@ -601,9 +804,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void Player_PositionChanged(PlayerPositionChangedEventParams e) { ChangeDisplayPlaybackPosition(e.Position, e.duration); }
         private void Player_LengthChanged(PlayerLengthChangedEventParams e) { ChangeDisplayPlaybackPosition(-1, e.duration); }
 
-        private void Player_PlaylistPositionChanged(PlayerPlaylistPositionChangeParams e) { 
-            if (Player.Mode == Modes.Radio) { ChangeDisplayPlaybackPosition(0, 0); } 
-            else { ChangePlaylistPosition(e.Position); } 
+        private void Player_PlaylistPositionChanged(PlayerPlaylistPositionChangeParams e)
+        {
+            if (Player.Mode == Modes.Radio) { ChangeDisplayPlaybackPosition(0, 0); }
+            else { ChangePlaylistPosition(e.Position); }
         }
 
         private void Player_PlaylistChanged(PlayerPlaylistChangeParams e)
@@ -715,8 +919,11 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private bool Open(string[] files, bool replace = false, bool random = false, int playIndex = 0, bool autoplay = false, long statupDuration = 0)
         {
             Debug.WriteLine("--> Open <--");
+            this.setLoadingState(true);
             if (replace == true) { Player.PlaylistClear(); }
-            return Player.PlaylistEnqueue(files, random, playIndex, statupDuration, autoplay);
+            bool rez = Player.PlaylistEnqueue(files, random, playIndex, statupDuration, autoplay);
+            this.setLoadingState(false);
+            return rez;
         }
 
         private bool loadingRating = false;
@@ -726,11 +933,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
             string[] rtab = null;
             try
             {
-                if (item == null) {
+                if (item == null)
+                {
                     string? r = Player.GetCurrentFile();
                     if (r != null && r.Trim().Length > 0) { item = PlayListViewItem.FromFilePath(r); }
                 }
-                if (item == null) 
+                if (item == null)
                 {
                     FileCover.BackgroundImage = Properties.Resources.album_large;
                     ReplaceElementDualText(PlaybackTabTitleLabelValue, "--");
@@ -822,11 +1030,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
         public bool IsLyricsVisible() { return (GlobalTableLayoutPanel.RowStyles[2].Height > 0); }
         internal List<LyricsBlock> LyricsTimedLinesParsed = null;
 
-        private void ShowLyricsLine(MediaItem item) {
+        private void ShowLyricsLine(MediaItem item)
+        {
             Dictionary<long, string> LyricsTimedLines = null;
             LyricsTimedLinesParsed = null;
             if (!Settings.DisplayLiveLyrics || item == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
-            if(item.Lyrics == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
+            if (item.Lyrics == null) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
             string lyrics = item.Lyrics.Trim();
             if (lyrics.Length == 0) { GlobalTableLayoutPanel.RowStyles[2].Height = 0; return; }
             GlobalTableLayoutPanel.RowStyles[2].Height = 50;

@@ -440,7 +440,7 @@ namespace AnotherMusicPlayer
                     }
                 }
 
-                Debug.WriteLine(JsonConvert.SerializeObject(existingParams));
+                //Debug.WriteLine(JsonConvert.SerializeObject(existingParams));
                 List<ParamObject> inserts = new List<ParamObject>();
                 List<ParamObject> updates = new List<ParamObject>();
 

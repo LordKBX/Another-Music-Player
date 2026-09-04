@@ -541,7 +541,7 @@ namespace AnotherMusicPlayer
                     List<int> keys = rows.Keys.ToList();
                     keys.OrderByDescending(x => x);
 
-                    Debug.WriteLine(JsonConvert.SerializeObject(keys));
+                    //Debug.WriteLine(JsonConvert.SerializeObject(keys));
                     int pid = rows[keys[0]].PlaylistId;
 
                     for (int i = 0; i < keys.Count; i++)
