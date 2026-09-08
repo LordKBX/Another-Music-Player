@@ -355,7 +355,7 @@ namespace AnotherMusicPlayer
             Control parent = (Control)parentItem.Tag;
             PlayListsLineItem item = (PlayListsLineItem)parent.Tag;
 
-            MediaInfoWindow ip = new MediaInfoWindow(App.win1, item.Path);
+            MediaInfoWindow ip = new MediaInfoWindow(App.win1, item.Path, MediaInfoWindowSourceType.Playlist);
             ip.ShowDialog();
         }
 

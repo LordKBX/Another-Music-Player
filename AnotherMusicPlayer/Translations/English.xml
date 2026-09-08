@@ -199,6 +199,9 @@
     <LibraryContextMenuEditGeneric><![CDATA[EDIT]]></LibraryContextMenuEditGeneric>
     <LibraryContextMenuEditAlbum><![CDATA[Edit Album]]></LibraryContextMenuEditAlbum>
     <LibraryContextMenuEditFolder><![CDATA[Rename Folder]]></LibraryContextMenuEditFolder>
+    <LibraryContextMenuRenameFile><![CDATA[Rename File]]></LibraryContextMenuRenameFile>
+    <LibraryContextMenuDeleteFile><![CDATA[Delete File]]></LibraryContextMenuDeleteFile>
+    <LibraryContextMenuOpenFolder><![CDATA[Open Folder]]></LibraryContextMenuOpenFolder>
     <LibraryContextMenuEditTrack><![CDATA[Edit Track]]></LibraryContextMenuEditTrack>
     <LibraryContextMenuEditFile><![CDATA[Edit File]]></LibraryContextMenuEditFile>
 

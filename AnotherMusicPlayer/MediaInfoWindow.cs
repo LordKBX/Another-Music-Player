@@ -1,4 +1,6 @@
-﻿using CustomExtensions;
+﻿using AnotherMusicPlayer.MainWindow2Space;
+using CustomExtensions;
+using m3uParser;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -12,6 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Shapes;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace AnotherMusicPlayer
 {
@@ -20,10 +23,14 @@ namespace AnotherMusicPlayer
         private Font fontNormal = App.win1.Font;
         private Font fontBold = new Font(App.win1.Font, FontStyle.Bold);
         Bitmap BitmapCover;
+        MediaInfoWindowSourceType sourceType;
+        string sourceInfo;
 
-        public MediaInfoWindow(Form parent, string filePath)
+        public MediaInfoWindow(MainWindow2 parent, string filePath, MediaInfoWindowSourceType sourceType = MediaInfoWindowSourceType.PlayingQueue, string sourceInfo = "")
         {
             this.Owner = parent;
+            this.sourceType = sourceType;
+            this.sourceInfo = sourceInfo;
             if (filePath == null || !File.Exists(filePath)) { throw new Exception("File not found!"); }
             InitializeComponent();
             MinimumSize = new Size(600, 300);
@@ -85,20 +92,138 @@ namespace AnotherMusicPlayer
             App.SetToolTip(ratingObject, "" + item.Rating + " / 5");
             #endregion
 
-            Button openFolder = new Button()
-            {
-                MinimumSize = new Size(150, 40),
-                Text = "Open folder",
-                Margin = new Padding(5, 0, 0, 0)
-            };
-            openFolder.Click += (s, e) =>
+            AddButton(App.GetTranslation("LibraryContextMenuOpenFolder", "Open folder"), "OpenFolder", (s, e) =>
             {
                 try
                 { Process.Start("explorer.exe", "/select,\"" + filePath + "\""); }
                 catch (Exception ex)
                 { MessageBox.Show("Error opening folder: " + ex.Message); }
-            };
-            flowLayoutPanelLeft.Controls.Add(openFolder);
+            });
+
+            AddButton(App.GetTranslation("LibraryContextMenuRenameFile", "Rename File"), "RenameFile", (s, e) =>
+            {
+                try
+                {
+                    //filePath
+                    FileInfo fi = new FileInfo(filePath);
+                    if(fi.Exists)
+                    {
+                        RenameWindow rw = new RenameWindow(this, fi.Name, new string[] { }, true);
+                        if (rw.ShowDialog() == DialogResult.OK)
+                        {
+                            App.bdd.DatabaseQuerys(new string[] { "UPDATE files SET Path = '" + Database.EscapeString(rw.FolderPath) + "' WHERE Path='" + Database.EscapeString(filePath) + "'" }, true);
+                            App.bdd.DatabaseQuerys(new string[] { "UPDATE playCounts SET Path = '" + Database.EscapeString(rw.FolderPath) + "' WHERE Path='" + Database.EscapeString(filePath) + "'" }, true);
+                            App.bdd.DatabaseQuerys(new string[] { "UPDATE playlistsItems SET Path = '" + Database.EscapeString(rw.FolderPath) + "' WHERE Path='" + Database.EscapeString(filePath) + "'" }, true);
+                            App.bdd.DatabaseQuerys(new string[] { "UPDATE queue SET Path1 = '" + Database.EscapeString(rw.FolderPath) + "' WHERE Path1='" + Database.EscapeString(filePath) + "'" }, true);
+                            App.bdd.DatabaseQuerys(new string[] { "UPDATE queue SET Path2 = '" + Database.EscapeString(rw.FolderPath) + "' WHERE Path2='" + Database.EscapeString(filePath) + "'" }, true);
+                            App.bdd.DatabaseQuerys(new string[] { "DELETE FROM covers WHERE LIKE '" + Database.EscapeString(filePath).Replace("\\\\", "\\").Replace("\\", "/") + "|'%" }, true);
+
+                            if (sourceType == MediaInfoWindowSourceType.PlayingQueue)
+                            {
+                                try
+                                {
+
+                                    if (App.win1.PlaybackTabDataGridView.SelectedRows.Count == 1)
+                                    {
+                                        int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
+
+                                        if (Player.Index == id)
+                                        {
+                                            ((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[Player.Index].DataBoundItem).Selected = "";
+                                            Player.StopAll();
+                                            Player.ClearCurrentFile();
+                                        }
+                                        ((PlayListViewItem)App.win1.PlaybackTabDataGridView.Rows[id].DataBoundItem).Path = rw.FolderPath;
+                                        Player.PlayList[id] = rw.FolderPath;
+                                        Player.SavePlaylist();
+                                        if (Player.Index == id) { Player.PlaylistReadIndex(id); }
+                                    }
+                                }
+                                catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+                            }
+                            if (sourceType == MediaInfoWindowSourceType.Library || App.win1.library.CurrentPath == fi.DirectoryName)
+                            {
+                                ((MainWindow2)Owner).library.DisplayPath(App.win1.library.CurrentPath);
+                            }
+                            if (sourceType == MediaInfoWindowSourceType.Playlist && App.win1.TabControler.SelectedTab.Name == "PlayListsTab")
+                            {
+                                TreeNodeMouseClickEventArgs ev = new TreeNodeMouseClickEventArgs(App.win1.PlaylistsTree.SelectedNode, MouseButtons.Left, 1, 0, 0);
+                                App.win1.playLists.PlaylistsTree_NodeMouseClick(App.win1.PlaylistsTree.SelectedNode, ev);
+                            }
+
+
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("File does not exist.");
+                    }
+                }
+                catch (Exception ex)
+                { MessageBox.Show(ex.Message + "\r\n" + ex.StackTrace); }
+            });
+
+            AddButton(App.GetTranslation("LibraryContextMenuDeleteFile"), "CancelButton", (s, e) =>
+            {
+                try
+                {
+                    //filePath
+                    FileInfo fi = new FileInfo(filePath);
+                    if(fi.Exists)
+                    {
+                        if (DialogBox.ShowDialog(
+                            App.GetTranslation("PlayListsContextMenuTrackDelete","Deleting file"),
+                            App.GetTranslation("PlayListsContextMenuTrackDeleteConfirmMessage", "Do you confirm ?").Replace("%X%", fi.Name),
+                            DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this))
+                        {
+                            Microsoft.VisualBasic.FileIO.FileSystem.DeleteFile(filePath,
+                                Microsoft.VisualBasic.FileIO.UIOption.OnlyErrorDialogs,
+                                Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+
+                            App.bdd.DeleteFileAsync(fi.FullName);
+
+                            if (sourceType == MediaInfoWindowSourceType.PlayingQueue)
+                            {
+                                try {
+                                    if (App.win1.PlaybackTabDataGridView.SelectedRows.Count == 1)
+                                    {
+                                        int id = App.win1.PlaybackTabDataGridView.SelectedRows[0].Index;
+
+                                        if (Player.Index == id)
+                                        {
+                                            Player.StopAll();
+                                            App.win1.PlaybackTabDataGridView.Rows.RemoveAt(Player.Index);
+                                            App.win1.PlayListItems.RemoveAt(Player.Index);
+                                        }
+                                        Player.PlaylistRemoveIndex(id);
+                                        Player.SavePlaylist();
+                                        if (Player.Index == id) { Player.PlaylistReadIndex(id); }
+                                    }
+                                }
+                                catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+                            }
+                            if(sourceType == MediaInfoWindowSourceType.Library || App.win1.library.CurrentPath == fi.DirectoryName)
+                            {
+                                ((MainWindow2)Owner).library.DisplayPath(App.win1.library.CurrentPath);
+                            }
+                            if(sourceType == MediaInfoWindowSourceType.Playlist && App.win1.TabControler.SelectedTab.Name == "PlayListsTab")
+                            {
+                                TreeNodeMouseClickEventArgs ev = new TreeNodeMouseClickEventArgs(App.win1.PlaylistsTree.SelectedNode, MouseButtons.Left, 1, 0, 0);
+                                App.win1.playLists.PlaylistsTree_NodeMouseClick(App.win1.PlaylistsTree.SelectedNode, ev);
+                            }
+
+                            this.Close();
+                        }
+                    }
+                    else
+                    {
+                        MessageBox.Show("File does not exist.");
+                    }
+                }
+                catch (Exception ex)
+                { MessageBox.Show(ex.Message + "\r\n" + ex.StackTrace); }
+            });
 
             flowLayoutPanelRight.Controls[0].Focus();
 
@@ -107,8 +232,8 @@ namespace AnotherMusicPlayer
 
         public void SetStyle(Control ctl = null) 
         {
-            if (ctl == null) { ctl = this; }
-            //AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
+            bool lv0 = false;
+            if (ctl == null) { ctl = this; lv0 = true; }
 
             if (ctl.Name == "Cover") { ctl.BackColor = App.style.GetColor("GlobalTrackIconBackColor"); }
             else
@@ -118,6 +243,16 @@ namespace AnotherMusicPlayer
             }
 
             if (ctl.Controls != null && ctl.Controls.Count > 0) { foreach (Control ctl2 in ctl.Controls) { SetStyle(ctl2); } }
+            if (lv0)
+            {
+                AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(Controls.Find("OpenFolder", true)[0]);
+                AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(Controls.Find("RenameFile", true)[0]);
+                AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(Controls.Find("CancelButton", true)[0]);
+
+                Controls.Find("OpenFolder", true)[0].Font = App.style.GetValue<Font>("GlobalFontSmall", AnotherMusicPlayer.Styles.Dark.GlobalFontSmall);
+                Controls.Find("RenameFile", true)[0].Font = App.style.GetValue<Font>("GlobalFontSmall", AnotherMusicPlayer.Styles.Dark.GlobalFontSmall);
+                Controls.Find("CancelButton", true)[0].Font = App.style.GetValue<Font>("GlobalFontSmall", AnotherMusicPlayer.Styles.Dark.GlobalFontSmall);
+            }
         }
 
         private void AddLine1L(string cat, string data) 
@@ -176,6 +311,18 @@ namespace AnotherMusicPlayer
             App.SetToolTip(lb1, data);
         }
 
+        private void AddButton(string text, string tag, EventHandler clickEvent)
+        {
+            Button btn = new Button()
+            {
+                MinimumSize = new Size(150, 40),
+                Text = text, Tag = tag, Name = tag,
+                Margin = new Padding(5, 0, 0, 3)
+            };
+            btn.Click += clickEvent;
+            flowLayoutPanelLeft.Controls.Add(btn);
+        }   
+
         private void changeCoverPreview(TagLib.IPicture pic)
         {
             MemoryStream ms = new MemoryStream(pic.Data.Data);
@@ -199,4 +346,6 @@ namespace AnotherMusicPlayer
             }
         }
     }
+
+    public enum MediaInfoWindowSourceType { PlayingQueue, Library, Playlist }
 }

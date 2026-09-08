@@ -601,6 +601,9 @@ namespace AnotherMusicPlayer
             if (System.IO.File.Exists(file)) { return false; }
             try { 
                 DatabaseQuerys(new string[] { "DELETE FROM files WHERE Path='" + EscapeString(file) + "'" }, commit); 
+                DatabaseQuerys(new string[] { "DELETE FROM playCounts WHERE Path='" + EscapeString(file) + "'" }, commit); 
+                DatabaseQuerys(new string[] { "DELETE FROM cc WHERE Path='" + EscapeString(file) + "'" }, commit); 
+                DatabaseQuerys(new string[] { "DELETE FROM queue WHERE Path1='" + EscapeString(file) + "'" }, commit); 
                 DatabaseQuerys(new string[] { "DELETE FROM covers WHERE LIKE '" + EscapeString(file).Replace("\\\\", "\\").Replace("\\", "/") + "|'%" }, commit); 
             }
             catch { return false; }

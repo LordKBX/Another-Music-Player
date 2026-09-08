@@ -14,6 +14,7 @@ namespace AnotherMusicPlayer.Styles
         internal static Type StyleType = typeof(Red);
         internal Type styleType = typeof(Red);
 
+        public static Font GlobalFontSmall = new Font("Segoe UI", 9, FontStyle.Regular, GraphicsUnit.Point);
         public static Font GlobalFont = new Font("Segoe UI", 12, FontStyle.Regular, GraphicsUnit.Point);
         public static Font GlobalFontTitle = new Font("Segoe UI", 15, FontStyle.Regular, GraphicsUnit.Point);
         public static Font GlobalFontTitleBold = new Font("Segoe UI", 15, FontStyle.Bold, GraphicsUnit.Point);

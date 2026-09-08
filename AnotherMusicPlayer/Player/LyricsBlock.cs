@@ -11,5 +11,6 @@ namespace AnotherMusicPlayer
         public long Start = 0;
         public long End = 0;
         public string Text = "";
+        public string Suffix = "";
     }
 }

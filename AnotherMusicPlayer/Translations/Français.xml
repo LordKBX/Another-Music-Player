@@ -198,7 +198,10 @@
 
     <LibraryContextMenuEditGeneric><![CDATA[Editer]]></LibraryContextMenuEditGeneric>
     <LibraryContextMenuEditAlbum><![CDATA[Editer l'Album]]></LibraryContextMenuEditAlbum>
-    <LibraryContextMenuEditFolder><![CDATA[Renomer le Dossier]]></LibraryContextMenuEditFolder>
+    <LibraryContextMenuEditFolder><![CDATA[Renommer le Dossier]]></LibraryContextMenuEditFolder>
+    <LibraryContextMenuRenameFile><![CDATA[Renommer]]></LibraryContextMenuRenameFile>
+    <LibraryContextMenuDeleteFile><![CDATA[Supprimer]]></LibraryContextMenuDeleteFile>
+    <LibraryContextMenuOpenFolder><![CDATA[Ouvrir Dossier]]></LibraryContextMenuOpenFolder>
     <LibraryContextMenuEditTrack><![CDATA[Editer la Piste]]></LibraryContextMenuEditTrack>
     <LibraryContextMenuEditFile><![CDATA[Editer le Fichier]]></LibraryContextMenuEditFile>
 

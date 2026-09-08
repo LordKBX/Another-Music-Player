@@ -151,7 +151,12 @@ namespace AnotherMusicPlayer
         }
 
         /// <summary> clear current file value </summary>
-        public static void ClearCurrentFile() { CurrentFile = null; }
+        public static void ClearCurrentFile() {
+            if (AudioList.ContainsKey(CurrentFile)) { 
+                AudioList.Remove(CurrentFile); 
+            }
+            CurrentFile = null;
+        }
 
         public static long GetCurrentFilePosition()
         {

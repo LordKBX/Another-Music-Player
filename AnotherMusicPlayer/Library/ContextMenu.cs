@@ -144,7 +144,7 @@ namespace AnotherMusicPlayer
             if (parent.GetType() == typeof(TrackButton))
             {
                 string track = (string)parent.Tag;
-                MediaInfoWindow ip = new MediaInfoWindow(App.win1, track);
+                MediaInfoWindow ip = new MediaInfoWindow(App.win1, track, MediaInfoWindowSourceType.Library, "");
                 ip.ShowDialog();
             }
             else

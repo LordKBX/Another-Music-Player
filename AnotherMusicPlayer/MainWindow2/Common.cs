@@ -212,7 +212,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         ((Button)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("GlobalButtonFlatAppearanceMouseOverBackColor");
                         ((Button)parent).Cursor = Cursors.Default;
                     }
-                    else if ((Tags.Contains("ValidateButton") || parent.Name == "ValidateButton"))
+                    else if (Tags.Contains("ValidateButton") || parent.Name == "ValidateButton")
                     { 
                         parent.BackColor = App.style.GetColor("ValidateButtonBackColor");
                         parent.ForeColor = App.style.GetColor("ValidateButtonForeColor");
@@ -225,7 +225,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         ((Button)parent).FlatAppearance.MouseDownBackColor = App.style.GetColor("ValidateButtonFlatAppearanceMouseDownBackColor");
                         ((Button)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("ValidateButtonFlatAppearanceMouseOverBackColor");
                     }
-                    else if ((Tags.Contains("CancelButton") || parent.Name == "CancelButton"))
+                    else if (Tags.Contains("CancelButton") || parent.Name == "CancelButton")
                     { 
                         parent.BackColor = App.style.GetColor("CancelButtonBackColor");
                         parent.ForeColor = App.style.GetColor("CancelButtonForeColor");
@@ -237,6 +237,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         ((Button)parent).FlatAppearance.CheckedBackColor = App.style.GetColor("CancelButtonFlatAppearanceCheckedBackColor");
                         ((Button)parent).FlatAppearance.MouseDownBackColor = App.style.GetColor("CancelButtonFlatAppearanceMouseDownBackColor");
                         ((Button)parent).FlatAppearance.MouseOverBackColor = App.style.GetColor("CancelButtonFlatAppearanceMouseOverBackColor");
+                    }
+                    else if (parent.Name == "FileCover")
+                    {
+                        ((Button)parent).Cursor = Cursors.Default;
+                        parent.BackColor = Color.Black;
+                        parent.ForeColor = Color.Black;
+                        ((Button)parent).Font = App.style.GetValue<Font>("GlobalFont", Dark.GlobalFont);
+                        ((Button)parent).FlatStyle = FlatStyle.Flat;
+                        ((Button)parent).FlatAppearance.BorderColor = Color.Black;
+                        ((Button)parent).FlatAppearance.BorderSize = 0;
+                        ((Button)parent).FlatAppearance.CheckedBackColor = Color.Black;
+                        ((Button)parent).FlatAppearance.MouseDownBackColor = Color.Black;
+                        ((Button)parent).FlatAppearance.MouseOverBackColor = Color.Black;
                     }
                     else
                     {

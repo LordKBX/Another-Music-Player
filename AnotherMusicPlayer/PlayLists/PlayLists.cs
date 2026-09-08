@@ -282,7 +282,7 @@ namespace AnotherMusicPlayer
             Parent.PlaylistsTree.Nodes[2].Expand();
         }
 
-        private void PlaylistsTree_NodeMouseClick(object sender, System.Windows.Forms.TreeNodeMouseClickEventArgs e)
+        public void PlaylistsTree_NodeMouseClick(object sender, System.Windows.Forms.TreeNodeMouseClickEventArgs e)
         {
             TreeNode parent = e.Node.Parent;
             if (e.Node.Level > 0) { while (parent.Parent != null) { parent = parent.Parent; } }

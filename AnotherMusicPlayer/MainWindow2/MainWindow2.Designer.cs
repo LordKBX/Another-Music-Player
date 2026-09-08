@@ -2443,7 +2443,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             // 
             tableLayoutPanel3.ColumnCount = 1;
             tableLayoutPanel3.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 100F));
-            tableLayoutPanel3.Controls.Add(BtnScheduller, 0, 7);
             tableLayoutPanel3.Controls.Add(BtnOpen, 0, 0);
             tableLayoutPanel3.Controls.Add(BtnPrevious, 0, 1);
             tableLayoutPanel3.Controls.Add(BtnPlayPause, 0, 2);
@@ -2451,6 +2450,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel3.Controls.Add(BtnRepeat, 0, 4);
             tableLayoutPanel3.Controls.Add(BtnShuffle, 0, 5);
             tableLayoutPanel3.Controls.Add(BtnClearList, 0, 6);
+            tableLayoutPanel3.Controls.Add(BtnScheduller, 0, 7);
             tableLayoutPanel3.Controls.Add(GridScanMetadata, 0, 8);
             tableLayoutPanel3.Dock = DockStyle.Fill;
             tableLayoutPanel3.Location = new Point(1159, 0);
@@ -2639,8 +2639,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadata.Controls.Add(textBox1, 0, 0);
             GridScanMetadata.Controls.Add(pictureBox1, 0, 1);
             GridScanMetadata.Controls.Add(GridScanMetadataNb, 0, 2);
-            GridScanMetadata.Dock = DockStyle.Bottom;
-            GridScanMetadata.Location = new Point(0, 518);
+            GridScanMetadata.Dock = DockStyle.Top;
+            GridScanMetadata.Location = new Point(0, 472);
             GridScanMetadata.Margin = new Padding(0);
             GridScanMetadata.Name = "GridScanMetadata";
             GridScanMetadata.RowCount = 3;

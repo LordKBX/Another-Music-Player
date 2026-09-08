@@ -51,7 +51,7 @@
             tableLayoutPanel4.Name = "tableLayoutPanel4";
             tableLayoutPanel4.RowCount = 1;
             tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 320F));
-            tableLayoutPanel4.Size = new System.Drawing.Size(982, 483);
+            tableLayoutPanel4.Size = new System.Drawing.Size(982, 573);
             tableLayoutPanel4.TabIndex = 9;
             // 
             // flowLayoutPanelRight
@@ -62,7 +62,7 @@
             flowLayoutPanelRight.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             flowLayoutPanelRight.Location = new System.Drawing.Point(257, 3);
             flowLayoutPanelRight.Name = "flowLayoutPanelRight";
-            flowLayoutPanelRight.Size = new System.Drawing.Size(722, 477);
+            flowLayoutPanelRight.Size = new System.Drawing.Size(722, 567);
             flowLayoutPanelRight.TabIndex = 5;
             flowLayoutPanelRight.WrapContents = false;
             // 
@@ -79,7 +79,7 @@
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 250F));
             tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            tableLayoutPanel1.Size = new System.Drawing.Size(250, 483);
+            tableLayoutPanel1.Size = new System.Drawing.Size(250, 573);
             tableLayoutPanel1.TabIndex = 6;
             // 
             // Cover
@@ -109,7 +109,7 @@
             flowLayoutPanelLeft.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             flowLayoutPanelLeft.Location = new System.Drawing.Point(3, 253);
             flowLayoutPanelLeft.Name = "flowLayoutPanelLeft";
-            flowLayoutPanelLeft.Size = new System.Drawing.Size(244, 227);
+            flowLayoutPanelLeft.Size = new System.Drawing.Size(244, 317);
             flowLayoutPanelLeft.TabIndex = 5;
             flowLayoutPanelLeft.WrapContents = false;
             // 
@@ -118,10 +118,10 @@
             AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             BackColor = System.Drawing.Color.DimGray;
-            ClientSize = new System.Drawing.Size(982, 483);
+            ClientSize = new System.Drawing.Size(982, 573);
             Controls.Add(tableLayoutPanel4);
             FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            MinimumSize = new System.Drawing.Size(1000, 530);
+            MinimumSize = new System.Drawing.Size(1000, 620);
             Name = "MediaInfoWindow";
             Text = "MediaInfo";
             tableLayoutPanel4.ResumeLayout(false);

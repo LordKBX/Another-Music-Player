@@ -16,6 +16,7 @@ namespace AnotherMusicPlayer.Styles
         internal static Type StyleType;
         //internal Type styleType;
 
+        public static Font GlobalFontSmall;
         public static Font GlobalFont;
         public static Font GlobalFontTitle;
         public static Color GlobalBackColor;

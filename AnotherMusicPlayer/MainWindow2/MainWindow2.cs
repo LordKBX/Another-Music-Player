@@ -278,7 +278,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private void DownloadLatestVersion() {
             if (!DialogBox.ShowDialog("Alert",
                 "Do you confirm downloading newest installer and running it ?",
-                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this.Parent))
+                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this))
             {return;}
             HttpClient httpClient = getHttpCLient();
             Task<HttpResponseMessage> task = httpClient.GetAsync(CheckAppVersionUrl);
@@ -726,7 +726,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         string text = "...";
                         foreach (LyricsBlock line in LyricsTimedLinesParsed)
                         {
-                            if (position >= line.Start && position <= line.End) { text = line.Text; }
+                            if (position >= line.Start && position <= line.End) { text = line.Text + line.Suffix; }
                         }
 
                         LyricsTextBox.Text = text;
@@ -1053,7 +1053,27 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     {
                         if (t < LyricsTimedLinesParsed[LyricsTimedLinesParsed.Count - 1].End) { LyricsTimedLinesParsed[LyricsTimedLinesParsed.Count - 1].End = t - 1; }
                     }
-                    LyricsTimedLinesParsed.Add(new LyricsBlock() { Start = t, End = t + 8000, Text = LyricsTimedLines[t] });
+                    string suffix = "";
+                    int prevCpt = 0;
+                    for (int i = LyricsTimedLinesParsed.Count-1; i>= 0; i--)
+                    {
+                        if (LyricsTimedLinesParsed[i].Text == LyricsTimedLines[t]) {
+                            if (i == LyricsTimedLinesParsed.Count - 1)
+                            {
+                                if (t - LyricsTimedLinesParsed[i].End >= 200) { break; }
+                            }
+                            else
+                            {
+                                if (i - 1 < 0) { break; }
+                                if (LyricsTimedLinesParsed[i].Start - LyricsTimedLinesParsed[i-1].End >= 200) { break; }
+                            }
+                            prevCpt += 1; 
+                        }
+                        else { break; }
+                    }
+                    if(prevCpt > 0) { suffix = " | +" + prevCpt; }
+
+                    LyricsTimedLinesParsed.Add(new LyricsBlock() { Start = t, End = t + 8000, Text = LyricsTimedLines[t], Suffix = suffix });
                 }
             }
         }

@@ -10,18 +10,30 @@ namespace AnotherMusicPlayer
 {
     public partial class RenameWindow : Form
     {
-        private string FolderPath;
+        public string FolderPath;
         private string[] PathTab;
         public bool renamed = false;
-        public RenameWindow(MainWindow2 parent, string folderPath, string[] pathTab)
+        public bool isFile = false;
+
+        public RenameWindow(Form parent, string folderPath, string[] pathTab, bool isFile = false)
         {
             Owner = parent;
             FolderPath = folderPath;
             PathTab = pathTab;
+            this.isFile = isFile;
             InitializeComponent();
             AnotherMusicPlayer.MainWindow2Space.Common.SetGlobalColor(this);
 
-            input.Text = pathTab[pathTab.Length - 1];
+            if(isFile) { 
+                TitleLabel.Text = "Rename file";
+                FileInfo fi = new FileInfo(folderPath);
+
+                input.Text = fi.Name.Replace(fi.Extension, "");
+            }
+            else { 
+                TitleLabel.Text = "Rename folder";
+                input.Text = pathTab[pathTab.Length - 1];
+            }
             this.Load += RenameWindow_Loaded;
 
             saveBtn.Click += ValidateButton_Click;
@@ -53,19 +65,40 @@ namespace AnotherMusicPlayer
             {
                 foreach (char c in excludeList) { if (tx.Contains(c)) { ok = false; break; } }
             }
-            if (ok == false)
+            if (isFile)
             {
-                MessageBox.Show(
-                    "Folder name invalid,\nplease remove the folowing characters:\n < > : \" / \\ | ? *", 
-                    "Error !", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
+                if (ok == false)
+                {
+                    MessageBox.Show(
+                        "Folder name invalid,\nplease remove the folowing characters:\n < > : \" / \\ | ? *",
+                        "Error !", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                List<string> list = new List<string>(PathTab);
+                list.Remove(PathTab[PathTab.Length - 1]);
+
+                Directory.Move(FolderPath, string.Join(MainWindow2.SeparatorChar, list.ToArray()) + MainWindow2.SeparatorChar + input.Text.Trim());
+                renamed = true;
+            }
+            else
+            {
+                if (ok == false)
+                {
+                    MessageBox.Show(
+                        "File name invalid,\nplease remove the folowing characters:\n < > : \" / \\ | ? *",
+                        "Error !", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                FileInfo fi = new FileInfo(FolderPath);
+                FolderPath = Path.Combine(fi.DirectoryName, input.Text.Trim() + fi.Extension);
+                fi.MoveTo(FolderPath);
+                renamed = true;
             }
 
-            List<string> list = new List<string>(PathTab);
-            list.Remove(PathTab[PathTab.Length - 1]);
 
-            Directory.Move(FolderPath, string.Join(MainWindow2.SeparatorChar, list.ToArray()) + MainWindow2.SeparatorChar + input.Text.Trim());
-            renamed = true;
+
             DialogResult = DialogResult.OK;
             Close();
         }
