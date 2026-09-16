@@ -61,7 +61,8 @@ namespace AnotherMusicPlayer
             AddLineR("Performers", string.Join("; ", item.Performers));
             AddLineR("Genres", string.Join("; ", item.Genres));
             flowLayoutPanelRight.Controls.Add(new Label() { 
-                Font = fontBold, Text = "Lyrics"
+                Font = fontBold, Text = "Lyrics",
+                Tag = "dataLine"
             });
             int cw = flowLayoutPanelRight.Width - 20;
             RichTextBox lb1 = new RichTextBox()
@@ -81,7 +82,7 @@ namespace AnotherMusicPlayer
 
             #region Rate element
 
-            flowLayoutPanelLeft.Controls.Add(new Label() { Font = fontBold, Text = "Rating" });
+            flowLayoutPanelLeft.Controls.Add(new Label() { Font = fontBold, Text = "Rating", Tag = "dataLine" });
             Rating2 ratingObject = new Rating2()
             {
                 MinimumSize = new Size(150, 40),
@@ -228,6 +229,7 @@ namespace AnotherMusicPlayer
             flowLayoutPanelRight.Controls[0].Focus();
 
             SetStyle();
+            MediaInfo_Resize(null, null);
         }
 
         public void SetStyle(Control ctl = null) 
@@ -259,8 +261,8 @@ namespace AnotherMusicPlayer
         {
             TableLayoutPanel table = new TableLayoutPanel()
             {
-                MinimumSize = new Size(flowLayoutPanelLeft.Width - 20, fontBold.Height + 4),
-                MaximumSize = new Size(flowLayoutPanelLeft.Width - 20, fontBold.Height + 4),
+                MinimumSize = new Size(flowLayoutPanelLeft.Width - 20, fontBold.Height + 8),
+                MaximumSize = new Size(flowLayoutPanelLeft.Width - 20, fontBold.Height + 8),
                 RowCount = 1, ColumnCount = 2,
                 Margin = new Padding(0)
             };
@@ -268,7 +270,7 @@ namespace AnotherMusicPlayer
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 120));
             table.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50));
 
-            table.Controls.Add(new Label() { Font = fontBold, Text = cat.Capitalize() }, 0, 0);
+            table.Controls.Add(new Label() { Font = fontBold, Text = cat.Capitalize(), Tag = "dataLine" }, 0, 0);
             Label lb1 = new Label()
             {
                 Font = fontNormal,
@@ -284,7 +286,7 @@ namespace AnotherMusicPlayer
 
         private void AddLine2L(string cat, string data) 
         {
-            flowLayoutPanelLeft.Controls.Add(new Label() { Font = fontBold, Text = cat.Capitalize() });
+            flowLayoutPanelLeft.Controls.Add(new Label() { Font = fontBold, Text = cat.Capitalize(), Tag = "dataLine" });
             Label lb1 = new Label()
             {
                 Font = fontNormal,
@@ -335,13 +337,18 @@ namespace AnotherMusicPlayer
         private void MediaInfo_Resize(object sender, EventArgs e)
         {
             Type st = typeof(string);
-            Size nz = new Size(flowLayoutPanelRight.Width - 20, 20);
+            foreach (Control ctl in flowLayoutPanelLeft.Controls)
+            {
+                Size nz = new Size(flowLayoutPanelLeft.Width - 20, ctl.Font.Height + 8);
+                ctl.MinimumSize = nz; ctl.Width = nz.Width; 
+            }
             foreach (Control ctl in flowLayoutPanelRight.Controls)
             {
+                Size nz = new Size(flowLayoutPanelRight.Width - 20, ctl.Font.Height + 8);
                 if (ctl.Tag != null && ctl.Tag.GetType() == st)
                 {
                     if (("" + ctl.Tag) == "dataLine") { ctl.MinimumSize = nz; ctl.Width = nz.Width; }
-                    if (("" + ctl.Tag) == "dataBlock") { ctl.MinimumSize = new Size(nz.Width, 120); ctl.Width = nz.Width; }
+                    if (("" + ctl.Tag) == "dataBlock") { ctl.MinimumSize = new Size(nz.Width, 195); ctl.Width = nz.Width; }
                 }
             }
         }

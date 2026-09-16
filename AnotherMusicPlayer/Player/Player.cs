@@ -26,6 +26,7 @@ namespace AnotherMusicPlayer
 {
     public delegate void PlayerNotify();
     public delegate void PlayerBoolNotify(bool state);
+    public delegate void PlayerStringNotify(string path);
 
     /// <summary> Player class, user for retrieving media file info or playing music </summary>
     public partial class Player
@@ -33,6 +34,11 @@ namespace AnotherMusicPlayer
         public static event PlayerNotify Paused = null;
         public static event PlayerNotify Started = null;
         public static event PlayerNotify Stoped = null;
+        public static event PlayerBoolNotify MustSavePlaylist = null;
+        public static event PlayerNotify MustSavePosition = null;
+        public static event PlayerStringNotify MustDeleteFileData = null;
+        public static event PlayerNotify PlaylistCleared = null;
+        public static string AppName = "MediaPlayer";
 
         /// <summary> Give the List of native accepted file extentions </summary>
         public static readonly string[] AcceptedExtentions = new string[] { ".aiff", ".mp3", ".wma" };

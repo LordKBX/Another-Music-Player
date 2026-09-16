@@ -1,5 +1,6 @@
 ﻿using App;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using NAudio.Gui;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -102,8 +103,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
             try
             {
                 if (this.InvokeRequired) { this.Invoke(() => { setMetadataScanningState(state, nb); }); return; }
-                if (state == true) { GridScanMetadata.Visible = true; GridScanMetadataNb.Text = "" + nb; }
-                else { GridScanMetadata.Visible = false; }
+
+                string p = App.style.GetValue<string>("LoadingIconPath", Styles.Dark.LoadingIconPath);
+                Debug.WriteLine("LoadImage = " + p);
+                pictureBox1.Load(p);
+
+                textBox1.BackColor = App.style.GetColor("GlobalBackColor", Styles.Dark.GlobalBackColor);
+                textBox1.ForeColor = App.style.GetColor("GlobalForeColor", Styles.Dark.GlobalForeColor);
+                textBox1.Font = App.style.GetValue<Font>("GlobalFontSmall", Styles.Dark.GlobalFontSmall);
+
+                GridScanMetadata.BackColor = App.style.GetColor("GlobalBackColor", Styles.Dark.GlobalBackColor);
+                GridScanMetadata.ForeColor = App.style.GetColor("GlobalForeColor", Styles.Dark.GlobalForeColor);
+                GridScanMetadata.Font = App.style.GetValue<Font>("GlobalFontSmall", Styles.Dark.GlobalFontSmall);
+
+                GridScanMetadata.Visible = state;
+                textBox1.Visible = state;
+                pictureBox1.Visible = state;
+                GridScanMetadataNb.Visible = state;
+
+                GridScanMetadataNb.Text = "" + nb;
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
@@ -173,175 +191,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
         }
 
-        
-        public static bool IsVersionString(string input)
-        { return Regex.IsMatch(input, "^([0-9\\.]{1,})$"); }
-
-        public static string NumEvenner(string input, int length = 3)
-        {
-            string ret = "" + input;
-            while (ret.Length < length) { ret = "0" + ret; }
-            return ret;
-        }
-
-        public static long AppNumberVersion(string version)
-        {
-            if (!IsVersionString(version)) { return 0; }
-            string endVersion = "";
-            string[] tab = version.Split('.');
-            foreach (string block in tab) { endVersion += NumEvenner(block, 4); }
-
-            return long.Parse(endVersion);
-        }
-
-        private static HttpClient getHttpCLient()
-        {
-            HttpClient httpClient = new HttpClient();
-            httpClient.DefaultRequestHeaders.Add("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
-            httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "deflate");
-            httpClient.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
-            httpClient.DefaultRequestHeaders.Add("Cache-Control", "no-cache");
-            httpClient.DefaultRequestHeaders.Add("Connection", "keep-alive");
-            httpClient.DefaultRequestHeaders.Add("Host", "api.github.com");
-            httpClient.DefaultRequestHeaders.Add("Pragma", "no-cache");
-
-            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:155.0) Gecko/20100101 Firefox/155.0");
-            httpClient.Timeout = new TimeSpan(0, 0, 10);
-
-            return httpClient;
-        }
-
-        private static string CheckAppVersionUrl = "https://api.github.com/repos/LordKBX/Another-Music-Player/releases";
-        public static FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo("" + Assembly.GetEntryAssembly().Location);
-        private bool CheckAppVersionInUse = false;
-
-        private static (long, string) ParseGitHubManifest(string content)
-        {
-            string downloadUrl = "";
-            long contentVersion = 0;
-            List<Dictionary<string, object>> list = JsonConvert.DeserializeObject<List<Dictionary<string, object>>>(content);
-            if (list[0].ContainsKey("assets") == false)
-            { return (0, ""); }
-            if (list[0].ContainsKey("tag_name") == false)
-            { return (0, ""); }
-
-            if (list[0]["assets"].GetType() == typeof(Newtonsoft.Json.Linq.JArray))
-            {
-                foreach (JObject kvp in ((Newtonsoft.Json.Linq.JArray)list[0]["assets"]))
-                {
-                    downloadUrl = kvp.GetValue("browser_download_url").ToString();
-                }
-            }
-            contentVersion = AppNumberVersion("" + list[0]["tag_name"]);
-
-            return (contentVersion, downloadUrl);
-        }
-
-        public void CheckAppVersion(bool IsBackground = false)
-        {
-            if (versionInfo == null) { return; }
-            if (CheckAppVersionInUse) { return; }
-            CheckAppVersionInUse = true;
-            try
-            {
-                long currentVersion = AppNumberVersion("0" + versionInfo.FileVersion);
-                HttpClient httpClient = getHttpCLient();
-                Task<HttpResponseMessage> task = httpClient.GetAsync(CheckAppVersionUrl);
-                task.Wait();
-                if (task.Result.IsSuccessStatusCode)
-                {
-                    string downloadUrl = "";
-                    string content = task.Result.Content.ReadAsStringAsync().Result;
-                    long contentVersion = 0;
-
-                    (contentVersion, downloadUrl) = ParseGitHubManifest(content);
-                    if(contentVersion == 0) 
-                    { if (IsBackground == false) MessageBox.Show("Impossible de tester la disponibilité d'une mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); CheckAppVersionInUse = false; return; }
-                    
-                    Debug.WriteLine("currentVersionInt = " + currentVersion);
-                    Debug.WriteLine("contentVersionInt = " + contentVersion);
-                    Debug.WriteLine("downloadUrl = " + downloadUrl);
-
-                    if (contentVersion > currentVersion) { ShowUpdateButton(true); CheckAppVersionInUse = false; return; }
-                    else { if (IsBackground == false) MessageBox.Show("L'application est à jour", "Info - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1); }
-                }
-                else
-                {
-                    if (IsBackground == false) MessageBox.Show("Impossible de tester la disponibilité d'une mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                }
-            }
-            catch (Exception ex) { Debug.WriteLine(ex); }
-            CheckAppVersionInUse = false;
-            ShowUpdateButton(false);
-        }
-
-        private void DownloadLatestVersion() {
-            if (!DialogBox.ShowDialog("Alert",
-                "Do you confirm downloading newest installer and running it ?",
-                DialogBoxButtons.YesNo, DialogBoxIcons.Warning, this))
-            {return;}
-            HttpClient httpClient = getHttpCLient();
-            Task<HttpResponseMessage> task = httpClient.GetAsync(CheckAppVersionUrl);
-            task.Wait();
-            if (task.Result.IsSuccessStatusCode)
-            {
-                string downloadUrl = "";
-                string content = task.Result.Content.ReadAsStringAsync().Result;
-                long contentVersion = 0;
-
-                (contentVersion, downloadUrl) = ParseGitHubManifest(content);
-                if (contentVersion == 0)
-                { MessageBox.Show("Impossible de récupérer la mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1); return; }
-
-                string fileName = "" + versionInfo.ProductName + "-" + contentVersion + ".exe";
-                string endFile = Path.GetTempPath() + fileName;
-                FileStreamOptions streamOption = new FileStreamOptions() { Access = FileAccess.Write, Mode = FileMode.OpenOrCreate, Share = FileShare.ReadWrite };
-                FileStream endstream = new FileStream(endFile, streamOption);
-                endstream.Position = 0;
-                endstream.SetLength(0);
-
-                HttpClient httpClient2 = getHttpCLient();
-                httpClient2.Timeout = new TimeSpan(0, 1, 0);
-                Task<Stream> downStream = httpClient2.GetStreamAsync(downloadUrl);
-                downStream.Wait(httpClient2.Timeout);
-                if (downStream.IsCompleted)
-                {
-                    byte[] buff = new byte[1024];
-                    int bytes = -1;
-                    do
-                    {
-                        // Read the client's test message.
-                        bytes = downStream.Result.Read(buff, 0, buff.Length);
-                        if (bytes < buff.Length)
-                        {
-                            for (int i = bytes; i < buff.Length; i++) { buff[i] = 0; }
-                        }
-                        endstream.Write(buff, 0, bytes);
-                    } while (bytes != 0);
-                    endstream.Close();
-
-                    Process proc = new Process();
-                    proc.StartInfo.FileName = endFile;
-                    proc.StartInfo.Arguments = "/VERYSILENT /SUPPRESSMSGBOXES /RESTARTAPPLICATIONS";
-                    proc.Start();
-
-                    Environment.Exit(0);
-                }
-                else
-                {
-                    MessageBox.Show("Impossible de télécharger la mise à jour", "Error - " + versionInfo.ProductName, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
-                }
-            }
-        }
-
-        private void UpdateButton_Click(object sender, EventArgs e) { DownloadLatestVersion(); }
-        private void ShowUpdateButton(bool visible)
-        {
-            if (this.InvokeRequired) { this.Invoke(() => { ShowUpdateButton(visible); }); return; }
-            UpdateButton.Visible = visible;
-            MainWIndowHead.ColumnStyles[2].Width = (visible) ? 62 : 0;
-        }
-
         /// <summary> Object music player </summary>
         public MainWindow2()
         {
@@ -396,9 +245,9 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
                 #region Define playback elements
                 BtnOpen.Click += (object sender, EventArgs e) => { };
-                BtnPrevious.Click += (object sender, EventArgs e) => { Player.Stop(Player.GetCurrentFile()); Player.PlaylistPrevious(); };
+                BtnPrevious.Click += (object sender, EventArgs e) => { Player.PlaylistPrevious(); };
                 BtnPlayPause.Click += (object sender, EventArgs e) => { PlayPause(); };
-                BtnNext.Click += (object sender, EventArgs e) => { Player.Stop(Player.GetCurrentFile()); Player.PlaylistNext(); };
+                BtnNext.Click += (object sender, EventArgs e) => { Player.PlaylistNext(); };
                 BtnShuffle.Click += (object sender, EventArgs e) => { Player.PlaylistRandomize(); };
                 BtnClearList.Click += (object sender, EventArgs e) => { Player.PlaylistClear(); UpdateLeftPannelMediaInfo(null); PlaybackPositionLabel.Text = "--"; };
                 BtnScheduller.Click += (object sender, EventArgs e) => { App.scheduller.ShowDialog(); };
@@ -452,6 +301,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 Player.Paused += Player_StatusChange;
                 Player.Stoped += Player_StatusChange;
                 Player.Started += Player_StatusChange;
+                Player.MustSavePlaylist += Player_MustSavePlaylist;
+                Player.MustSavePosition += Player_MustSavePosition;
+                Player.MustDeleteFileData += Player_MustDeleteFileData;
+                Player.PlaylistCleared += Player_PlaylistCleared;
 
                 RadioPlayer.StatusUpdated += Player_StatusChange;
                 RadioPlayer.RadioPlayerPositionChanged += (PlayerPositionChangedEventParams e) => { ChangeDisplayPlaybackPosition(e.Position, 0); };
@@ -552,6 +405,56 @@ namespace AnotherMusicPlayer.MainWindow2Space
             //Settings.SaveSettings().Wait(500);
         }
 
+        private void Player_MustSavePlaylist(bool save_indexes)
+        {
+            int lindex = 1;
+            List<string> querys = new List<string>() { "DELETE FROM queue;" };
+            foreach (string line in PlayList)
+            {
+                string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
+                query += App.NormalizeNumber(lindex, 10) + "','";
+                query += Database.EscapeString(line) + "',";
+                //query += ((line[1] == null) ? "NULL" : "'" + Database.EscapeString(line[1]) + "'");
+                query += "NULL";
+                query += ")";
+                lindex += 1;
+                querys.Add(query);
+            }
+            App.bdd.DatabaseQuerys(querys.ToArray(), true);
+            if (save_indexes)
+            {
+                Settings.LastPlaylistIndex = Player.Index;
+                Settings.LastPlaylistDuration = Position(null);
+
+                App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+                App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
+            }
+        }
+
+        private void Player_MustSavePosition()
+        {
+            Settings.LastPlaylistIndex = Player.Index;
+            Settings.LastPlaylistDuration = 0;
+            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
+        }
+
+        private void Player_MustDeleteFileData(string path)
+        {
+            App.bdd.DeleteFileAsync(path, true);
+        }
+
+        private void Player_PlaylistCleared()
+        {
+            List<string> querys = new List<string>() { "DELETE FROM queue;" };
+            App.bdd.DatabaseQuerys(querys.ToArray(), true);
+
+            Settings.LastPlaylistIndex = 0;
+            Settings.LastPlaylistDuration = 0;
+            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
+            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
+        }
+
         private void Player_StatusChange()
         {
             if (this.InvokeRequired) { this.Invoke(() => { Player_StatusChange(); }); return; }
@@ -590,6 +493,8 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 }
                 else
                 {
+                    PlaybackPositionLabel.Text = App.GetTranslation("PlaybackPositionLabel").Replace("%X%", "" + Player.PlayList.Count).Replace("%Y%", "" + (Player.Index + 1));
+                    UpdateLeftPannelMediaInfo(PlayListViewItem.FromFilePath(Player.GetCurrentFile()));
                     BtnPlayPause.BackgroundImage = (Player.LatestPlayerStatus == PlayerStatus.Play) ? IconPlay : IconPause;
                     buttonPlay.Icon = (Player.LatestPlayerStatus == PlayerStatus.Play) ? ThumbnailIconPlay : ThumbnailIconPause;
                 }
@@ -615,6 +520,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {
             CheckAppVersion(true);
             library.InvokeScan();
+            library.LoadGenreList();
         }
 
         private void PlaybackTabRatting_RateChanged(Rating2 sender, double value)
@@ -1055,9 +961,10 @@ namespace AnotherMusicPlayer.MainWindow2Space
                     }
                     string suffix = "";
                     int prevCpt = 0;
-                    for (int i = LyricsTimedLinesParsed.Count-1; i>= 0; i--)
+                    for (int i = LyricsTimedLinesParsed.Count - 1; i >= 0; i--)
                     {
-                        if (LyricsTimedLinesParsed[i].Text == LyricsTimedLines[t]) {
+                        if (LyricsTimedLinesParsed[i].Text == LyricsTimedLines[t])
+                        {
                             if (i == LyricsTimedLinesParsed.Count - 1)
                             {
                                 if (t - LyricsTimedLinesParsed[i].End >= 200) { break; }
@@ -1065,16 +972,25 @@ namespace AnotherMusicPlayer.MainWindow2Space
                             else
                             {
                                 if (i - 1 < 0) { break; }
-                                if (LyricsTimedLinesParsed[i].Start - LyricsTimedLinesParsed[i-1].End >= 200) { break; }
+                                if (LyricsTimedLinesParsed[i].Start - LyricsTimedLinesParsed[i - 1].End >= 200) { break; }
                             }
-                            prevCpt += 1; 
+                            prevCpt += 1;
                         }
                         else { break; }
                     }
-                    if(prevCpt > 0) { suffix = " | +" + prevCpt; }
+                    if (prevCpt > 0) { suffix = " | +" + prevCpt; }
 
                     LyricsTimedLinesParsed.Add(new LyricsBlock() { Start = t, End = t + 8000, Text = LyricsTimedLines[t], Suffix = suffix });
                 }
+            }
+        }
+
+        private void WindowIconButton_Click(object sender, EventArgs e)
+        {
+            Debug.WriteLine("AA");
+            if (App.IsDebug) 
+            {
+                setMetadataScanningState(true, 500);
             }
         }
     }

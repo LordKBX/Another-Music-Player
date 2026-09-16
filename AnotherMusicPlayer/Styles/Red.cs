@@ -22,6 +22,7 @@ namespace AnotherMusicPlayer.Styles
         public static Color GlobalForeColor = Color.FromArgb(255, 255, 255, 255);
         public static Color GlobalIconColor = Color.FromArgb(255, 255, 255, 255);
         public static int GlobalIconSize = 24;
+        public static string LoadingIconPath = ".\\icons\\loading_0.gif";
 
         public static Color ContextMenuBackColor = Color.FromArgb(255, 200, 50, 50);
         public static Color ContextMenuForeColor = Color.FromArgb(255, 255, 255, 255);

@@ -36,6 +36,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static Type typeString = typeof(string);
         private static Type typeRating2 = typeof(Rating2);
         private static Type typeTrackButton = typeof(TrackButton);
+        private static Type typePictureBox = typeof(PictureBox);
 
         public static void SetGlobalColor(Control parent, int lv = 0)
         {
@@ -125,6 +126,12 @@ namespace AnotherMusicPlayer.MainWindow2Space
                         ((Label)parent).Image = Icons.FromIconKind(IconKind.MicrophoneVariant, 32, new SolidColorBrush(Icons.ToMediaColor(App.style.GetColor("GlobalForeColor", Styles.Dark.GlobalForeColor))));
                         ((Label)parent).ImageAlign = ContentAlignment.TopLeft;
 
+                    }
+                    else if (parent.Name == "ScanTags")
+                    {
+                        ((Label)parent).BackColor = App.style.GetColor("GlobalBackColor", Styles.Dark.GlobalBackColor);
+                        ((Label)parent).ForeColor = App.style.GetColor("GlobalForeColor", Styles.Dark.GlobalForeColor);
+                        ((Label)parent).Font = App.style.GetValue<Font>("GlobalFont", Styles.Dark.GlobalFont);
                     }
                 }
                 else if (type == typeDataGridViewTextBoxColumn)

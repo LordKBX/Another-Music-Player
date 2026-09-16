@@ -1,22 +1,14 @@
 ﻿using AnotherMusicPlayer.MainWindow2Space;
-using NAudio;
 using NAudio.Wave;
-using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Timers;
-using System.Windows.Forms;
-using System.Windows.Media.Imaging;
 using TagLib;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.ListView;
 
 namespace AnotherMusicPlayer
 {
@@ -165,8 +157,9 @@ namespace AnotherMusicPlayer
                 {
                     //Debug.WriteLine("MetaData Source: " + (OriginPath ?? FilePath));
                     TagLib.File tags;
+                    bool of = true;
                     if (System.IO.File.Exists(FilePath)) { tags = TagLib.File.Create(FilePath, ReadStyle.Average); }
-                    else { tags = TagLib.File.Create(OriginPath, ReadStyle.Average); FilePath = OriginPath; }
+                    else { tags = TagLib.File.Create(OriginPath, ReadStyle.Average); FilePath = OriginPath; of = false; }
                     MediaItem item = new MediaItem();
                     item.Name = tags.Tag.Title;
                     item.Album = tags.Tag.Album;
@@ -198,19 +191,40 @@ namespace AnotherMusicPlayer
                     item.Year = tags.Tag.Year;
                     item.TrackGain = tags.Tag.ReplayGainTrackGain;
 
-                    TagLib.Tag tag = tags.GetTag(TagLib.TagTypes.Id3v2);
                     byte rate1 = 0;
 
-                    try { rate1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true).Rating; } 
-                    catch(Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+                    TagLib.Tag tag = tags.GetTag(TagLib.TagTypes.Id3v2);
 
-                    if (TableRatePlayer.ContainsKey(rate1)) { item.Rating = TableRatePlayer[rate1]; }
-                    else
+                    if (tag == null) {
+                        Debug.WriteLine("Please convert file to mp3");
+                        Dictionary<string, object> rez = App.bdd.DatabaseFileInfo((of) ? FilePath : OriginPath);
+
+                        if (rez != null && rez.Count > 0) {
+                            string r = ("" + rez["Rating"]).Trim();
+                            if (r == "NaN" || r == "") { }
+                            else {
+                                r = r.Replace(".", ",");
+                                item.Rating = double.Parse(r);
+                            }
+                        }
+                    }
+                    else 
                     {
-                        byte min = 255;
-                        foreach (byte i in TableRatePlayer.Keys) { if (rate1 - i >= 0) { min = i; } }
-                        if (min == 255) { item.Rating = 5; }
-                        else { item.Rating = (double)(TableRatePlayer[min] + 0.5); }
+                        try
+                        {
+                            TagLib.Id3v2.PopularimeterFrame pmf = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
+                            rate1 = pmf.Rating;
+                        }
+                        catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
+
+                        if (TableRatePlayer.ContainsKey(rate1)) { item.Rating = TableRatePlayer[rate1]; }
+                        else
+                        {
+                            byte min = 255;
+                            foreach (byte i in TableRatePlayer.Keys) { if (rate1 - i >= 0) { min = i; } }
+                            if (min == 255) { item.Rating = 5; }
+                            else { item.Rating = (double)(TableRatePlayer[min] + 0.5); }
+                        }
                     }
                     tags.Dispose();
 
@@ -387,7 +401,7 @@ namespace AnotherMusicPlayer
                 TagLib.Id3v2.Tag.DefaultVersion = 3; TagLib.Id3v2.Tag.ForceDefaultVersion = true;
 
                 TagLib.File fi = TagLib.File.Create(filePath, ReadStyle.Average);
-                TagLib.Tag tag = fi.GetTag(TagTypes.Id3v2);
+                TagLib.Tag tag = fi.GetTag(TagLib.TagTypes.Id3v2);
                 TagLib.Id3v2.PopularimeterFrame frame1 = TagLib.Id3v2.PopularimeterFrame.Get((TagLib.Id3v2.Tag)tag, "Windows Media Player 9 Series", true);
                 if (FilesTags.ReverseTableRateWindows.ContainsKey(ratting)) { frame1.Rating = FilesTags.ReverseTableRatePlayer[ratting]; }
                 else { frame1.Rating = (byte)(FilesTags.ReverseTableRatePlayer[Math.Truncate(ratting)] + 1); }

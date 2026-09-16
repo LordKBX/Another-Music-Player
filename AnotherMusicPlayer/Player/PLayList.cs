@@ -43,7 +43,7 @@ namespace AnotherMusicPlayer
                 }
                 else {
                     // Delete from database files that no longer exist
-                    App.bdd.DeleteFileAsync(file, true);
+                    MustDeleteFileData?.Invoke(file);
                 }
             }
 
@@ -109,28 +109,7 @@ namespace AnotherMusicPlayer
 
         public static void SavePlaylist(bool save_indexes = true)
         {
-            int lindex = 1;
-            List<string> querys = new List<string>() { "DELETE FROM queue;" };
-            foreach (string line in PlayList)
-            {
-                string query = "INSERT INTO queue(MIndex, Path1, Path2) VALUES('";
-                query += App.NormalizeNumber(lindex, 10) + "','";
-                query += Database.EscapeString(line) + "',";
-                //query += ((line[1] == null) ? "NULL" : "'" + Database.EscapeString(line[1]) + "'");
-                query += "NULL";
-                query += ")";
-                lindex += 1;
-                querys.Add(query);
-            }
-            App.bdd.DatabaseQuerys(querys.ToArray(), true);
-            if (save_indexes)
-            {
-                Settings.LastPlaylistIndex = PlayListIndex;
-                Settings.LastPlaylistDuration = Position(null);
-
-                App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
-                App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
-            }
+            MustSavePlaylist?.Invoke(save_indexes);
         }
 
         /// <summary> Clear playlist </summary>
@@ -149,13 +128,7 @@ namespace AnotherMusicPlayer
             evt2.Position = PlayListIndex;
             PlaylistPositionChanged(evt2);
 
-            List<string> querys = new List<string>() { "DELETE FROM queue;" };
-            App.bdd.DatabaseQuerys(querys.ToArray(), true);
-
-            Settings.LastPlaylistIndex = 0;
-            Settings.LastPlaylistDuration = 0;
-            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
-            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
+            PlaylistCleared?.Invoke();
         }
 
         /// <summary> Read playlist </summary>
@@ -225,7 +198,16 @@ namespace AnotherMusicPlayer
         /// <summary> Read previous index in playlist </summary>
         public static void PlaylistPrevious()
         {
-            Debug.WriteLine("--> PlaylistPrevious <--");
+            //Debug.WriteLine("--> PlaylistPrevious <--");
+            if (PlayList.Count < 1) { return; }
+            if (PlayList.Count == 1) {
+                string f = GetCurrentFile();
+                if (PlayNewPositions.ContainsKey(f)) { PlayNewPositions[f] = 0; }
+                else { PlayNewPositions.Add(GetCurrentFile(), 0); }
+                return;
+            }
+            Player.Stop(Player.GetCurrentFile());
+
             PlayListIndex = ((PlayListIndex - 1) < 0) ? PlayList.Count - 1 : PlayListIndex - 1;
             Play(PlayList[PlayListIndex]);
             CurrentFile = PlayList[PlayListIndex];
@@ -234,16 +216,23 @@ namespace AnotherMusicPlayer
             evt.Position = PlayListIndex;
             PlaylistPositionChanged(evt);
 
-            Settings.LastPlaylistIndex = PlayListIndex;
-            Settings.LastPlaylistDuration = 0;
-            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
-            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
+            MustSavePosition?.Invoke();
         }
 
         /// <summary> Read next index in playlist </summary>
         public static void PlaylistNext()
         {
             //Debug.WriteLine("--> PlaylistNext <--");
+            if (PlayList.Count < 1) { return; }
+            if (PlayList.Count == 1)
+            {
+                string f = GetCurrentFile();
+                if (PlayNewPositions.ContainsKey(f)) { PlayNewPositions[f] = 0; }
+                else { PlayNewPositions.Add(GetCurrentFile(), 0); }
+                return;
+            }
+            Player.Stop(Player.GetCurrentFile());
+
             PlayListIndex = ((PlayListIndex + 1) >= PlayList.Count) ? 0 : PlayListIndex + 1;
             if (!PlayLoop && PlayListIndex == 0) { return; }
             Play(PlayList[PlayListIndex]);
@@ -253,10 +242,7 @@ namespace AnotherMusicPlayer
             evt.Position = PlayListIndex;
             PlaylistPositionChanged(evt);
 
-            Settings.LastPlaylistIndex = PlayListIndex;
-            Settings.LastPlaylistDuration = 0;
-            App.bdd.DatabaseSaveParam("LastPlaylistIndex", "" + Settings.LastPlaylistIndex, "INT");
-            App.bdd.DatabaseSaveParam("LastPlaylistDuration", "" + Settings.LastPlaylistDuration, "INT");
+            MustSavePosition?.Invoke();
         }
 
         /// <summary> Preload next index in playlist </summary>

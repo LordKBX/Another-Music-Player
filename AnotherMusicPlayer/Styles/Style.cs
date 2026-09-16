@@ -23,6 +23,7 @@ namespace AnotherMusicPlayer.Styles
         public static Color GlobalForeColor;
         public static Color GlobalIconColor;
         public static int GlobalIconSize;
+        public static string LoadingIconPath;
 
         public static Color ContextMenuBackColor;
         public static Color ContextMenuForeColor;

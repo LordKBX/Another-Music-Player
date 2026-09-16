@@ -54,10 +54,14 @@ namespace AnotherMusicPlayer
                 int cpt = 0;
                 foreach (string k in Counts.Keys) { cpt = Convert.ToInt32(Counts[k]["nb"]); break; }
 
-                Parent.LibraryFiltersGenreList.Items.Add(new DropDownItem() { 
-                    Value = ((key == "0") ? "<N/A>" : key.Substring(0, 1).ToUpper() + key.Substring(1)) + " (" + cpt + ")", 
-                    Data = (key == "0") ? "" : key
-                });
+                if (cpt > 0)
+                {
+                    Parent.LibraryFiltersGenreList.Items.Add(new DropDownItem()
+                    {
+                        Value = ((key == "0") ? "<N/A>" : key.Substring(0, 1).ToUpper() + key.Substring(1)) + " (" + cpt + ")",
+                        Data = (key == "0") ? "" : key
+                    });
+                }
             }
             Parent.LibraryFiltersGenreList.SelectedIndex = 0;
         }

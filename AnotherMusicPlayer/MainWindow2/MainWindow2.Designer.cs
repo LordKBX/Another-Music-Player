@@ -178,7 +178,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             SettingsTabEqualizerLabel09 = new Label();
             SettingsTabEqualizerLabel10 = new Label();
             tableLayoutPanel3 = new TableLayoutPanel();
-            BtnScheduller = new Button();
             BtnOpen = new Button();
             BtnPrevious = new Button();
             BtnPlayPause = new Button();
@@ -186,6 +185,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnRepeat = new Button();
             BtnShuffle = new Button();
             BtnClearList = new Button();
+            BtnScheduller = new Button();
             GridScanMetadata = new TableLayoutPanel();
             textBox1 = new TextBox();
             pictureBox1 = new PictureBox();
@@ -335,6 +335,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             WindowIconButton.Size = new Size(62, 64);
             WindowIconButton.TabIndex = 4;
             WindowIconButton.UseVisualStyleBackColor = true;
+            WindowIconButton.Click += WindowIconButton_Click;
             // 
             // TitleLabel
             // 
@@ -2469,27 +2470,6 @@ namespace AnotherMusicPlayer.MainWindow2Space
             tableLayoutPanel3.Size = new Size(75, 667);
             tableLayoutPanel3.TabIndex = 6;
             // 
-            // BtnScheduller
-            // 
-            BtnScheduller.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
-            BtnScheduller.AutoSizeMode = AutoSizeMode.GrowAndShrink;
-            BtnScheduller.BackColor = Color.FromArgb(30, 30, 30);
-            BtnScheduller.BackgroundImage = Properties.Resources.album_large;
-            BtnScheduller.BackgroundImageLayout = ImageLayout.Center;
-            BtnScheduller.Cursor = Cursors.Hand;
-            BtnScheduller.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
-            BtnScheduller.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
-            BtnScheduller.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
-            BtnScheduller.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
-            BtnScheduller.FlatStyle = FlatStyle.Flat;
-            BtnScheduller.ForeColor = Color.White;
-            BtnScheduller.Location = new Point(12, 417);
-            BtnScheduller.Margin = new Padding(2, 4, 2, 4);
-            BtnScheduller.Name = "BtnScheduller";
-            BtnScheduller.Size = new Size(51, 51);
-            BtnScheduller.TabIndex = 2;
-            BtnScheduller.UseVisualStyleBackColor = false;
-            // 
             // BtnOpen
             // 
             BtnOpen.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
@@ -2632,6 +2612,27 @@ namespace AnotherMusicPlayer.MainWindow2Space
             BtnClearList.TabIndex = 0;
             BtnClearList.UseVisualStyleBackColor = false;
             // 
+            // BtnScheduller
+            // 
+            BtnScheduller.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
+            BtnScheduller.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            BtnScheduller.BackColor = Color.FromArgb(30, 30, 30);
+            BtnScheduller.BackgroundImage = Properties.Resources.album_large;
+            BtnScheduller.BackgroundImageLayout = ImageLayout.Center;
+            BtnScheduller.Cursor = Cursors.Hand;
+            BtnScheduller.FlatAppearance.BorderColor = Color.FromArgb(224, 224, 224);
+            BtnScheduller.FlatAppearance.CheckedBackColor = Color.FromArgb(70, 70, 70);
+            BtnScheduller.FlatAppearance.MouseDownBackColor = Color.FromArgb(70, 70, 70);
+            BtnScheduller.FlatAppearance.MouseOverBackColor = Color.FromArgb(50, 50, 50);
+            BtnScheduller.FlatStyle = FlatStyle.Flat;
+            BtnScheduller.ForeColor = Color.White;
+            BtnScheduller.Location = new Point(12, 417);
+            BtnScheduller.Margin = new Padding(2, 4, 2, 4);
+            BtnScheduller.Name = "BtnScheduller";
+            BtnScheduller.Size = new Size(51, 51);
+            BtnScheduller.TabIndex = 2;
+            BtnScheduller.UseVisualStyleBackColor = false;
+            // 
             // GridScanMetadata
             // 
             GridScanMetadata.ColumnCount = 1;
@@ -2639,7 +2640,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadata.Controls.Add(textBox1, 0, 0);
             GridScanMetadata.Controls.Add(pictureBox1, 0, 1);
             GridScanMetadata.Controls.Add(GridScanMetadataNb, 0, 2);
-            GridScanMetadata.Dock = DockStyle.Top;
+            GridScanMetadata.Dock = DockStyle.Fill;
             GridScanMetadata.Location = new Point(0, 472);
             GridScanMetadata.Margin = new Padding(0);
             GridScanMetadata.Name = "GridScanMetadata";
@@ -2647,7 +2648,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 62F));
             GridScanMetadata.RowStyles.Add(new RowStyle(SizeType.Absolute, 75F));
             GridScanMetadata.RowStyles.Add(new RowStyle());
-            GridScanMetadata.Size = new Size(75, 149);
+            GridScanMetadata.Size = new Size(75, 195);
             GridScanMetadata.TabIndex = 1;
             // 
             // textBox1
@@ -2662,23 +2663,28 @@ namespace AnotherMusicPlayer.MainWindow2Space
             textBox1.Name = "textBox1";
             textBox1.Size = new Size(67, 54);
             textBox1.TabIndex = 0;
+            textBox1.Tag = "ScanTags";
             textBox1.Text = "Scan Tags";
             textBox1.TextAlign = HorizontalAlignment.Center;
             // 
             // pictureBox1
             // 
-            pictureBox1.Dock = DockStyle.Fill;
-            pictureBox1.InitialImage = (Image)resources.GetObject("pictureBox1.InitialImage");
-            pictureBox1.Location = new Point(0, 62);
-            pictureBox1.Margin = new Padding(0);
+            pictureBox1.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            pictureBox1.BackgroundImageLayout = ImageLayout.Center;
+            pictureBox1.ErrorImage = null;
+            pictureBox1.InitialImage = null;
+            pictureBox1.Location = new Point(4, 67);
+            pictureBox1.Margin = new Padding(4, 0, 0, 0);
+            pictureBox1.MaximumSize = new Size(64, 64);
+            pictureBox1.MinimumSize = new Size(64, 64);
             pictureBox1.Name = "pictureBox1";
-            pictureBox1.Size = new Size(75, 75);
+            pictureBox1.Size = new Size(64, 64);
             pictureBox1.TabIndex = 1;
             pictureBox1.TabStop = false;
             // 
             // GridScanMetadataNb
             // 
-            GridScanMetadataNb.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            GridScanMetadataNb.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             GridScanMetadataNb.AutoSize = true;
             GridScanMetadataNb.BackColor = Color.Transparent;
             GridScanMetadataNb.ForeColor = Color.White;
@@ -2687,6 +2693,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
             GridScanMetadataNb.Name = "GridScanMetadataNb";
             GridScanMetadataNb.Size = new Size(67, 25);
             GridScanMetadataNb.TabIndex = 2;
+            GridScanMetadataNb.Tag = "ScanTags";
             GridScanMetadataNb.TextAlign = ContentAlignment.MiddleCenter;
             // 
             // LyricsTextBox

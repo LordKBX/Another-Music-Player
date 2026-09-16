@@ -37,10 +37,7 @@ namespace AnotherMusicPlayer
         private static float GetFileGain(string FilePath, bool forced = false) 
         {
             FilePath = FilePath.Replace("\\\\", "\\");
-            //if (FilePath == null || !System.IO.File.Exists(FilePath)) { return 0.0f; }
-            //if(!forced && FilesGain.ContainsKey(FilePath)) { return FilesGain[FilePath]; }
             Dictionary<string, object> infodata = App.bdd.DatabaseFileInfo(FilePath);
-            //Debug.WriteLine(JsonConvert.SerializeObject(infodata));
             if(infodata == null) { return Library.FailledAverageGain; }
             if (infodata.ContainsKey("Gain") && GetAverageGain() != 0)
             {
