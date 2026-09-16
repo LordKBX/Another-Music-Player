@@ -394,6 +394,8 @@ namespace AnotherMusicPlayer
             string d = item.Details.Replace(".", ",").Trim();
             if (doubleRegex.Match(d).Success) { ratting = double.Parse(d); }
 
+            if (!filePath.EndsWith(".mp3")) { return (true, "Invalid File Type"); }
+
             try
             {
                 if (Player.GetCurrentFile() == filePath && Player.LatestPlayerStatus == PlayerStatus.Play) { return (false, "Current played file"); }
