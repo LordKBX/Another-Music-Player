@@ -14,10 +14,6 @@ using System.Windows;
 using System.Windows.Forms;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
-using System.Xml.Linq;
-using static System.Runtime.InteropServices.Marshalling.IIUnknownCacheStrategy;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TextBox;
 using MainWindow2 = AnotherMusicPlayer.MainWindow2Space.MainWindow2;
 using Size = System.Drawing.Size;
 
@@ -125,9 +121,10 @@ namespace AnotherMusicPlayer
             Parent.LibraryFiltersSearchBox.KeyDown += LibraryFiltersSearchBox_KeyDown;
 
             Parent.LibrarySearchContent.AutoGenerateColumns = false;
-            Parent.LibrarySearchContent.MultiSelect = false;
+            Parent.LibrarySearchContent.MultiSelect = true;
             Parent.LibrarySearchContent.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             Parent.LibrarySearchContent.CellDoubleClick += LibrarySearchContent_CellDoubleClick;
+            Parent.LibrarySearchContent.Scroll += (object sender, ScrollEventArgs e) => { Parent.LibrarySearchContent.Focus(); };
             foreach (string col in new List<string>() { "Name", "Album", "Artists", "Year", "DurationS", "RatingDisplay" })
             {
                 if (col == "DurationS") {
@@ -182,11 +179,98 @@ namespace AnotherMusicPlayer
                 ReadOnly = true,
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill
             });
+            Parent.LibraryNavigationContentFolders.Scroll += (object? sender, ScrollEventArgs e) => { Parent.LibraryNavigationContentFolders.Focus(); };
             Parent.LibraryNavigationContentFolders.MouseDoubleClick += BtnFolder_Click;
+
+            KeyboardLocal.AddKeyUpFunction(LibraryKeyUpFunctionParsing);
 
             CreateWatcher();
             //InvokeScan();
             //ActualizeColors();
+        }
+
+        internal LibraryMode GetLibraryMode() {
+            if (Parent.LibraryFiltersGenreList.Visible == true) { return LibraryMode.Filtered; }
+            else if (Parent.LibraryFiltersSearchBox.Visible == true) { return LibraryMode.Search; }
+
+            return LibraryMode.Folder;
+        }
+
+        public bool LibraryKeyUpFunctionParsing(object sender, KeyEventArgs e)
+        {
+            if (e.Control) { return false; }
+            if (e.Shift) { return false; }
+            if (e.KeyData == Keys.None) { return false; }
+            if ("" + e.KeyData == "ShiftKey") { return false; }
+            if ("" + e.KeyData == "ControlKey") { return false; }
+            bool ret = false;
+
+            if (Parent.TabControler.SelectedTab == Parent.LibraryTab)
+            {
+                LibraryMode mode = GetLibraryMode();
+                if (mode == LibraryMode.Filtered || mode == LibraryMode.Search)
+                {
+
+                    int id = (Parent.LibrarySearchContent.SelectedRows.Count > 0) ? Parent.LibrarySearchContent.SelectedRows[0].Index : -1;
+                    if (id == -1) { return false; }
+                    //Parent.LibrarySearchContent.ClearSelection();
+
+                    if (e.Shift == true && e.KeyCode == Keys.Up) { if (id - 1 >= 0) { Parent.LibrarySearchContent.Rows[id - 1].Selected = !Parent.LibrarySearchContent.Rows[id - 1].Selected; ret = true; } }
+                    else if (e.Shift == true && e.KeyCode == Keys.Down) { if (id + 1 < Parent.LibrarySearchContent.Rows.Count) { Parent.LibrarySearchContent.Rows[id + 1].Selected = !Parent.LibrarySearchContent.Rows[id + 1].Selected; ret = true; } }
+                    else if (e.Shift == false && e.KeyCode == Keys.Down) {
+                        Parent.LibrarySearchContent.ClearSelection();
+                        if (id + 1 < Parent.LibrarySearchContent.Rows.Count) { Parent.LibrarySearchContent.Rows[id + 1].Selected = true; ret = true; } 
+                    }
+                    else if (e.Shift == false && e.KeyCode == Keys.Down) {
+                        Parent.LibrarySearchContent.ClearSelection();
+                        if (id + 1 < Parent.LibrarySearchContent.Rows.Count) { Parent.LibrarySearchContent.Rows[id + 1].Selected = true; ret = true; } 
+                    }
+                    else
+                    {
+                        Parent.LibrarySearchContent.ClearSelection();
+                        string keyChar = KeyboardLocal.KeyCodeToUnicode(e.KeyData);
+                        if (keyChar == null || keyChar == string.Empty || keyChar.Trim() == "") { return false; }
+                        keyChar = keyChar.ToUpper();
+
+                        foreach (DataGridViewRow line in Parent.LibrarySearchContent.Rows)
+                        {
+                            if (((MediaItem)line.DataBoundItem).Name.ToUpper().StartsWith(keyChar))
+                            {
+                                line.Selected = true;
+                                Parent.LibrarySearchContent.FirstDisplayedScrollingRowIndex = line.Index;
+                                ret = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                else {
+                    int id = (Parent.LibraryNavigationContentFolders.SelectedRows.Count > 0) ? Parent.LibraryNavigationContentFolders.SelectedRows[0].Index : -1;
+                    if (id == -1) { return false; }
+                    Parent.LibrarySearchContent.ClearSelection();
+
+                    if (e.KeyCode == Keys.Up) { if (id - 1 >= 0) { Parent.LibraryNavigationContentFolders.Rows[id - 1].Selected = true; ret = true; } }
+                    else if (e.KeyCode == Keys.Down) { if (id + 1 < Parent.LibraryNavigationContentFolders.Rows.Count) { Parent.LibraryNavigationContentFolders.Rows[id + 1].Selected = true; ret = true; } }
+                    else
+                    {
+                        string keyChar = KeyboardLocal.KeyCodeToUnicode(e.KeyData);
+                        if (keyChar == null || keyChar == string.Empty || keyChar.Trim() == "") { return false; }
+                        keyChar = keyChar.ToUpper();
+
+                        foreach (DataGridViewRow line in Parent.LibraryNavigationContentFolders.Rows)
+                        {
+                            if (((LibraryFolderObjets)line.DataBoundItem).Name.ToUpper().StartsWith(keyChar)) {
+                                line.Selected = true;
+                                Parent.LibraryNavigationContentFolders.FirstDisplayedScrollingRowIndex = line.Index;
+                                ret = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            e.SuppressKeyPress = true;
+            return ret;
         }
 
         private void LibrarySearchContent_CellDoubleClick(object sender, DataGridViewCellEventArgs e)

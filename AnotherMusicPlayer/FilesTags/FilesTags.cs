@@ -28,12 +28,13 @@ namespace AnotherMusicPlayer
         public string Composers { get; set; }
         public string Artists { 
             get {
-                List<string> cpl = Composers.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
-                List<string> pel = Performers.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
-                List<string> aal = AlbumArtists.Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                List<string> cpl = Composers.Trim().Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                List<string> pel = Performers.Trim().Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
+                List<string> aal = AlbumArtists.Trim().Replace("; ", ";").Replace(" ;", ";").Replace(" ; ", ";").Split(';').ToList();
                 foreach (string perf in pel) { if (!cpl.Contains(perf)) { cpl.Add(perf); } }
                 foreach (string perf in aal) { if (!cpl.Contains(perf)) { cpl.Add(perf); } }
-                return string.Join("; ", cpl);
+                string t = (cpl.Count > 1) ? string.Join("; ", cpl) : ((cpl.Count > 0) ? ("" + cpl[0]) : "");
+                return t.Trim().Trim(';').Trim().Trim(';');
             }
         }
         public string Copyright { get; set; }

@@ -1,10 +1,12 @@
-﻿using System;
-using System.Windows;
-using System.Diagnostics;
+﻿using AnotherMusicPlayer;
+using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
-using AnotherMusicPlayer;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows;
+using System.Windows.Forms;
 
 namespace AnotherMusicPlayer.MainWindow2Space
 {
@@ -14,17 +16,36 @@ namespace AnotherMusicPlayer.MainWindow2Space
         private static double PreviousKeyboardTime = 0;
         private static MainWindow2 parent = null;
 
+        private static List<Func<object, PreviewKeyDownEventArgs, bool>> PreviewKeyDownFunctions = new List<Func<object, PreviewKeyDownEventArgs, bool>>();
+        public static bool AddPreviewKeyDownFunction(Func<object, PreviewKeyDownEventArgs, bool> func) { try { PreviewKeyDownFunctions.Add(func); } catch (Exception) { return false; } return true; }
+        public static void ClearPreviewKeyDownFunctions() { PreviewKeyDownFunctions.Clear(); }
+
+        private static List<Func<object, KeyEventArgs, bool>> KeyDownFunctions = new List<Func<object, KeyEventArgs, bool>>();
+        public static bool AddKeyDownFunction(Func<object, KeyEventArgs, bool> func) { try { KeyDownFunctions.Add(func); } catch (Exception) { return false; } return true; }
+        public static void ClearKeyDownFunctions() { KeyDownFunctions.Clear(); }
+
+        private static List<Func<object, KeyEventArgs, bool>> KeyUpFunctions = new List<Func<object, KeyEventArgs, bool>>();
+        public static bool AddKeyUpFunction(Func<object, KeyEventArgs, bool> func) { try { KeyUpFunctions.Add(func); } catch (Exception) { return false; } return true; }
+        public static void ClearKeyUpFunctions() { KeyUpFunctions.Clear(); }
+
         public static void Init(MainWindow2 form)
         {
+            if (parent != null) { return; }
+
             parent = form;
-            form.PreviewKeyDown += LocalControlEvent;
+            form.PreviewKeyDown += LocalControl_PreviewKeyDownEvent;
+            form.KeyDown += LocalControl_KeyDownEvent;
+            form.KeyUp += LocalControl_KeyUpEvent;
+
             List<Control> lcl = ListSubControls(form);
             Type buttonType = typeof(Button);
             foreach (Control ctrl in lcl) 
             { 
                 try { 
-                    ctrl.PreviewKeyDown += LocalControlEvent;
+                    ctrl.PreviewKeyDown += LocalControl_PreviewKeyDownEvent;
                     if (ctrl.GetType() == buttonType) { ctrl.TabStop = false; }
+                    ctrl.KeyDown += LocalControl_KeyDownEvent;
+                    ctrl.KeyUp += LocalControl_KeyUpEvent;
                 } catch (Exception) { } 
             }
         }
@@ -39,13 +60,15 @@ namespace AnotherMusicPlayer.MainWindow2Space
             return lcl;
         }
 
-        private static void LocalControlEvent(object? sender, PreviewKeyDownEventArgs e) 
+        private static void LocalControl_PreviewKeyDownEvent(object sender, PreviewKeyDownEventArgs e) 
         {  // intercept keyboard event on UI to prevent selected button activation via keyboard
             if (sender == null) { return; }
             if (sender.GetType() == typeof(TextBox)) { return; }
-            if (parent.InvokeRequired) { parent.Invoke(() => { LocalControlEvent(sender, e); }); return; }
+            if (parent.InvokeRequired) { parent.Invoke(() => { LocalControl_PreviewKeyDownEvent(sender, e); }); return; }
             try
             {
+                foreach (Func<object, PreviewKeyDownEventArgs, bool> func in PreviewKeyDownFunctions) { func(sender, e); }
+
                 if(e.Control && e.KeyCode == Keys.R) {
                     parent.Left = Screen.PrimaryScreen.Bounds.Left;
                     parent.Top = Screen.PrimaryScreen.Bounds.Top;
@@ -112,5 +135,48 @@ namespace AnotherMusicPlayer.MainWindow2Space
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
         }
+
+        private static void LocalControl_KeyDownEvent(object sender, KeyEventArgs e)
+        {
+            foreach (Func<object, KeyEventArgs, bool> func in KeyDownFunctions) { func(sender, e); }
+        }
+
+        private static void LocalControl_KeyUpEvent(object sender, KeyEventArgs e)
+        {
+            foreach (Func<object, KeyEventArgs, bool> func in KeyUpFunctions) { func(sender, e); }
+        }
+
+        public static string KeyCodeToUnicode(Keys key)
+        {
+            byte[] keyboardState = new byte[255];
+            bool keyboardStateStatus = GetKeyboardState(keyboardState);
+
+            if (!keyboardStateStatus)
+            {
+                return "";
+            }
+
+            uint virtualKeyCode = (uint)key;
+            uint scanCode = MapVirtualKey(virtualKeyCode, 0);
+            IntPtr inputLocaleIdentifier = GetKeyboardLayout(0);
+
+            StringBuilder result = new StringBuilder();
+            ToUnicodeEx(virtualKeyCode, scanCode, keyboardState, result, (int)5, (uint)0, inputLocaleIdentifier);
+
+            return result.ToString();
+        }
+
+        [DllImport("user32.dll")]
+        static extern bool GetKeyboardState(byte[] lpKeyState);
+
+        [DllImport("user32.dll")]
+        static extern uint MapVirtualKey(uint uCode, uint uMapType);
+
+        [DllImport("user32.dll")]
+        static extern IntPtr GetKeyboardLayout(uint idThread);
+
+        [DllImport("user32.dll")]
+        static extern int ToUnicodeEx(uint wVirtKey, uint wScanCode, byte[] lpKeyState, [Out, MarshalAs(UnmanagedType.LPWStr)] StringBuilder pwszBuff, int cchBuff, uint wFlags, IntPtr dwhkl);
+
     }
 }

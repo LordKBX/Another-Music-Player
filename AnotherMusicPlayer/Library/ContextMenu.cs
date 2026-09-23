@@ -103,7 +103,7 @@ namespace AnotherMusicPlayer
                 {
                     cm.Items[i].Tag = parent;
                     if (type == "track") { cm.Items[i].Click += CM_AddPlaylistTrack; }
-                    if (type == "selection") { cm.Items[i].Click += CM_AddPlaylistTrack; }
+                    if (type == "selection") { cm.Items[i].Click += CM_AddPlaylistFolder; }
                     if (type == "album") { cm.Items[i].Click += CM_AddPlaylistAlbum; }
                     if (type == "disk") { cm.Items[i].Click += CM_AddPlaylistAlbum; }
                     if (type == "folder") { cm.Items[i].Click += CM_AddPlaylistFolder; }
@@ -225,14 +225,17 @@ namespace AnotherMusicPlayer
                     if (((DataGridView)parent).SelectedRows.Count > 0)
                     {
                         List<string> files = new List<string>();
+                        List<int> ids = new List<int>();
+
+                        bool IsLFO = true;
+
                         foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
                         {
-                            if (row.DataBoundItem is LibraryFolderObjets itm)
-                            {
-                                string[] rfiles = getDirectoryMediaFIles(itm.Path);
-                                files.AddRange(rfiles);
-                            }
+                            ids.Add(row.Index);
+                            if (row.DataBoundItem is MediaItem itm2) { IsLFO = false; }
                         }
+                        ids.Sort();
+                        foreach (int id in ids) { files.Add((IsLFO) ? ((LibraryFolderObjets)((DataGridView)parent).Rows[id].DataBoundItem).Path : ((MediaItem)((DataGridView)parent).Rows[id].DataBoundItem).Path); }
 
                         InsertPlayList ip = new InsertPlayList(App.win1, files.ToArray());
                         ip.ShowDialog();
@@ -263,6 +266,23 @@ namespace AnotherMusicPlayer
                     foreach (MediaItem itm in view.SelectedItems) { files.Add(itm.Path); }
                     Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
                 }
+            }
+            else if (parent.GetType().Name == "DataGridView")
+            {
+                List<string> files = new List<string>();
+                List<int> ids = new List<int>();
+
+                bool IsLFO = true;
+
+                foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                {
+                    ids.Add(row.Index);
+                    if (row.DataBoundItem is MediaItem itm2) { IsLFO = false; }
+                }
+                ids.Sort();
+                foreach (int id in ids) { files.Add((IsLFO) ? ((LibraryFolderObjets)((DataGridView)parent).Rows[id].DataBoundItem).Path : ((MediaItem)((DataGridView)parent).Rows[id].DataBoundItem).Path); }
+
+                Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
             }
             else
             {
@@ -349,18 +369,20 @@ namespace AnotherMusicPlayer
 
             if (parent.GetType() == typeof(DataGridView))
             {
-                Debug.WriteLine("Merde2");
                 if (((DataGridView)parent).SelectedRows.Count > 0)
                 {
                     List<string> files = new List<string>();
+                    List<int> ids = new List<int>();
+
+                    bool IsLFO = true;
+
                     foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
                     {
-                        if (row.DataBoundItem is LibraryFolderObjets itm)
-                        {
-                            string[] rfiles = getDirectoryMediaFIles(itm.Path);
-                            files.AddRange(rfiles);
-                        }
+                        ids.Add(row.Index);
+                        if (row.DataBoundItem is MediaItem itm2) { IsLFO = false; }
                     }
+                    ids.Sort();
+                    foreach (int id in ids) { files.Add((IsLFO) ? ((LibraryFolderObjets)((DataGridView)parent).Rows[id].DataBoundItem).Path : ((MediaItem)((DataGridView)parent).Rows[id].DataBoundItem).Path); }
 
                     Player.PlaylistEnqueue(files.ToArray(), true, 0, 0, true);
                 }
@@ -396,8 +418,27 @@ namespace AnotherMusicPlayer
                     Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
                 }
             }
+            else if (parent.GetType().Name == "DataGridView") 
+            {
+                List<string> files = new List<string>();
+                List<int> ids = new List<int>();
+
+                bool IsLFO = true;
+
+                foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
+                {
+                    ids.Add(row.Index);
+                    if (row.DataBoundItem is MediaItem itm2) { IsLFO = false; }
+                }
+                ids.Sort();
+                foreach (int id in ids) { files.Add((IsLFO) ? ((LibraryFolderObjets)((DataGridView)parent).Rows[id].DataBoundItem).Path : ((MediaItem)((DataGridView)parent).Rows[id].DataBoundItem).Path); }
+
+                Player.PlaylistClear();
+                Player.PlaylistEnqueue(files.ToArray(), false, 0, 0, true);
+            }
             else
             {
+                Debug.WriteLine("parent = " + parent.Name);
                 string track = (string)parent.Tag;
                 Player.PlaylistClear();
                 Player.PlaylistEnqueue(new string[] { track }, false, 0, 0, true);
@@ -495,14 +536,17 @@ namespace AnotherMusicPlayer
                     if (((DataGridView)parent).SelectedRows.Count > 0)
                     {
                         List<string> files = new List<string>();
+                        List<int> ids = new List<int>();
+
+                        bool IsLFO = true;
+
                         foreach (DataGridViewRow row in ((DataGridView)parent).SelectedRows)
                         {
-                            if (row.DataBoundItem is LibraryFolderObjets itm)
-                            {
-                                string[] rfiles = getDirectoryMediaFIles(itm.Path);
-                                files.AddRange(rfiles);
-                            }
+                            ids.Add(row.Index);
+                            if (row.DataBoundItem is MediaItem itm2) { IsLFO = false; }
                         }
+                        ids.Sort();
+                        foreach (int id in ids) { files.Add( (IsLFO)? ((LibraryFolderObjets)((DataGridView)parent).Rows[id].DataBoundItem).Path : ((MediaItem)((DataGridView)parent).Rows[id].DataBoundItem).Path); }
 
                         Player.StopAll();
                         Player.PlaylistClear();

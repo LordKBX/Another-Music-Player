@@ -313,8 +313,19 @@ namespace AnotherMusicPlayer.MainWindow2Space
                 PlaybackTabDataGridView.CellDoubleClick += PlaybackTabDataGridView_CellDoubleClick;
                 PlaybackTabDataGridView.CellMouseClick += PlaybackTabDataGridView_CellMouseClick;
 
+                TabControler.TabClick += (object sender, Manina.Windows.Forms.TabMouseEventArgs e) => {
+                    if (TabControler.SelectedTab == PlaybackTab) { PlaybackTabDataGridView.Focus(); }
+                    else if (TabControler.SelectedTab == LibraryTab) {
+                        if (library.GetLibraryMode() == LibraryMode.Folder) { LibraryNavigationContentFolders.Focus(); }
+                        else { LibrarySearchContent.Focus(); }
+                    }
+                    else if (TabControler.SelectedTab == PlayListsTab) { PlayListsTabDataGridView.Focus(); }
+                    else if (TabControler.SelectedTab == SettingsTab) { }
+                };
+
                 KeyboardLocal.Init(this);
                 KeyboardGlobal.Init();
+                KeyboardLocal.AddKeyUpFunction(PlaybackKeyUpFunctionParsing);
             }
             catch (Exception ex) { Debug.WriteLine(ex.Message + "\r\n" + ex.StackTrace); }
 

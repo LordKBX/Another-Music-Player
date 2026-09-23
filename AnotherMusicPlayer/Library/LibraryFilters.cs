@@ -1,21 +1,22 @@
-﻿using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Windows;
-using System.Windows.Media;
-using System.Windows.Forms;
-using System.Diagnostics;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using System.Runtime.InteropServices;
-using System.Windows.Media.Imaging;
-using System.Windows.Documents;
+using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
-using System.Windows.Threading;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Collections.ObjectModel;
+using System.Windows;
+using System.Windows.Documents;
+using System.Windows.Forms;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace AnotherMusicPlayer
 {
@@ -81,6 +82,7 @@ namespace AnotherMusicPlayer
                 Parent.LibraryFiltersGenreList.SelectedIndex = 0;
                 Parent.LibraryFiltersGenreList.Visible = false;
                 if (CurrentPath != RootPath) { DisplayPath(RootPath); }
+                Parent.LibraryNavigationContentFolders.Focus();
             }
             else
             {
@@ -138,6 +140,7 @@ namespace AnotherMusicPlayer
                 searchResults = GetTabInfoFromFiles(paths.ToArray());
                 if (searchResults != null)
                 {
+                    List<MediaItem> list0 = new List<MediaItem>();
                     ObservableCollection<MediaItem> list = new ObservableCollection<MediaItem>();
                     foreach (KeyValuePair<string, Dictionary<uint, Dictionary<string, MediaItem>>> album in searchResults)
                     {
@@ -145,11 +148,25 @@ namespace AnotherMusicPlayer
                         {
                             foreach (KeyValuePair<string, MediaItem> track in disk.Value)
                             {
-                                list.Add(track.Value);
+                                list0.Add(track.Value);
                             }
                         }
                     }
+                    list0.Sort((x, y) => {
+                        int r = string.Compare(x.Name, y.Name);
+                        if (r == 0) { r = string.Compare(x.Album, y.Album); }
+                        if (r == 0) { r = string.Compare(x.Artists, y.Artists); }
+                        if (r == 0) { r = (x.Disc < y.Disc) ? 1 : 0; }
+                        if (r == 0) { r = (x.Track < y.Track)?1:0; }
+                        if (r == 0) { r = string.Compare(x.Path, y.Path); }
+
+                        return r;
+                        });
+                    for (int i = 0; i < list0.Count; i++) { list.Add(list0[i]); }
+
                     Parent.LibrarySearchContent.DataSource = list;
+                    Parent.LibrarySearchContent.Focus();
+                    Parent.LibrarySearchContent.ContextMenuStrip = MakeContextMenu(Parent.LibrarySearchContent, "selection", false, null);
                     Parent.LibraryNavigationPathContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
                 }
                 Parent.setLoadingState(false);
@@ -195,6 +212,7 @@ namespace AnotherMusicPlayer
                         }
                     }
                     Parent.LibrarySearchContent.DataSource = list;
+                    Parent.LibrarySearchContent.Focus();
                     Parent.LibraryNavigationPathContener.AutoScrollOffset = new System.Drawing.Point(0, 0);
                 }
                 Parent.setLoadingState(false);

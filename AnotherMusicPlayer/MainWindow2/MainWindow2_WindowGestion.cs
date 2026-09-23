@@ -266,5 +266,27 @@ namespace AnotherMusicPlayer.MainWindow2Space
         }
 
         #endregion
+
+        public bool PlaybackKeyUpFunctionParsing(object sender, KeyEventArgs e)
+        {
+            if (e.Control) { return false; }
+            if (e.Shift) { return false; }
+            if (e.KeyData == Keys.None) { return false; }
+            if ("" + e.KeyData == "ShiftKey") { return false; }
+            if ("" + e.KeyData == "ControlKey") { return false; }
+            bool ret = false;
+
+            if (TabControler.SelectedTab == PlaybackTab)
+            {
+                int id = (PlaybackTabDataGridView.SelectedRows.Count > 0) ? PlaybackTabDataGridView.SelectedRows[0].Index : -1;
+                if (id == -1) { return false; }
+                PlaybackTabDataGridView.ClearSelection();
+
+                if (e.KeyCode == Keys.Up) { if (id - 1 >= 0) { PlaybackTabDataGridView.Rows[id - 1].Selected = true; ret = true; } }
+                else if (e.KeyCode == Keys.Down) { if (id + 1 < PlaybackTabDataGridView.Rows.Count) { PlaybackTabDataGridView.Rows[id + 1].Selected = true; ret = true; } }
+            }
+            e.SuppressKeyPress = true;
+            return ret;
+        }
     }
 }

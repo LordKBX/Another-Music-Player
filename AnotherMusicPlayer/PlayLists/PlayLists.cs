@@ -61,8 +61,31 @@ namespace AnotherMusicPlayer
             Parent.PlayListsTabDataGridView.MultiSelect = true;
 
             DataGridViewContextMenu = MakeCellContextMenu(Parent.PlayListsTabDataGridView);
+            Parent.PlayListsTabDataGridView.Scroll += (object sender, ScrollEventArgs e) => { Parent.PlayListsTabDataGridView.Focus(); };
+            KeyboardLocal.AddKeyUpFunction(PlaylistsKeyUpFunctionParsing);
 
             Init();
+        }
+
+        public bool PlaylistsKeyUpFunctionParsing(object sender, KeyEventArgs e)
+        {
+            if (e.Control) { return false; }
+            if (e.Shift) { return false; }
+            if (e.KeyData == Keys.None) { return false; }
+            if ("" + e.KeyData == "ShiftKey") { return false; }
+            if ("" + e.KeyData == "ControlKey") { return false; }
+            bool ret = false;
+
+            if (Parent.TabControler.SelectedTab == Parent.PlayListsTab)
+            {
+                int id = (Parent.PlayListsTabDataGridView.SelectedRows.Count > 0) ? Parent.PlayListsTabDataGridView.SelectedRows[0].Index : -1;
+                if (id == -1) { return false; }
+
+                if (e.KeyCode == Keys.Up) { if (id - 1 >= 0) { Parent.PlayListsTabDataGridView.Rows[id - 1].Selected = !Parent.PlayListsTabDataGridView.Rows[id - 1].Selected; ret = true; } }
+                else if (e.KeyCode == Keys.Down) { if (id + 1 < Parent.PlayListsTabDataGridView.Rows.Count) { Parent.PlayListsTabDataGridView.Rows[id + 1].Selected = !Parent.PlayListsTabDataGridView.Rows[id - 1].Selected; ret = true; } }
+            }
+            e.SuppressKeyPress = true;
+            return ret;
         }
 
         private void PlayListsTabDataGridView_CellMouseDoubleClick(object sender, DataGridViewCellMouseEventArgs e)

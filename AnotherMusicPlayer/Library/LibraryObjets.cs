@@ -12,4 +12,10 @@ namespace AnotherMusicPlayer
         public string Name { get; set; } = "";
         public string Path { get; set; } = "";
     }
+
+    internal enum LibraryMode { 
+        Folder, 
+        Search,
+        Filtered
+    }
 }
