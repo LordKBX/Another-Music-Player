@@ -339,6 +339,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
 
             this.FormClosed += MainWindow2_FormClosed;
             CheckAppVersion(true);
+            if (App.IsDebug) { ShowUpdateButton(true); }
         }
 
         public static void PlayPause()

@@ -180,6 +180,7 @@ namespace AnotherMusicPlayer.MainWindow2Space
         {
             if (this.InvokeRequired) { this.Invoke(() => { ShowUpdateButton(visible); }); return; }
             UpdateButton.Visible = visible;
+            UpdateButton.BackgroundImageLayout = ImageLayout.Zoom;
             MainWIndowHead.ColumnStyles[2].Width = (visible) ? 62 : 0;
         }
     }
